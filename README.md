@@ -54,6 +54,8 @@ And an App needs an address, but this does not necessarily need to exist.
 
 The Device can be claimed with the address of the Consumer, then the Consumer can authorize the App to access the Device.
 
+![frontend](resources/images/frontend.png)
+
 ## Production Build
 
 To compile ClojureScript to JavaScript:
