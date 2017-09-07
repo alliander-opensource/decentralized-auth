@@ -20,7 +20,8 @@
   (re-frame/clear-subscription-cache!)
   (re-frame/dispatch [:db/provide-web3
                       blockchain/provides-web3?
-                      blockchain/web3-instance])
+                      (when blockchain/provides-web3?
+                        (blockchain/web3-instance))])
   (reagent/render [views/main-panel]
                   (.getElementById js/document "app")))
 

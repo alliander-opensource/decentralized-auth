@@ -2,11 +2,13 @@
 
 (def default-db
   {;; Application state obtained from the blockchain
+   :blockchain/apps           {}
    :blockchain/authorizations {}
+   :blockchain/devices        {}
 
    ;; The maximum number of computational steps the transaction execution is
    ;; allowed to take
-   :blockchain/max-gas-limit  4000000
+   :blockchain/max-gas-limit 4000000
 
    ;; Add the address of the existing smart contract on the Ropsten test
    :contracts/contracts {:smart-energy-authorizations

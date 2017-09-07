@@ -11,6 +11,9 @@
                  [cljs-ajax "0.5.8"]
                  [org.clojure/core.async "0.3.443"]
 
+                 ;; Logging
+                 [com.taoensso/timbre "4.10.0"]
+
                  ;; Frontend
                  [re-frame "0.9.4"]
                  [re-frisk "0.4.5"]

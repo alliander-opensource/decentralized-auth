@@ -1,6 +1,7 @@
 (ns decentralized-auth.blockchain
   (:require-macros [cljs.core.async.macros :refer [go go-loop]]
-                   [re-frame.core :as re-frame])
+                   [re-frame.core :as re-frame]
+                   [taoensso.timbre :as log])
   (:require [ajax.core :as ajax]
             [camel-snake-kebab.core :refer [->PascalCase]]
             [cljs-web3.core :as web3]
@@ -10,12 +11,13 @@
             [cljs.core.async :as async]
             [goog.string :as string]
             [goog.string.format]
-            [re-frame.core :as re-frame]))
+            [re-frame.core :as re-frame]
+            [taoensso.timbre :as log]))
 
 (def provides-web3?
   (boolean (aget js/window "web3")))
 
-(def web3-instance
+(defn web3-instance []
   (new (aget js/window "Web3")
        (web3/current-provider (aget js/window "web3"))))
 
@@ -34,7 +36,7 @@
                       (if ok
                         (go (async/>! result-chan abi)
                             (async/close! result-chan))
-                        (println "error fetching" contract-key)))
+                        (log/error "error fetching" contract-key)))
         request     {:method          :get
                      :uri             (string/format "./contracts/build/%s.abi"
                                                      (->PascalCase (name contract-key)))

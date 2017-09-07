@@ -1,11 +1,13 @@
 (ns decentralized-auth.events
-  (:require [cljs-web3.eth :as web3-eth]
+  (:require-macros [taoensso.timbre :as log])
+  (:require [cljs-web3.core :as web3]
+            [cljs-web3.eth :as web3-eth]
             [cljs.spec.alpha]
             [decentralized-auth.blockchain :as blockchain]
             [decentralized-auth.db :as db]
             [madvas.re-frame.web3-fx :as web3-fx]
             [re-frame.core :as re-frame]
-            [cljs-web3.core :as web3]))
+            [taoensso.timbre :as log]))
 
 
 ;;; INITIALIZE DATABASE EVENT HANDLERS
@@ -68,7 +70,7 @@
 (re-frame/reg-event-db
  :blockchain/log-error
  (fn [db errors]
-   (println "something went wrong" errors)
+   (log/error "something went wrong" errors)
    db))
 
 (re-frame/reg-event-fx
