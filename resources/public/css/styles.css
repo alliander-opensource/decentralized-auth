@@ -95,19 +95,22 @@ input {
 }
 
 .footer {
+    font-size: 12px;
     grid-area: footer;
+    margin-left:auto;
+    margin-right:0;
 }
 
 .wrapper {
     display: grid;
     grid-gap: 10px;
     grid-template-columns: 0.35fr 0.30fr 0.35fr;
-    grid-template-rows: repeat(0.30fr);
-    /* grid-template-rows: 0.30fr */
-    /*                     0.30fr */
-    /*                     0.30fr; */
+    grid-template-rows: 0.4fr
+                        0.4fr
+                        0.2fr;
     grid-template-areas: "device   data-flow app"
-                         "consumer consumer  consumer";
+                         "consumer consumer  consumer"
+                         "...      ...       footer";
     background-color: #fff;
 }
 
@@ -118,7 +121,7 @@ input {
     padding: 10px;
 }
 
-.data-flow {
+.data-flow, .footer {
     background-color: #919191;
 }
 

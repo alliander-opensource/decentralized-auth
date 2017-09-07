@@ -9,7 +9,7 @@
    [:a {:href "https://metamask.io/"} "MetaMask extension"]
    ", "
    [:a {:href "https://github.com/ethereum/mist"} "Mist Browser"]
-   " or "
+   ", or "
    [:a {:href "https://parity.io/"} "Parity Browser"]
    " and refresh."])
 
@@ -77,6 +77,12 @@
                                         @app])}
         "Revoke authorization"]])))
 
+(defn footer []
+  [:div.box.footer
+   [:a
+    {:href "contracts/src/SmartEnergyAuthorizations.sol"}
+    "Smart contract code"]])
+
 (defn smart-authorization-grid []
   [:div.wrapper
    ;; FIXME: find out how to dynamically create more [device,data,app]s in CSS
@@ -84,7 +90,8 @@
    [device]
    [data]
    [app]
-   [consumer]])
+   [consumer]
+   [footer]])
 
 (defn main-panel []
   (let [provides-web3? (re-frame/subscribe [:db/provides-web3?])]
