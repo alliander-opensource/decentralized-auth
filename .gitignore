@@ -10,7 +10,6 @@
 /.tested
 /checkouts
 /classes
-/doc
 /figwheel_server.log
 /generated
 /resources/public/contracts/build
