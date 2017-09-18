@@ -11,7 +11,7 @@
    [:a {:href "https://github.com/ethereum/mist"} "Mist Browser"]
    ", or "
    [:a {:href "https://parity.io/"} "Parity Browser"]
-   " and refresh."])
+   ", and refresh."])
 
 (def key-pair
   [:img {:src "images/keys.png" :alt "Key pair"}])

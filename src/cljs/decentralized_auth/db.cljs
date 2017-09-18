@@ -12,7 +12,7 @@
 
    ;; Add the address of the existing smart contract on the Ropsten test
    :contracts/contracts {:smart-energy-authorizations
-                         {:address "0xde34e63b35c17f54e22253b90ec2b97baf221271"}}
+                         {:address "0x6abe54fcddfc7b39728808e7092379892d30ef65"}}
 
    ;; Web3 instance and active account for blockchain interactions via the
    ;; browser
