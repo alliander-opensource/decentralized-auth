@@ -4,6 +4,7 @@ A prototype to test the authorization of energy data flows using Ethereum smart 
 
 The ClojureScript architecture uses [re-frame](https://github.com/Day8/re-frame).
 
+
 ## Development Mode
 
 ### Start Cider from Emacs:
@@ -33,26 +34,18 @@ Wait a bit, then browse to [http://localhost:3449](http://localhost:3449).
 lein auto compile-contracts
 ```
 
-#### Git setup
-The project uses a GitHub and GitLab remote. Configure this as follows in .git/config:
-
-```
-[remote "origin"]
-    url = git@gitlab.com:hellodata/decentralized-auth.git
-	url = git@github.com:hellodata-org/decentralized-auth.git
-	fetch = +refs/heads/*:refs/remotes/origin/*
-```
-
 ## Usage
 
-The prototype expects a web3.js object provided, for example via by the Chrome extension [MetaMask](https://metamask.io/). And to interact with the smart contract, two accounts are necesary:
+The prototype expects a web3.js object provided, for example via by the Chrome extension [MetaMask](https://metamask.io/). And to interact with the smart contract, two accounts are necessary:
 
 - Device
 - Consumer
 
-And an App needs an address, but this does not necessarily need to exist.
+And an App needs an address, but in the current prototype this does not need to exist.
 
 The Device can be claimed with the address of the Consumer, then the Consumer can authorize the App to access the Device.
+
+To follow the flow change accounts in MetaMask and respectively click the buttons for Claim (as a Device) and Authorize or Revoke (as a Consumer), then login as the Device again and see the data flow change.
 
 ![frontend](resources/images/frontend.png)
 
