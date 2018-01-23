@@ -4,6 +4,7 @@ A prototype to test the authorization of energy data flows using Ethereum smart 
 
 The ClojureScript architecture uses [re-frame](https://github.com/Day8/re-frame).
 
+A prototype that addresses [limitations](https://github.com/Alliander/decentralized-auth/blob/iota/doc/Decentralized%20authorization%20of%20access%20to%20energy%20data.pdf) of Ethereum (transaction fees, scalability) and uses the IOTA Tangle instead of Ethereum for authorizing (and transporting) energy data can be found in the [iota branch](https://github.com/Alliander/decentralized-auth/tree/iota).
 
 ## Development Mode
 
