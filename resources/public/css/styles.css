@@ -74,20 +74,20 @@ input {
     border-color: #a84f00;
 }
 
-.device {
-    grid-area: device;
+.service-provider {
+    grid-area: service-provider;
 }
 
 .data-flow {
     grid-area: data-flow;
 }
 
-.app {
-    grid-area: app;
+.data-provider {
+    grid-area: data-provider;
 }
 
-.consumer {
-    grid-area: consumer;
+.prosumer {
+    grid-area: prosumer;
 }
 
 .header {
@@ -107,9 +107,9 @@ input {
     grid-template-rows: 0.4fr
                         0.4fr
                         0.2fr;
-    grid-template-areas: "device   data-flow app"
-                         "consumer consumer  consumer"
-                         "...      ...       footer";
+    grid-template-areas: "data-provider data-flow service-provider"
+                         "prosumer      prosumer  prosumer"
+                         "...           ...       footer";
     background-color: #fff;
 }
 

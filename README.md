@@ -20,6 +20,7 @@ Navigate to a ClojureScript file and start a figwheel REPL with `cider-jack-in-c
 ### Run application:
 
 ```
+./compile-solidity
 lein clean
 lein figwheel dev
 ```
@@ -30,13 +31,13 @@ Wait a bit, then browse to [http://localhost:3449](http://localhost:3449).
 
 ## Usage
 
-To interact with the smart contract, two IOTA addresses are necessary:
+To interact with the smart contract, three IOTA addresses are necessary:
 
 - Data Provider
-- User
+- Prosumer
 - Service Provider
 
-The Data Provider can be claimed with the address of the User, then the User can authorize the Service provider to access the Data Provider.
+The Data Provider can be claimed with the address of the Prosumer, then the Prosumer can authorize the Service provider to access the Data Provider.
 
 ## Production Build
 

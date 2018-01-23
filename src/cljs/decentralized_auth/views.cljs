@@ -4,7 +4,7 @@
 
 
 (defn no-web3-explanation []
-  [:div.box.consumer
+  [:div.box.prosumer
    "This website works with Web3.js for interaction with
     Ethereum smart contracts. Please install the "
    [:a {:href "https://metamask.io/"} "MetaMask extension"]
@@ -19,22 +19,22 @@
   [:img {:src "images/keys.png" :alt "Key pair"}])
 
 
-(defn device []
-  (let [consumer (r/atom "0xbC965738eAbb38d15dc5d0B63Ec1420EAb5df2BC")]
+(defn data-provider []
+  (let [prosumer (r/atom "0xbC965738eAbb38d15dc5d0B63Ec1420EAb5df2BC")]
     (fn []
-      [:div.box.device "Device 0x85d..."
+      [:div.box.data-provider "Data Provider 0x85d..."
        [:br]
        key-pair
        [:br]
        [:button.btn.btn-default
-        {:on-click #(re-frame/dispatch [:blockchain/claim-device
+        {:on-click #(re-frame/dispatch [:blockchain/claim-data-provider
                                         :smart-energy-authorizations
-                                        @consumer])}
+                                        @prosumer])}
         "Claim"]
-       [:span " Consumer: "]
+       [:span " Prosumer: "]
        [:input {:type        "text"
-                :value       @consumer
-                :on-change   #(reset! consumer
+                :value       @prosumer
+                :on-change   #(reset! prosumer
                                       (-> % .-target .-value))}]])))
 
 
@@ -46,41 +46,41 @@
         [:div.box.data-flow "Data flow disallowed" [:br] "(unauthorized)"]))))
 
 
-(defn app []
-  [:div.box.app "App 0x40..."
+(defn service-provider []
+  [:div.box.service-provider "Service Provider 0x40..."
    [:br]
    key-pair])
 
 
-(defn consumer []
-  (let [device (r/atom "0x85d85715218895AE964A750D9A92F13a8951dE3d")
-        app    (r/atom "0x4053e580c8aA07c3A2eB8F0d41bE1f380d29c374")]
+(defn prosumer []
+  (let [data-provider    (r/atom "0x85d85715218895AE964A750D9A92F13a8951dE3d")
+        service-provider (r/atom "0x4053e580c8aA07c3A2eB8F0d41bE1f380d29c374")]
     (fn []
-      [:div.box.consumer "Consumer 0xbC..."
+      [:div.box.prosumer "Prosumer 0xbC..."
        [:br]
        key-pair
        [:br]
        [:button.btn.btn-default
         {:on-click #(re-frame/dispatch [:blockchain/authorize
                                         :smart-energy-authorizations
-                                        @device
-                                        @app])}
+                                        @data-provider
+                                        @service-provider])}
         "Authorize"]
-       [:span " Device: "]
+       [:span " Data Provider: "]
        [:input {:type      "text"
-                :value     @device
-                :on-change #(reset! device (-> % .-target .-value))}]
-       [:span " App: "]
+                :value     @data-provider
+                :on-change #(reset! data-provider (-> % .-target .-value))}]
+       [:span " Service Provider: "]
        [:input {:type      "text"
-                :value     @app
-                :on-change #(reset! app (-> % .-target .-value))}]
+                :value     @service-provider
+                :on-change #(reset! service-provider (-> % .-target .-value))}]
        [:br]
        [:button.btn.btn-default
-        {:style {:margin-top :5px}
+        {:style    {:margin-top :5px}
          :on-click #(re-frame/dispatch [:blockchain/revoke
                                         :smart-energy-authorizations
-                                        @device
-                                        @app])}
+                                        @data-provider
+                                        @service-provider])}
         "Revoke authorization"]])))
 
 
@@ -93,12 +93,12 @@
 
 (defn smart-authorization-grid []
   [:div.wrapper
-   ;; FIXME: find out how to dynamically create more [device,data,app]s in CSS
-   ;; Grid Layout
-   [device]
+   ;; FIXME: find out how to dynamically create
+   ;; more [data-provider,data,service-provider]s in CSS Grid Layout
+   [data-provider]
    [data]
-   [app]
-   [consumer]
+   [service-provider]
+   [prosumer]
    [footer]])
 
 

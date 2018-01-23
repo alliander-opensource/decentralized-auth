@@ -3,8 +3,8 @@
 
 (def default-db
   {;; Application state obtained from the blockchain
-   :blockchain/apps           {}
-   :blockchain/authorizations {}
-   :blockchain/devices        {}
+   :blockchain/service-providers {}
+   :blockchain/authorizations    {}
+   :blockchain/data-providers    {}
 
    :db/iota-instance  nil})
