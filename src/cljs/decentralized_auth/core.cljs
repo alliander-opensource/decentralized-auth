@@ -16,6 +16,7 @@
     (enable-re-frisk!)
     (println "dev mode")))
 
+
 (defn mount-root []
   (re-frame/clear-subscription-cache!)
   (re-frame/dispatch [:db/provide-web3
@@ -24,6 +25,7 @@
                         (blockchain/web3-instance))])
   (reagent/render [views/main-panel]
                   (.getElementById js/document "app")))
+
 
 (defn ^:export init []
   (re-frame/dispatch-sync [:db/initialize-db])
