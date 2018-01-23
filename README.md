@@ -20,7 +20,7 @@ Navigate to a ClojureScript file and start a figwheel REPL with `cider-jack-in-c
 ### Run application:
 
 ```
-./compile-solidity
+java -jar iri-<version>.jar -p 14265 # start local node
 lein clean
 lein figwheel dev
 ```

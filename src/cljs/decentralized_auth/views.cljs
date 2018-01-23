@@ -3,18 +3,6 @@
             [reagent.core :as r]))
 
 
-(defn no-web3-explanation []
-  [:div.box.prosumer
-   "This website works with Web3.js for interaction with
-    Ethereum smart contracts. Please install the "
-   [:a {:href "https://metamask.io/"} "MetaMask extension"]
-   ", "
-   [:a {:href "https://github.com/ethereum/mist"} "Mist Browser"]
-   ", or "
-   [:a {:href "https://parity.io/"} "Parity Browser"]
-   ", and refresh."])
-
-
 (def key-pair
   [:img {:src "images/keys.png" :alt "Key pair"}])
 
@@ -84,13 +72,6 @@
         "Revoke authorization"]])))
 
 
-(defn footer []
-  [:div.box.footer
-   [:a
-    {:href "contracts/src/SmartEnergyAuthorizations.sol"}
-    "Smart contract code"]])
-
-
 (defn smart-authorization-grid []
   [:div.wrapper
    ;; FIXME: find out how to dynamically create
@@ -98,8 +79,7 @@
    [data-provider]
    [data]
    [service-provider]
-   [prosumer]
-   [footer]])
+   [prosumer]])
 
 
 (defn main-panel []
