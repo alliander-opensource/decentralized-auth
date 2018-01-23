@@ -1,25 +1,24 @@
 (defproject decentralized-auth "0.1.0-SNAPSHOT"
   :dependencies [[org.clojure/clojure "1.8.0"]
-                 [org.clojure/clojurescript "1.9.908"]
+                 [org.clojure/clojurescript "1.9.946"]
 
                  ;; IOTA interaction
-                 [camel-snake-kebab "0.4.0"]
                  [cljs-iota "0.0.1"]
 
                  ;; HTTP
-                 [cljs-ajax "0.5.8"]
-                 [org.clojure/core.async "0.3.443"]
+                 [cljs-ajax "0.7.3"]
+                 [org.clojure/core.async "0.4.474"]
 
                  ;; Logging
                  [com.taoensso/timbre "4.10.0"]
 
                  ;; Frontend
-                 [re-frame "0.9.4"]
-                 [re-frisk "0.4.5"]
-                 [reagent "0.6.0"]]
+                 [re-frame "0.10.2"]
+                 [re-frisk "0.5.3"]
+                 [reagent "0.7.0"]]
 
-  :plugins [[lein-auto "0.1.2"]
-            [lein-cljsbuild "1.1.4"]
+  :plugins [[lein-auto "0.1.3"]
+            [lein-cljsbuild "1.1.7"]
             [lein-shell "0.5.0"]]
 
   :min-lein-version "2.5.3"
@@ -39,12 +38,12 @@
 
   :profiles
   {:dev
-   {:dependencies [[binaryage/devtools "0.8.2"]
-                   [figwheel-sidecar "0.5.9"]
+   {:dependencies [[binaryage/devtools "0.9.9"]
+                   [figwheel-sidecar "0.5.14"]
                    [com.cemerick/piggieback "0.2.1"]]
 
-    :plugins      [[lein-figwheel "0.5.9"]
-                   [lein-doo "0.1.7"]]}}
+    :plugins      [[lein-figwheel "0.5.14"]
+                   [lein-doo "0.1.8"]]}}
 
   :cljsbuild
   {:builds
