@@ -6,10 +6,10 @@ import "Mortal.sol";
 
 contract SmartEnergyAuthorizations is Mortal {
 
-  // Mapping from device to consumer
+  // Mapping from data provider to prosumer
   mapping(address => address) claims;
 
-  // Mapping from device to app to authorization flag
+  // Mapping from data provider to service provider to authorization flag
   mapping(address => mapping(address => bool)) authorizations;
 
   // Constructor
@@ -17,33 +17,33 @@ contract SmartEnergyAuthorizations is Mortal {
     owner = msg.sender;
   }
 
-  function claimDevice(address consumer) {
-    address device = msg.sender;
-    claims[device] = consumer;
+  function claimDataProvider(address prosumer) {
+    address dataProvider = msg.sender;
+    claims[dataProvider] = prosumer;
   }
 
-  function authorize(address device, address app) {
-    address consumer = msg.sender;
+  function authorize(address dataProvider, address serviceProvider) {
+    address prosumer = msg.sender;
 
-    require(claims[device] == consumer);
+    require(claims[dataProvider] == prosumer);
 
-    authorizations[device][app] = true;
+    authorizations[dataProvider][serviceProvider] = true;
   }
 
-  function revoke(address device, address app) {
-    address consumer = msg.sender;
+  function revoke(address dataProvider, address serviceProvider) {
+    address prosumer = msg.sender;
 
-    require(claims[device] == consumer);
+    require(claims[dataProvider] == prosumer);
 
-    authorizations[device][app] = false;
+    authorizations[dataProvider][serviceProvider] = false;
   }
 
-  function isAuthorized(address app) constant returns (bool) {
-    address device = msg.sender;
+  function isAuthorized(address serviceProvider) constant returns (bool) {
+    address dataProvider = msg.sender;
 
-    // NOTE: Returns false when no entry for device, or for
-    // device and app, exists in the `authorizations` mapping.
-    return authorizations[device][app];
+    // NOTE: Returns false when no entry for dataProvider, or for dataProvider
+    // and serviceProvider, exists in the `authorizations` mapping.
+    return authorizations[dataProvider][serviceProvider];
   }
 
 }

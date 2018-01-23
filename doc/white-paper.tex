@@ -72,12 +72,13 @@ Erwin Rooijakkers\\[-3pt] \normalsize
 % Joulliette project.
 
 Within Alliander various projects (like Tippiq, HelloData, and GateKeeper) work
-on the use case of authorizing the access of energy data for P1-device to app,
-so that the consumer is in control over his data. Because of the characteristics
-of the blockchain (immutability, decentralization, independence, automatic
-settlement, availability, reachability), it seems beneficial to decentralize the
-authorization business logic on a public or private blockchain. In this document
-a prototype for authorizing data access on the Ethereum blockchain is
+on the use case of authorizing the access of energy data for P1-device to
+service provider, so that the prosumer is in control over his data. Because of
+the characteristics of the blockchain (immutability, decentralization,
+independence, automatic settlement, availability, reachability), it seems
+beneficial to decentralize the authorization business logic on a public or
+private blockchain. In this document a prototype for authorizing data access on
+the Ethereum blockchain is
 introduced, and future recommendations are provided.\\
 
 The Ethereum blockchain is an immutable, distributed ledger with a virtual
@@ -125,16 +126,17 @@ limitations, will be discussed.\\
 There are three entities at play when authorizing access to energy data:
 
 \begin{enumerate}
-  \item Device (IoT-device that provides energy data)
-  \item Consumer (owner of an IoT-device)
-  \item App (service provider that wants to do something with energy data)
+  \item Data Provider (IoT-device that provides energy data)
+  \item Prosumer (owner of an IoT-device)
+  \item Service Provider (application that wants to do something with energy data)
 \end{enumerate}
 
-The consumer, app, and device need to have an address on the Ethereum blockchain
-(key pair). Because of the properties of blockchain addresses it can be ensured
-that the actions are executed by the entities involved. A device can be claimed
-by a consumer. And a consumer can then give access to the app. Finally,
-a device can check if an app has access.\\
+The prosumer, service provider, and data provider need to have an address on the
+Ethereum blockchain (key pair). Because of the properties of blockchain
+addresses it can be ensured that the actions are executed by the entities
+involved. A data provider can be claimed by a prosumer. And a prosumer can then
+give access to the service provider. Finally, a data provider can check if an
+service provider has access.\\
 
 A smart contract that implements this logic is shown below in \ref{prototype} Prototype.\\
 
@@ -160,6 +162,18 @@ stringstyle=\color[rgb]{0.627,0.126,0.941}  % strings
 }%
 \lstinputlisting{SmartEnergyAuthorizations.sol}
 
+Note that require throws an exception and stops the transaction when the clause
+is false. And note that msg.sender is the address that calls the smart contract.
+And note that the constant keyword makes it so that the execution of the method
+does not cost Ether.
+
+This contract makes it possible for a prosumer to claim a data provider, this
+needs to be done from the address (wallet) of the data provider. Next it is
+possible for a prosumer to authorize or revoke access to a data provider, but
+only if the data provider is claimed by the prosumer. Finally, a data provider
+can query the blockchain to see if the service provider that is requesting data
+is authorized by the prosumer.
+
 The above smart contract is deployed on the Ethereum test net. It is possible to
 interact with this smart contract back-end via the front-end deployed on
 \url{http://erooijak.simple-webhosting.eu}.\\
@@ -172,14 +186,15 @@ blockchain and in the smart contract above. These are stated below as problem,
 and underneath every problem a possible solution is provided.
 
 \begin{itemize}
-\item \textbf{Problem:} Performing the transactions (e.g., claiming a device)
-  costs money (fees on Ethereum blockchain). This means that the consumer and
-  device have to pay. \\\textbf{Solution:} The IOTA Tangle blockchain does not
-  have this limitation \cite{iota}. It can, in the future, also share energy
-  data between IoT-devices in an end-to-end encrypted manner \cite{iotamam} (!).
-\item \textbf{Problem:} Scalability of the blockchain. When more devices start
-  using the Ethereum blockchain state changes and transactions might not be
-  included in blocks. This can lead to increased transaction fees or longer
+\item \textbf{Problem:} Performing the transactions (e.g., claiming a data
+  provider) costs money (fees on Ethereum blockchain). This means that the
+  prosumer and data provider have to pay. \\\textbf{Solution:} The IOTA Tangle
+  blockchain does not have this limitation \cite{iota}. It can, in the future,
+  also share energy data between IoT-devices in an end-to-end encrypted manner
+  \cite{iotamam} (!).
+\item \textbf{Problem:} Scalability of the blockchain. When more data providers
+  start using the Ethereum blockchain state changes and transactions might not
+  be included in blocks. This can lead to increased transaction fees or longer
   during transactions. \\\textbf{Solution:} The IOTA Tangle \cite{iota} is a
   ``blockchainless blockchain'' where consensus formation is not separated from
   the performing of transactions (every previous transaction needs to validate
@@ -188,30 +203,31 @@ and underneath every problem a possible solution is provided.
   smart contracts because timestamps are difficult to implement, so another way
   to do authorization needs to be found, or wait till the problem is solved,
   which it is almost, e.g., \cite{iotatimestamps}).
-\item \textbf{Problem:} Scalability of implementation. If a lot of devices and
-  authorizations are stored in the smart contract it might lead to performance
-  problems when it stores many devices and authorizations. \\\textbf{Solution:}
-  Use an appropriate data structure; or use offchain or off-Tangle processing.
-\item \textbf{Problem:} In the current smart contract, when a device changes
-  ownership the old authorizations are taken along to the new consumer. The
-  reason is that a mapping type does not know which keys it contains.
+\item \textbf{Problem:} Scalability of implementation. If a lot of data
+  providers and authorizations are stored in the smart contract it might lead to
+  performance problems when it stores many data providers and authorizations.
+  \\\textbf{Solution:} Use an appropriate data structure; or use offchain or
+  off-Tangle processing.
+\item \textbf{Problem:} In the current smart contract, when a data providers
+  changes ownership the old authorizations are taken along to the new prosumer.
+  The reason is that a mapping type does not know which keys it contains.
   \\\textbf{Solution:} To fix this another data structure needs to be used, that
   can be iterated over and cleaned when switching ownership. For example an
   IterableMapping.
-\item \textbf{Problem:} In the current smart contract, the list of devices for a
-  consumer are not iterable. To provide a convenient user interface around the
+\item \textbf{Problem:} In the current smart contract, the list of data providers for a
+  prosumer are not iterable. To provide a convenient user interface around the
   smart contract back-end this type of information needs to be queryable. But
   maybe such a UI is not a requirement. \\\textbf{Solution:} Same as above.
-\item \textbf{Problem:} A consumer cannot provide a granularity of access to a
-  device (e.g., only part of the data of a device, like only realtime data but
+\item \textbf{Problem:} A prosumer cannot provide a granularity of access to a
+  data provider (e.g., only part of the data of a data provider, like only realtime data but
   not the history). \\\textbf{Solution:} To fix this other data structures need
   to be used in the contract, like the IterableMapping mentioned above. Wherein
-  also the capabilities of the device can be stored.
+  also the capabilities of the data providers can be stored.
 \item \textbf{Problem:} Authorization data is publicly available and
   inspectable. \\\textbf{Solution:} This can be solved by a proper anonymous
   identity management system like IRMA \cite{irma} or Sovrin \cite{sovrin},
   where only the attributes of an identity that are necessary (e.g., does a
-  consumer live on the address of the device?) are available, in a
+  prosumer live on the address of the data provider?) are available, in a
   non-identifiable manner.
 \end{itemize}
 
@@ -220,9 +236,10 @@ and underneath every problem a possible solution is provided.
 Authorizing access to energy data on the Ethereum blockchain is doable. It makes
 all the benefits of the blockchain automatically available. The authorization
 data information cannot be tempered with, it provides an immutable audit trail
-of events, and it is convenient for a device to access the necessary
-authorization information, or even for an app to access the data of a device,
-even when the device is behind a firewall.\\
+of events, and it is convenient for a data provider to access the necessary
+authorization information, or even for an service provider to access the data of
+a data
+provider, even when the data provider is behind a firewall.\\
 
 There are some limitations to using a blockchain for authorizing access to
 energy data. Limitations coming from high transaction costs, the data structures

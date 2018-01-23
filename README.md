@@ -20,6 +20,7 @@ Navigate to a ClojureScript file and start a figwheel REPL with `cider-jack-in-c
 ### Run application:
 
 ```
+./compile-solidity
 lein clean
 lein figwheel dev
 ```
@@ -38,14 +39,14 @@ lein auto compile-contracts
 
 The prototype expects a web3.js object provided, for example via by the Chrome extension [MetaMask](https://metamask.io/). And to interact with the smart contract, two accounts are necessary:
 
-- Device
-- Consumer
+- Data Provider
+- Prosumer
 
-And an App needs an address, but in the current prototype this does not need to exist.
+And a Service Provider needs an address, but in the current prototype this does not need to exist.
 
-The Device can be claimed with the address of the Consumer, then the Consumer can authorize the App to access the Device.
+The Data Provider can be claimed with the address of the Prosumer, then the Prosumer can authorize the Service provider to access the Data Provider.
 
-To follow the flow change accounts in MetaMask and respectively click the buttons for Claim (as a Device) and Authorize or Revoke (as a Consumer), then login as the Device again and see the data flow change.
+To follow the flow change accounts in MetaMask and respectively click the buttons for Claim (as a Data Provider) and Authorize or Revoke (as a Prosumer), then login as the Data Provider again and see the data flow change.
 
 ![frontend](resources/images/frontend.png)
 

@@ -79,6 +79,7 @@
    db))
 
 
+;;; Remove contract (only possible by address that created it)
 (re-frame/reg-event-fx
  :blockchain/remove
  (fn [{{:keys [db/active-address
@@ -101,84 +102,21 @@
 
 
 (re-frame/reg-event-fx
- :blockchain/register-device
+ :blockchain/claim-data-provider
  (fn [{{:keys [db/active-address
                db/web3-instance
                blockchain/max-gas-limit
                contracts/contracts]} :db}
-      [_ contract-key]]
+      [_ contract-key prosumer]]
    (let [tx-opts            {:gas  max-gas-limit
                              :from active-address}
          {:keys [contract]} (contract-key contracts)]
      {:web3-fx.contract/state-fns
       {:web3    web3-instance
-       :db-path [:register-device-fn]
+       :db-path [:claim-data-provider-fn]
        :fns     [{:instance      contract
-                  :method        :register-device
-                  :tx-opts       tx-opts
-                  :on-success    [:do-nothing]
-                  :on-error      [:blockchain/log-error]
-                  :on-tx-receipt [:do-nothing]}]}})))
-
-
-(re-frame/reg-event-fx
- :blockchain/register-app
- (fn [{{:keys [db/active-address
-               db/web3-instance
-               blockchain/max-gas-limit
-               contracts/contracts]} :db}
-      [_ contract-key]]
-   (let [tx-opts            {:gas  max-gas-limit
-                             :from active-address}
-         {:keys [contract]} (contract-key contracts)]
-     {:web3-fx.contract/state-fns
-      {:web3    web3-instance
-       :db-path [:register-device-fn]
-       :fns     [{:instance      contract
-                  :method        :register-app
-                  :tx-opts       tx-opts
-                  :on-success    [:do-nothing]
-                  :on-error      [:blockchain/log-error]
-                  :on-tx-receipt [:do-nothing]}]}})))
-
-
-(re-frame/reg-event-fx
- :blockchain/register-consumer
- (fn [{{:keys [db/active-address
-               db/web3-instance
-               blockchain/max-gas-limit
-               contracts/contracts]} :db}
-      [_ contract-key]]
-   (let [tx-opts            {:gas  max-gas-limit
-                             :from active-address}
-         {:keys [contract]} (contract-key contracts)]
-     {:web3-fx.contract/state-fns
-      {:web3    web3-instance
-       :db-path [:register-consumer-fn]
-       :fns     [{:instance      contract
-                  :method        :register-consumer
-                  :tx-opts       tx-opts
-                  :on-success    [:do-nothing]
-                  :on-error      [:blockchain/log-error]
-                  :on-tx-receipt [:do-nothing]}]}})))
-
-
-(re-frame/reg-event-fx
- :blockchain/claim-device
- (fn [{{:keys [db/active-address
-               db/web3-instance
-               blockchain/max-gas-limit
-               contracts/contracts]} :db}
-      [_ contract-key consumer]]
-   (let [tx-opts            {:gas  max-gas-limit
-                             :from active-address}
-         {:keys [contract]} (contract-key contracts)]
-     {:web3-fx.contract/state-fns
-      {:web3    web3-instance
-       :db-path [:claim-device-fn]
-       :fns     [{:instance      contract
-                  :method        :claim-device
-                  :args          [consumer]
+                  :method        :claim-data-provider
+                  :args          [prosumer]
                   :tx-opts       tx-opts
                   :on-success    [:do-nothing]
                   :on-error      [:blockchain/log-error]
@@ -191,16 +129,16 @@
                db/web3-instance
                blockchain/max-gas-limit
                contracts/contracts]} :db}
-      [_ contract-key device app]]
+      [_ contract-key data-provider service-provider]]
    (let [tx-opts            {:gas  max-gas-limit
                              :from active-address}
          {:keys [contract]} (contract-key contracts)]
      {:web3-fx.contract/state-fns
       {:web3    web3-instance
-       :db-path [:claim-device-fn]
+       :db-path [:claim-data-provider-fn]
        :fns     [{:instance      contract
                   :method        :authorize
-                  :args          [device app]
+                  :args          [data-provider service-provider]
                   :tx-opts       tx-opts
                   :on-success    [:do-nothing]
                   :on-error      [:blockchain/log-error]
@@ -213,16 +151,16 @@
                db/web3-instance
                blockchain/max-gas-limit
                contracts/contracts]} :db}
-      [_ contract-key device app]]
+      [_ contract-key data-provider service-provider]]
    (let [tx-opts            {:gas  max-gas-limit
                              :from active-address}
          {:keys [contract]} (contract-key contracts)]
      {:web3-fx.contract/state-fns
       {:web3    web3-instance
-       :db-path [:claim-device-fn]
+       :db-path [:claim-data-provider-fn]
        :fns     [{:instance      contract
                   :method        :revoke
-                  :args          [device app]
+                  :args          [data-provider service-provider]
                   :tx-opts       tx-opts
                   :on-success    [:do-nothing]
                   :on-error      [:blockchain/log-error]
@@ -235,17 +173,17 @@
 (re-frame/reg-event-fx
  :blockchain/is-authorized?
  (fn [{{:keys [contracts/contracts]} :db}
-      [_ contract-key app]]
+      [_ contract-key service-provider]]
    (let [{:keys [contract]} (contract-key contracts)]
      {:web3-fx.contract/constant-fns
       {:fns [{:instance   contract
               :method     :is-authorized
-              :args       [app]
-              :on-success [:db/add-authorization app]
+              :args       [service-provider]
+              :on-success [:db/add-authorization service-provider]
               :on-error   [:blockchain/log-error]}]}})))
 
 
 (re-frame/reg-event-db
  :db/add-authorization
- (fn [db [_ app authorized?]]
-   (assoc-in db [:blockchain/authorizations app] authorized?)))
+ (fn [db [_ service-provider authorized?]]
+   (assoc-in db [:blockchain/authorizations service-provider] authorized?)))
