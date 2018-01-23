@@ -10,12 +10,13 @@
             [taoensso.timbre :as log]))
 
 
-;;; INITIALIZE DATABASE EVENT HANDLERS
+;;;; Initialize database event handlers
 
 (re-frame/reg-event-db
  :db/initialize-db
  (fn [_ _]
    db/default-db))
+
 
 (re-frame/reg-event-fx
  :db/provide-web3
@@ -25,11 +26,13 @@
     (when provides-web3?
       {:dispatch [:db/store-web3-instance web3-instance]}))))
 
+
 (re-frame/reg-event-fx
  :db/store-web3-instance
  (fn [{:keys [db]} [_ web3-instance]]
    {:db       (assoc db :db/web3-instance web3-instance)
     :dispatch [:db/add-active-address]}))
+
 
 (re-frame/reg-event-fx
  :db/add-active-address
@@ -39,7 +42,7 @@
       :dispatch [:db/add-contracts]})))
 
 
-;;; INITIALIZATION OF SMART CONTRACT
+;;;; Initialization of smart contract
 
 (re-frame/reg-event-fx
  :db/add-contracts
@@ -48,6 +51,7 @@
      (blockchain/add-ropsten-contract web3-instance
                                       contract-key
                                       address))))
+
 
 (re-frame/reg-event-db
  :db/add-contract
@@ -58,20 +62,22 @@
               :contract contract)))
 
 
-;;; SMART CONTRACT STATEFUL EVENT HANDLERS (change something on the blockchain)
+;;;; Smart contract stateful event handlers (change blockchain state)
 
-;; TODO: on-success and on-tx-receipt handlers should do implemented
+;; TODO: on-success and on-tx-receipt handlers should be implemented
 ;;       See https://github.com/district0x/re-frame-web3-fx/blob/master/README.md
 
 (re-frame/reg-event-fx
  :do-nothing
  (fn [_ _]))
 
+
 (re-frame/reg-event-db
  :blockchain/log-error
  (fn [db errors]
    (log/error "something went wrong" errors)
    db))
+
 
 (re-frame/reg-event-fx
  :blockchain/remove
@@ -93,6 +99,7 @@
                   :on-error      [:blockchain/log-error]
                   :on-tx-receipt [:do-nothing]}]}})))
 
+
 (re-frame/reg-event-fx
  :blockchain/register-device
  (fn [{{:keys [db/active-address
@@ -112,6 +119,7 @@
                   :on-success    [:do-nothing]
                   :on-error      [:blockchain/log-error]
                   :on-tx-receipt [:do-nothing]}]}})))
+
 
 (re-frame/reg-event-fx
  :blockchain/register-app
@@ -133,6 +141,7 @@
                   :on-error      [:blockchain/log-error]
                   :on-tx-receipt [:do-nothing]}]}})))
 
+
 (re-frame/reg-event-fx
  :blockchain/register-consumer
  (fn [{{:keys [db/active-address
@@ -152,6 +161,7 @@
                   :on-success    [:do-nothing]
                   :on-error      [:blockchain/log-error]
                   :on-tx-receipt [:do-nothing]}]}})))
+
 
 (re-frame/reg-event-fx
  :blockchain/claim-device
@@ -174,6 +184,7 @@
                   :on-error      [:blockchain/log-error]
                   :on-tx-receipt [:do-nothing]}]}})))
 
+
 (re-frame/reg-event-fx
  :blockchain/authorize
  (fn [{{:keys [db/active-address
@@ -194,6 +205,7 @@
                   :on-success    [:do-nothing]
                   :on-error      [:blockchain/log-error]
                   :on-tx-receipt [:do-nothing]}]}})))
+
 
 (re-frame/reg-event-fx
  :blockchain/revoke
@@ -217,7 +229,8 @@
                   :on-tx-receipt [:do-nothing]}]}})))
 
 
-;;; SMART CONTRACT CONSTANT EVENT HANDLERS (query things on the blockchain)
+
+;;;; Smart contract constant event handlers (query things on the blockchain)
 
 (re-frame/reg-event-fx
  :blockchain/is-authorized?
@@ -230,6 +243,7 @@
               :args       [app]
               :on-success [:db/add-authorization app]
               :on-error   [:blockchain/log-error]}]}})))
+
 
 (re-frame/reg-event-db
  :db/add-authorization

@@ -14,19 +14,15 @@
             [re-frame.core :as re-frame]
             [taoensso.timbre :as log]))
 
+
 (def provides-web3?
   (boolean (aget js/window "web3")))
+
 
 (defn web3-instance []
   (new (aget js/window "Web3")
        (web3/current-provider (aget js/window "web3"))))
 
-;; (def network-type
-;;   (case (web3/version-network web3-instance)
-;;     "1" :local-development ; FIXME: same as main-net
-;;     "2" :morden-network    ; deprecated
-;;     "3" :ropsten-network
-;;     :unknown-network))
 
 (defn- fetch-abi
   "Retrieves abi of compiled smart contract"
@@ -46,6 +42,7 @@
     (ajax/ajax-request request)
     result-chan))
 
+
 (defn add-ropsten-contract
   "Adds the abi and contract belonging to `contract-key` to the db.
 
@@ -57,6 +54,7 @@
                                            abi
                                            address)]
         (re-frame/dispatch [:db/add-contract contract-key abi contract]))))
+
 
 (defn get-active-address [web3-instance]
   (first (web3-eth/accounts web3-instance)))

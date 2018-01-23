@@ -2,6 +2,7 @@
   (:require [re-frame.core :as re-frame]
             [reagent.core :as r]))
 
+
 (defn no-web3-explanation []
   [:div.box.consumer
    "This website works with Web3.js for interaction with
@@ -13,8 +14,10 @@
    [:a {:href "https://parity.io/"} "Parity Browser"]
    ", and refresh."])
 
+
 (def key-pair
   [:img {:src "images/keys.png" :alt "Key pair"}])
+
 
 (defn device []
   (let [consumer (r/atom "0xbC965738eAbb38d15dc5d0B63Ec1420EAb5df2BC")]
@@ -34,6 +37,7 @@
                 :on-change   #(reset! consumer
                                       (-> % .-target .-value))}]])))
 
+
 (defn data []
   (let [authorizations (re-frame/subscribe [:blockchain/authorizations])]
     (fn []
@@ -41,10 +45,12 @@
         [:div.box.data-flow.authorized "Data flow allowed" [:br] "(authorized)"]
         [:div.box.data-flow "Data flow disallowed" [:br] "(unauthorized)"]))))
 
+
 (defn app []
   [:div.box.app "App 0x40..."
    [:br]
    key-pair])
+
 
 (defn consumer []
   (let [device (r/atom "0x85d85715218895AE964A750D9A92F13a8951dE3d")
@@ -77,11 +83,13 @@
                                         @app])}
         "Revoke authorization"]])))
 
+
 (defn footer []
   [:div.box.footer
    [:a
     {:href "contracts/src/SmartEnergyAuthorizations.sol"}
     "Smart contract code"]])
+
 
 (defn smart-authorization-grid []
   [:div.wrapper
@@ -92,6 +100,7 @@
    [app]
    [consumer]
    [footer]])
+
 
 (defn main-panel []
   (let [provides-web3? (re-frame/subscribe [:db/provides-web3?])]
