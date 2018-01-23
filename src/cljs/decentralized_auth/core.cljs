@@ -4,7 +4,6 @@
             [decentralized-auth.events]
             [decentralized-auth.subs]
             [decentralized-auth.views :as views]
-            [decentralized-auth.workers]
             [re-frame.core :as re-frame]
             [re-frisk.core :refer [enable-re-frisk!]]
             [reagent.core :as reagent]))

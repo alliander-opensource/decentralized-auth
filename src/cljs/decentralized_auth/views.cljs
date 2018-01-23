@@ -103,8 +103,4 @@
 
 
 (defn main-panel []
-  (let [provides-web3? (re-frame/subscribe [:db/provides-web3?])]
-    (fn []
-      (if @provides-web3?
-        [smart-authorization-grid]
-        [no-web3-explanation]))))
+  [smart-authorization-grid])
