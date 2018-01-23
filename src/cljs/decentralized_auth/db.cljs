@@ -9,7 +9,7 @@
 
    ;; The maximum number of computational steps the transaction execution is
    ;; allowed to take
-   :blockchain/max-gas-limit 40000
+   :blockchain/max-gas-limit 400000
 
    ;; Add the address of the existing smart contract on the Ropsten test
    :contracts/contracts {:smart-energy-authorizations
