@@ -2,10 +2,9 @@
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.9.908"]
 
-                 ;; Blockchain interaction
+                 ;; IOTA interaction
                  [camel-snake-kebab "0.4.0"]
-                 [cljs-web3 "0.19.0-0-2"]
-                 [madvas.re-frame/web3-fx "0.1.12"]
+                 [cljs-iota "0.0.1"]
 
                  ;; HTTP
                  [cljs-ajax "0.5.8"]

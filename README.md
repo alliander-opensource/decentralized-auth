@@ -1,6 +1,6 @@
 # decentralized-auth
 
-A prototype to test the authorization of energy data flows using Ethereum smart contracts.
+A prototype to test the authorization and access to energy data flow using IOTA.
 
 The ClojureScript architecture uses [re-frame](https://github.com/Day8/re-frame).
 
@@ -28,26 +28,15 @@ Figwheel will automatically push cljs changes to the browser.
 
 Wait a bit, then browse to [http://localhost:3449](http://localhost:3449).
 
-#### Auto-compile solidity Smart Contracts:
-
-```
-lein auto compile-contracts
-```
-
 ## Usage
 
-The prototype expects a web3.js object provided, for example via by the Chrome extension [MetaMask](https://metamask.io/). And to interact with the smart contract, two accounts are necessary:
+To interact with the smart contract, two IOTA addresses are necessary:
 
-- Device
-- Consumer
+- Data Provider
+- User
+- Service Provider
 
-And an App needs an address, but in the current prototype this does not need to exist.
-
-The Device can be claimed with the address of the Consumer, then the Consumer can authorize the App to access the Device.
-
-To follow the flow change accounts in MetaMask and respectively click the buttons for Claim (as a Device) and Authorize or Revoke (as a Consumer), then login as the Device again and see the data flow change.
-
-![frontend](resources/images/frontend.png)
+The Data Provider can be claimed with the address of the User, then the User can authorize the Service provider to access the Data Provider.
 
 ## Production Build
 
