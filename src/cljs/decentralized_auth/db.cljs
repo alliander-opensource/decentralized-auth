@@ -1,4 +1,5 @@
-(ns decentralized-auth.db)
+(ns decentralized-auth.db
+  (:require [cljs-iota.core :as iota]))
 
 
 (def default-db
@@ -7,4 +8,4 @@
    :blockchain/authorizations    {}
    :blockchain/data-providers    {}
 
-   :db/iota-instance  nil})
+   :db/iota-instance  (iota/create-iota "http://localhost:14265")})
