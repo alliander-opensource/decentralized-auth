@@ -8,4 +8,4 @@
    :blockchain/authorizations    {}
    :blockchain/data-providers    {}
 
-   :db/iota-instance  (iota/create-iota "http://localhost:14265")})
+   :db/iota-instance (iota/create-iota "http://localhost:14265")})
