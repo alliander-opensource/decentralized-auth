@@ -1,7 +1,7 @@
 (ns decentralized-auth.core
-  (:require [decentralized-auth.blockchain :as blockchain]
-            [decentralized-auth.config :as config]
+  (:require [decentralized-auth.config :as config]
             [decentralized-auth.events]
+            [decentralized-auth.iota :as iota]
             [decentralized-auth.subs]
             [decentralized-auth.views :as views]
             [re-frame.core :as re-frame]
@@ -23,6 +23,12 @@
 
 
 (defn ^:export init []
-  (re-frame/dispatch-sync [:db/initialize-db])
   (dev-setup)
+  (re-frame/dispatch-sync [:db/initialize-db])
+
+  ;; Wait for IOTA MAM to be compiled
+  (js/setTimeout
+   #(re-frame/dispatch-sync [:db/initialize-iota "http://localhost:14700"])
+   1000)
+
   (mount-root))
