@@ -4,7 +4,7 @@
 
                  ;; IOTA interaction
                  [cljs-iota "1.0.1"]
-                 [cljs-iota-mam "1.0.0"]
+                 [cljs-iota-mam "1.0.1"]
 
                  ;; HTTP
                  [cljs-ajax "0.7.3"]

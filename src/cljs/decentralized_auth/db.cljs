@@ -4,9 +4,8 @@
 
 (def default-db
   {;; Application state obtained from the blockchain
-   :blockchain/service-providers {}
-   :blockchain/authorizations    {}
-   :blockchain/data-providers    {}
+   :view/service-providers {}
+   :view/data-providers    {}
 
    :db/iota-instance nil
    :db/iota-mam      nil})

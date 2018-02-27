@@ -4,6 +4,18 @@
 
 
 (re-frame/reg-sub
- :blockchain/authorizations
+ :view/authorizations
  (fn [db]
-   (:blockchain/authorizations db)))
+   (:view/authorizations db)))
+
+
+(re-frame/reg-sub
+ :data-provider/root
+ (fn [db]
+   (:data-provider/root db)))
+
+
+(re-frame/reg-sub
+ :data-provider/side-key
+ (fn [db]
+   (:data-provider/side-key db)))

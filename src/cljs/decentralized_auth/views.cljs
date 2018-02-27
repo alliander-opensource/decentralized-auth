@@ -3,31 +3,47 @@
             [reagent.core :as r]))
 
 
+(defn data-providers []
+  [:div.box.data-providers "Prosumer's Data Providers"
+   [:br]
+   [:span "Raspberry Pi. Root: x"]])
+
+
+(defn service-providers []
+  [:div.box.service-providers "Independent Service Providers"
+   [:br]
+   [:span "Oma app. Public key: x"]])
+
+
 (def key-pair
   [:img {:src "images/keys.png" :alt "Key pair"}])
 
 
 (defn data-provider []
-  (let [prosumer (r/atom "0xbC965738eAbb38d15dc5d0B63Ec1420EAb5df2BC")]
+  (let [payload  (r/atom "GRANDMA9IS9WALKING")
+        side-key (re-frame/subscribe [:data-provider/side-key])
+        root     (re-frame/subscribe [:data-provider/root])]
     (fn []
-      [:div.box.data-provider "Data Provider 0x85d..."
+      [:div.box.data-provider "Data Provider (Raspberry Pi)"
        [:br]
        key-pair
        [:br]
+       [:span " Payload: "]
+       [:input {:type      "text"
+                :value     @payload
+                :size      32
+                :on-change #(reset! payload (-> % .-target .-value))}]
+       [:br]
        [:button.btn.btn-default
-        {:on-click #(re-frame/dispatch [:blockchain/claim-data-provider
-                                        :smart-energy-authorizations
-                                        @prosumer])}
-        "Claim"]
-       [:span " Prosumer: "]
-       [:input {:type        "text"
-                :value       @prosumer
-                :on-change   #(reset! prosumer
-                                      (-> % .-target .-value))}]])))
+        {:on-click #(re-frame/dispatch [:data-provider/publish
+                                        @payload
+                                        @root
+                                        @side-key])}
+        "Publish"]])))
 
 
 (defn data []
-  (let [authorizations (re-frame/subscribe [:blockchain/authorizations])]
+  (let [authorizations (re-frame/subscribe [:view/authorizations])]
     (fn []
       (if (get @authorizations "0x4053e580c8aA07c3A2eB8F0d41bE1f380d29c374")
         [:div.box.data-flow.authorized "Data flow allowed" [:br] "(authorized)"]
@@ -35,50 +51,36 @@
 
 
 (defn service-provider []
-  [:div.box.service-provider "Service Provider 0x40..."
+  [:div.box.service-provider "Service Provider (Oma app)"
    [:br]
    key-pair])
 
 
 (defn prosumer []
-  (let [data-provider    (r/atom "0x85d85715218895AE964A750D9A92F13a8951dE3d")
-        service-provider (r/atom "0x4053e580c8aA07c3A2eB8F0d41bE1f380d29c374")]
+  (let [root     (r/atom "0x85d85715218895AE964A750D9A92F13a8951dE3d")
+        side-key (r/atom "SECRET")]
     (fn []
-      [:div.box.prosumer "Prosumer 0xbC..."
+      [:div.box.prosumer "Prosumer"
        [:br]
        key-pair
        [:br]
-       [:button.btn.btn-default
-        {:on-click #(re-frame/dispatch [:blockchain/authorize
-                                        :smart-energy-authorizations
-                                        @data-provider
-                                        @service-provider])}
-        "Authorize"]
-       [:span " Data Provider: "]
+       [:span " Side key: "]
        [:input {:type      "text"
-                :value     @data-provider
-                :on-change #(reset! data-provider (-> % .-target .-value))}]
-       [:span " Service Provider: "]
-       [:input {:type      "text"
-                :value     @service-provider
-                :on-change #(reset! service-provider (-> % .-target .-value))}]
+                :value     @side-key
+                :size      32
+                :on-change #(reset! side-key (-> % .-target .-value))}]
        [:br]
        [:button.btn.btn-default
-        {:style    {:margin-top :5px}
-         :on-click #(re-frame/dispatch [:blockchain/revoke
-                                        :smart-energy-authorizations
-                                        @data-provider
-                                        @service-provider])}
-        "Revoke authorization"]])))
+        {:on-click #(re-frame/dispatch [:iota/authorize
+                                        @root
+                                        @side-key])}
+        "Authorize Oma app"]])))
 
 
 (defn smart-authorization-grid []
   [:div.wrapper
-   ;; FIXME: find out how to dynamically create
-   ;; more [data-provider,data,service-provider]s in CSS Grid Layout
-   [data-provider]
-   [data]
-   [service-provider]
+   [data-providers] [service-providers]
+   [data-provider] [data] [service-provider]
    [prosumer]])
 
 

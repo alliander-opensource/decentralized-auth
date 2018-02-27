@@ -74,6 +74,16 @@ input {
     border-color: #a84f00;
 }
 
+.data-providers {
+    background-color: #e56c00!important;
+    grid-area: data-providers;
+}
+
+.service-providers {
+    background-color: #e56c00!important;
+    grid-area: service-providers;
+}
+
 .service-provider {
     grid-area: service-provider;
 }
@@ -84,6 +94,10 @@ input {
 
 .data-provider {
     grid-area: data-provider;
+}
+
+.data-providers {
+    grid-area: data-providers;
 }
 
 .prosumer {
@@ -104,12 +118,14 @@ input {
     display: grid;
     grid-gap: 10px;
     grid-template-columns: 0.35fr 0.30fr 0.35fr;
-    grid-template-rows: 0.4fr
-                        0.4fr
-                        0.2fr;
-    grid-template-areas: "data-provider data-flow service-provider"
-                         "prosumer      prosumer  prosumer"
-                         "...           ...       footer";
+    grid-template-rows: 0.30fr
+                        0.10fr
+                        0.30fr
+                        0.30fr;
+    grid-template-areas: "data-providers    ...               service-providers"
+                         "...               ...               ..."
+                         "data-provider     data-flow         service-provider"
+                         "prosumer          prosumer          prosumer";
     background-color: #fff;
 }
 
