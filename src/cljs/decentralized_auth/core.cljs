@@ -23,11 +23,13 @@
 
 (defn ^:export init []
   (dev-setup)
-  (re-frame/dispatch [:db/initialize-db])
+  (re-frame/dispatch-sync [:db/initialize-db])
 
   ;; Wait for IOTA MAM to be compiled
   (js/setTimeout
-   #(re-frame/dispatch [:db/initialize-iota "http://localhost:14700"])
+   #(do (re-frame/dispatch-sync [:db/initialize-iota "http://localhost:14700"])
+        (re-frame/dispatch-sync [:db/initialize-iota-mam]))
+
    1000)
 
   (mount-root))

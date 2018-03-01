@@ -1,10 +1,10 @@
 (defproject decentralized-auth "0.1.0-SNAPSHOT"
-  :dependencies [[org.clojure/clojure "1.8.0"]
+  :dependencies [[org.clojure/clojure "1.9.0-alpha16"] ; latest version that works with Figwheel
                  [org.clojure/clojurescript "1.9.946"]
 
                  ;; IOTA interaction
                  [cljs-iota "1.0.1"]
-                 [cljs-iota-mam "1.0.1"]
+                 [cljs-iota-mam "1.0.6"]
 
                  ;; HTTP
                  [cljs-ajax "0.7.3"]
@@ -30,10 +30,6 @@
                                     "test/js"]
 
   :figwheel {:css-dirs ["resources/public/css"]}
-
-  :aliases {"compile-solidity" ["shell" "./compile-solidity.sh"]}
-  :auto {"compile-solidity" {:file-pattern #"\.(sol)$"
-                             :paths        ["resources/public/contracts/src"]}}
 
   :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
 

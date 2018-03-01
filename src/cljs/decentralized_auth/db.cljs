@@ -3,9 +3,13 @@
 
 
 (def default-db
-  {;; Application state obtained from the blockchain
-   :view/service-providers {}
-   :view/data-providers    {}
+  {:directory/service-providers {}
+   :directory/data-providers    {}
 
-   :db/iota-instance nil
-   :db/iota-mam      nil})
+   :iota/iota-instance nil
+   :iota.mam/mam-state nil
+
+   :data-provider/side-key ""
+   :data-provider/root     ""
+
+   :service-provider/message ""})
