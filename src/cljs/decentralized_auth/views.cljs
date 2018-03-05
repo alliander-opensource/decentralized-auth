@@ -41,7 +41,8 @@
 
 
 (defn data-provider []
-  (let [message (r/atom "GRANDMA9MAKES9COFFEE")]
+  (let [message  (r/atom "GAS9M")
+        side-key (re-frame/subscribe [:data-provider/side-key])]
     (fn []
       [:div.box.data-provider "Data Provider (Raspberry Pi)"
        [:br]
@@ -52,6 +53,14 @@
                 :value     @message
                 :size      32
                 :on-change #(reset! message (-> % .-target .-value))}]
+       [:br]
+       [:span " Side key: "]
+       [:input {:type      "text"
+                :value     @side-key
+                :size      32
+                :on-change #(re-frame/dispatch
+                             [:data-provider/side-key-changed
+                              (-> % .-target .-value)])}]
        [:br]
        [:button.btn.btn-default
         {:on-click #(re-frame/dispatch [:data-provider/publish @message])}
@@ -85,25 +94,17 @@
 
 
 (defn prosumer []
-  (let [root     (re-frame/subscribe [:data-provider/root])
-        side-key (re-frame/subscribe [:data-provider/side-key])]
-    [:div.box.prosumer "Prosumer"
-     [:br]
-     [prosumer-image]
-     [:br]
-     [:span " Side key: "]
-     [:input {:type      "text"
-              :value     @side-key
-              :size      32
-              :on-change #(re-frame/dispatch
-                           [:data-provider/side-key-changed
-                            (-> % .-target .-value)])}]
-     [:br]
-     [:button.btn.btn-default
-      {:on-click #(re-frame/dispatch [:iota/authorize
-                                      @root
-                                      @side-key])}
-      "Authorize Oma app"]]))
+  [:div.box.prosumer "Prosumer"
+   [:br]
+   [prosumer-image]
+   [:br]
+   [:button.btn.btn-default
+    {:on-click #(re-frame/dispatch [:iota/authorize])}
+    "Claim Pi"]
+   [:span " "]
+   [:button.btn.btn-default
+    {:on-click #(re-frame/dispatch [:iota/authorize])}
+    "Authorize Oma app"]])
 
 
 (defn smart-authorization-grid []
