@@ -61,10 +61,8 @@
 (defn data []
   (let [authorizations (re-frame/subscribe [:view/authorizations])]
     (if (get @authorizations "0x4053e580c8aA07c3A2eB8F0d41bE1f380d29c374")
-
-        ;;; TODO: make it into an arrow?
-      [:div.box.data-flow.authorized "Data flow allowed" [:br] "(authorized)"]
-      [:div.box.data-flow "Data flow disallowed" [:br] "(unauthorized)"])))
+      [:div.box.data-flow.authorized [:br] [:br] "Data flow allowed" [:br] "(authorized)"]
+      [:div.box.data-flow [:br] [:br] "Data flow disallowed" [:br] "(unauthorized)"])))
 
 
 (defn service-provider []

@@ -89,6 +89,7 @@ input {
 }
 
 .data-flow {
+    clip-path: polygon(0% 10%, 60% 10%, 60% 0%, 100% 50%, 60% 100%, 60% 90%, 0% 90%);
     grid-area: data-flow;
 }
 
