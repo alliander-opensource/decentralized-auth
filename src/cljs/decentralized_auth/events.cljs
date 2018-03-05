@@ -66,10 +66,12 @@
 (re-frame/reg-event-db
  :data-provider/publish
  (fn [{:keys [iota.mam/mam-state] :as db} [_ message]]
-   (let [{:keys [payload root address]} (iota-mam/create mam-state message)]
+   (let [{:keys [state payload root address]} (iota-mam/create mam-state message)]
      (log/infof "Attaching message %s at root %s" message root)
      (iota-mam/attach payload address)
-     (assoc db :data-provider/root root))))
+     (assoc db
+            :data-provider/root root
+            :iota.mam/mam-state state))))
 
 
 (re-frame/reg-fx
