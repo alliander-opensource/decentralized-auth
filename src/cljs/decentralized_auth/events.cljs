@@ -33,16 +33,18 @@
 
 (reg-event-fx
  :iota/initialize
- (fn [{:keys [db] :as cofx} [_ iota-provider]]
+ (fn [{{:keys [iota/provider data-provider/default-side-key]
+        :as   db}
+       :db
+       :as      cofx} _]
 
    (log/infof "Initializing IOTA and IOTA MAM with provider %s..."
-              iota-provider)
+              provider)
 
-   (let [iota-instance    (iota/create-iota iota-provider)
+   (let [iota-instance    (iota/create-iota provider)
          seed             (gen-seed)
          mam-state        (iota-mam/init iota-instance seed 2)
-         mam-mode         :restricted
-         default-side-key (:data-provider/side-key db)]
+         mam-mode         :restricted]
      {:db       (assoc db
                        :iota/iota-instance iota-instance
                        :iota.mam/mam-state mam-state)

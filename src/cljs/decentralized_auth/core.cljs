@@ -27,7 +27,7 @@
 
   ;; Wait for IOTA MAM to be compiled...
   (js/setTimeout
-   #(re-frame/dispatch [:iota/initialize "https://testnet140.tangle.works"])
+   #(re-frame/dispatch [:iota/initialize])
    1000)
 
   (mount-root))
