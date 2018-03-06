@@ -96,7 +96,9 @@
 (re-frame/reg-event-fx
  :service-provider/fetch
  (fn [{{:keys [iota.mam/mam-state] :as db} :db :as cofx} [_ root side-key]]
+
    (log/infof "Fetching message from root %s using side key %s" root side-key)
+
    {:iota-mam-fx/fetch {:root       root
                         :mode       (-> mam-state :channel :mode)
                         :side-key   side-key
