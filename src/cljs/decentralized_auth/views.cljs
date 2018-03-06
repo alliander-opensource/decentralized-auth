@@ -14,9 +14,9 @@
      [:br]
      [:span [:strong "Raspberry Pi"]]
      [:br]
-     [:span "MAM root: " (format-root @root)]
+     [:span "Side key: " @side-key]
      [:br]
-     [:span "Side key: " @side-key]]))
+     [:span "MAM root: " (format-root @root)]]))
 
 
 (defn service-providers []
@@ -25,7 +25,7 @@
         public-key "x"]
     [:div.box.service-providers "Independent Service Providers"
      [:br]
-     [:span "Oma app."]
+     [:span [:strong "Oma app."]]
      [:br]
      [:span "Public key: " public-key]
      [:br]
