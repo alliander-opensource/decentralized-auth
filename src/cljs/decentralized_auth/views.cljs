@@ -14,18 +14,24 @@
      [:br]
      [:span [:strong "Raspberry Pi"]]
      [:br]
-     [:span "Root: " (format-root @root)]
+     [:span "MAM root: " (format-root @root)]
      [:br]
      [:span "Side key: " @side-key]]))
 
 
 (defn service-providers []
-  (let [side-key (re-frame/subscribe [:data-provider/side-key])]
+  (let [side-key   (re-frame/subscribe [:service-provider/side-key])
+        root       (re-frame/subscribe [:service-provider/root])
+        public-key "x"]
     [:div.box.service-providers "Independent Service Providers"
      [:br]
-     [:span "Oma app. Public key: x"]
+     [:span "Oma app."]
      [:br]
-     [:span "Side key: " @side-key]]))
+     [:span "Public key: " public-key]
+     [:br]
+     [:span "Side key (encrypted): " (str public-key @side-key)]
+     [:br]
+     [:span "Next MAM root: " (format-root @root)]]))
 
 
 (defn raspberry-pi-image []
@@ -41,7 +47,7 @@
 
 
 (defn data-provider []
-  (let [message  (r/atom "GAS9M")
+  (let [message  (r/atom "9ENERGYDATA9")
         side-key (re-frame/subscribe [:data-provider/side-key])]
     (fn []
       [:div.box.data-provider "Data Provider (Raspberry Pi)"
@@ -59,7 +65,8 @@
                 :value     @side-key
                 :size      32
                 :on-change #(re-frame/dispatch
-                             [:data-provider/side-key-changed
+                             [:data-provider/change-mode
+                              :restricted
                               (-> % .-target .-value)])}]
        [:br]
        [:button.btn.btn-default
@@ -68,27 +75,34 @@
 
 
 (defn data []
-  (let [authorizations (re-frame/subscribe [:view/authorizations])]
-    (if (get @authorizations "0x4053e580c8aA07c3A2eB8F0d41bE1f380d29c374")
-      [:div.box.data-flow.authorized [:br] [:br] "Data flow allowed" [:br] "(authorized)"]
+  (let [authorized?          (re-frame/subscribe [:service-provider/authorized?])
+        latest-msg-timestamp (re-frame/subscribe [:service-provider/latest-msg-timestamp])]
+    (if @authorized?
+      [:div.box.data-flow.authorized [:br] [:br] "Data flow allowed" [:br] "(authorized)"
+       [:br]
+       [:span "Last message: " @latest-msg-timestamp]]
       [:div.box.data-flow [:br] [:br] "Data flow disallowed" [:br] "(unauthorized)"])))
 
 
+(defn messages-panel [messages]
+  [:span "Messages: "
+   (into [:ul]
+    (map (fn [msg] [:li ^{:key msg} msg])
+         messages))])
+
+
 (defn service-provider []
-  (let [root    (re-frame/subscribe [:data-provider/root])
-        message (re-frame/subscribe [:service-provider/message])]
+  (let [root     (re-frame/subscribe [:service-provider/root])
+        side-key (re-frame/subscribe [:service-provider/side-key])
+        messages (re-frame/subscribe [:service-provider/messages])]
     [:div.box.service-provider "Service Provider (Oma app)"
      [:br]
      [grandma-app-image]
      [:br]
-     [:span " Message: "]
-     [:input {:type      "text"
-              :value     @message
-              :size      32
-              :on-change identity}]
+     [messages-panel @messages]
      [:br]
      [:button.btn.btn-default
-      {:on-click #(re-frame/dispatch [:service-provider/fetch @root])}
+      {:on-click #(re-frame/dispatch [:service-provider/fetch @root @side-key])}
       "Fetch"]
      [:br]]))
 
@@ -99,17 +113,21 @@
    [prosumer-image]
    [:br]
    [:button.btn.btn-default
-    {:on-click #(re-frame/dispatch [:iota/authorize])}
+    {:on-click #(re-frame/dispatch [:prosumer/claim-pi])}
     "Claim Pi"]
    [:span " "]
    [:button.btn.btn-default
-    {:on-click #(re-frame/dispatch [:iota/authorize])}
-    "Authorize Oma app"]])
+    {:on-click #(re-frame/dispatch [:prosumer/authorize "oma-app" "x"])}
+    "Authorize Oma app"]
+   [:span " "]
+   [:button.btn.btn-default
+    {:on-click #(re-frame/dispatch [:prosumer/revoke "oma-app" "x"])}
+    "Revoke access to Oma app"]])
 
 
 (defn smart-authorization-grid []
   [:div.wrapper
-   [data-providers] [service-providers]
+   [data-providers]       [service-providers]
    [data-provider] [data] [service-provider]
    [prosumer]])
 

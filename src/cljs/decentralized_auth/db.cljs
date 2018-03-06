@@ -9,7 +9,7 @@
    :iota/iota-instance nil
    :iota.mam/mam-state nil
 
-   :data-provider/side-key ""
+   :data-provider/side-key "SECRET"
    :data-provider/root     ""
 
-   :service-provider/message ""})
+   :service-provider/messages []})

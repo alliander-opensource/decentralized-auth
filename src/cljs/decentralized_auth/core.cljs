@@ -25,11 +25,9 @@
   (dev-setup)
   (re-frame/dispatch-sync [:db/initialize-db])
 
-  ;; Wait for IOTA MAM to be compiled
+  ;; Wait for IOTA MAM to be compiled...
   (js/setTimeout
-   #(do (re-frame/dispatch-sync [:db/initialize-iota "http://localhost:14700"])
-        (re-frame/dispatch-sync [:db/initialize-iota-mam]))
-
+   #(re-frame/dispatch [:iota/initialize "https://testnet140.tangle.works"])
    1000)
 
   (mount-root))
