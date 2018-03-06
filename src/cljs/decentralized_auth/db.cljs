@@ -13,7 +13,12 @@
    :data-provider/side-key         ""
    :data-provider/root             ""
 
-   :service-provider/messages             []
-   :service-provider/latest-msg-timestamp nil
-   :service-provider/side-key             ""
-   :service-provider/root                 ""})
+   :service-provider.grandma-app/messages             []
+   :service-provider.grandma-app/latest-msg-timestamp nil
+   :service-provider.grandma-app/side-key             ""
+   :service-provider.grandma-app/root                 ""
+
+   :service-provider.wattapp/messages             []
+   :service-provider.wattapp/latest-msg-timestamp nil
+   :service-provider.wattapp/side-key             ""
+   :service-provider.wattapp/root                 ""})

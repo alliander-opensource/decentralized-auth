@@ -84,13 +84,23 @@ input {
     grid-area: service-providers;
 }
 
-.service-provider {
-    grid-area: service-provider;
+.grandma-app {
+    grid-area: grandma-app;
 }
 
-.data-flow {
+
+.wattapp {
+    grid-area: wattapp;
+}
+
+.grandma-app-data-flow {
     clip-path: polygon(0% 10%, 60% 10%, 60% 0%, 100% 50%, 60% 100%, 60% 90%, 0% 90%);
-    grid-area: data-flow;
+    grid-area: grandma-app-data-flow;
+}
+
+.wattapp-data-flow {
+    clip-path: polygon(0% 10%, 60% 10%, 60% 0%, 100% 50%, 60% 100%, 60% 90%, 0% 90%);
+    grid-area: wattapp-data-flow;
 }
 
 .data-provider {
@@ -109,24 +119,20 @@ input {
     grid-area: header;
 }
 
-.footer {
-    font-size: 12px;
-    grid-area: footer;
-    text-align: center;
-}
-
 .wrapper {
     display: grid;
     grid-gap: 10px;
     grid-template-columns: 0.35fr 0.30fr 0.35fr;
     grid-template-rows: 0.30fr
                         0.10fr
-                        0.30fr
+                        0.15fr
+                        0.15fr
                         0.30fr;
-    grid-template-areas: "data-providers    ...               service-providers"
-                         "...               ...               ..."
-                         "data-provider     data-flow         service-provider"
-                         "prosumer          prosumer          prosumer";
+    grid-template-areas: "data-providers    service-providers     service-providers"
+                         "...               ...                   ..."
+                         "data-provider     grandma-app-data-flow grandma-app"
+                         "data-provider     wattapp-data-flow     wattapp"
+                         "prosumer          prosumer              prosumer";
     background-color: #fff;
 }
 

@@ -87,54 +87,101 @@
 
 (reg-fx
  :iota-mam-fx/fetch
- (fn [{:keys [root mode side-key on-success]}]
+ (fn [{:keys [root mode side-key on-success on-next-root]}]
    (go (let [{:keys [next-root]}
              (<! (iota-mam/fetch root mode side-key
                                  #(dispatch (conj on-success %))))]
-         (dispatch [:service-provider/change-root next-root])))))
+         (dispatch (conj on-next-root next-root))))))
 
 
 (reg-event-fx
- :service-provider/fetch
+ :service-provider.wattapp/fetch
  (fn [{{:keys [iota.mam/mam-state] :as db} :db :as cofx} [_ root side-key]]
 
-   (log/infof "Fetching message from root %s using side key %s" root side-key)
+   (log/infof "Fetching message for wattapp from root %s using side key %s"
+              root side-key)
 
-   {:iota-mam-fx/fetch {:root       root
-                        :mode       (-> mam-state :channel :mode)
-                        :side-key   side-key
-                        :on-success [:service-provider/add-message]}
+   {:iota-mam-fx/fetch {:root         root
+                        :mode         (-> mam-state :channel :mode)
+                        :side-key     side-key
+                        :on-success   [:service-provider.wattapp/add-message]
+                        :on-next-root [:service-provider.wattapp/change-root]}
+    :db                db}))
+
+
+(reg-event-fx
+ :service-provider.grandma-app/fetch
+ (fn [{{:keys [iota.mam/mam-state] :as db} :db :as cofx} [_ root side-key]]
+
+   (log/infof "Fetching message for grandma-app from root %s using side key %s"
+              root side-key)
+
+   {:iota-mam-fx/fetch {:root         root
+                        :mode         (-> mam-state :channel :mode)
+                        :side-key     side-key
+                        :on-success   [:service-provider.grandma-app/add-message]
+                        :on-next-root [:service-provider.grandma-app/change-root]}
     :db                db}))
 
 
 (reg-event-db
  :prosumer/authorize
- (fn [{:keys [data-provider/side-key data-provider/root] :as db} [_ app-name]]
-   (log/infof "Authorizing %s" app-name)
-   (assoc db
-          :service-provider/side-key side-key
-          :service-provider/root root)))
+ (fn [{:keys [data-provider/side-key data-provider/root] :as db} [_ service-provider]]
+
+   (log/infof "Authorizing %s" service-provider)
+
+   (case service-provider
+     "grandma-app"
+     (assoc db
+            :service-provider.grandma-app/side-key side-key
+            :service-provider.grandma-app/root root)
+
+     "wattapp"
+     (assoc db
+            :service-provider.wattapp/side-key side-key
+            :service-provider.wattapp/root root)
+
+     #_default
+     (throw (js/Error. (str "Unknown service provider: " service-provider))))))
 
 
 (reg-event-db
  :prosumer/revoke
- (fn [{:keys [data-provider/side-key data-provider/root] :as db} [_ app-name]]
-   (log/infof "Revoking access for %s" app-name)
-   (assoc db
-          :data-provider/side-key "NEW9SECRET9KEY")))
+ (fn [{:keys [data-provider/side-key data-provider/root] :as db} [_ service-provider]]
+
+   (log/infof "Revoking access for %s" service-provider)
+
+   ;; TODO: inform authorized service providers of new side key
+   (update db :data-provider/side-key str "9")))
 
 
 (reg-event-db
- :service-provider/add-message
+ :service-provider.wattapp/add-message
  (fn [db [_ message]]
-   (log/info "Adding message" message)
+   (log/infof "Adding message %s for wattapp" message)
    (-> db
-       (assoc :service-provider/latest-msg-timestamp (js/Date.))
-       (update :service-provider/messages conj message))))
+       (assoc :service-provider.wattapp/latest-msg-timestamp (js/Date.))
+       (update :service-provider.wattapp/messages conj message))))
 
 
 (reg-event-db
- :service-provider/change-root
+ :service-provider.wattapp/change-root
  (fn [db [_ root]]
-   (log/infof "Changing root to %s for service provider" root)
-   (assoc db :service-provider/root root)))
+   (log/infof "Changing root to %s for wattapp" root)
+   (assoc db :service-provider.wattapp/root root)))
+
+
+(reg-event-db
+ :service-provider.grandma-app/add-message
+ (fn [db [_ message]]
+   (log/infof "Adding message %s for grandma-app" message)
+   (-> db
+       (assoc :service-provider.grandma-app/latest-msg-timestamp (js/Date.))
+       (update :service-provider.grandma-app/messages conj message))))
+
+
+(reg-event-db
+ :service-provider.grandma-app/change-root
+ (fn [db [_ root]]
+   (log/infof "Changing root to %s for grandma-app" root)
+   (assoc db :service-provider.grandma-app/root root)))
