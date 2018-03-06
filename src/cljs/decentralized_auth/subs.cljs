@@ -1,8 +1,5 @@
 (ns decentralized-auth.subs
-  (:require-macros [reagent.ratom :refer [reaction]]
-                   [taoensso.timbre :as log])
-  (:require [clojure.string :as string]
-            [re-frame.core :refer [reg-sub]]))
+  (:require [re-frame.core :refer [reg-sub]]))
 
 
 (reg-sub

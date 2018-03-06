@@ -1,5 +1,4 @@
-(ns decentralized-auth.db
-  (:require [cljs-iota.core :as iota]))
+(ns decentralized-auth.db)
 
 
 (def default-db

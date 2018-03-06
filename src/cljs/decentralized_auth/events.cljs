@@ -3,12 +3,11 @@
                    [taoensso.timbre :as log])
   (:require [cljs-iota-mam.core :as iota-mam]
             [cljs-iota.core :as iota]
-            [cljs.core.async :as async :refer [<!]]
+            [cljs.core.async :refer [<!]]
             [clojure.string :as string]
             [decentralized-auth.config :as config]
             [decentralized-auth.db :as db]
-            [re-frame.core :refer [reg-event-db reg-event-fx reg-fx dispatch]]
-            [taoensso.timbre :as log]))
+            [re-frame.core :refer [reg-event-db reg-event-fx reg-fx dispatch]]))
 
 
 ;;;; Initialize database event handlers
