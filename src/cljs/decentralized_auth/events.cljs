@@ -7,13 +7,13 @@
             [clojure.string :as string]
             [decentralized-auth.config :as config]
             [decentralized-auth.db :as db]
-            [re-frame.core :as re-frame]
+            [re-frame.core :refer [reg-event-db reg-event-fx reg-fx dispatch]]
             [taoensso.timbre :as log]))
 
 
 ;;;; Initialize database event handlers
 
-(re-frame/reg-event-db
+(reg-event-db
  :db/initialize-db
  (fn [_ _]
    db/default-db))
@@ -31,7 +31,7 @@
          (apply str))))
 
 
-(re-frame/reg-event-fx
+(reg-event-fx
  :iota/initialize
  (fn [{:keys [db] :as cofx} [_ iota-provider]]
 
@@ -49,7 +49,7 @@
       :dispatch [:data-provider/change-mode mam-mode default-side-key]})))
 
 
-(re-frame/reg-event-db
+(reg-event-db
  :data-provider/change-mode
  (fn [{:keys [iota.mam/mam-state] :as db} [_ mam-mode side-key]]
 
@@ -70,7 +70,7 @@
                    transactions))))
 
 
-(re-frame/reg-event-db
+(reg-event-db
  :data-provider/publish
  (fn [{:keys [iota.mam/mam-state] :as db} [_ message]]
    (let [{:keys [state payload root address]} (iota-mam/create mam-state message)]
@@ -84,16 +84,16 @@
             :iota.mam/mam-state state))))
 
 
-(re-frame/reg-fx
+(reg-fx
  :iota-mam-fx/fetch
  (fn [{:keys [root mode side-key on-success]}]
    (go (let [{:keys [next-root]}
              (<! (iota-mam/fetch root mode side-key
-                                 #(re-frame/dispatch (conj on-success %))))]
-         (re-frame/dispatch [:service-provider/change-root next-root])))))
+                                 #(dispatch (conj on-success %))))]
+         (dispatch [:service-provider/change-root next-root])))))
 
 
-(re-frame/reg-event-fx
+(reg-event-fx
  :service-provider/fetch
  (fn [{{:keys [iota.mam/mam-state] :as db} :db :as cofx} [_ root side-key]]
 
@@ -106,7 +106,7 @@
     :db                db}))
 
 
-(re-frame/reg-event-db
+(reg-event-db
  :prosumer/authorize
  (fn [{:keys [data-provider/side-key data-provider/root] :as db} [_ app-name]]
    (log/infof "Authorizing %s" app-name)
@@ -115,7 +115,7 @@
           :service-provider/root root)))
 
 
-(re-frame/reg-event-db
+(reg-event-db
  :prosumer/revoke
  (fn [{:keys [data-provider/side-key data-provider/root] :as db} [_ app-name]]
    (log/infof "Revoking access for %s" app-name)
@@ -123,7 +123,7 @@
           :data-provider/side-key "NEW9SECRET9KEY")))
 
 
-(re-frame/reg-event-db
+(reg-event-db
  :service-provider/add-message
  (fn [db [_ message]]
    (log/info "Adding message" message)
@@ -132,7 +132,7 @@
        (update :service-provider/messages conj message))))
 
 
-(re-frame/reg-event-db
+(reg-event-db
  :service-provider/change-root
  (fn [db [_ root]]
    (log/infof "Changing root to %s for service provider" root)

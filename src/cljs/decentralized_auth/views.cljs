@@ -1,5 +1,5 @@
 (ns decentralized-auth.views
-  (:require [re-frame.core :as re-frame]
+  (:require [re-frame.core :refer [dispatch subscribe]]
             [reagent.core :as r]))
 
 
@@ -8,8 +8,8 @@
 
 
 (defn data-providers []
-  (let [root     (re-frame/subscribe [:data-provider/root])
-        side-key (re-frame/subscribe [:data-provider/side-key])]
+  (let [root     (subscribe [:data-provider/root])
+        side-key (subscribe [:data-provider/side-key])]
     [:div.box.data-providers "Prosumer's Data Providers"
      [:br]
      [:span [:strong "Raspberry Pi"]]
@@ -20,8 +20,8 @@
 
 
 (defn service-providers []
-  (let [side-key   (re-frame/subscribe [:service-provider/side-key])
-        root       (re-frame/subscribe [:service-provider/root])
+  (let [side-key   (subscribe [:service-provider/side-key])
+        root       (subscribe [:service-provider/root])
         public-key "x"]
     [:div.box.service-providers "Independent Service Providers"
      [:br]
@@ -48,7 +48,7 @@
 
 (defn data-provider []
   (let [message  (r/atom "9ENERGYDATA9")
-        side-key (re-frame/subscribe [:data-provider/side-key])]
+        side-key (subscribe [:data-provider/side-key])]
     (fn []
       [:div.box.data-provider "Data Provider (Raspberry Pi)"
        [:br]
@@ -64,19 +64,19 @@
        [:input {:type      "text"
                 :value     @side-key
                 :size      32
-                :on-change #(re-frame/dispatch
+                :on-change #(dispatch
                              [:data-provider/change-mode
                               :restricted
                               (-> % .-target .-value)])}]
        [:br]
        [:button.btn.btn-default
-        {:on-click #(re-frame/dispatch [:data-provider/publish @message])}
+        {:on-click #(dispatch [:data-provider/publish @message])}
         "Publish"]])))
 
 
 (defn data []
-  (let [authorized?          (re-frame/subscribe [:service-provider/authorized?])
-        latest-msg-timestamp (re-frame/subscribe [:service-provider/latest-msg-timestamp])]
+  (let [authorized?          (subscribe [:service-provider/authorized?])
+        latest-msg-timestamp (subscribe [:service-provider/latest-msg-timestamp])]
     (if @authorized?
       [:div.box.data-flow.authorized [:br] [:br] "Data flow allowed" [:br] "(authorized)"
        [:br]
@@ -92,9 +92,9 @@
 
 
 (defn service-provider []
-  (let [root     (re-frame/subscribe [:service-provider/root])
-        side-key (re-frame/subscribe [:service-provider/side-key])
-        messages (re-frame/subscribe [:service-provider/messages])]
+  (let [root     (subscribe [:service-provider/root])
+        side-key (subscribe [:service-provider/side-key])
+        messages (subscribe [:service-provider/messages])]
     [:div.box.service-provider "Service Provider (Oma app)"
      [:br]
      [grandma-app-image]
@@ -102,7 +102,7 @@
      [messages-panel @messages]
      [:br]
      [:button.btn.btn-default
-      {:on-click #(re-frame/dispatch [:service-provider/fetch @root @side-key])}
+      {:on-click #(dispatch [:service-provider/fetch @root @side-key])}
       "Fetch"]
      [:br]]))
 
@@ -113,15 +113,15 @@
    [prosumer-image]
    [:br]
    [:button.btn.btn-default
-    {:on-click #(re-frame/dispatch [:prosumer/claim-pi])}
+    {:on-click #(dispatch [:prosumer/claim-pi])}
     "Claim Pi"]
    [:span " "]
    [:button.btn.btn-default
-    {:on-click #(re-frame/dispatch [:prosumer/authorize "oma-app" "x"])}
+    {:on-click #(dispatch [:prosumer/authorize "oma-app" "x"])}
     "Authorize Oma app"]
    [:span " "]
    [:button.btn.btn-default
-    {:on-click #(re-frame/dispatch [:prosumer/revoke "oma-app" "x"])}
+    {:on-click #(dispatch [:prosumer/revoke "oma-app" "x"])}
     "Revoke access to Oma app"]])
 
 
