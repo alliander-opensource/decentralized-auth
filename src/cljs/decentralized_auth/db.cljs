@@ -11,6 +11,10 @@
    :iota.mam/mam-state nil
 
    :data-provider/default-side-key "SECRET"
+   :data-provider/side-key         ""
    :data-provider/root             ""
 
-   :service-provider/messages []})
+   :service-provider/messages             []
+   :service-provider/latest-msg-timestamp ""
+   :service-provider/side-key             ""
+   :service-provider/root                 ""})
