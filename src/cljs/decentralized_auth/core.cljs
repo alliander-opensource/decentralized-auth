@@ -5,7 +5,7 @@
             [decentralized-auth.views :as views]
             [re-frame.core :as re-frame]
             [re-frisk.core :refer [enable-re-frisk!]]
-            [reagent.core :as reagent]))
+            [reagent.core :as r]))
 
 
 (defn dev-setup []
@@ -17,7 +17,7 @@
 
 (defn mount-root []
   (re-frame/clear-subscription-cache!)
-  (reagent/render [views/main-panel]
+  (r/render [views/main-panel]
                   (.getElementById js/document "app")))
 
 
