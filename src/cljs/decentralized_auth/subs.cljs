@@ -6,12 +6,6 @@
 
 
 (reg-sub
- :iota.mam/root
- (fn [{{{:keys [next-root]} :channel} :iota.mam/iota-mam :as db}]
-   next-root))
-
-
-(reg-sub
  :data-provider/root
  (fn [{:keys [data-provider/root] :as db}]
    root))
