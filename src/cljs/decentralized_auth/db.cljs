@@ -15,6 +15,6 @@
    :data-provider/root             ""
 
    :service-provider/messages             []
-   :service-provider/latest-msg-timestamp ""
+   :service-provider/latest-msg-timestamp nil
    :service-provider/side-key             ""
    :service-provider/root                 ""})
