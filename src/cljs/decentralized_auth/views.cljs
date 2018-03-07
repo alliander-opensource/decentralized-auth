@@ -24,7 +24,7 @@
           public-key "x"]
       [:div {:style {:display "inline-block"}}
        [:br]
-       [:span [:strong "Oma app."]]
+       [:span [:strong "Grandma app."]]
        [:br]
        [:span "Public key: " public-key]
        [:br]
@@ -94,7 +94,14 @@
         {:on-click #(dispatch [:data-provider/publish @message])}
         "Publish"]
        [:br]
-       [:span "MAM root: " (format-root @root)]])))
+       [:span "MAM root: " (format-root @root)]
+       [:br]
+       [:span "Claim token: 9ABC?"]
+       [:br]
+       "Authorizations:"
+       [:span>lu
+        [:li "grandma-app"]
+        [:li "wattapp"]]])))
 
 
 (defn grandma-app-data-flow []
@@ -128,7 +135,7 @@
   (let [root     (subscribe [:service-provider.grandma-app/root])
         side-key (subscribe [:service-provider.grandma-app/side-key])
         messages (subscribe [:service-provider.grandma-app/messages])]
-    [:div.box.grandma-app "Service Provider 1 (Oma app)"
+    [:div.box.grandma-app "Service Provider 1 (Grandma app)"
      [:br]
      [grandma-app-image]
      [:br]
