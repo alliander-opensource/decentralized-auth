@@ -61,7 +61,7 @@
 
 
 (defn data-provider []
-  (let [message        (r/atom "9ENERGYDATA9")
+  (let [message        (r/atom "some energy data")
         side-key       (subscribe [:data-provider/side-key])
         root           (subscribe [:data-provider/root])
         authorizations (subscribe [:data-provider/authorized-service-providers])]
