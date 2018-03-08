@@ -3,6 +3,7 @@
                    [taoensso.timbre :as log])
   (:require [cljs-iota-mam.core :as iota-mam]
             [cljs-iota.core :as iota]
+            [cljs-iota.utils :as iota-utils]
             [cljs.core.async :refer [<!]]
             [clojure.string :as string]
             [decentralized-auth.config :as config]
@@ -58,7 +59,8 @@
               (name mam-mode) side-key)
 
    (let [new-mam-state (cond-> mam-state
-                         (not (string/blank? side-key))
+                         (not (and (= mam-mode :restricted)
+                                   (string/blank? side-key)))
                          (iota-mam/change-mode mam-mode side-key))]
      (assoc db
             :iota.mam/mam-state new-mam-state
@@ -73,11 +75,12 @@
 
 (reg-event-db
  :data-provider/publish
- (fn [{:keys [iota.mam/mam-state] :as db} [_ message]]
-   (let [{:keys [state payload root address]} (iota-mam/create mam-state message)]
+ (fn [{:keys [iota.mam/mam-state iota/iota-instance] :as db} [_ packet]]
+   (let [trytes                               (iota-utils/to-trytes iota-instance packet)
+         {:keys [state payload root address]} (iota-mam/create mam-state trytes)]
 
      (log/infof "Attaching message %s at root %s with address %s"
-                message root address)
+                packet root address)
 
      (attach-to-tangle payload address)
      (assoc db
