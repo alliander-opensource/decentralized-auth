@@ -9,9 +9,10 @@
    :iota/iota-instance nil
    :iota.mam/mam-state nil
 
-   :data-provider/default-side-key "SECRET"
-   :data-provider/side-key         ""
-   :data-provider/root             ""
+   :data-provider/default-side-key             "SECRET"
+   :data-provider/side-key                     ""
+   :data-provider/root                         ""
+   :data-provider/authorized-service-providers #{}
 
    :service-provider.grandma-app/messages             []
    :service-provider.grandma-app/latest-msg-timestamp nil

@@ -17,6 +17,12 @@
    side-key))
 
 
+(reg-sub
+ :data-provider/authorized-service-providers
+ (fn [{:keys [data-provider/authorized-service-providers] :as db}]
+   authorized-service-providers))
+
+
 ;;;;
 ;;;; Service Provider: Grandma app
 

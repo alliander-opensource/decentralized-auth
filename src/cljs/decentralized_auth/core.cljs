@@ -1,5 +1,6 @@
 (ns decentralized-auth.core
   (:require [decentralized-auth.config :as config]
+            [decentralized-auth.db]
             [decentralized-auth.events]
             [decentralized-auth.subs]
             [decentralized-auth.views :as views]

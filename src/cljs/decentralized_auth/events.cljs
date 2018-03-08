@@ -85,42 +85,63 @@
             :iota.mam/mam-state state))))
 
 
+(reg-event-db
+ :data-provider/notify-new-side-key
+ (fn [{:keys [data-provider/authorized-service-providers] :as db} [_ side-key]]
+   (log/infof "Informing service providers %s about new side key"
+              authorized-service-providers)
+   (let [db-authorization-keys
+         (map (fn [asp]
+                (keyword (str "service-provider." asp "/side-key")))
+              authorized-service-providers)]
+     (apply assoc (cons db (interleave db-authorization-keys (repeat side-key)))))))
+
+
 (reg-fx
  :iota-mam-fx/fetch
- (fn [{:keys [root mode side-key on-success on-next-root]}]
+ (fn [{:keys [iota-instance root mode side-key on-success on-next-root]}]
    (go (let [{:keys [next-root]}
              (<! (iota-mam/fetch root mode side-key
-                                 #(dispatch (conj on-success %))))]
+                                 #(let [msg (iota-utils/from-trytes iota-instance %)]
+                                    (dispatch (conj on-success msg)))))]
          (dispatch (conj on-next-root next-root))))))
 
 
 (reg-event-fx
  :service-provider.wattapp/fetch
- (fn [{{:keys [iota.mam/mam-state] :as db} :db :as cofx} [_ root side-key]]
+ (fn [{{:keys [iota.mam/mam-state
+               iota/iota-instance] :as db} :db
+       :as cofx}
+      [_ root side-key]]
 
    (log/infof "Fetching message for wattapp from root %s using side key %s"
               root side-key)
 
-   {:iota-mam-fx/fetch {:root         root
-                        :mode         (-> mam-state :channel :mode)
-                        :side-key     side-key
-                        :on-success   [:service-provider.wattapp/add-message]
-                        :on-next-root [:service-provider.wattapp/change-root]}
+   {:iota-mam-fx/fetch {:iota-instance iota-instance
+                        :root          root
+                        :mode          (-> mam-state :channel :mode)
+                        :side-key      side-key
+                        :on-success    [:service-provider.wattapp/add-message]
+                        :on-next-root  [:service-provider.wattapp/change-root]}
     :db                db}))
 
 
 (reg-event-fx
  :service-provider.grandma-app/fetch
- (fn [{{:keys [iota.mam/mam-state] :as db} :db :as cofx} [_ root side-key]]
+ (fn [{{:keys [iota.mam/mam-state
+               iota/iota-instance] :as db} :db
+       :as cofx}
+      [_ root side-key]]
 
    (log/infof "Fetching message for grandma-app from root %s using side key %s"
               root side-key)
 
-   {:iota-mam-fx/fetch {:root         root
-                        :mode         (-> mam-state :channel :mode)
-                        :side-key     side-key
-                        :on-success   [:service-provider.grandma-app/add-message]
-                        :on-next-root [:service-provider.grandma-app/change-root]}
+   {:iota-mam-fx/fetch {:iota-instance iota-instance
+                        :root          root
+                        :mode          (-> mam-state :channel :mode)
+                        :side-key      side-key
+                        :on-success    [:service-provider.grandma-app/add-message]
+                        :on-next-root  [:service-provider.grandma-app/change-root]}
     :db                db}))
 
 
@@ -130,19 +151,22 @@
 
    (log/infof "Authorizing %s" service-provider)
 
-   (case service-provider
-     "grandma-app"
-     (assoc db
-            :service-provider.grandma-app/side-key side-key
-            :service-provider.grandma-app/root root)
+   (-> (case service-provider
+           "grandma-app"
+         (assoc db
+                :service-provider.grandma-app/side-key side-key
+                :service-provider.grandma-app/root root)
 
-     "wattapp"
-     (assoc db
-            :service-provider.wattapp/side-key side-key
-            :service-provider.wattapp/root root)
+         "wattapp"
+         (assoc db
+                :service-provider.wattapp/side-key side-key
+                :service-provider.wattapp/root root)
 
-     #_default
-     (throw (js/Error. (str "Unknown service provider: " service-provider))))))
+         #_default
+         (throw (js/Error. (str "Unknown service provider: " service-provider))))
+
+       (update
+        :data-provider/authorized-service-providers conj service-provider))))
 
 
 (reg-event-db
@@ -152,7 +176,9 @@
    (log/infof "Revoking access for %s" service-provider)
 
    ;; TODO: inform authorized service providers of new side key
-   (update db :data-provider/side-key str "9")))
+   (-> db
+       (update :data-provider/side-key str "9")
+       (update :data-provider/authorized-service-providers disj service-provider))))
 
 
 (reg-event-db

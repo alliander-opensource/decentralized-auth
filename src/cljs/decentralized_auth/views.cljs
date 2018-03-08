@@ -7,47 +7,41 @@
   (str (->> root (take 10) (apply str)) "......"))
 
 
+(defn authorizations-panel [authorizations]
+  [:div
+   "Authorized service providers:"
+   (->> authorizations
+        (map (fn [sp] [:li ^{:key sp} sp]))
+        (into [:span>ul]))])
+
+
 (defn data-providers []
-  (let [root     (subscribe [:data-provider/root])
-        side-key (subscribe [:data-provider/side-key])]
+  (let [root           (subscribe [:data-provider/root])
+        side-key       (subscribe [:data-provider/side-key])
+        authorizations (subscribe [:data-provider/authorized-service-providers])]
     [:div.box.data-providers "Prosumer's Data Providers"
      [:br]
-     [:span [:ul>li "Raspberry Pi"]]]))
+     [:span [:ul>li "Raspberry Pi"
+             [authorizations-panel @authorizations]]]]))
 
 
 (defn service-providers []
   [:div.box.service-providers "Independent Service Providers"
 
    [:div
-    (let [side-key   (subscribe [:service-provider.grandma-app/side-key])
-          root       (subscribe [:service-provider.grandma-app/root])
-          public-key "x"]
+    (let [public-key "x"]
       [:div {:style {:display "inline-block"}}
        [:br]
        [:span [:strong "Grandma app."]]
        [:br]
-       [:span "Public key: " public-key]
-       [:br]
-       [:span "Side key (encrypted): "
-        (when (not-empty @side-key)
-          (str public-key @side-key))]
-       [:br]
-       [:span "Next MAM root: " (format-root @root)]])
+       [:span "Public key: " public-key]])
 
-    (let [side-key   (subscribe [:service-provider.wattapp/side-key])
-          root       (subscribe [:service-provider.wattapp/root])
-          public-key "y"]
-      [:div {:style {:display "inline-block"}}
+    (let [public-key "y"]
+      [:div {:style {:display "inline-block" :padding-left "10px"}}
        [:br]
        [:span [:strong "Wattapp."]]
        [:br]
-       [:span "Public key: " public-key]
-       [:br]
-       [:span "Side key (encrypted): "
-        (when (not-empty @side-key)
-          (str public-key @side-key))]
-       [:br]
-       [:span "Next MAM root: " (format-root @root)]])]])
+       [:span "Public key: " public-key]])]])
 
 
 (defn raspberry-pi-image []
@@ -67,9 +61,10 @@
 
 
 (defn data-provider []
-  (let [message  (r/atom "9ENERGYDATA9")
-        side-key (subscribe [:data-provider/side-key])
-        root     (subscribe [:data-provider/root])]
+  (let [message        (r/atom "9ENERGYDATA9")
+        side-key       (subscribe [:data-provider/side-key])
+        root           (subscribe [:data-provider/root])
+        authorizations (subscribe [:data-provider/authorized-service-providers])]
     (fn []
       [:div.box.data-provider "Data Provider (Raspberry Pi)"
        [:br]
@@ -98,20 +93,28 @@
        [:br]
        [:span "Claim token: 9ABC?"]
        [:br]
-       "Authorizations:"
-       [:span>lu
-        [:li "grandma-app"]
-        [:li "wattapp"]]])))
+       [:br]
+       [authorizations-panel @authorizations]])))
 
 
 (defn grandma-app-data-flow []
   (let [authorized?          (subscribe [:service-provider.grandma-app/authorized?])
         latest-msg-timestamp (subscribe [:service-provider.grandma-app/latest-msg-timestamp])]
     (if @authorized?
-      [:div.box.grandma-app-data-flow.authorized [:br] [:br] "Data flow allowed" [:br] "(authorized)"
+      [:div.box.grandma-app-data-flow.authorized
+       [:br]
+       [:br]
+       "Data flow allowed"
+       [:br]
+       "(authorized)"
        [:br]
        [:span "Last message: " @latest-msg-timestamp]]
-      [:div.box.grandma-app-data-flow [:br] [:br] "Data flow disallowed" [:br] "(unauthorized)"])))
+      [:div.box.grandma-app-data-flow
+       [:br]
+       [:br]
+       "Data flow disallowed"
+       [:br]
+       "(unauthorized)"])))
 
 
 (defn wattapp-data-flow []
@@ -141,6 +144,16 @@
      [:br]
      [messages-panel @messages]
      [:br]
+     [:span "Next MAM root: " (format-root @root)]
+     [:br]
+     [:span "Side key (encrypted): "
+      (when (not-empty @side-key)
+        (str "x" @side-key))]
+     [:br]
+     [:button.btn.btn-default
+      {:on-click #(dispatch [:prosumer/authorize "grandma-app" "x"])}
+      "Authorize"]
+     " "
      [:button.btn.btn-default
       {:on-click #(dispatch [:service-provider.grandma-app/fetch @root @side-key])}
       "Fetch"]]))
@@ -156,6 +169,16 @@
      [:br]
      [messages-panel @messages]
      [:br]
+     [:span "Next MAM root: " (format-root @root)]
+     [:br]
+     [:span "Side key (encrypted): "
+      (when (not-empty @side-key)
+        (str "y" @side-key))]
+     [:br]
+     [:button.btn.btn-default
+      {:on-click #(dispatch [:prosumer/authorize "wattapp" "y"])}
+      "Authorize"]
+     [:span " "]
      [:button.btn.btn-default
       {:on-click #(dispatch [:service-provider.wattapp/fetch @root @side-key])}
       "Fetch"]]))
@@ -171,16 +194,8 @@
     "Claim Pi"]
    [:span " "]
    [:button.btn.btn-default
-    {:on-click #(dispatch [:prosumer/authorize "grandma-app" "x"])}
-    "Authorize Oma app"]
-   [:span " "]
-   [:button.btn.btn-default
     {:on-click #(dispatch [:prosumer/revoke "grandma-app" "x"])}
     "Revoke access for Oma app"]
-   [:span " "]
-   [:button.btn.btn-default
-    {:on-click #(dispatch [:prosumer/authorize "wattapp" "y"])}
-    "Authorize Wattapp"]
    [:span " "]
    [:button.btn.btn-default
     {:on-click #(dispatch [:prosumer/revoke "wattapp" "y"])}
