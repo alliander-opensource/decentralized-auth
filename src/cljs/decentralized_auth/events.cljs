@@ -88,18 +88,6 @@
             :iota.mam/mam-state state))))
 
 
-(reg-event-db
- :data-provider/notify-new-side-key
- (fn [{:keys [data-provider/authorized-service-providers] :as db} [_ side-key]]
-   (log/infof "Informing service providers %s about new side key"
-              authorized-service-providers)
-   (let [db-authorization-keys
-         (map (fn [asp]
-                (keyword (str "service-provider." asp "/side-key")))
-              authorized-service-providers)]
-     (apply assoc (cons db (interleave db-authorization-keys (repeat side-key)))))))
-
-
 (reg-fx
  :iota-mam-fx/fetch
  (fn [{:keys [iota-instance root mode side-key on-success on-next-root]}]
@@ -172,16 +160,40 @@
         :data-provider/authorized-service-providers conj service-provider))))
 
 
-(reg-event-db
+(reg-event-fx
  :prosumer/revoke
- (fn [{:keys [data-provider/side-key data-provider/root] :as db} [_ service-provider]]
+ (fn [{{:keys [data-provider/side-key
+               data-provider/root
+               data-provider/authorized-service-providers]
+        :as   db}
+       :db :as cofx}
+      [_ service-provider]]
 
-   (log/infof "Revoking access for %s" service-provider)
+   (let [new-authorized-service-providers
+         (disj authorized-service-providers service-provider)
+         new-side-key (str "x" side-key)]
 
-   ;; TODO: inform authorized service providers of new side key
-   (-> db
-       (update :data-provider/side-key str "9")
-       (update :data-provider/authorized-service-providers disj service-provider))))
+     (log/infof "Revoking access for %s" service-provider)
+     (log/infof "Informing %s of new side key" new-authorized-service-providers)
+
+     {:db         (-> db
+                      (assoc :data-provider/side-key new-side-key)
+                      (assoc :data-provider/authorized-service-providers
+                             new-authorized-service-providers))
+      :dispatch-n [[:data-provider/notify-new-side-key new-side-key]
+                   [:data-provider/change-mode :restricted new-side-key]]})))
+
+
+(reg-event-db
+ :data-provider/notify-new-side-key
+ (fn [{:keys [data-provider/authorized-service-providers] :as db} [_ side-key]]
+   (log/infof "Informing service providers %s about new side key"
+              authorized-service-providers)
+   (let [db-authorization-keys
+         (map (fn [asp]
+                (keyword (str "service-provider." asp "/side-key")))
+              authorized-service-providers)]
+     (apply assoc (cons db (interleave db-authorization-keys (repeat side-key)))))))
 
 
 (reg-event-db
