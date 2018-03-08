@@ -85,25 +85,30 @@ input {
 }
 
 .grandma-app {
+    background-color: #7db239;
     grid-area: grandma-app;
 }
 
 
 .wattapp {
+    background-color: #7db239;
     grid-area: wattapp;
 }
 
 .grandma-app-data-flow {
+    background-color: #919191;
     clip-path: polygon(0% 10%, 60% 10%, 60% 0%, 100% 50%, 60% 100%, 60% 90%, 0% 90%);
     grid-area: grandma-app-data-flow;
 }
 
 .wattapp-data-flow {
+    background-color: #919191;
     clip-path: polygon(0% 10%, 60% 10%, 60% 0%, 100% 50%, 60% 100%, 60% 90%, 0% 90%);
     grid-area: wattapp-data-flow;
 }
 
 .data-provider {
+    background-color: #7db239;
     grid-area: data-provider;
 }
 
@@ -112,6 +117,7 @@ input {
 }
 
 .prosumer {
+    background-color: #7db239;
     grid-area: prosumer;
 }
 
@@ -137,14 +143,9 @@ input {
 }
 
 .box {
-    background-color: #7db239;
     color: #fff;
     border-radius: 5px;
     padding: 10px;
-}
-
-.data-flow, .footer {
-    background-color: #919191;
 }
 
 .authorized {
