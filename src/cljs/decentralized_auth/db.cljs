@@ -5,7 +5,7 @@
   {:directory/service-providers {}
    :directory/data-providers    {}
 
-   :iota/provider      "https://testnet140.tangle.works"
+   :iota/provider      "http://localhost:14700"
    :iota/iota-instance nil
    :iota.mam/mam-state nil
 
