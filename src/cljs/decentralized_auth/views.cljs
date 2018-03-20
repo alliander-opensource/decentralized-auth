@@ -7,6 +7,12 @@
   (str (->> root (take 10) (apply str)) "......"))
 
 
+(defn decrypt-side-key
+  "Decrypting now means removing the \"public key\" prefix."
+  [side-key]
+  (when side-key (subs side-key 1)))
+
+
 (defn authorizations-panel [authorizations]
   [:div
    "Authorized service providers:"
@@ -146,16 +152,16 @@
      [:br]
      [:span "Next MAM root: " (format-root @root)]
      [:br]
-     [:span "Side key (encrypted): "
-      (when (not-empty @side-key)
-        (str "x" @side-key))]
+     [:span "Side key (encrypted): " @side-key]
      [:br]
      [:button.btn.btn-default
       {:on-click #(dispatch [:prosumer/authorize "grandma-app" "x"])}
       "Authorize"]
      " "
      [:button.btn.btn-default
-      {:on-click #(dispatch [:service-provider.grandma-app/fetch @root @side-key])}
+      {:on-click #(dispatch [:service-provider.grandma-app/fetch
+                             @root
+                             (decrypt-side-key @side-key)])}
       "Fetch"]]))
 
 
@@ -171,16 +177,16 @@
      [:br]
      [:span "Next MAM root: " (format-root @root)]
      [:br]
-     [:span "Side key (encrypted): "
-      (when (not-empty @side-key)
-        (str "y" @side-key))]
+     [:span "Side key (encrypted): " @side-key]
      [:br]
      [:button.btn.btn-default
       {:on-click #(dispatch [:prosumer/authorize "wattapp" "y"])}
       "Authorize"]
      [:span " "]
      [:button.btn.btn-default
-      {:on-click #(dispatch [:service-provider.wattapp/fetch @root @side-key])}
+      {:on-click #(dispatch [:service-provider.wattapp/fetch
+                             @root
+                             (decrypt-side-key @side-key)])}
       "Fetch"]]))
 
 

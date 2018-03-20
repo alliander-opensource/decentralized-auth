@@ -53,7 +53,10 @@
 
 (reg-event-db
  :data-provider/change-mode
- (fn [{:keys [iota.mam/mam-state] :as db} [_ mam-mode side-key]]
+ (fn [{:keys [iota.mam/mam-state
+              data-provider/authorized-service-providers]
+       :as   db}
+      [_ mam-mode side-key]]
 
    (log/infof "Changing MAM mode to %s and side key to %s "
               (name mam-mode) side-key)
@@ -65,6 +68,44 @@
      (assoc db
             :iota.mam/mam-state new-mam-state
             :data-provider/side-key side-key))))
+
+
+(defn json-encode [m]
+  (.stringify js/JSON (clj->js m)))
+
+
+(defn json-decode [msg]
+  (try
+    (js->clj (.parse js/JSON msg) :keywordize-keys true)
+    (catch :default _
+      msg)))
+
+
+(reg-event-fx
+ :data-provider/rotate-key
+ (fn [{{:keys [iota.mam/mam-state]
+        :as   db}
+       :db :as cofx}
+      [_ authorized-service-providers side-key]]
+
+   (log/infof "Informing authorized data providers %s of new side key %s"
+              authorized-service-providers
+              side-key)
+
+   ;; Encrypt side keys using public keys of authorized service providers
+   ;; Add them into data structure, publish that message, change mode
+   (let [new-side-key-msg (json-encode
+                           {:type "key-rotation"
+                            :msg  (select-keys {"grandma-app" (str "x" side-key)
+                                                "wattapp"     (str "y" side-key)}
+                                               authorized-service-providers)})]
+
+     {:dispatch       [:data-provider/publish new-side-key-msg]
+
+      ;; Bit hacky way to change the mode AFTER the new-side-key msg has been published.
+      ;; TODO: prettify
+      :dispatch-later [{:ms       2000
+                        :dispatch [:data-provider/change-mode :restricted side-key]}]})))
 
 
 (defn attach-to-tangle [payload address]
@@ -164,6 +205,10 @@
         :data-provider/authorized-service-providers conj service-provider))))
 
 
+(defn gen-key []
+  (->> (random-uuid) str (take 8) (apply str) string/upper-case))
+
+
 (reg-event-fx
  :prosumer/revoke
  (fn [{{:keys [data-provider/side-key
@@ -175,38 +220,35 @@
 
    (let [new-authorized-service-providers
          (disj authorized-service-providers service-provider)
-         new-side-key (str "x" side-key)]
+         new-side-key (gen-key)]
 
      (log/infof "Revoking access for %s" service-provider)
-     (log/infof "Informing %s of new side key" new-authorized-service-providers)
 
      {:db         (-> db
                       (assoc :data-provider/side-key new-side-key)
                       (assoc :data-provider/authorized-service-providers
                              new-authorized-service-providers))
-      :dispatch-n [[:data-provider/notify-new-side-key new-side-key]
-                   [:data-provider/change-mode :restricted new-side-key]]})))
-
-
-(reg-event-db
- :data-provider/notify-new-side-key
- (fn [{:keys [data-provider/authorized-service-providers] :as db} [_ side-key]]
-   (log/infof "Informing service providers %s about new side key"
-              authorized-service-providers)
-   (let [db-authorization-keys
-         (map (fn [asp]
-                (keyword (str "service-provider." asp "/side-key")))
-              authorized-service-providers)]
-     (apply assoc (cons db (interleave db-authorization-keys (repeat side-key)))))))
+      :dispatch [:data-provider/rotate-key
+                 new-authorized-service-providers
+                 new-side-key]})))
 
 
 (reg-event-db
  :service-provider.wattapp/add-message
  (fn [db [_ message]]
-   (log/infof "Adding message %s for wattapp" message)
-   (-> db
-       (assoc :service-provider.wattapp/latest-msg-timestamp (js/Date.))
-       (update :service-provider.wattapp/messages conj message))))
+
+   (let [parsed-message (json-decode message)]
+
+     (log/infof "Adding message %s for wattapp" message)
+
+     (when (:type parsed-message)
+       (log/info "Rotating keys"))
+
+     (cond-> db
+       (:type parsed-message) (assoc :service-provider.wattapp/side-key
+                                     (:wattapp (:msg parsed-message)))
+       true (assoc :service-provider.wattapp/latest-msg-timestamp (js/Date.))
+       true (update :service-provider.wattapp/messages conj message)))))
 
 
 (reg-event-db
@@ -219,10 +261,19 @@
 (reg-event-db
  :service-provider.grandma-app/add-message
  (fn [db [_ message]]
-   (log/infof "Adding message %s for grandma-app" message)
-   (-> db
-       (assoc :service-provider.grandma-app/latest-msg-timestamp (js/Date.))
-       (update :service-provider.grandma-app/messages conj message))))
+
+   (let [parsed-message (json-decode message)]
+
+     (log/infof "Adding message %s for grandma-app" parsed-message)
+
+     (when (:type parsed-message)
+       (log/info "Rotating keys"))
+
+     (cond-> db
+       (:type parsed-message) (assoc :service-provider.grandma-app/side-key
+                                     (:grandma-app (:msg parsed-message)))
+       true (assoc :service-provider.grandma-app/latest-msg-timestamp (js/Date.))
+       true (update :service-provider.grandma-app/messages conj message)))))
 
 
 (reg-event-db
