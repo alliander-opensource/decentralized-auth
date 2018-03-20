@@ -69,7 +69,7 @@
 
 (defn attach-to-tangle [payload address]
   (go (let [depth                6
-            min-weight-magnitude 3
+            min-weight-magnitude 14
             transactions         (<! (iota-mam/attach payload
                                                       address
                                                       depth
