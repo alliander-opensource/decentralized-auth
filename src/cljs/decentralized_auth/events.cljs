@@ -68,9 +68,13 @@
 
 
 (defn attach-to-tangle [payload address]
-  (go (let [transactions (<! (iota-mam/attach payload address))]
-        (log/infof "Transactions attached to tangle: %s"
-                   transactions))))
+  (go (let [depth                6
+            min-weight-magnitude 3
+            transactions         (<! (iota-mam/attach payload
+                                                      address
+                                                      depth
+                                                      min-weight-magnitude))]
+        (log/infof "Transactions attached to tangle: %s" transactions))))
 
 
 (reg-event-db
