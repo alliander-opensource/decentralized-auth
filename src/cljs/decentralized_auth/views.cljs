@@ -1,5 +1,6 @@
 (ns decentralized-auth.views
-  (:require [re-frame.core :refer [dispatch subscribe]]
+  (:require [decentralized-auth.utils :refer [json-encode]]
+            [re-frame.core :refer [dispatch subscribe]]
             [reagent.core :as r]))
 
 
@@ -92,7 +93,9 @@
                               (-> % .-target .-value)])}]
        [:br]
        [:button.btn.btn-default
-        {:on-click #(dispatch [:data-provider/publish @message])}
+        {:on-click #(dispatch [:data-provider/publish (json-encode
+                                                       {:type  "data"
+                                                        :value @message})])}
         "Publish"]
        [:br]
        [:span "MAM root: " (format-root @root)]

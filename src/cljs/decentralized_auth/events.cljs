@@ -8,6 +8,7 @@
             [clojure.string :as string]
             [decentralized-auth.config :as config]
             [decentralized-auth.db :as db]
+            [decentralized-auth.utils :refer [json-encode json-decode]]
             [re-frame.core :refer [reg-event-db reg-event-fx reg-fx dispatch]]))
 
 
@@ -70,15 +71,13 @@
             :data-provider/side-key side-key))))
 
 
-(defn json-encode [m]
-  (.stringify js/JSON (clj->js m)))
-
-
-(defn json-decode [msg]
-  (try
-    (js->clj (.parse js/JSON msg) :keywordize-keys true)
-    (catch :default _
-      msg)))
+(defn side-key-msg
+  "Create a message for key rotation. Encrypt the side keys with the public keys
+  of authorized service providers."
+  [side-key authorized-service-providers]
+  (-> {"grandma-app" (str "x" side-key)
+       "wattapp"     (str "y" side-key)}
+      (select-keys authorized-service-providers)))
 
 
 (reg-event-fx
@@ -96,21 +95,20 @@
    ;; Add them into data structure, publish that message, change mode
    (let [new-side-key-msg (json-encode
                            {:type "key-rotation"
-                            :msg  (select-keys {"grandma-app" (str "x" side-key)
-                                                "wattapp"     (str "y" side-key)}
-                                               authorized-service-providers)})]
+                            :value  (side-key-msg side-key
+                                                  authorized-service-providers)})]
 
-     {:dispatch       [:data-provider/publish new-side-key-msg]
-
-      ;; Bit hacky way to change the mode AFTER the new-side-key msg has been published.
-      ;; TODO: prettify
-      :dispatch-later [{:ms       2000
+     {:dispatch-later [{:ms       0
+                        :dispatch [:data-provider/publish new-side-key-msg]}
+                       ;; Bit hacky way to change the mode AFTER the
+                       ;; new-side-key msg has been published.
+                       {:ms       2000
                         :dispatch [:data-provider/change-mode :restricted side-key]}]})))
 
 
 (defn attach-to-tangle [payload address]
   (go (let [depth                6
-            min-weight-magnitude 14
+            min-weight-magnitude 3
             transactions         (<! (iota-mam/attach payload
                                                       address
                                                       depth
@@ -190,12 +188,12 @@
    (-> (case service-provider
            "grandma-app"
          (assoc db
-                :service-provider.grandma-app/side-key side-key
+                :service-provider.grandma-app/side-key (str "x" side-key)
                 :service-provider.grandma-app/root root)
 
          "wattapp"
          (assoc db
-                :service-provider.wattapp/side-key side-key
+                :service-provider.wattapp/side-key (str "y" side-key)
                 :service-provider.wattapp/root root)
 
          #_default
@@ -237,16 +235,16 @@
  :service-provider.wattapp/add-message
  (fn [db [_ message]]
 
-   (let [parsed-message (json-decode message)]
+   (let [{:keys [type value]} (json-decode message)]
 
      (log/infof "Adding message %s for wattapp" message)
 
-     (when (:type parsed-message)
+     (when (= type "key-rotation")
        (log/info "Rotating keys"))
 
      (cond-> db
-       (:type parsed-message) (assoc :service-provider.wattapp/side-key
-                                     (:wattapp (:msg parsed-message)))
+       (= type "key-rotation") (assoc :service-provider.wattapp/side-key
+                                      (:wattapp value))
        true (assoc :service-provider.wattapp/latest-msg-timestamp (js/Date.))
        true (update :service-provider.wattapp/messages conj message)))))
 
@@ -262,16 +260,16 @@
  :service-provider.grandma-app/add-message
  (fn [db [_ message]]
 
-   (let [parsed-message (json-decode message)]
+   (let [{:keys [type value]} (json-decode message)]
 
-     (log/infof "Adding message %s for grandma-app" parsed-message)
+     (log/infof "Adding message %s for grandma-app" message)
 
-     (when (:type parsed-message)
+     (when (= type "key-rotation")
        (log/info "Rotating keys"))
 
      (cond-> db
-       (:type parsed-message) (assoc :service-provider.grandma-app/side-key
-                                     (:grandma-app (:msg parsed-message)))
+       (= type "key-rotation") (assoc :service-provider.grandma-app/side-key
+                                      (:grandma-app value))
        true (assoc :service-provider.grandma-app/latest-msg-timestamp (js/Date.))
        true (update :service-provider.grandma-app/messages conj message)))))
 
