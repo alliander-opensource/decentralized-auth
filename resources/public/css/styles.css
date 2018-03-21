@@ -74,11 +74,6 @@ input {
     border-color: #a84f00;
 }
 
-.data-providers {
-    background-color: #e56c00!important;
-    grid-area: data-providers;
-}
-
 .service-providers {
     background-color: #e56c00!important;
     grid-area: service-providers;
@@ -112,10 +107,6 @@ input {
     grid-area: data-provider;
 }
 
-.data-providers {
-    grid-area: data-providers;
-}
-
 .prosumer {
     background-color: #7db239;
     grid-area: prosumer;
@@ -134,7 +125,7 @@ input {
                         0.15fr
                         0.15fr
                         0.30fr;
-    grid-template-areas: "data-providers    service-providers     service-providers"
+    grid-template-areas: "service-providers service-providers     service-providers"
                          "...               ...                   ..."
                          "data-provider     grandma-app-data-flow grandma-app"
                          "data-provider     wattapp-data-flow     wattapp"

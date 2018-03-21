@@ -89,3 +89,13 @@
  :service-provider.wattapp/authorized?
  (fn [{:keys [service-provider.wattapp/messages] :as db}]
    (not-empty messages)))
+
+
+;;;;
+;;;; Prosumer
+
+
+(reg-sub
+ :prosumer/authorized-service-providers
+ (fn [{:keys [prosumer/authorized-service-providers] :as db}]
+   authorized-service-providers))

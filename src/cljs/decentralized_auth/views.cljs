@@ -194,26 +194,31 @@
 
 
 (defn prosumer []
-  [:div.box.prosumer "Prosumer"
-   [:br]
-   [prosumer-image]
-   [:br]
-   [:button.btn.btn-default
-    {:on-click #(dispatch [:prosumer/claim-pi])}
-    "Claim Pi"]
-   [:span " "]
-   [:button.btn.btn-default
-    {:on-click #(dispatch [:prosumer/revoke "grandma-app" "x"])}
-    "Revoke access for Oma app"]
-   [:span " "]
-   [:button.btn.btn-default
-    {:on-click #(dispatch [:prosumer/revoke "wattapp" "y"])}
-    "Revoke access for Wattapp"]])
+  (let [authorizations (subscribe [:prosumer/authorized-service-providers])]
+    [:div.box.prosumer "Prosumer"
+     [:br]
+     [prosumer-image]
+     [:br]
+     "Data providers"
+     [:span [:ul>li "Raspberry Pi"
+             [authorizations-panel @authorizations]]]
+     [:br]
+     [:button.btn.btn-default
+      {:on-click #(dispatch [:prosumer/claim-pi])}
+      "Claim Pi"]
+     [:span " "]
+     [:button.btn.btn-default
+      {:on-click #(dispatch [:prosumer/revoke "grandma-app" "x"])}
+      "Revoke access for Oma app"]
+     [:span " "]
+     [:button.btn.btn-default
+      {:on-click #(dispatch [:prosumer/revoke "wattapp" "y"])}
+      "Revoke access for Wattapp"]]))
 
 
 (defn smart-authorization-grid []
   [:div.wrapper
-   [data-providers]                        [service-providers]
+   [service-providers]
    [data-provider] [grandma-app-data-flow] [grandma-app]
    [prosumer]      [wattapp-data-flow]     [wattapp]])
 

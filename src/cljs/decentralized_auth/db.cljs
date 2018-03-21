@@ -22,4 +22,6 @@
    :service-provider.wattapp/messages             []
    :service-provider.wattapp/latest-msg-timestamp nil
    :service-provider.wattapp/side-key             ""
-   :service-provider.wattapp/root                 ""})
+   :service-provider.wattapp/root                 ""
+
+   :prosumer/authorized-service-providers #{}})
