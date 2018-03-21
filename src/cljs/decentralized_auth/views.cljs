@@ -1,5 +1,5 @@
 (ns decentralized-auth.views
-  (:require [decentralized-auth.utils :refer [json-encode]]
+  (:require [decentralized-auth.utils :refer [debug-panel json-encode]]
             [re-frame.core :refer [dispatch subscribe]]
             [reagent.core :as r]))
 
