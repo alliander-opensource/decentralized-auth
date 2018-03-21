@@ -117,23 +117,41 @@
        [:br]
        "(authorized)"
        [:br]
-       [:span "Last message: " @latest-msg-timestamp]]
+       (when @latest-msg-timestamp
+         [:span "Last message: " @latest-msg-timestamp])]
       [:div.box.grandma-app-data-flow
        [:br]
        [:br]
        "Data flow disallowed"
        [:br]
-       "(unauthorized)"])))
+       "(unauthorized)"
+       [:br]
+       (when @latest-msg-timestamp
+         [:span "Last message: " @latest-msg-timestamp])])))
 
 
 (defn wattapp-data-flow []
   (let [authorized?          (subscribe [:service-provider.wattapp/authorized?])
         latest-msg-timestamp (subscribe [:service-provider.wattapp/latest-msg-timestamp])]
     (if @authorized?
-      [:div.box.wattapp-data-flow.authorized [:br] [:br] "Data flow allowed" [:br] "(authorized)"
+      [:div.box.wattapp-data-flow.authorized
        [:br]
-       [:span "Last message: " @latest-msg-timestamp]]
-      [:div.box.wattapp-data-flow [:br] [:br] "Data flow disallowed" [:br] "(unauthorized)"])))
+       [:br]
+       "Data flow allowed"
+       [:br]
+       "(authorized)"
+       [:br]
+       (when @latest-msg-timestamp
+         [:span "Last message: " @latest-msg-timestamp])]
+      [:div.box.wattapp-data-flow
+       [:br]
+       [:br]
+       "Data flow disallowed"
+       [:br]
+       "(unauthorized)"
+       [:br]
+       (when @latest-msg-timestamp
+         [:span "Last message: " @latest-msg-timestamp])])))
 
 
 (defn messages-panel [messages]

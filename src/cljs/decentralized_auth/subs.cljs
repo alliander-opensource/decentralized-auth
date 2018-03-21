@@ -53,8 +53,8 @@
 
 (reg-sub
  :service-provider.grandma-app/authorized?
- (fn [{:keys [service-provider.grandma-app/messages] :as db}]
-   (not-empty messages)))
+ (fn [{:keys [prosumer/authorized-service-providers] :as db}]
+   (contains? authorized-service-providers "grandma-app")))
 
 
 ;;;;
@@ -87,8 +87,8 @@
 
 (reg-sub
  :service-provider.wattapp/authorized?
- (fn [{:keys [service-provider.wattapp/messages] :as db}]
-   (not-empty messages)))
+ (fn [{:keys [prosumer/authorized-service-providers] :as db}]
+   (contains? authorized-service-providers "wattapp")))
 
 
 ;;;;
