@@ -134,10 +134,9 @@
 (reg-fx
  :iota-mam-fx/fetch
  (fn [{:keys [iota-instance root mode side-key on-success on-next-root]}]
-   (go (let [{:keys [next-root]}
-             (<! (iota-mam/fetch root mode side-key
-                                 #(let [msg (iota-utils/from-trytes iota-instance %)]
-                                    (dispatch (conj on-success msg)))))]
+   (go (let [callback            #(let [msg (iota-utils/from-trytes iota-instance %)]
+                                    (dispatch (conj on-success msg)))
+             {:keys [next-root]} (<! (iota-mam/fetch root mode side-key callback))]
          (dispatch (conj on-next-root next-root))))))
 
 
@@ -200,7 +199,9 @@
          (throw (js/Error. (str "Unknown service provider: " service-provider))))
 
        (update
-        :data-provider/authorized-service-providers conj service-provider))))
+        :data-provider/authorized-service-providers conj service-provider)
+       (update
+        :prosumer/authorized-service-providers conj service-provider))))
 
 
 (defn gen-key []
@@ -222,10 +223,11 @@
 
      (log/infof "Revoking access for %s" service-provider)
 
-     {:db         (-> db
-                      (assoc :data-provider/side-key new-side-key)
-                      (assoc :data-provider/authorized-service-providers
-                             new-authorized-service-providers))
+     {:db       (assoc db :data-provider/side-key new-side-key
+                       :data-provider/authorized-service-providers
+                       new-authorized-service-providers
+                       :prosumer/authorized-service-providers
+                       new-authorized-service-providers)
       :dispatch [:data-provider/rotate-key
                  new-authorized-service-providers
                  new-side-key]})))
