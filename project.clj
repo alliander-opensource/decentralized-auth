@@ -14,6 +14,7 @@
                  [com.taoensso/timbre "4.10.0"]
 
                  ;; Frontend
+                 [cljsjs/noty "3.1.4-0"]
                  [re-frame "0.10.2"]
                  [re-frisk "0.5.3"]
                  [reagent "0.7.0"]]

@@ -1,5 +1,6 @@
 (ns decentralized-auth.views
-  (:require [decentralized-auth.utils :refer [debug-panel json-encode]]
+  (:require cljsjs.noty
+            [decentralized-auth.utils :refer [debug-panel json-encode]]
             [re-frame.core :refer [dispatch subscribe]]
             [reagent.core :as r]))
 
@@ -9,9 +10,21 @@
 
 
 (defn decrypt-side-key
-  "Decrypting now means removing the \"public key\" prefix."
+  "Decrypting now means removing the \"public key\" prefix. (the \"x\" and
+  \"y\")"
   [side-key]
   (when side-key (subs side-key 1)))
+
+
+(defn notification
+  "Displays the msg in a Noty notification with type `:info`, `:warning` or
+  `:error`."
+  [type msg]
+  (.show (js/Noty. #js {:text    (str "<span>" msg "</span>")
+                        :theme   "mint"
+                        :type    (name type)
+                        :layout  "bottomRight"
+                        :timeout 10000})))
 
 
 (defn authorizations-panel [authorizations]
