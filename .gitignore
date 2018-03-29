@@ -19,3 +19,18 @@
 pom.xml
 pom.xml.asc
 profiles.clj
+
+# Other
+.DS_Store
+*.swp# 
+
+# Node
+raspberrypi/node_modules
+raspberrypi/npm-debug.log
+raspberrypi/yarn-error.log
+raspberrypi/dist
+raspberrypi/build
+
+# Logs
+raspberrypi/combined.log
+raspberrypi/error.log

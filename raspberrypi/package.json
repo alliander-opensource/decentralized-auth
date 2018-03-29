@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "iota.lib.js": "0.4.7"
+  },
+  "devDependencies": {
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.9.0"
+  }
+}
