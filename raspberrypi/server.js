@@ -1,4 +1,7 @@
 const IOTA = require('iota.lib.js');
+const signing = require('./iota/signing');
+const logger = require('winston');
+const CryptoJS = require('crypto-js');
 
 const iota = new IOTA({
   provider: 'http://localhost:14700'
@@ -6,11 +9,14 @@ const iota = new IOTA({
 
 const deviceSeed = 'GOYM9ANDMIHYZUWUBPEVLPRSUGDZHDDVTLS9HBOGNOGLGQTPQTAZNVIWIVVXAVVSZWZJWZHSEVTPNBYWE';
 const deviceAddress = 'FODEYEQHYCWYTDEDWZLPCLRDIU9RFKU9AFQSEOR9RSGEPDGQBGMYXIQCENBDGYFFS9AJK9GJJZJGEUEW9'; // address with index 0 and security 3
-const deviceSecret = 'SECRET';
+// const deviceAddress = iota.api.getNewAddress(deviceSeed, { index: 0, checksum: false, security: 3 });
+const secret = 'BANANA';
 
 const depth = 6;
 const mwm = 3; // Minimum weight magnitude 3 works on local testnet if configured like that, 14 for main
 
+
+let signedChallenges = [];
 
 // TODO: addresses are not rotated.
 
@@ -56,18 +62,22 @@ function getLastMessage(seed, address) {
  * @param {string} seed Our IOTA seed
  * @param {string} receiver IOTA address of receiver
  * @param {JSON} message to send
- * @returns {null}
+ * @returns {Promise}
  */
 function send(seed, receiver, message) {
-  const trytes = iota.utils.toTrytes(JSON.stringify(message));
-  const transfers = [{ address: receiver, value: 0, message: trytes }];
+  return new Promise((resolve, reject) => {
+    const trytes = iota.utils.toTrytes(JSON.stringify(message));
+    const transfers = [{ address: receiver, value: 0, message: trytes }];
 
-  iota.api.sendTransfer(seed, depth, mwm, transfers, (err) => {
-    if (err) {
-      console.log(`Send error: ${err}`);
-    } else {
-      console.log(`Send message ${JSON.stringify(message)} to ${receiver}`);
-    }
+    iota.api.sendTransfer(seed, depth, mwm, transfers, (err, res) => {
+      if (!err) {
+        logger.info(`Send message ${JSON.stringify(message)} to ${receiver}`);
+        resolve(res);
+      } else {
+        logger.error(`Send error: ${err}`);
+        reject(err);
+      }
+    });
   });
 }
 
@@ -80,11 +90,11 @@ function send(seed, receiver, message) {
  * @param {string} sender Our IOTA address
  * @param {string} receiver IOTA address of receiver of the challenge
  * @param {string} challenge Challenge to be returned signed with key on the box
- * @returns {null}
+ * @returns {Promise}
  */
 function sendChallenge(seed, sender, receiver, challenge) {
   const message = { sender, challenge };
-  send(seed, receiver, message);
+  return send(seed, receiver, message);
 }
 
 
@@ -103,22 +113,58 @@ function sendClaimResult(seed, sender, receiver, status) {
     { sender, status, mamData: { root: 'ROOT', sideKey: 'SIDEKEY' } } :
     { sender, status };
 
-  send(seed, receiver, message);
+  return send(seed, receiver, message);
+}
+
+
+// Source for 'random' generator:
+// https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript/47496558#47496558
+function createChallenge() {
+  let challenge = '';
+  const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ9';
+  const HASH_LENGTH = 243; // kerl
+
+  for (let i = 0; i < HASH_LENGTH - secret.length; i += 1) {
+    challenge += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+
+  return challenge;
+}
+
+
+function storeSignedChallenge(signedChallenge) {
+  signedChallenges.push(signedChallenge);
+}
+
+
+function removeSignedChallenge(signedChallenge) {
+  signedChallenges = signedChallenges.filter(sc => sc !== signedChallenge);
 }
 
 
 function isValid(signedChallenge) {
-  return signedChallenge === 'XSECRET';
+  return signedChallenges.includes(signedChallenge);
 }
 
 
-getLastMessage(deviceSeed, deviceAddress)
-  .then(({ sender, signedChallenge }) => {
-    if (signedChallenge) {
-      const status = isValid(signedChallenge) ? 'OK' : 'NOK';
-      sendClaimResult(deviceSeed, deviceAddress, sender, status);
-    } else {
-      sendChallenge(deviceSeed, deviceAddress, sender, 'SECRET');
-    }
-  })
-  .catch(console.log);
+function run() {
+  logger.info('Getting last message...');
+
+  getLastMessage(deviceSeed, deviceAddress)
+    .then(({ sender, signedChallenge }) => {
+      if (signedChallenge) {
+        const status = isValid(signedChallenge) ? 'OK' : 'NOK';
+        removeSignedChallenge(signedChallenge);
+        return sendClaimResult(deviceSeed, deviceAddress, sender, status);
+      }
+      const challenge = createChallenge();
+      const signed = signing.sign(challenge, secret);
+      storeSignedChallenge(signed);
+
+      return sendChallenge(deviceSeed, deviceAddress, sender, challenge);
+    })
+    .catch(logger.error);
+}
+
+// MAIN
+setInterval(run, 10000);
