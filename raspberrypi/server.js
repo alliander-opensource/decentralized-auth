@@ -98,6 +98,8 @@ function sendChallenge(seed, sender, receiver, challenge) {
 }
 
 
+
+
 /**
  * Sends claim result (including MAM message when result was 'OK')
  *
@@ -109,6 +111,10 @@ function sendChallenge(seed, sender, receiver, challenge) {
  * @returns {null}
  */
 function sendClaimResult(seed, sender, receiver, status) {
+
+  // TODO MAM
+  // const { root, sideKey } =
+
   const message = status === 'OK' ?
     { sender, status, mamData: { root: 'ROOT', sideKey: 'SIDEKEY' } } :
     { sender, status };
@@ -153,6 +159,8 @@ function run() {
   getLastMessage(deviceSeed, deviceAddress)
     .then(({ sender, signedChallenge }) => {
       if (signedChallenge) {
+
+        // TODO do not call multiple times
         const status = isValid(signedChallenge) ? 'OK' : 'NOK';
         removeSignedChallenge(signedChallenge);
         return sendClaimResult(deviceSeed, deviceAddress, sender, status);
