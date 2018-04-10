@@ -4,7 +4,7 @@ const logger = require('winston');
 const CryptoJS = require('crypto-js');
 
 const iota = new IOTA({
-  provider: 'http://localhost:14700'
+  provider: 'http://node01.testnet.iotatoken.nl:16265'
 });
 
 const deviceSeed = 'GOYM9ANDMIHYZUWUBPEVLPRSUGDZHDDVTLS9HBOGNOGLGQTPQTAZNVIWIVVXAVVSZWZJWZHSEVTPNBYWE';
@@ -13,7 +13,7 @@ const deviceAddress = 'FODEYEQHYCWYTDEDWZLPCLRDIU9RFKU9AFQSEOR9RSGEPDGQBGMYXIQCE
 const secret = 'BANANA';
 
 const depth = 6;
-const mwm = 3; // Minimum weight magnitude 3 works on local testnet if configured like that, 14 for main
+const mwm = 10; // Minimum weight magnitude 10 works testnet, 14 for main
 
 
 let signedChallenges = [];
@@ -25,29 +25,26 @@ let signedChallenges = [];
  * PAIRING A DEVICE
  */
 
-
 /**
  * Gets last received transfer message.
  * NOTE: order is not necessarily chronological, but let's assume it is.
  *
- * @function getLastMessge
- * @param {string} seed Our IOTA seed
+ * @function getLastMessage
  * @param {string} address Our IOTA address
  * @returns {JSON} Parsed message or `null` when no received transfers
  */
-function getLastMessage(seed, address) {
+function getLastMessage(address) {
   return new Promise((resolve, reject) => {
-    const options = { security: 3 };
-
-    iota.api.getTransfers(seed, options, (err, transfers) => {
+    iota.api.findTransactionObjects({ addresses: [address] }, (err, transactions) => {
       if (err) reject(err);
 
-      const { received } = iota.utils.categorizeTransfers(transfers, [address]);
+      const { received } = iota.utils.categorizeTransfers([transactions], [address]);
 
       if (received.length === 0) reject(new Error('No received transfers'));
 
-      const latestTransfer = received[received.length - 1];
-      const message = JSON.parse(iota.utils.extractJson(latestTransfer));
+      // Assuming timestamps in order
+      const lastTransaction = received[received.length - 1];
+      const message = JSON.parse(iota.utils.extractJson(lastTransaction));
 
       resolve(message);
     });
@@ -96,8 +93,6 @@ function sendChallenge(seed, sender, receiver, challenge) {
   const message = { sender, challenge };
   return send(seed, receiver, message);
 }
-
-
 
 
 /**
@@ -156,7 +151,7 @@ function isValid(signedChallenge) {
 function run() {
   logger.info('Getting last message...');
 
-  getLastMessage(deviceSeed, deviceAddress)
+  getLastMessage(deviceAddress)
     .then(({ sender, signedChallenge }) => {
       if (signedChallenge) {
 
@@ -173,6 +168,12 @@ function run() {
     })
     .catch(logger.error);
 }
+
+
+function getAddress(seed) {
+  iota.api.getNewAddress(seed, { index: 0, total: 1, security: 3 }, (err, res) => console.log(res));
+}
+
 
 // MAIN
 setInterval(run, 10000);
