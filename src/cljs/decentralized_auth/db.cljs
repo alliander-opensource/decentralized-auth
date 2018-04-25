@@ -5,7 +5,7 @@
   {:directory/service-providers {}
    :directory/data-providers    {}
 
-   :iota/provider      "http://localhost:14700" #_"http://node04.iotatoken.nl:14265"
+   :iota/provider      "http://node01.testnet.iotatoken.nl:16265" #_"http://node04.iotatoken.nl:14265" #_"http://localhost:14...."
    :iota/iota-instance nil
    :iota.mam/mam-state nil
 
