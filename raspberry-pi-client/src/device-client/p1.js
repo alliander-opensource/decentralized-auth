@@ -76,12 +76,12 @@ function initP1(messageHandler) {
 
   serialPort.on('error', (err) => {
     logger.error(`Error when reading port ${err}`);
-    tryInitP1();
+    tryInitP1(messageHandler);
   });
 
   serialPort.on('close', () => {
     logger.info('Port closed');
-    tryInitP1();
+    tryInitP1(messageHandler);
   });
 }
 
