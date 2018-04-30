@@ -25,10 +25,19 @@ This client in demonstrates:
 
 ## Production
 
-Copy the compiled file to your Raspberry Pi:
+Copy the source to your pi:
 
 ```
-scp
+rm -rf node_modules # we will install our dependencies on the Pi to avoid conflicts
+rsync pi@<pi's IP>:/home/pi/raspberry-pi-client/
+```
+
+Install dependencies on Pi:
+
+```
+ssh pi@<pi's IP>
+cd raspberry-pi-client
+npm i
 ```
 
 Generate a seed with `cat /dev/urandom | LC_ALL=C tr -dc 'A-Z9' | fold -w 81 | head -n 1` and add it into the SEED environment variable:
@@ -37,10 +46,10 @@ Generate a seed with `cat /dev/urandom | LC_ALL=C tr -dc 'A-Z9' | fold -w 81 | h
 export SEED=<seed>
 ```
 
-Start with `npm start`
+Start the client with `npm start`
 
 ## Running the application locally
 
 - Checkout the code
-- `npm install` (or `npm install --python=python2.6` when a gyp error appears)
+- `npm install`
 - `npm start`
