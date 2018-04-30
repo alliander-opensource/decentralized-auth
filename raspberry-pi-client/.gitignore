@@ -1,0 +1,17 @@
+# Node
+node_modules
+npm-debug.log
+yarn-error.log
+dist
+build
+
+# Logs
+combined.log
+error.log
+
+# Other
+.DS_Store
+*.swp
+
+# GPL licensed
+mam.node.js

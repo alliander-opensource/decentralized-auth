@@ -16,6 +16,8 @@
 /resources/public/js
 /sdb.db
 /target
+combined.log
+error.log
 pom.xml
 pom.xml.asc
 profiles.clj

@@ -1,0 +1,22 @@
+{
+    "extends": [
+      "airbnb",
+      "plugin:jasmine/recommended",
+      "plugin:mocha/recommended"
+    ],
+    "env": {
+      "es6": true,
+      "browser": true,
+      "node": true,
+      "mocha": true,
+      "jasmine": true
+    },
+    "rules": {
+      "import/no-extraneous-dependencies": ["off"],
+      "import/no-unresolved": ["off"]
+    },
+    "plugins": [
+      "jasmine",
+      "mocha"
+    ],
+}

@@ -1,0 +1,41 @@
+{
+  "name": "decentralized-auth-raspberry-pi-client",
+  "version": "1.0.0",
+  "description": "The Raspberry Pi client for providing your smart meter energy data to those you have given consent",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "lint": "./node_modules/.bin/eslint -c .eslintrc src test"
+  },
+  "keywords": [
+    "iota",
+    "gdpr"
+  ],
+  "contributors": [
+    "Alliander N.V. (https://alliander.com/)"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "bn.js": "^4.11.8",
+    "crypto-js": "3.1.9-1",
+    "get-random-values": "1.2.0",
+    "iota.lib.js": "0.4.7",
+    "mam.client.js": "git+ssh://git@github.com/iotaledger/mam.client.js.git",
+    "npm": "5.8.0",
+    "promise-retryer": "0.0.1",
+    "serialport": "4.0.7",
+    "uuid": "3.1.0",
+    "winston": "3.0.0-rc3"
+  },
+  "devDependencies": {
+    "eslint": "4.8.0",
+    "eslint-config-airbnb": "15.1.0",
+    "eslint-plugin-import": "2.7.0",
+    "eslint-plugin-jasmine": "2.9.3",
+    "eslint-plugin-jsx-a11y": "5.1.1",
+    "eslint-plugin-mocha": "4.11.0",
+    "eslint-plugin-react": "7.4.0",
+    "keccak": "1.4.0",
+    "mocha": "4.0.1"
+  }
+}
