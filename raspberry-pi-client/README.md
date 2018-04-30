@@ -25,17 +25,19 @@ This client in demonstrates:
 
 ## Production
 
-Copy the source to your pi:
+Get the raspberry-pi-client on your Pi:
 
 ```
-rm -rf node_modules # we will install our dependencies on the Pi to avoid conflicts
-rsync pi@<pi's IP>:/home/pi/raspberry-pi-client/
+ssh pi@<pi's IP>
+git init
+git remote add origin git@github.com:Alliander/decentralized-auth.git
+git fetch
+git checkout origin/master -- raspberry-pi-client
 ```
 
 Install dependencies on Pi:
 
 ```
-ssh pi@<pi's IP>
 cd raspberry-pi-client
 npm i
 ```
