@@ -23,11 +23,20 @@ This client in demonstrates:
 
 ### Revoke access
 
-## Installation
+## Production
 
-Generate a seed with:
+Build source code with [nexe](https://github.com/nexe/nexe);
 
-Copy the source code to your Raspberry Pi
+```
+npm i nexe -g
+nexe src/main.js
+```
+
+Copy the compiled file to your Raspberry Pi:
+
+```
+scp
+```
 
 Generate a seed with `cat /dev/urandom | LC_ALL=C tr -dc 'A-Z9' | fold -w 81 | head -n 1` and add it into the SEED environment variable:
 
