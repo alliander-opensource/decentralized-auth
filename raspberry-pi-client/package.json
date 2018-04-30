@@ -8,7 +8,7 @@
   },
   "main": "src/main.js",
   "scripts": {
-    "start": "node src/server.js",
+    "start": "node src/main.js",
     "lint": "./node_modules/.bin/eslint -c .eslintrc src test"
   },
   "keywords": [
