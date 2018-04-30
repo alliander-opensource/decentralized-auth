@@ -25,13 +25,6 @@ This client in demonstrates:
 
 ## Production
 
-Build source code with [nexe](https://github.com/nexe/nexe);
-
-```
-npm i nexe -g
-nexe src/main.js
-```
-
 Copy the compiled file to your Raspberry Pi:
 
 ```
