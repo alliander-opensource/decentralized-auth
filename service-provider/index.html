@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="styles.css" />
 
     <script src="https://d3js.org/d3.v3.min.js"></script>
-
     <script src="https://unpkg.com/iota.lib.js@0.4.7/dist/iota.js"></script>
 
     <!-- Place iota-bindings-emscripten.wasm in -->
@@ -82,20 +81,6 @@
     </script>
   </head>
   <body>
-    <label for="root-text-box">
-      Root:
-    </label>
-    <input id="root-text-box"
-           type="text"
-           value="UVUHULNNDNJYENBIFZBBVRLCFAHLAQBUVSAJCIAIGDMMWKMDNHPJDXVZKQDBATNJZTX9SJ9KVUFKCMUHF" />
-    <br />
-    <label for="side-key-text-box">
-      Side key:
-    </label>
-    <input id="side-key-text-box" type="text" value="BANANA" />
-    <br />
-    <button onclick="read()">Fetch</button>
-
     <div class="charts-container">
       <ul>
         <li class="chart">
@@ -118,7 +103,24 @@
         </li>
       </ul>
     </div>
-
+    <label for="seed-text-box">
+      My address
+    </label>
+    <input id="seed-text-box"
+           type="text"
+           value="HNJCJTZASSOGJXPJTCIJZBIEFKMKMAZOKMNYLWYWDVWFSFMLAVEVKXEANUYXWOXDDWV9PEBFKIEU9LGQ9" />
+    <br />
+    <label for="root-text-box">
+      Received root:
+    </label>
+    <input id="root-text-box"
+           type="text"
+           value="UVUHULNNDNJYENBIFZBBVRLCFAHLAQBUVSAJCIAIGDMMWKMDNHPJDXVZKQDBATNJZTX9SJ9KVUFKCMUHF" />
+    <br />
+    <label for="side-key-text-box">
+      Received side key:
+    </label>
+    <input id="side-key-text-box" type="text" value="BANANA" />
     <script src="line-chart.js">
     </script>
 
