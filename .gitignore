@@ -16,6 +16,7 @@
 /resources/public/js
 /sdb.db
 /target
+node_modules
 combined.log
 error.log
 pom.xml

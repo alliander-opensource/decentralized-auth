@@ -1,0 +1,148 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>
+      Wattt
+    </title>
+    <link rel="stylesheet" href="styles.css" />
+
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+
+    <script src="https://unpkg.com/iota.lib.js@0.4.7/dist/iota.js"></script>
+
+    <!-- Place iota-bindings-emscripten.wasm in -->
+    <!-- ./lib/iota-bindings-emscripten.wasm and mam.web.js in ./mam.web.js. -->
+    <script src="node_modules/mam.client.js/mam.web.js"></script>
+
+    <script>
+     const iota = new IOTA({ provider: 'http://node01.testnet.iotatoken.nl:16265' });
+
+     // Wait for streaming compile of MAM library before initializing
+     const MAX_STREAMING_COMPILE_TIME_MS = 3000;
+     setTimeout(() => Mam.init(iota), MAX_STREAMING_COMPILE_TIME_MS);
+
+     function fromTrytes(trytes) {
+       const isOdd = n => (n % 2) === 1;
+
+       // Work around odd length trytes that cannot be converted by appending a 9
+       if (isOdd(trytes.length)) {
+         return iota.utils.fromTrytes(`${trytes}9`);
+       }
+
+       return iota.utils.fromTrytes(trytes);
+     }
+
+     const toDate = timestamp => new Date(timestamp);
+
+     const toElectricityUsage = (telegram) => {
+       // 1.7.0 is OBIS code for positive active instantaneous power (A+) [kW]
+       const CAPTURE_USAGE_PATTERN = /1.7.0\((.{7})\*kW\)/
+       const value = CAPTURE_USAGE_PATTERN.exec(telegram)[1];
+
+       return parseFloat(value);
+     }
+
+     const read = () => {
+       const root = document.getElementById('root-text-box').value;
+       const sideKey = document.getElementById('side-key-text-box').value;
+       const mode = 'restricted';
+
+       console.log(`Trying to fetch from root ${root} with side key ${sideKey}`);
+
+       Mam
+         .fetch(root, mode, sideKey)
+         .then(({ nextRoot, messages }) => {
+           const jsonMessages = messages.map(m => JSON.parse(fromTrytes(m)));
+           const usage = jsonMessages.map(
+             m => ({
+               date: toDate(m.timestamp),
+               value: toElectricityUsage(m.raw),
+             }));
+
+           console.log(`Messages is ${messages}`);
+           console.log(`Next root is ${nextRoot}`);
+           console.log(`Usage is ${usage}`);
+
+           if (usage && usage.length !== 0) {
+             if (usage.length > 26) {
+              return usage.slice(usage.length-26, usage.length-1);
+             } else {
+               return usage;
+             }
+           } else {
+             throw new Error('No new data');
+           }
+         })
+         .then(usage => drawLineChart('line-chart', usage))
+         .catch(console.log);
+     };
+
+     setInterval(read, 10000);
+    </script>
+  </head>
+  <body>
+    <label for="root-text-box">
+      Root:
+    </label>
+    <input id="root-text-box"
+           type="text"
+           value="UVUHULNNDNJYENBIFZBBVRLCFAHLAQBUVSAJCIAIGDMMWKMDNHPJDXVZKQDBATNJZTX9SJ9KVUFKCMUHF" />
+    <br />
+    <label for="side-key-text-box">
+      Side key:
+    </label>
+    <input id="side-key-text-box" type="text" value="BANANA" />
+    <br />
+    <button onclick="read()">Fetch</button>
+
+    <div class="charts-container">
+      <ul>
+        <li class="chart">
+          <h3 class="chart-sub-headline">Wattt P1 Insights</h3>
+          <h2 class="chart-headline">Electricity usage (Wh)</h2>
+          <div id="line-chart">
+            <svg id="line-chart-svg" class="line-chart-svg">
+              <text x="30" y="30" font-size="30" dy="0">
+                <tspan x="0" dy=".6em">Fetching data via</tspan>
+                <tspan x="0" dy="1.2em">IOTA MAM</tspan>
+              </text>
+              <defs>
+                <linearGradient id="line-chart-gradient-background-area" x1="0" x2="0" y1="0" y2="1">
+                  <stop class="line-chart-gradient-background-area-top" offset="0%" />
+                  <stop class="line-chart-gradient-background-area-bottom" offset="100%" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <script src="line-chart.js">
+    </script>
+
+    <!--
+    <script>
+     const usage = [
+       {timestamp: 1524758880844, value: Math.random() * 100},
+       {timestamp: 1524758892456, value: Math.random() * 100},
+       {timestamp: 1524758897343, value: Math.random() * 100},
+       {timestamp: 1524758907341, value: Math.random() * 100},
+       {timestamp: 1524758917333, value: Math.random() * 100},
+       {timestamp: 1524758927344, value: Math.random() * 100},
+     ]
+
+     var data = usage.map((d) => {
+       const jsDate = new Date(d.timestamp);
+       return {
+         date: jsDate,
+         value: d.value,
+       };
+     });
+
+     drawLineChart('line-chart', data);
+    </script>
+    -->
+  </body>
+</html>

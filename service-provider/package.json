@@ -1,0 +1,20 @@
+{
+  "name": "decentralized-auth-service-provider",
+  "version": "1.0.0",
+  "description": "The front end for requesting consent and displaying energy data",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/alliander/decentralized-auth.git"
+  },
+  "keywords": [
+    "iota",
+    "gdpr"
+  ],
+  "contributors": [
+    "Alliander N.V. (https://alliander.com/)"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "mam.client.js": "git+https://github.com/iotaledger/mam.client.js.git"
+  }
+}
