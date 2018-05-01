@@ -19,18 +19,21 @@
 
      const ADDRESS_COOKIE_NAME = 'wattt-iota-address';
 
-     function storeAddress(el) {
-       const address = el.value;
-       if (address.length === 81) {
-         console.log('Storing address...');
-         Cookies.set(ADDRESS_COOKIE_NAME, address);
-       }
+     function storeAddress(address) {
+       console.log('Storing address...');
+       Cookies.set(ADDRESS_COOKIE_NAME, address);
      }
 
      function setAddress(address) {
        console.log('Setting address...');
-       const addressTextBox = document.getElementById('address-text-box');
-       addressTextBox.value = address;
+       const addressBox = document.getElementById('address-hidden-box');
+       addressBox.value = address;
+     }
+
+     function requestAuthorization() {
+       const address = document.getElementById('address-hidden-box').value;
+       const url = window.location.href;
+       window.location = `http://localhost:3000/new-policy?iotaAddress=${address}&url=${url}`;
      }
 
      const iota = new IOTA({ provider: 'http://node01.testnet.iotatoken.nl:16265' });
@@ -60,7 +63,7 @@
        return parseFloat(value);
      }
 
-     const readAndDraw = () => {
+     const processMamMessage = () => {
        const root = document.getElementById('root-text-box').value;
        const sideKey = document.getElementById('side-key-text-box').value;
        const mode = 'restricted';
@@ -95,7 +98,7 @@
          .catch(console.log);
      };
 
-     setInterval(readAndDraw, 10000);
+     setInterval(processMamMessage, 10000);
     </script>
   </head>
   <body>
@@ -121,13 +124,10 @@
         </li>
       </ul>
     </div>
-    <label for="address-text-box">
-      My address
-    </label>
-    <input id="address-text-box"
-           type="text"
-           onchange="storeAddress(this)"
-    />
+    <button onclick="requestAuthorization()">
+      Request data!
+    </button>
+    <input id="address-hidden-box" type="hidden" />
     <br />
     <label for="root-text-box">
       Received root:
@@ -143,38 +143,16 @@
     <script src="line-chart.js">
     </script>
     <script>
-     // Set initial address
+     // Get and set initial address
      const address = Cookies.get(ADDRESS_COOKIE_NAME);
 
      if (!!address) {
        setAddress(address);
      } else {
        const newAddress = generateAddressForTestingPurposes();
-       setAddress(newAddress);
+       storeAddress(newAddress);
+       setAddress(address);
      }
     </script>
-
-    <!--
-    <script>
-     const usage = [
-       {timestamp: 1524758880844, value: Math.random() * 100},
-       {timestamp: 1524758892456, value: Math.random() * 100},
-       {timestamp: 1524758897343, value: Math.random() * 100},
-       {timestamp: 1524758907341, value: Math.random() * 100},
-       {timestamp: 1524758917333, value: Math.random() * 100},
-       {timestamp: 1524758927344, value: Math.random() * 100},
-     ]
-
-     var data = usage.map((d) => {
-       const jsDate = new Date(d.timestamp);
-       return {
-         date: jsDate,
-         value: d.value,
-       };
-     });
-
-     drawLineChart('line-chart', data);
-    </script>
-    -->
   </body>
 </html>
