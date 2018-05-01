@@ -9,12 +9,30 @@
 
     <script src="https://d3js.org/d3.v3.min.js"></script>
     <script src="https://unpkg.com/iota.lib.js@0.4.7/dist/iota.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 
     <!-- Place iota-bindings-emscripten.wasm in -->
     <!-- ./lib/iota-bindings-emscripten.wasm and mam.web.js in ./mam.web.js. -->
     <script src="node_modules/mam.client.js/mam.web.js"></script>
 
     <script>
+
+     const ADDRESS_COOKIE_NAME = 'wattt-iota-address';
+
+     function storeAddress(el) {
+       const address = el.value;
+       if (address.length === 81) {
+         console.log('Storing address...');
+         Cookies.set(ADDRESS_COOKIE_NAME, address);
+       }
+     }
+
+     function setAddress(address) {
+       console.log('Setting address...');
+       const addressTextBox = document.getElementById('address-text-box');
+       addressTextBox.value = address;
+     }
+
      const iota = new IOTA({ provider: 'http://node01.testnet.iotatoken.nl:16265' });
 
      // Wait for streaming compile of MAM library before initializing
@@ -42,7 +60,7 @@
        return parseFloat(value);
      }
 
-     const read = () => {
+     const readAndDraw = () => {
        const root = document.getElementById('root-text-box').value;
        const sideKey = document.getElementById('side-key-text-box').value;
        const mode = 'restricted';
@@ -77,7 +95,7 @@
          .catch(console.log);
      };
 
-     setInterval(read, 10000);
+     setInterval(readAndDraw, 10000);
     </script>
   </head>
   <body>
@@ -103,12 +121,13 @@
         </li>
       </ul>
     </div>
-    <label for="seed-text-box">
+    <label for="address-text-box">
       My address
     </label>
-    <input id="seed-text-box"
+    <input id="address-text-box"
            type="text"
-           value="HNJCJTZASSOGJXPJTCIJZBIEFKMKMAZOKMNYLWYWDVWFSFMLAVEVKXEANUYXWOXDDWV9PEBFKIEU9LGQ9" />
+           onchange="storeAddress(this)"
+    />
     <br />
     <label for="root-text-box">
       Received root:
@@ -122,6 +141,17 @@
     </label>
     <input id="side-key-text-box" type="text" value="BANANA" />
     <script src="line-chart.js">
+    </script>
+    <script>
+     // Set initial address
+     const address = Cookies.get(ADDRESS_COOKIE_NAME);
+
+     if (!!address) {
+       setAddress(address);
+     } else {
+       const newAddress = generateAddressForTestingPurposes();
+       setAddress(newAddress);
+     }
     </script>
 
     <!--
