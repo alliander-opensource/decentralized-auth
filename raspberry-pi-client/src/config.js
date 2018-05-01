@@ -5,6 +5,7 @@ const config = {
 
   iotaProvider: process.env.IOTA_PROVIDER ? process.env.IOTA_PROVIDER : 'http://node01.testnet.iotatoken.nl:16265',
   iotaMinWeightMagnitude: 10, // Only works on testnet, use >14 for main net
+  iotaDepth: 6,
 
   seed: process.env.SEED ? process.env.SEED : 'TLQPEYBND9AFCHFDLCWSVQU9ISCDTBKUQSLXEEUXFHVDEEQZZJPCBPBJ9QSVFBXUJXTIFBMTQSLVUFYTH',
   secret: 'APPLE',
