@@ -35,7 +35,7 @@
      const requestAuthorization = () => {
        const address = document.getElementById('address-hidden-box').value;
        const url = window.location.href;
-       const goal = 'display your energy usage data in a fancy graph';
+       const goal = document.getElementById('goal-text-box').value;
        window.location = `http://localhost:3000/new-policy?iotaAddress=${address}&url=${url}&goal=${goal}`;
      }
 
@@ -201,9 +201,21 @@
         </li>
       </ul>
     </div>
+    <label for="root-text-box">
+      Goal:
+    </label>
+    <input id="goal-text-box"
+           type="text"
+           size=100
+           value="display your energy usage data in a fancy graph"
+    />
+    <br />
+    <br />
     <button onclick="requestAuthorization()">
       Request data!
     </button>
+    <br />
+    <br />
     <input id="address-hidden-box" type="hidden" />
     <br />
     <label for="root-text-box">
