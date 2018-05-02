@@ -23,13 +23,11 @@
      const ADDRESS_COOKIE_NAME = 'wattt-iota-address';
      const MAM_DATA_TYPE = 'MAM_DATA';
 
-     const storeAddress = (address) => {
-       console.log('Storing address...');
-       Cookies.set(ADDRESS_COOKIE_NAME, address);
-     }
+     const getAddress = () => Cookies.get(ADDRESS_COOKIE_NAME);
 
      const setAddress = (address) => {
-       console.log('Setting address...');
+       console.log('Setting address in cookie and hidden field...');
+       Cookies.set(ADDRESS_COOKIE_NAME, address);
        const addressBox = document.getElementById('address-hidden-box');
        addressBox.value = address;
      }
@@ -222,13 +220,12 @@
     </script>
     <script>
      // Get and set initial address
-     const address = Cookies.get(ADDRESS_COOKIE_NAME);
+     const address = getAddress();
 
      if (!!address) {
        setAddress(address);
      } else {
        const newAddress = generateAddressForTestingPurposes();
-       storeAddress(newAddress);
        setAddress(address);
      }
     </script>
