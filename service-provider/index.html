@@ -18,7 +18,10 @@
 
     <script>
 
+     let IS_AUTHORIZED = false;
+
      const ADDRESS_COOKIE_NAME = 'wattt-iota-address';
+     const MAM_DATA_TYPE = 'MAM_DATA';
 
      const storeAddress = (address) => {
        console.log('Storing address...');
@@ -65,19 +68,91 @@
        return parseFloat(value);
      }
 
+     /**
+      * Gets last received transfer message.
+      * NOTE: order is not necessarily chronological, but let's assume it is.
+      *
+      * @function getLastMessage
+      * @param {string} address Our IOTA address
+      * @returns {JSON} Parsed message or `null` when no received transfers
+      */
+     function getLastMessage(address) {
+       return new Promise((resolve, reject) => {
+         iota.api.findTransactionObjects({ addresses: [address] }, (err, transactions) => {
+           if (err) return reject(err);
+           if (!transactions || transactions.length === 0) return reject(new Error('No transactions retrieved.'));
+
+           const sortedTransactions = transactions.sort((a, b) => b.timestamp - a.timestamp);
+           const lastTransaction = sortedTransactions[0];
+           const message = JSON.parse(iota.utils.extractJson([lastTransaction]));
+           const messageWithTimeStamp = { ...message, timestamp: lastTransaction.timestamp };
+
+           return resolve(messageWithTimeStamp);
+         });
+       });
+     }
+
+     const seenMessages = new Set(); // mutable set
+     const processMessage = () => {
+       const address = document.getElementById('address-hidden-box').value;
+       console.log(`Getting last message from address ${address}...`);
+
+       if (address === "") {
+         console.log('No address so cannot process message');
+         return;
+       }
+
+       getLastMessage(address)
+        .then((msg) => {
+          if (!msg) {
+            console.log('No messages');
+            return null;
+          }
+
+          // To avoid processing the same last message over and over we keep track
+          // of already processed messages (note: stringified versions so set
+          // operations that use equals (like set.has()) work as intended)
+          if (seenMessages.has(JSON.stringify(msg))) {
+            console.log('No new messages');
+            return null;
+          }
+          seenMessages.add(JSON.stringify(msg));
+
+          console.log(`Received new message of type ${msg.type}`);
+          switch (msg.type) {
+            case MAM_DATA_TYPE:
+            {
+              document.getElementById('root-text-box').value = msg.mamData.root;
+              document.getElementById('side-key-text-box').value = msg.mamData.sideKey;
+              break;
+            }
+            default:
+            {
+              throw new Error(`Unknown message type: ${msg.type}`);
+            }
+        }
+      })
+        .catch(console.log); // eslint-disable-line no-console
+     }
+
      const processMamMessage = () => {
        const root = document.getElementById('root-text-box').value;
        const sideKey = document.getElementById('side-key-text-box').value;
        const mode = 'restricted';
 
+       IS_AUTHORIZED = (root !== "" && sideKey !== "");
+
+       if (!IS_AUTHORIZED) {
+         console.log('No authorization received');
+         return;
+       }
        console.log(`Trying to fetch from root ${root} with side key ${sideKey}`);
 
        Mam
          .fetch(root, mode, sideKey)
          .then(({ nextRoot, messages }) => {
            const jsonMessages = messages.map(m => JSON.parse(fromTrytes(m)));
-           const usage = jsonMessages.map(
-             m => ({
+           const usage = jsonMessages.map(m => ({
                date: toDate(m.timestamp),
                value: toElectricityUsage(m.raw),
              }));
@@ -100,7 +175,8 @@
          .catch(console.log);
      };
 
-     setInterval(processMamMessage, 10000);
+     setInterval(processMessage, 5000);
+     setInterval(processMamMessage, 5000);
     </script>
   </head>
   <body>
@@ -112,8 +188,9 @@
           <div id="line-chart">
             <svg id="line-chart-svg" class="line-chart-svg">
               <text x="30" y="30" font-size="30" dy="0">
-                <tspan x="0" dy=".6em">Fetching data via</tspan>
-                <tspan x="0" dy="1.2em">IOTA MAM</tspan>
+                <tspan x="0" dy=".6em">NOT AUTHORIZED</tspan>
+                <tspan x="0" dy="1.2em">Request consent via</tspan>
+                <tspan x="0" dy="1.2em">the button below</tspan>
               </text>
               <defs>
                 <linearGradient id="line-chart-gradient-background-area" x1="0" x2="0" y1="0" y2="1">
@@ -134,14 +211,13 @@
     <label for="root-text-box">
       Received root:
     </label>
-    <input id="root-text-box"
-           type="text"
-           value="UVUHULNNDNJYENBIFZBBVRLCFAHLAQBUVSAJCIAIGDMMWKMDNHPJDXVZKQDBATNJZTX9SJ9KVUFKCMUHF" />
+    <input id="root-text-box" type="text"
+    />
     <br />
     <label for="side-key-text-box">
       Received side key:
     </label>
-    <input id="side-key-text-box" type="text" value="BANANA" />
+    <input id="side-key-text-box" type="text" />
     <script src="line-chart.js">
     </script>
     <script>
