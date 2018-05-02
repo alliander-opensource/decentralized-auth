@@ -34,7 +34,8 @@
      const requestAuthorization = () => {
        const address = document.getElementById('address-hidden-box').value;
        const url = window.location.href;
-       window.location = `http://localhost:3000/new-policy?iotaAddress=${address}&url=${url}`;
+       const goal = 'display your energy usage data in a fancy graph';
+       window.location = `http://localhost:3000/new-policy?iotaAddress=${address}&url=${url}&goal=${goal}`;
      }
 
      const iota = new IOTA({ provider: 'http://node01.testnet.iotatoken.nl:16265' });
