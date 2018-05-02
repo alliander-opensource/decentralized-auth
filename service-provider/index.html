@@ -20,18 +20,18 @@
 
      const ADDRESS_COOKIE_NAME = 'wattt-iota-address';
 
-     function storeAddress(address) {
+     const storeAddress = (address) => {
        console.log('Storing address...');
        Cookies.set(ADDRESS_COOKIE_NAME, address);
      }
 
-     function setAddress(address) {
+     const setAddress = (address) => {
        console.log('Setting address...');
        const addressBox = document.getElementById('address-hidden-box');
        addressBox.value = address;
      }
 
-     function requestAuthorization() {
+     const requestAuthorization = () => {
        const address = document.getElementById('address-hidden-box').value;
        const url = window.location.href;
        window.location = `http://localhost:3000/new-policy?iotaAddress=${address}&url=${url}`;
@@ -43,7 +43,7 @@
      const MAX_STREAMING_COMPILE_TIME_MS = 3000;
      setTimeout(() => Mam.init(iota), MAX_STREAMING_COMPILE_TIME_MS);
 
-     function fromTrytes(trytes) {
+     const fromTrytes = (trytes) => {
        const isOdd = n => (n % 2) === 1;
 
        // Work around odd length trytes that cannot be converted by appending a 9
