@@ -90,6 +90,7 @@ function fetch(root, sideKey) {
 
 module.exports = {
   init,
+  changeSideKey,
   getMamState,
   attach,
   fetch,

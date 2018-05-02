@@ -13,6 +13,7 @@ const SEND_CHALLENGE_TYPE = 'CHALLENGE';
 const CLAIM_RESULT_TYPE = 'CLAIM_RESULT';
 const CLAIM_DEVICE_TYPE = 'CLAIM_DEVICE';
 const ANSWER_CHALLENGE_TYPE = 'ANSWER_CHALLENGE';
+const INFORM_UPDATE_SIDE_KEY_TYPE = 'INFORM_UPDATE_SIDE_KEY';
 
 const CHECK_MESSAGE_INTERVAL_MS = 5000;
 
@@ -168,6 +169,19 @@ module.exports = class DeviceClient {
               msg.sender,
               msg.signedChallenge,
             );
+          }
+          case INFORM_UPDATE_SIDE_KEY_TYPE:
+          {
+            const sideKeys = ['HUMMUS', 'SWEETPOTATO', 'FRIES'];
+            const randomIndex = Math.floor(Math.random() * sideKeys.length);
+            const newSideKey = sideKeys[randomIndex];
+
+            return this.informUpdateSideKey(
+              msg.authorizedServiceProviders,
+              newSideKey,
+            )
+              .then(() => this.mam.changeSideKey(newSideKey))
+              .catch(err => logger.error(`change side key ${err}`));
           }
           default:
           {
