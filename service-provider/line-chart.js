@@ -133,7 +133,7 @@ function drawLineChart(elementId, data) { // eslint-disable-line no-unused-vars
       .attr('x', detailWidth / 2)
       .attr('y', detailHeight / 3)
       .attr('text-anchor', 'middle')
-      .text('Usage (Wh): ');
+      .text('Usage (kW): ');
 
     text.append('tspan')
       .attr('class', 'line-chart-bubble-value')
