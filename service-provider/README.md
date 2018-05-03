@@ -16,6 +16,8 @@ mam.web.js expect iota-bindings-emscripten.wasm to be in root directory so move 
 sudo cp node_modules/mam.client.js/lib/iota-bindings-emscripten.wasm /
 ```
 
+Open index.html
+
 ## Installation on VPS
 
 Get the code on your server:
