@@ -16,7 +16,7 @@
     <script src="node_modules/iota.lib.js/dist/iota.js"></script>
     <script src="node_modules/mam.client.js/lib/mam.web.js"></script>
 
-    <script>
+    <script type="text/javascript">
 
      let IS_AUTHORIZED = false;
      let ENERGY_USAGE_DATA = []; // Array of { date, value } tuples
@@ -42,9 +42,8 @@
 
      const iota = new IOTA({ provider: 'http://node01.testnet.iotatoken.nl:16265' });
 
-     // Wait for streaming compile of MAM library before initializing
-     const MAX_STREAMING_COMPILE_TIME_MS = 3000;
-     setTimeout(() => Mam.init(iota), MAX_STREAMING_COMPILE_TIME_MS);
+     const Mam = require('mam.web.js');
+     Mam.init(iota);
 
      const fromTrytes = (trytes) => {
        const isOdd = n => (n % 2) === 1;
