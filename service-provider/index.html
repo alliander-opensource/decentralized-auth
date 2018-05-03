@@ -26,7 +26,7 @@
      const getAddress = () => Cookies.get(ADDRESS_COOKIE_NAME);
 
      const setAddress = (address) => {
-       console.log('Setting address in cookie and hidden field...');
+       console.log(`Setting address ${address} in cookie and hidden field...`);
        Cookies.set(ADDRESS_COOKIE_NAME, address);
        const addressBox = document.getElementById('address-hidden-box');
        addressBox.value = address;
@@ -238,7 +238,7 @@
        setAddress(address);
      } else {
        const newAddress = generateAddressForTestingPurposes();
-       setAddress(address);
+       setAddress(newAddress);
      }
     </script>
   </body>
