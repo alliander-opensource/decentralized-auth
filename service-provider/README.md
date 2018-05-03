@@ -2,7 +2,7 @@
 
 Example of a service provider.
 
-## Installation
+## Installation locally
 
 Retrieve the mam.client.js:
 
@@ -10,10 +10,39 @@ Retrieve the mam.client.js:
 npm install
 ```
 
-mam.web.js expect iota-bindings-emscripten.wasm to be in /lib directory so move the file one level lower:
+mam.web.js expect iota-bindings-emscripten.wasm to be in root directory so move the file there:
 
 ```
-mv node_modules/mam.client.js/lib/mam.web.js node_modules/mam.client.js/
+sudo cp node_modules/mam.client.js/lib/iota-bindings-emscripten.wasm /
+```
+
+## Installation on VPS
+
+Get the code on your server:
+
+```
+git init
+git remote add origin git@github.com:Alliander/decentralized-auth.git
+git fetch
+git checkout origin/master -- service-provider
+```
+
+Install Node and npm:
+
+```
+sudo apt-get install nodejs npm
+```
+
+Get the JavaScript dependencies:
+
+```
+npm install
+```
+
+Move wasm file to root of site (mam.web.js expects it to be there):
+
+```
+cp node_modules/mam.client.js/lib/iota-bindings-emscripten.wasm .
 ```
 
 ## Features

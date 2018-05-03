@@ -14,7 +14,7 @@
     <!-- Place iota-bindings-emscripten.wasm in -->
     <!-- ./lib/iota-bindings-emscripten.wasm and mam.web.js in ./mam.web.js. -->
     <script src="node_modules/iota.lib.js/dist/iota.js"></script>
-    <script src="node_modules/mam.client.js/mam.web.js"></script>
+    <script src="node_modules/mam.client.js/lib/mam.web.js"></script>
 
     <script>
 
@@ -150,6 +150,7 @@
          .fetch(root, mode, sideKey)
          .then(({ nextRoot, messages }) => {
            const jsonMessages = messages.map(m => JSON.parse(fromTrytes(m)));
+
            const usage = jsonMessages.map(m => ({
                date: toDate(m.timestamp),
                value: toElectricityUsage(m.raw),
