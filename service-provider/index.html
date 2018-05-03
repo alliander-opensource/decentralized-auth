@@ -9,7 +9,7 @@
 
     <script src="https://d3js.org/d3.v3.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
-    <script src="./generate-address.js"></script>
+    <script src="generate-address.js"></script>
 
     <!-- Place iota-bindings-emscripten.wasm in -->
     <!-- ./lib/iota-bindings-emscripten.wasm and mam.web.js in ./mam.web.js. -->
@@ -19,6 +19,7 @@
     <script>
 
      let IS_AUTHORIZED = false;
+     let ENERGY_USAGE_DATA = []; // Array of { date, value } tuples
 
      const ADDRESS_COOKIE_NAME = 'wattt-iota-address';
      const MAM_DATA_TYPE = 'MAM_DATA';
@@ -133,6 +134,12 @@
         .catch(console.log); // eslint-disable-line no-console
      }
 
+     // non lazy and non tail recursive take while function
+     // SOURCE: https://repl.it/repls/StiffImaginaryThings
+     const nil = {};
+     const takeWhile = (f, [x = nil, ...xs]) => (x === nil || !f(x))
+       ? [] : [x, ...takeWhile(f, xs)];
+
      const processMamMessage = () => {
        const root = document.getElementById('root-text-box').value;
        const sideKey = document.getElementById('side-key-text-box').value;
@@ -151,26 +158,37 @@
          .then(({ nextRoot, messages }) => {
            const jsonMessages = messages.map(m => JSON.parse(fromTrytes(m)));
 
-           const usage = jsonMessages.map(m => ({
+           // Read all data messages received from this root
+           const dataMessages = takeWhile(m => m.type === 'DATA', jsonMessages);
+           const usage = dataMessages.map(m => ({
                date: toDate(m.timestamp),
                value: toElectricityUsage(m.raw),
              }));
 
-           console.log(`Messages is ${messages}`);
+           console.log(`JSON messages is ${jsonMessages}`);
            console.log(`Next root is ${nextRoot}`);
            console.log(`Usage is ${usage}`);
 
-           if (usage && usage.length !== 0) {
-             if (usage.length > 26) {
-              return usage.slice(usage.length-26, usage.length-1);
-             } else {
-               return usage;
-             }
-           } else {
-             throw new Error('No new data');
+           if (!usage || usage.length === 0) {
+             throw new Error('No data');
+           }
+
+           // Store the data messages in our backing field
+           ENERGY_USAGE_DATA = usage;
+
+           // Try retrieve the first KEY_ROTATION message
+           const keyRotationMessage = jsonMessages.find(m => m.type === 'KEY_ROTATION');
+           if (keyRotationMessage) {
+             console.log(`Found key rotation message ${keyRotationMessage}`);
+             // If contains ourselves decrypt, update ROOT and side key
+
+             // Else drop the root and side key
+             console.log('No longer authorized :(');
+             document.getElementById('root-text-box').value = "";
+             document.getElementById('side-key-text-box').value = "";
            }
          })
-         .then(usage => drawLineChart('line-chart', usage))
+         .then(() => drawLineChart('line-chart', ENERGY_USAGE_DATA))
          .catch(console.log);
      };
 
