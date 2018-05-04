@@ -38,7 +38,7 @@
     <script type="text/javascript">
 
      let IS_AUTHORIZED = false;
-     let ENERGY_USAGE_DATA = []; // Array of { date, value } tuples
+     const ENERGY_USAGE_DATA = []; // Mutable array of { date, value } tuples
 
      const ADDRESS_COOKIE_NAME = 'wattt-iota-address';
      const MAM_DATA_TYPE = 'MAM_DATA';
@@ -216,7 +216,7 @@
            }
 
            // Store the data messages in our backing field
-           ENERGY_USAGE_DATA = ENERGY_USAGE_DATA.concat(usage);
+           ENERGY_USAGE_DATA.push(...usage);
 
            // Update to use the next root
            setRoot(nextRoot);
