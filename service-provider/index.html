@@ -75,6 +75,9 @@
        return iota.utils.fromTrytes(trytes);
      }
 
+
+     // Parse data message
+
      const toDate = timestamp => new Date(timestamp);
 
      const toElectricityUsage = (telegram) => {
@@ -111,9 +114,10 @@
 
      const seenMessages = new Set(); // mutable set
 
+
      /**
-      * Processes an IOTA message by dispatching the type of message to its handler
-      *
+      * Retrieves and processes an IOTA message by dispatching the type of
+      * message to its handler
       * @function processIotaMessage
       * @returns {undefined}
       */
@@ -170,6 +174,14 @@
      const getSideKey = () => document.getElementById('side-key-text-box').value;
      const setSideKey = key => document.getElementById('side-key-text-box').value = key;
 
+
+     /**
+      * Retrieves and processes MAM messages by dispatching the type of message to
+      * its handler
+      *
+      * @function processIotaMessage
+      * @returns {undefined}
+      */
      const processMamMessage = () => {
        const root = getRoot();
        const sideKey = getSideKey();
