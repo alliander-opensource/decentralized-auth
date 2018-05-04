@@ -9,8 +9,7 @@ body {
   font-size: 14px;
   font-family: sans-serif;
   font-weight: 100;
-  background-color: #ccc;
-  background-image: linear-gradient(transparent 50%, rgba(255, 255, 255, 0.5) 25%);
+  background-color: #7db339;
   background-size: 4px 4px;
 }
 body ul {
