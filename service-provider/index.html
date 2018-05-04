@@ -28,12 +28,16 @@
     </title>
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="alliander.css" />
+
+    <script src="https://unpkg.com/noty@3.2.0-beta/lib/noty.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/noty@3.2.0-beta/lib/noty.css" />
+    <link rel="stylesheet" href="https://unpkg.com/noty@3.2.0-beta/lib/themes/mint.css" />
 
     <script src="https://d3js.org/d3.v3.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+
     <script src="generate-address.js"></script>
-    <script src="https://unpkg.com/noty@3.2.0-beta/lib/noty.js"></script>
 
     <script src="node_modules/iota.lib.js/dist/iota.js"></script>
     <script src="node_modules/mam.client.js/lib/mam.web.js"></script>
@@ -53,6 +57,22 @@
        Cookies.set(ADDRESS_COOKIE_NAME, address);
      }
 
+
+     /*
+      * Displays the msg in a Noty notification
+      *
+      * function notify
+      * @param {string} msg Message to display in notification
+      * @param {string} type Type of message ('info', 'warning' or 'error')
+      * @returns {undefined}
+      */
+     const notify = (msg, type) => new Noty({
+       text: `<span>${msg}</span>`,
+       theme: 'mint',
+       type,
+       layout: 'topRight',
+       timeout: 10000,
+     }).show();
 
      /**
       * Requests consent at My Home. When consent is provided the service
