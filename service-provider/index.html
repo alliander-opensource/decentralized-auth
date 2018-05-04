@@ -27,6 +27,7 @@
       Wattt
     </title>
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="alliander.css" />
 
     <script src="https://d3js.org/d3.v3.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
@@ -261,7 +262,7 @@
           <h2 class="chart-headline">Electricity usage (kW)</h2>
           <div id="line-chart">
             <svg id="line-chart-svg" class="line-chart-svg">
-              <text x="30" y="30" font-size="30" dy="0">
+              <text x="30" y="30" font-size="25" dy="0">
                 <tspan x="0" dy=".6em">NOT AUTHORIZED</tspan>
                 <tspan x="0" dy="1.2em">Request consent via</tspan>
                 <tspan x="0" dy="1.2em">the button below</tspan>
@@ -287,7 +288,7 @@
     />
     <br />
     <br />
-    <button onclick="requestAuthorization()">
+    <button class="btn btn-default" onclick="requestAuthorization()">
       Request data!
     </button>
     <br />

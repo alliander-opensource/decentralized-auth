@@ -1,0 +1,64 @@
+/* Alliander styles lifted from Alliander.com */
+
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url('fonts/proxima_nova.eot');
+  src: url('fonts/proxima_nova.eot?#iefix') format('embedded-opentype'),
+  url('fonts/proxima_nova.woff') format('woff'),
+  url('fonts/proxima_nova.ttf') format('truetype'),
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: "Proxima Nova",Verdana,sans-serif;
+  font-style: normal;
+}
+
+input {
+  border-color: #ccc;
+  color: #929292;
+  outline: none;
+  font-style: normal;
+  font-size: 14px;
+  box-shadow: none !important;
+  border-radius: 3px 0 0 3px !important;
+}
+
+.btn {
+  border: none;
+  font-size: 16px;
+  padding: 7px 11px;
+  white-space: normal;
+  display: inline-block;
+  margin-bottom: 0;
+  font-weight: normal;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  padding: 6px 12px;
+  font-size: 16px;
+  line-height: 1.42857;
+  border-radius: 3px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.btn-default {
+  color: #fff;
+  background-color: #e56c00;
+  border-color: #e56c00;
+}
+
+.btn-default:hover,
+.btn-default:focus,
+.btn-default:active {
+  color: #fff;
+  background-color: #b25400;
+  border-color: #a84f00;
+}
