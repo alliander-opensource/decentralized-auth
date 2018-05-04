@@ -87,7 +87,14 @@
      }
 
      const seenMessages = new Set(); // mutable set
-     const processMessage = () => {
+
+     /**
+      * Processes an IOTA message by dispatching the type of message to its handler
+      *
+      * @function processIotaMessage
+      * @returns {undefined}
+      */
+     const processIotaMessage = () => {
        const address = getAddress();
        console.log(`Getting last message from address ${address}...`);
 
@@ -187,7 +194,7 @@
          .catch(console.log);
      };
 
-     setInterval(processMessage, 5000);
+     setInterval(processIotaMessage, 5000);
      setInterval(processMamMessage, 5000);
     </script>
   </head>
