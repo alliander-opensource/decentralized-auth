@@ -25,14 +25,12 @@
      const getAddress = () => Cookies.get(ADDRESS_COOKIE_NAME);
 
      const setAddress = (address) => {
-       console.log(`Setting address ${address} in cookie and hidden field...`);
+       console.log(`Setting address ${address} in cookie...`);
        Cookies.set(ADDRESS_COOKIE_NAME, address);
-       const addressBox = document.getElementById('address-hidden-box');
-       addressBox.value = address;
      }
 
      const requestAuthorization = () => {
-       const address = document.getElementById('address-hidden-box').value;
+       const address = getAddress();
        const url = window.location.href;
        const goal = document.getElementById('goal-text-box').value;
        window.location = `http://localhost:3000/new-policy?iotaAddress=${address}&url=${url}&goal=${goal}`;
@@ -90,7 +88,7 @@
 
      const seenMessages = new Set(); // mutable set
      const processMessage = () => {
-       const address = document.getElementById('address-hidden-box').value;
+       const address = getAddress();
        console.log(`Getting last message from address ${address}...`);
 
        if (address === "") {
@@ -232,7 +230,6 @@
     </button>
     <br />
     <br />
-    <input id="address-hidden-box" type="hidden" />
     <br />
     <label for="root-text-box">
       Received root:
