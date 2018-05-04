@@ -123,8 +123,8 @@
           switch (msg.type) {
             case MAM_DATA_TYPE:
             {
-              document.getElementById('root-text-box').value = msg.mamData.root;
-              document.getElementById('side-key-text-box').value = msg.mamData.sideKey;
+              setRoot(msg.mamData.root);
+              setSideKey(msg.mamData.sideKey);
               break;
             }
             default:
@@ -142,9 +142,14 @@
      const takeWhile = (f, [x = nil, ...xs]) => (x === nil || !f(x))
        ? [] : [x, ...takeWhile(f, xs)];
 
+     const getRoot = () => document.getElementById('root-text-box').value;
+     const setRoot = root => document.getElementById('root-text-box').value = root;
+     const getSideKey = () => document.getElementById('side-key-text-box').value;
+     const setSideKey = key => document.getElementById('side-key-text-box').value = key;
+
      const processMamMessage = () => {
-       const root = document.getElementById('root-text-box').value;
-       const sideKey = document.getElementById('side-key-text-box').value;
+       const root = getRoot();
+       const sideKey = getSideKey();
        const mode = 'restricted';
 
        IS_AUTHORIZED = (root !== "" && sideKey !== "");
@@ -186,8 +191,8 @@
 
              // Else drop the root and side key
              console.log('No longer authorized :(');
-             document.getElementById('root-text-box').value = "";
-             document.getElementById('side-key-text-box').value = "";
+             setRoot("");
+             setSideKey("");
            }
          })
          .then(() => drawLineChart('line-chart', ENERGY_USAGE_DATA))
