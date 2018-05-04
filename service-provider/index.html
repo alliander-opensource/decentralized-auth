@@ -200,7 +200,7 @@
          .then(({ nextRoot, messages }) => {
            const jsonMessages = messages.map(m => JSON.parse(fromTrytes(m)));
 
-           // Read all data messages received from this root
+           // Read all data messages received from this root onwards
            const dataMessages = takeWhile(m => m.type === 'DATA', jsonMessages);
            const usage = dataMessages.map(m => ({
                date: toDate(m.timestamp),
@@ -216,7 +216,10 @@
            }
 
            // Store the data messages in our backing field
-           ENERGY_USAGE_DATA = usage;
+           ENERGY_USAGE_DATA = ENERGY_USAGE_DATA.concat(usage);
+
+           // Update to use the next root
+           setRoot(nextRoot);
 
            // Try retrieve the first KEY_ROTATION message
            const keyRotationMessage = jsonMessages.find(m => m.type === 'KEY_ROTATION');
