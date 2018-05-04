@@ -251,9 +251,6 @@
          .then(() => drawLineChart('line-chart', ENERGY_USAGE_DATA))
          .catch(console.log);
      };
-
-     setInterval(processIotaMessage, 5000);
-     setInterval(processMamMessage, 5000);
     </script>
   </head>
   <body>
@@ -317,6 +314,12 @@
        const newAddress = generateAddressForTestingPurposes();
        setAddress(newAddress);
      }
+
+     // Process IOTA and MAM messages now and every 5 seconds
+     processIotaMessage();
+     setInterval(processIotaMessage, 5000);
+     processMamMessage();
+     setInterval(processMamMessage, 5000);
     </script>
   </body>
 </html>
