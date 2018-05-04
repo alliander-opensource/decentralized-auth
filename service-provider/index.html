@@ -233,12 +233,19 @@
            const keyRotationMessage = jsonMessages.find(m => m.type === 'KEY_ROTATION');
            if (keyRotationMessage) {
              console.log(`Found key rotation message ${keyRotationMessage}`);
-             // If contains ourselves decrypt, update ROOT and side key
 
-             // Else drop the root and side key
-             console.log('No longer authorized :(');
-             setRoot("");
-             setSideKey("");
+             const address = getAddress();
+             if (typeof keyRotationMessage[address] === 'undefined') {
+               console.log('No longer authorized :(');
+               setRoot("");
+               setSideKey("");
+             // If contains ourselves decrypt, update ROOT and side key
+             } else {
+               // TODO: encryption
+               const encryptedSideKey = keyRotationMessage[address];
+               console.log('Still authorized, update sidekey');
+               setSideKey(encryptedSideKey);
+             }
            }
          })
          .then(() => drawLineChart('line-chart', ENERGY_USAGE_DATA))
