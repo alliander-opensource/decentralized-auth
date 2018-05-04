@@ -50,6 +50,14 @@
        Cookies.set(ADDRESS_COOKIE_NAME, address);
      }
 
+
+     /**
+      * Requests consent at My Home. When consent is provided the service
+      * provider will receive the MAM root and side key on the address.
+      *
+      * @function requestAuthorization
+      * @returns {undefined}
+      */
      const requestAuthorization = () => {
        const address = getAddress();
        const url = window.location.href;
