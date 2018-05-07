@@ -45,12 +45,15 @@
     <script type="text/javascript">
      let IS_AUTHORIZED = false;
 
-     const POLLING_INTERVAL_MS = 10000; // How often to poll for IOTA and MAM messages
+     const POLLING_INTERVAL_MS = 5000; // How often to poll for IOTA and MAM messages
 
      const ENERGY_USAGE_DATA = []; // Mutable array of { date, value } tuples
 
      const ADDRESS_COOKIE_NAME = 'wattt-iota-address';
-     const MAM_DATA_TYPE = 'MAM_DATA';
+
+     const MAM_DATA_MESSAGE_TYPE = 'MAM_DATA';
+     const DATA_MESSAGE_TYPE = 'DATA';
+     const KEY_ROTATION_MESSAGE_TYPE = 'KEY_ROTATION';
 
      const getAddress = () => Cookies.get(ADDRESS_COOKIE_NAME);
 
@@ -143,10 +146,7 @@
        return new Promise((resolve, reject) => {
          iota.api.findTransactionObjects({ addresses: [address] }, (err, transactions) => {
            if (err) return reject(err);
-           if (!transactions || transactions.length === 0) {
-             notify('IOTA: No messages')
-             return reject(new Error('No transactions retrieved.'));
-           }
+           if (!transactions || transactions.length === 0) return reject(new Error('No transactions retrieved.'));
 
            const sortedTransactions = transactions.sort((a, b) => b.timestamp - a.timestamp);
            const lastTransaction = sortedTransactions[0];
@@ -182,7 +182,6 @@
          .then((msg) => {
            if (!msg) {
              console.log('IOTA: No message');
-             notify('IOTA: No message');
              return null;
            }
 
@@ -191,7 +190,6 @@
            // operations that use equals (like set.has()) work as intended)
            if (seenMessages.has(JSON.stringify(msg))) {
              console.log('IOTA: No new message');
-             notify('IOTA: No new message');
              return null;
            }
            seenMessages.add(JSON.stringify(msg));
@@ -199,7 +197,7 @@
            console.log(`IOTA: Received new message of type ${msg.type}`);
            notify(`IOTA: Received new message of type ${msg.type}`);
            switch (msg.type) {
-             case MAM_DATA_TYPE:
+             case MAM_DATA_MESSAGE_TYPE:
              {
                notify(`IOTA MAM: Setting root to ${formatTrytes(msg.mamData.root)}`);
                setRoot(msg.mamData.root);
@@ -218,11 +216,6 @@
          .catch(console.log); // eslint-disable-line no-console
      }
 
-     // non lazy and non tail recursive take while function
-     // SOURCE: https://repl.it/repls/StiffImaginaryThings
-     const nil = {};
-     const takeWhile = (f, [x = nil, ...xs]) => (x === nil || !f(x))
-       ? [] : [x, ...takeWhile(f, xs)];
 
      const getRoot = () => document.getElementById('root-text-box').value;
      const setRoot = root => document.getElementById('root-text-box').value = root;
@@ -254,55 +247,55 @@
        notify(`IOTA MAM: Fetching from root ${formatTrytes(root)} with side key ${sideKey}`);
 
        Mam
-         .fetch(root, mode, sideKey)
-         .then(({ nextRoot, messages }) => {
-           const jsonMessages = messages.map(m => JSON.parse(fromTrytes(m)));
+         .fetchSingle(root, mode, sideKey)
+         .then(res => {
+           console.log('RES' + res)
+           console.log('RES keys' + Object.keys(res))
+           console.log('RES payload' + res.payload)
+           console.log('RES parsed payload' + fromTrytes(res.payload))
+           return res;
+         })
+         .then(({ nextRoot, payload }) => {
+           const jsonMessage = JSON.parse(fromTrytes(payload));
 
-           // Read all data messages received from this root onwards
-           const dataMessages = takeWhile(m => m.type === 'DATA', jsonMessages);
-           const usage = dataMessages.map(m => ({
-               date: toDate(m.timestamp),
-               value: toElectricityUsage(m.raw),
-             }));
+           switch (jsonMessage.type) {
+             case DATA_MESSAGE_TYPE:
+             {
+               notify(`IOTA MAM: Received an energy usage data message`);
+               const usage = {
+                 date: toDate(jsonMessage.timestamp),
+                 value: toElectricityUsage(jsonMessage.raw),
+               };
+               // Store the data messages in our backing field
+               ENERGY_USAGE_DATA.push(usage);
+               break;
+             }
+             case KEY_ROTATION_MESSAGE_TYPE:
+             {
+               notify(`IOTA MAM: Got key rotation message ${JSON.stringify(jsonMessage)}`);
 
-           console.log(`JSON messages is ${jsonMessages}`);
-           console.log(`Next root is ${nextRoot}`);
-           console.log(`Usage is ${usage}`);
-
-           if (!usage || usage.length === 0) {
-             throw new Error('No data');
+               const address = getAddress();
+               if (typeof jsonMessage[address] === 'undefined') {
+                 notify('No longer authorized :(', 'warning');
+                 console.log('No longer authorized :(');
+                 setRoot('');
+                 setSideKey('');
+                 // If contains ourselves decrypt, update ROOT and side key
+               } else {
+                 // TODO: encryption
+                 const encryptedSideKey = jsonMessage[address];
+                 notify('Still authorized, update side key');
+                 console.log('Still authorized, update side key');
+                 notify(`IOTA MAM: Updating side key to ${encryptedSideKey}`);
+                 setSideKey(encryptedSideKey);
+               }
+               break;
+             }
            }
-
-           // Store the data messages in our backing field
-           notify(`IOTA MAM: Received ${usage.length} energy usage data messages`);
-           ENERGY_USAGE_DATA.push(...usage);
 
            // Update to use the next root
            notify(`IOTA MAM: Setting next root to ${formatTrytes(nextRoot)}`);
            setRoot(nextRoot);
-
-           // Try retrieve the first KEY_ROTATION message
-           const keyRotationMessage = jsonMessages.find(m => m.type === 'KEY_ROTATION');
-           if (keyRotationMessage) {
-             console.log(`IOTA MAM: Got key rotation message ${JSON.stringify(keyRotationMessage)}`);
-             notify(`IOTA MAM: Got key rotation message ${JSON.stringify(keyRotationMessage)}`);
-
-             const address = getAddress();
-             if (typeof keyRotationMessage[address] === 'undefined') {
-               notify('No longer authorized :(', 'warning');
-               console.log('No longer authorized :(');
-               setRoot('');
-               setSideKey('');
-             // If contains ourselves decrypt, update ROOT and side key
-             } else {
-               // TODO: encryption
-               const encryptedSideKey = keyRotationMessage[address];
-               notify('Still authorized, update side key');
-               console.log('Still authorized, update side key');
-               notify(`IOTA MAM: Updating side key to ${encryptedSideKey}`);
-               setSideKey(encryptedSideKey);
-             }
-           }
          })
          .then(() => drawLineChart('line-chart', ENERGY_USAGE_DATA))
          .catch(console.log);
