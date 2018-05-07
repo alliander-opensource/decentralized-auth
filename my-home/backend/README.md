@@ -109,13 +109,6 @@ cat /dev/urandom | LC_ALL=C tr -dc 'A-Z9' | fold -w 81 | head -n 1
 and place it in `config.deviceSeed`.
 
 
-### Service provider
-
-```
-# mam.web.js expect iota-bindings-emscripten.wasm to be in /lib directory
-cp node_modules/mam.client.js/lib/mam.web.js node_modules/mam.client.js/
-```
-
 ## Tests
 
 Run IOTA integration tests with `npm run iota-test`.
