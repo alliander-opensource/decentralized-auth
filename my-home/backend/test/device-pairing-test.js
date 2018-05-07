@@ -26,10 +26,10 @@ describe('Pairing of a device using a Device Client instance', () => {
     // Start the device client
     exec(`cd ../../raspberry-pi-client; SEED=${deviceSeed} \
           npm start`, (err) => {
-      if (err) {
-        throw new Error(err);
-      }
-    });
+        if (err) {
+          throw new Error(err);
+        }
+      });
   });
 
   describe('myHouse.claimDevice', () => {

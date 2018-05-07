@@ -60,7 +60,7 @@ describe('Disclosure session', () => {
   const addressAttributeType = 'pbdf.pbdf.idin.address';
   const cityAttributeType = 'pbdf.pbdf.idin.city';
 
-  xit('adds the disclosed attributes to the users\' session', () =>
+  xit('adds the disclosed attributes to the users\' session', () => // eslint-disable-line
     request(app)
       .get(API_GET_SESSION_URL)
       .set('cookie', cookie)

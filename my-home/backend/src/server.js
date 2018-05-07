@@ -1,5 +1,4 @@
 const express = require('express');
-const util = require('util');
 const logger = require('./logger')(module);
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
