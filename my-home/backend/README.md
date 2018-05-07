@@ -108,14 +108,11 @@ cat /dev/urandom | LC_ALL=C tr -dc 'A-Z9' | fold -w 81 | head -n 1
 
 and place it in `config.deviceSeed`.
 
-
 ## Tests
 
-Run IOTA integration tests with `npm run iota-test`.
+Run IOTA integration tests with `npm run iota-test`. It will start the `raspberry-pi-client` in the test.
 
 Run end-to-end tests with `npm run test`.
-
-NOTE: currently the test uses an extra device-client (duplicated code) to avoid the babel polyfill error when running tests from multiple packages
 
 ## IRMA
 
