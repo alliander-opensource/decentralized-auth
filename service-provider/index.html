@@ -331,7 +331,7 @@
      // Get and set initial address
      const address = getAddress();
 
-     if (address !== 'undefined') {
+     if (typeof address !== 'undefined') {
        setAddress(address);
      } else {
        const newAddress = generateAddressForTestingPurposes();
