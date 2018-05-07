@@ -15,17 +15,23 @@ const mwm = config.iotaMinWeightMagnitude;
  * @function send
  * @param {string} seed Our IOTA seed
  * @param {string} receiver IOTA address of receiver
+ * @param {string} tag Optional tag
  * @param {JSON} message to send
  * @returns {Promise}
  */
-function send(seed, receiver, message) {
+function send(seed, receiver, message, tag = '') {
   return new Promise((resolve, reject) => {
     const trytes = iota.utils.toTrytes(JSON.stringify(message));
-    const transfers = [{ address: receiver, value: 0, message: trytes }];
+    const transfers = [{
+      address: receiver,
+      value: 0,
+      obsoleteTag: tag, // tag is not found when searching for tags with findTransactionObjects
+      message: trytes,
+    }];
 
     iota.api.sendTransfer(seed, depth, mwm, transfers, (err, res) => {
       if (!err) {
-        logger.info(`Send message ${JSON.stringify(message)} to ${receiver}`);
+        logger.info(`Send message ${JSON.stringify(message)} with tag ${tag} to ${receiver}`);
         return resolve(res);
       }
       logger.error(`Send error: ${err}`);

@@ -34,6 +34,26 @@ module.exports = class DeviceClient {
   }
 
 
+  /**
+   * Attaches a message with our address on the tangle under the tag, so that
+   * the device client's address can be found by searching for the tag.
+   *
+   *
+   * @function publishPresence
+   * @param {string} seed Our IOTA seed
+   * @param {string} sender Our IOTA address
+   * @param {string} tag Tag to publish our presence under
+   * @returns {Promise}
+   */
+  static publishPresence(seed, sender, tag) {
+    logger.info(`Publishing presence under tag ${tag}`);
+    const message = { sender };
+    const someAddress = Array(82).join('A'); // 81 As
+
+    return iota.send(seed, someAddress, message, tag);
+  }
+
+
   // TODO: addresses are not rotated.
 
   /**
@@ -204,6 +224,9 @@ module.exports = class DeviceClient {
   async init(intervalMs) {
     const [address] = await iota.getAddress(this.seed, 1);
     logger.info(`Starting device client on address ${address}`);
+
+    const PRESENCE_TAG = 'RASPBERRYPI';
+    DeviceClient.publishPresence(this.seed, address, PRESENCE_TAG);
 
     p1Reader.tryInitP1(telegram => this.handleP1Message(telegram));
 
