@@ -45,6 +45,9 @@
     <script type="text/javascript">
 
      let IS_AUTHORIZED = false;
+
+     const POLLING_INTERVAL_MS = 10000; // How often to poll for IOTA and MAM messages
+
      const ENERGY_USAGE_DATA = []; // Mutable array of { date, value } tuples
 
      const ADDRESS_COOKIE_NAME = 'wattt-iota-address';
@@ -76,7 +79,7 @@
          theme: 'mint',
          type,
          layout: 'topRight',
-         timeout: 10000,
+         timeout: POLLING_INTERVAL_MS,
        }).show();
      }
 
@@ -149,9 +152,9 @@
        });
      }
 
+     const formatTrytes = trytes => `${trytes.slice(0, 10)}...`
+
      const seenMessages = new Set(); // mutable set
-
-
      /**
       * Retrieves and processes an IOTA message by dispatching the type of
       * message to its handler
@@ -170,7 +173,8 @@
        getLastMessage(address)
         .then((msg) => {
           if (!msg) {
-            console.log('No messages');
+            console.log('IOTA: No message');
+            notify('IOTA: No message');
             return null;
           }
 
@@ -178,22 +182,28 @@
           // of already processed messages (note: stringified versions so set
           // operations that use equals (like set.has()) work as intended)
           if (seenMessages.has(JSON.stringify(msg))) {
-            console.log('No new messages');
+            console.log('IOTA: No new message');
+            notify('IOTA: No new message');
             return null;
           }
           seenMessages.add(JSON.stringify(msg));
 
-          console.log(`Received new message of type ${msg.type}`);
+          console.log(`IOTA: Received new message of type ${msg.type}`);
+          notify(`IOTA: Received new message of type ${msg.type}`);
           switch (msg.type) {
             case MAM_DATA_TYPE:
             {
+              notify(`IOTA MAM: Setting root to ${formatTrytes(msg.mamData.root)}`);
               setRoot(msg.mamData.root);
+              notify(`IOTA MAM: Setting side key to ${msg.mamData.sideKey}`);
               setSideKey(msg.mamData.sideKey);
               break;
             }
             default:
             {
-              throw new Error(`Unknown message type: ${msg.type}`);
+              const errorMessage = `Unknown message type: ${msg.type}`;
+              notify(errorMessage, 'error')
+              throw new Error(errorMessage);
             }
         }
       })
@@ -227,10 +237,13 @@
        IS_AUTHORIZED = (root !== "" && sideKey !== "");
 
        if (!IS_AUTHORIZED) {
-         console.log('No authorization received');
+         console.log('IOTA MAM: No authorization', 'warning');
+         notify('IOTA MAM: No authorization', 'warning');
          return;
        }
-       console.log(`Trying to fetch from root ${root} with side key ${sideKey}`);
+
+       console.log(`IOTA MAM: Fetching from root ${formatTrytes(root)} with side key ${sideKey}`);
+       notify(`IOTA MAM: Fetching from root ${formatTrytes(root)} with side key ${sideKey}`);
 
        Mam
          .fetch(root, mode, sideKey)
@@ -253,18 +266,22 @@
            }
 
            // Store the data messages in our backing field
+           notify(`IOTA MAM: Received ${usage.length} energy usage data messages`)
            ENERGY_USAGE_DATA.push(...usage);
 
            // Update to use the next root
+           notify(`IOTA MAM: Setting next root to ${formatTrytes(nextRoot)}`);
            setRoot(nextRoot);
 
            // Try retrieve the first KEY_ROTATION message
            const keyRotationMessage = jsonMessages.find(m => m.type === 'KEY_ROTATION');
            if (keyRotationMessage) {
-             console.log(`Found key rotation message ${keyRotationMessage}`);
+             console.log(`IOTA MAM: Got key rotation message ${JSON.stringify(keyRotationMessage)}`);
+             notify(`IOTA MAM: Got key rotation message ${JSON.stringify(keyRotationMessage)}`);
 
              const address = getAddress();
              if (typeof keyRotationMessage[address] === 'undefined') {
+               notify('No longer authorized :(', 'warning');
                console.log('No longer authorized :(');
                setRoot("");
                setSideKey("");
@@ -272,7 +289,9 @@
              } else {
                // TODO: encryption
                const encryptedSideKey = keyRotationMessage[address];
-               console.log('Still authorized, update sidekey');
+               notify('Still authorized, update side key');
+               console.log('Still authorized, update side key');
+               notify(`IOTA MAM: Updating side key to ${encryptedSideKey}`)
                setSideKey(encryptedSideKey);
              }
            }
@@ -346,9 +365,9 @@
 
      // Process IOTA and MAM messages now and every 5 seconds
      processIotaMessage();
-     setInterval(processIotaMessage, 5000);
+     setInterval(processIotaMessage, POLLING_INTERVAL_MS);
      processMamMessage();
-     setInterval(processMamMessage, 5000);
+     setInterval(processMamMessage, POLLING_INTERVAL_MS);
     </script>
   </body>
 </html>
