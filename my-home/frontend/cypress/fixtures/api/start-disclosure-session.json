@@ -1,0 +1,9 @@
+{
+  "irmaSessionId": "T6jH9yPm59ShWh6asiTqRxBIHAu26HlnSttQRUvKu",
+  "qrContent": {
+    "u": "https://irma-api-server/api/v2/verification/T6jH9yPm59ShWh6asiTqRxBIHAu26HlnSttQRUvKu",
+    "v": "2.0",
+    "vmax": "2.2",
+    "irmaqr": "disclosing"
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "name": "diva-js-reference-3p-frontend",
+  "version": "1.0.0",
+  "description": "A frontend for a reference implementation that uses the Diva SDK to verify IRMA attributes.",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Alliander/diva-js.git"
+  },
+  "dependencies": {
+    "axios": "0.17.0",
+    "material-ui": "0.19.4",
+    "moment": "2.20.1",
+    "qrcode.react": "0.7.2",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-flexbox-grid": "1.1.5",
+    "react-moment": "0.7.0",
+    "react-redux": "5.0.6",
+    "react-router-dom": "4.2.2",
+    "react-scripts": "1.0.14",
+    "redux": "3.7.2",
+    "redux-logger": "3.0.6",
+    "redux-thunk": "2.2.0",
+    "uuid": "3.2.1"
+  },
+  "proxy": "http://localhost:4000",
+  "scripts": {
+    "build": "react-scripts build",
+    "cypres:open": "npx cypress open",
+    "dev": "react-scripts start",
+    "eject": "react-scripts eject",
+    "lint": "./node_modules/.bin/eslint -c .eslintrc src",
+    "start": "react-scripts start",
+    "test": "react-scripts test --env=jsdom"
+  },
+  "keywords": [
+    "irma",
+    "attributes",
+    "privacy",
+    "identity",
+    "management"
+  ],
+  "contributors": [
+    "Koen van Ingen",
+    "Timen Olthof",
+    "Alliander N.V. (https://alliander.com/)"
+  ],
+  "license": "BSD-3-Clause",
+  "devDependencies": {
+    "cypress": "1.0.3",
+    "eslint": "4.8.0",
+    "eslint-config-airbnb": "15.1.0",
+    "eslint-config-react-app": "2.0.1",
+    "eslint-plugin-flowtype": "2.39.1",
+    "eslint-plugin-import": "2.7.0",
+    "eslint-plugin-jasmine": "2.9.3",
+    "eslint-plugin-jsx-a11y": "5.1.1",
+    "eslint-plugin-mocha": "5.0.0",
+    "eslint-plugin-react": "7.4.0",
+    "history-prop-types": "2.5.2",
+    "jest-cli": "21.2.1"
+  }
+}
