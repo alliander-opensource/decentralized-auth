@@ -1,6 +1,6 @@
 const iota = require('../src/modules/iota');
 const pairing = require('../src/modules/device/pairing');
-const DeviceClient = require('../../../raspberry-pi-client/src/device-client');
+const DeviceClient = require('../src/device-client');
 const signing = require('../src/modules/iota/kerl/signing');
 const { expect, generateSeedForTestingPurposes } = require('../src/common/test-utils');
 
@@ -42,12 +42,13 @@ describe('Pairing of a device by calling methods on DeviceClient', () => {
   describe('deviceClient.getLastMessage', () =>
     it('should be able to retrieve the last message', () =>
       iota.getLastMessage(deviceAddress)
-        .then(message =>
+        .then((message) => {
+          expect(message).to.have.property('type')
+            .and.to.equal(pairing.CLAIM_DEVICE_TYPE);
 
-          expect(message).to.deep.equal({
-            type: pairing.CLAIM_DEVICE_TYPE,
-            sender: myHouseAddress,
-          }))));
+          expect(message).to.have.property('sender')
+            .and.to.equal(myHouseAddress);
+        })));
 
   describe('deviceClient.sendChallenge', () => {
     it('should be able to create a challenge that can be signed', () => {

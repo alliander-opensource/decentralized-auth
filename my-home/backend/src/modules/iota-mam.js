@@ -21,6 +21,7 @@ function setMamState(state) { mamState = state; }
  * @returns {undefined}
  */
 function changeSideKey(sideKey) {
+  logger.info(`Changing side key to ${sideKey}`);
   MAM.changeMode(getMamState(), mode, sideKey);
 }
 
@@ -90,8 +91,8 @@ function fetch(root, sideKey) {
 
 module.exports = {
   init,
-  changeSideKey,
   getMamState,
+  changeSideKey,
   attach,
   fetch,
 };

@@ -1,6 +1,6 @@
 const iota = require('../src/modules/iota');
 const pairing = require('../src/modules/device/pairing');
-const DeviceClient = require('../../../raspberry-pi-client/src/device-client');
+const DeviceClient = require('../src/device-client');
 const signing = require('../src/modules/iota/kerl/signing');
 const { expect, generateSeedForTestingPurposes } = require('../src/common/test-utils');
 const PromiseRetryer = require('promise-retryer')(Promise);

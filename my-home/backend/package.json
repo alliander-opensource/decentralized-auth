@@ -1,0 +1,69 @@
+{
+  "name": "diva-js-reference-3p-backend",
+  "version": "1.0.0",
+  "description": "A backend for a reference implementation that uses the Diva SDK to verify IRMA attributes.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon -e js,html src/server.js",
+    "prod": "./node_modules/.bin/knex migrate:latest; node src/server.js",
+    "lint": "./node_modules/.bin/eslint -c .eslintrc src test",
+    "migrate": "./node_modules/.bin/knex migrate:latest",
+    "test": "mocha 'src/**/*.e2e.js'",
+    "iota-test": "mocha --timeout 30000",
+    "test:watch": "mocha --watch 'src/**/*.e2e.js'",
+    "test:unit": "mocha 'src/**/*.spec.js'"
+  },
+  "private": true,
+  "keywords": [
+    "irma",
+    "attributes",
+    "privacy",
+    "identity",
+    "management"
+  ],
+  "contributors": [
+    "Koen van Ingen",
+    "Timen Olthof",
+    "Alliander N.V. (https://alliander.com/)"
+  ],
+  "license": "BSD-3-Clause",
+  "dependencies": {
+    "basic-auth": "2.0.0",
+    "bn.js": "4.11.8",
+    "cookie-encrypter": "0.2.3",
+    "cookie-parser": "1.4.3",
+    "crypto-js": "3.1.9-1",
+    "diva-irma-js": "git+https://github.com/Alliander/diva-irma-js.git#28ad1fbe4bc5f590c9d7471308c8b2646bbe03f6",
+    "express": "4.16.1",
+    "get-random-values": "1.2.0",
+    "iota.lib.js": "0.4.7",
+    "knex": "0.14.4",
+    "mam.client.js": "git+ssh://git@github.com/iotaledger/mam.client.js.git",
+    "npm": "5.8.0",
+    "objection": "1.0.0",
+    "pg": "7.4.1",
+    "promise-retryer": "0.0.1",
+    "qr-image": "3.2.0",
+    "serialport": "4.0.7",
+    "superagent": "3.8.0",
+    "uuid": "3.1.0",
+    "winston": "3.0.0-rc3"
+  },
+  "devDependencies": {
+    "chai": "4.1.2",
+    "chai-as-promised": "7.1.1",
+    "eslint": "4.8.0",
+    "eslint-config-airbnb": "15.1.0",
+    "eslint-plugin-import": "2.7.0",
+    "eslint-plugin-jasmine": "2.9.3",
+    "eslint-plugin-jsx-a11y": "5.1.1",
+    "eslint-plugin-mocha": "4.11.0",
+    "eslint-plugin-react": "7.4.0",
+    "keccak": "1.4.0",
+    "mocha": "4.0.1",
+    "nodemon": "1.17.2",
+    "supertest": "3.0.0",
+    "supertest-as-promised": "4.0.2"
+  }
+}
