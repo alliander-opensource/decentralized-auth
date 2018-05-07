@@ -35,6 +35,7 @@ app.get('/api/deauthenticate', require('./actions/deauthenticate'));
 
 // DIVA disclore endpoints
 app.get('/api/start-disclosure-session', require('./actions/start-simple-disclosure-session'));
+app.post('/api/start-disclosure-session', require('./actions/start-disclosure-session'));
 app.post('/api/start-irma-session', require('./actions/start-irma-session'));
 app.get('/api/disclosure-status', require('./actions/disclosure-status'));
 
@@ -56,12 +57,12 @@ app.get('/api/policy/by-sp', require('./modules/policy/get-all-policies-by-sp'))
 app.post('/api/policy/get-message-for-policy', require('./modules/policy/get-message-for-policy'));
 
 const server = app.listen(config.port, () => {
-  const dc = new DeviceClient(
-    config.deviceSeed,
-    config.deviceSecret,
-    config.deviceInitialSideKey,
-  );
-  logger.info(`Started a dummy device client for testing purposes ${util.inspect(dc)} !`);
+  // const dc = new DeviceClient(
+  //   config.deviceSeed,
+  //   config.deviceSecret,
+  //   config.deviceInitialSideKey,
+  // );
+  // logger.info(`Started a dummy device client for testing purposes ${util.inspect(dc)} !`);
 
   logger.info(`Diva Reference Third Party backend listening on port ${config.port} !`);
   logger.info(`Diva version ${diva.version()}`);
