@@ -7,7 +7,7 @@
     "start": "node src/server.js",
     "dev": "nodemon -e js,html src/server.js",
     "prod": "./node_modules/.bin/knex migrate:latest; node src/server.js",
-    "lint": "./node_modules/.bin/eslint -c .eslintrc src test",
+    "lint": "./node_modules/.bin/eslint -c ../../.eslintrc src test",
     "migrate": "./node_modules/.bin/knex migrate:latest",
     "test": "mocha 'src/**/*.e2e.js'",
     "iota-test": "mocha --timeout 30000",
