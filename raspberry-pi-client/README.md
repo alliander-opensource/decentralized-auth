@@ -23,6 +23,12 @@ This client in demonstrates:
 
 ### Revoke access
 
+## Tests
+
+```
+npm run test
+```
+
 ## Production
 
 Get the raspberry-pi-client on your Pi:
@@ -48,10 +54,14 @@ Generate a seed with `cat /dev/urandom | LC_ALL=C tr -dc 'A-Z9' | fold -w 81 | h
 export SEED=<seed>
 ```
 
-Start the client with `npm start`
+Start the client with `npm start`, e.g.:
 
 ## Running the application locally
 
 - Checkout the code
 - `npm install`
 - `npm start`
+
+Or run with specific seed:
+
+- SEED=HWMLSSBKJOTBKVQTJE9OWPPMPZJTDUDIHMMUFIBQJCDJDPRNLAAG99J9UXZIKSQJDTUWFPSXJIZEJMTXV npm start

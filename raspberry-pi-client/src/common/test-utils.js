@@ -7,10 +7,7 @@ const chaiAsPromised = require('chai-as-promised');
 const request = require('supertest-as-promised');
 
 chai.use(chaiAsPromised);
-const expect = chai.expect;
-
-const app = require('../server').app;
-const server = require('../server').server;
+const { expect } = chai;
 
 const getRandomValues = require('get-random-values');
 
@@ -35,8 +32,6 @@ const generateSeedForTestingPurposes = () => {
 };
 
 module.exports = {
-  app,
-  server,
   expect,
   request,
 

@@ -9,7 +9,8 @@
   "main": "src/main.js",
   "scripts": {
     "start": "node src/main.js",
-    "lint": "./node_modules/.bin/eslint -c ../.eslintrc src test"
+    "lint": "./node_modules/.bin/eslint -c ../.eslintrc src test",
+    "test": "mocha --timeout 30000"
   },
   "keywords": [
     "iota",
@@ -23,6 +24,7 @@
     "ajv": "^6.0.1",
     "bn.js": "^4.11.8",
     "crypto-js": "3.1.9-1",
+    "express": "^4.16.3",
     "get-random-values": "1.2.0",
     "iota.lib.js": "0.4.7",
     "mam.client.js": "git+https://github.com/iotaledger/mam.client.js.git",
@@ -33,6 +35,8 @@
     "winston": "3.0.0-rc3"
   },
   "devDependencies": {
+    "chai": "4.1.2",
+    "chai-as-promised": "7.1.1",
     "eslint": "4.8.0",
     "eslint-config-airbnb": "15.1.0",
     "eslint-plugin-import": "2.7.0",
@@ -40,6 +44,8 @@
     "eslint-plugin-jsx-a11y": "5.1.1",
     "eslint-plugin-mocha": "4.11.0",
     "eslint-plugin-react": "7.4.0",
-    "mocha": "4.0.1"
+    "mocha": "4.0.1",
+    "supertest": "3.0.0",
+    "supertest-as-promised": "4.0.2"
   }
 }

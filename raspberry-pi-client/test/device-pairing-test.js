@@ -1,14 +1,15 @@
 const iota = require('../src/modules/iota');
-const pairing = require('../src/modules/device/pairing');
-const DeviceClient = require('../../../raspberry-pi-client/src/device-client');
+const pairingMock = require('./pairing-mock');
+
+const DeviceClient = require('../src/device-client');
 const signing = require('../src/modules/iota/kerl/signing');
 const { expect, generateSeedForTestingPurposes } = require('../src/common/test-utils');
 
 describe('Pairing of a device by calling methods on DeviceClient', () => {
   const myHouseSeed = generateSeedForTestingPurposes();
   const deviceSeed = generateSeedForTestingPurposes();
-  const deviceSecret = 'HUMMUS';
-  const initialSideKey = 'SWEETPOTATO';
+  const deviceSecret = 'APPLE';
+  const initialSideKey = 'BANANA';
 
   let myHouseAddress;
   let deviceClient;
@@ -24,7 +25,6 @@ describe('Pairing of a device by calling methods on DeviceClient', () => {
         deviceAddress = firstAddress;
         deviceClient = new DeviceClient(
           deviceSeed,
-          deviceAddress,
           deviceSecret,
           initialSideKey,
         );
@@ -33,7 +33,7 @@ describe('Pairing of a device by calling methods on DeviceClient', () => {
 
   describe('myHouse.claimDevice', () => {
     it('should send a claim message to a device', () =>
-      pairing.claimDevice(myHouseSeed, myHouseAddress, deviceAddress)
+      pairingMock.claimDevice(myHouseSeed, myHouseAddress, deviceAddress)
         .then(transactions =>
 
           expect(transactions).to.be.an('array')));
@@ -42,12 +42,11 @@ describe('Pairing of a device by calling methods on DeviceClient', () => {
   describe('deviceClient.getLastMessage', () =>
     it('should be able to retrieve the last message', () =>
       iota.getLastMessage(deviceAddress)
-        .then(message =>
+        .then((message) => {
+          expect(message).to.have.property('type').and.equal(pairingMock.CLAIM_DEVICE_TYPE);
 
-          expect(message).to.deep.equal({
-            type: pairing.CLAIM_DEVICE_TYPE,
-            sender: myHouseAddress,
-          }))));
+          expect(message).to.have.property('sender').and.equal(myHouseAddress);
+        })));
 
   describe('deviceClient.sendChallenge', () => {
     it('should be able to create a challenge that can be signed', () => {
@@ -95,7 +94,7 @@ describe('Pairing of a device by calling methods on DeviceClient', () => {
     });
 
     it('should be able to answer a challenge', () =>
-      pairing.answerChallenge(
+      pairingMock.answerChallenge(
         myHouseSeed,
         myHouseAddress,
         deviceAddress,
@@ -148,14 +147,14 @@ describe('Pairing of a device by calling methods on DeviceClient', () => {
 
   describe('myHouse.retrieveClaim', () => {
     it('should be able to retrieve the successful claim result', () =>
-      pairing.retrieveClaim(myHouseAddress, deviceAddress)
+      pairingMock.retrieveClaim(myHouseAddress, deviceAddress)
         .then((claim) => {
           expect(claim).to.have.property('sender');
           expect(claim).to.have.property('status');
           expect(claim.status).to.equal('OK');
           expect(claim).to.have.property('mamData')
             .and.to.have.property('sideKey')
-            .and.to.equal('SWEETPOTATO');
+            .and.to.equal('BANANA');
           expect(claim).to.have.property('mamData') // eslint-disable-line jasmine/new-line-before-expect
             .and.to.have.property('root')
             .and.to.have.lengthOf(81);
