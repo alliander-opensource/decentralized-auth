@@ -7,7 +7,6 @@ const cookieEncrypter = require('cookie-encrypter');
 const diva = require('diva-irma-js');
 const simpleSession = require('./modules/simple-session');
 const config = require('./config');
-const DeviceClient = require('./device-client');
 
 const initializeDatabase = require('./database/initialize-database');
 
@@ -57,13 +56,6 @@ app.get('/api/policy/by-sp', require('./modules/policy/get-all-policies-by-sp'))
 app.post('/api/policy/get-message-for-policy', require('./modules/policy/get-message-for-policy'));
 
 const server = app.listen(config.port, () => {
-  // const dc = new DeviceClient(
-  //   config.deviceSeed,
-  //   config.deviceSecret,
-  //   config.deviceInitialSideKey,
-  // );
-  // logger.info(`Started a dummy device client for testing purposes ${util.inspect(dc)} !`);
-
   logger.info(`Diva Reference Third Party backend listening on port ${config.port} !`);
   logger.info(`Diva version ${diva.version()}`);
 });
