@@ -248,13 +248,6 @@
 
        Mam
          .fetchSingle(root, mode, sideKey)
-         .then(res => {
-           console.log('RES' + res)
-           console.log('RES keys' + Object.keys(res))
-           console.log('RES payload' + res.payload)
-           console.log('RES parsed payload' + fromTrytes(res.payload))
-           return res;
-         })
          .then(({ nextRoot, payload }) => {
            const jsonMessage = JSON.parse(fromTrytes(payload));
 
