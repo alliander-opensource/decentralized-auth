@@ -122,18 +122,6 @@
      };
 
 
-     // Parse data message
-
-     const toDate = timestamp => new Date(timestamp);
-
-     const toElectricityUsage = (telegram) => {
-       // 1.7.0 is OBIS code for positive active instantaneous power (A+) [kW]
-       const CAPTURE_USAGE_PATTERN = /1.7.0\((.{7})\*kW\)/;
-       const value = CAPTURE_USAGE_PATTERN.exec(telegram)[1];
-
-       return parseFloat(value);
-     };
-
      /**
       * Gets last received transfer message.
       * NOTE: order is not necessarily chronological, but let's assume it is.
@@ -221,6 +209,19 @@
      const setRoot = root => document.getElementById('root-text-box').value = root;
      const getSideKey = () => document.getElementById('side-key-text-box').value;
      const setSideKey = key => document.getElementById('side-key-text-box').value = key;
+
+
+     // Parse MAM data message
+
+     const toDate = timestamp => new Date(timestamp);
+
+     const toElectricityUsage = (telegram) => {
+       // 1.7.0 is OBIS code for positive active instantaneous power (A+) [kW]
+       const CAPTURE_USAGE_PATTERN = /1.7.0\((.{7})\*kW\)/;
+       const value = CAPTURE_USAGE_PATTERN.exec(telegram)[1];
+
+       return parseFloat(value);
+     };
 
 
      /**
