@@ -47,7 +47,7 @@ describe('Pairing of a device using a Device Client instance', () => {
       PromiseRetryer.run({
         delay: WAIT_TIME_MS,
         maxRetries: MAX_RETRIES,
-        promise: () => iota.getLastMessage(myHouseAddress),
+        promise: () => iota.getLastMessage({ addresses: [myHouseAddress] }),
         validate: msg =>
           new Promise((resolve, reject) => {
             if (!!msg && msg.type === 'CHALLENGE') {

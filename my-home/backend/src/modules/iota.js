@@ -40,12 +40,13 @@ function send(seed, receiver, message) {
  * NOTE: order is not necessarily chronological, but let's assume it is.
  *
  * @function getLastMessage
- * @param {string} address Our IOTA address
+ * @param {Object} searchValues List of bundle hashes, addresses, tags or
+ *                              approvees (e.g., `{ hashes: ['ABCD'] }`)
  * @returns {JSON} Parsed message or `null` when no received transfers
  */
-function getLastMessage(address) {
+function getLastMessage(searchValues) {
   return new Promise((resolve, reject) => {
-    iota.api.findTransactionObjects({ addresses: [address] }, (err, transactions) => {
+    iota.api.findTransactionObjects(searchValues, (err, transactions) => {
       if (err) return reject(err);
       if (!transactions || transactions.length === 0) return reject(new Error('No transactions retrieved.'));
 

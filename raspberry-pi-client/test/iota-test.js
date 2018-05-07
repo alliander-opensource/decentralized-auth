@@ -36,7 +36,7 @@ describe('Iota', () => {
           expect(transactions).to.be.an('array')));
 
     it('should be able to retrieve the message', () =>
-      iota.getLastMessage(receiveAddress)
+      iota.getLastMessage({ addresses: [receiveAddress] })
         .then(messageFromIota =>
 
           expect(messageFromIota).to.deep.equal(message)));

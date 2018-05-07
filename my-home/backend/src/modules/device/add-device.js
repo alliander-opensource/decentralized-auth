@@ -61,7 +61,7 @@ module.exports = function requestHandler(req, res) {
       pairing.claimDevice(config.iotaSeed, config.iotaAddress, device.iotaAddress)
         .then(() =>
           waitForMessage(
-            () => iota.getLastMessage(config.iotaAddress),
+            () => iota.getLastMessage({ addresses: [config.iotaAddress] }),
             'CHALLENGE',
           ))
         .then(({ challenge }) => {

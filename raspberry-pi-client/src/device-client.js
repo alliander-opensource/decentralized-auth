@@ -135,7 +135,7 @@ module.exports = class DeviceClient {
     logger.info(`Getting last message from address ${address}...`);
 
 
-    iota.getLastMessage(address)
+    iota.getLastMessage({ addresses: [address] })
       .then((msg) => {
         if (!msg) {
           logger.info('No messages');

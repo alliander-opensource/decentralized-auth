@@ -41,7 +41,7 @@ describe('Pairing of a device by calling methods on DeviceClient', () => {
 
   describe('deviceClient.getLastMessage', () =>
     it('should be able to retrieve the last message', () =>
-      iota.getLastMessage(deviceAddress)
+      iota.getLastMessage({ addresses: [deviceAddress] })
         .then((message) => {
           expect(message).to.have.property('type').and.equal(pairingMock.CLAIM_DEVICE_TYPE);
 
@@ -73,7 +73,7 @@ describe('Pairing of a device by calling methods on DeviceClient', () => {
     let testChallenge;
 
     it('should be able to retrieve a challenge', () =>
-      iota.getLastMessage(myHouseAddress)
+      iota.getLastMessage({ addresses: [myHouseAddress] })
         .then((message) => {
           testChallenge = message.challenge;
           return message;
@@ -110,7 +110,7 @@ describe('Pairing of a device by calling methods on DeviceClient', () => {
     let testSignedChallenge;
 
     it('should be able to receive a claim result', () =>
-      iota.getLastMessage(deviceAddress)
+      iota.getLastMessage({ addresses: [deviceAddress] })
         .then((message) => {
           testSender = message.sender;
           testSignedChallenge = message.signedChallenge;
