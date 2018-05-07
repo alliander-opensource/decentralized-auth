@@ -64,15 +64,21 @@
       * function notify
       * @param {string} msg Message to display in notification
       * @param {string} type Type of message ('info', 'warning' or 'error')
-      * @returns {undefined}
+      * @returns {Object} the notification object that is shown
       */
-     const notify = (msg, type) => new Noty({
-       text: `<span>${msg}</span>`,
-       theme: 'mint',
-       type,
-       layout: 'topRight',
-       timeout: 10000,
-     }).show();
+     const notify = (msg, type) => {
+
+       const MAX_WORD_LENGTH_NOTY = 39;
+       const format = msg => msg.split(" ").map(w => w.slice(0, MAX_WORD_LENGTH_NOTY)).join(" ")
+
+       return new Noty({
+         text: `<br /><span>${format(msg)}</span><br /><br />`,
+         theme: 'mint',
+         type,
+         layout: 'topRight',
+         timeout: 10000,
+       }).show();
+     }
 
      /**
       * Requests consent at My Home. When consent is provided the service
