@@ -144,7 +144,7 @@
          iota.api.findTransactionObjects({ addresses: [address] }, (err, transactions) => {
            if (err) return reject(err);
            if (!transactions || transactions.length === 0) {
-             notify('IOTA: no messages')
+             notify('IOTA: No messages')
              return reject(new Error('No transactions retrieved.'));
            }
 
