@@ -182,7 +182,6 @@
            }
            seenMessages.add(JSON.stringify(msg));
 
-           console.log(`IOTA: Received new message of type ${msg.type}`);
            notify(`IOTA: Received new message of type ${msg.type}`);
            switch (msg.type) {
              case MAM_DATA_MESSAGE_TYPE:
@@ -239,12 +238,10 @@
        IS_AUTHORIZED = (root !== "" && sideKey !== "");
 
        if (!IS_AUTHORIZED) {
-         console.log('IOTA MAM: No authorization', 'warning');
          notify('IOTA MAM: No authorization', 'warning');
          return;
        }
 
-       console.log(`IOTA MAM: Fetching from root ${formatTrytes(root)} with side key ${sideKey}`);
        notify(`IOTA MAM: Fetching from root ${formatTrytes(root)} with side key ${sideKey}`);
 
        Mam
@@ -271,7 +268,6 @@
                const address = getAddress();
                if (typeof jsonMessage[address] === 'undefined') {
                  notify('No longer authorized :(', 'warning');
-                 console.log('No longer authorized :(');
                  setRoot('');
                  setSideKey('');
                  // If contains ourselves decrypt, update ROOT and side key
@@ -279,7 +275,6 @@
                  // TODO: encryption
                  const encryptedSideKey = jsonMessage[address];
                  notify('Still authorized, update side key');
-                 console.log('Still authorized, update side key');
                  notify(`IOTA MAM: Updating side key to ${encryptedSideKey}`);
                  setSideKey(encryptedSideKey);
                }
@@ -292,7 +287,7 @@
            setRoot(nextRoot);
          })
          .then(() => drawLineChart('line-chart', ENERGY_USAGE_DATA))
-         .catch(console.log);
+         .catch(err => notify(err, 'error));
      };
 
     </script>
