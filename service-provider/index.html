@@ -43,7 +43,6 @@
     <script src="node_modules/mam.client.js/lib/mam.web.js"></script>
 
     <script type="text/javascript">
-
      let IS_AUTHORIZED = false;
 
      const POLLING_INTERVAL_MS = 10000; // How often to poll for IOTA and MAM messages
@@ -58,33 +57,33 @@
      const setAddress = (address) => {
        console.log(`Setting address ${address} in cookie...`);
        Cookies.set(ADDRESS_COOKIE_NAME, address);
-     }
+     };
 
 
      /*
       * Displays the msg in a Noty notification
       *
       * function notify
-      * @param {string} msg Message to display in notification
+      * @param {string} message Message to display in notification
       * @param {string} type Type of message ('info', 'warning' or 'error')
       * @returns {Object} the notification object that is shown
       */
-     const notify = (msg, type = 'info') => {
+     const notify = (message, type = 'info') => {
 
        const MAX_WORD_LENGTH_NOTY = 39;
        const format = msg => msg
-         .split(" ")
+         .split(' ')
          .map(w => w.slice(0, MAX_WORD_LENGTH_NOTY))
-         .join(" ")
+         .join(' ');
 
        return new Noty({
-         text: `<br /><span>${format(msg)}</span><br /><br />`,
+         text: `<br /><span>${format(message)}</span><br /><br />`,
          theme: 'mint',
          type,
          layout: 'topRight',
          timeout: POLLING_INTERVAL_MS,
        }).show();
-     }
+     };
 
      /**
       * Requests consent at My Home. When consent is provided the service
@@ -100,11 +99,12 @@
        const myHouseUrl = `http://localhost:3000/new-policy?iotaAddress=${address}&url=${url}&goal=${goal}`;
 
        window.location = myHouseUrl;
-     }
+     };
 
      const iota = new IOTA({ provider: 'http://node01.testnet.iotatoken.nl:16265' });
 
      const Mam = require('mam.web.js');
+
      Mam.init(iota);
 
      const fromTrytes = (trytes) => {
@@ -116,7 +116,7 @@
        }
 
        return iota.utils.fromTrytes(trytes);
-     }
+     };
 
 
      // Parse data message
@@ -125,11 +125,11 @@
 
      const toElectricityUsage = (telegram) => {
        // 1.7.0 is OBIS code for positive active instantaneous power (A+) [kW]
-       const CAPTURE_USAGE_PATTERN = /1.7.0\((.{7})\*kW\)/
+       const CAPTURE_USAGE_PATTERN = /1.7.0\((.{7})\*kW\)/;
        const value = CAPTURE_USAGE_PATTERN.exec(telegram)[1];
 
        return parseFloat(value);
-     }
+     };
 
      /**
       * Gets last received transfer message.
@@ -155,7 +155,7 @@
        });
      }
 
-     const formatTrytes = trytes => `${trytes.slice(0, 10)}...`
+     const formatTrytes = trytes => `${trytes.slice(0, 10)}...`;
 
      const seenMessages = new Set(); // mutable set
 
@@ -170,49 +170,49 @@
        const address = getAddress();
        console.log(`Getting last message from address ${address}...`);
 
-       if (address === "") {
+       if (address === '') {
          console.log('No address so cannot process message');
          return;
        }
 
        getLastMessage(address)
-        .then((msg) => {
-          if (!msg) {
-            console.log('IOTA: No message');
-            notify('IOTA: No message');
-            return null;
-          }
+         .then((msg) => {
+           if (!msg) {
+             console.log('IOTA: No message');
+             notify('IOTA: No message');
+             return null;
+           }
 
-          // To avoid processing the same last message over and over we keep track
-          // of already processed messages (note: stringified versions so set
-          // operations that use equals (like set.has()) work as intended)
-          if (seenMessages.has(JSON.stringify(msg))) {
-            console.log('IOTA: No new message');
-            notify('IOTA: No new message');
-            return null;
-          }
-          seenMessages.add(JSON.stringify(msg));
+           // To avoid processing the same last message over and over we keep track
+           // of already processed messages (note: stringified versions so set
+           // operations that use equals (like set.has()) work as intended)
+           if (seenMessages.has(JSON.stringify(msg))) {
+             console.log('IOTA: No new message');
+             notify('IOTA: No new message');
+             return null;
+           }
+           seenMessages.add(JSON.stringify(msg));
 
-          console.log(`IOTA: Received new message of type ${msg.type}`);
-          notify(`IOTA: Received new message of type ${msg.type}`);
-          switch (msg.type) {
-            case MAM_DATA_TYPE:
-            {
-              notify(`IOTA MAM: Setting root to ${formatTrytes(msg.mamData.root)}`);
-              setRoot(msg.mamData.root);
-              notify(`IOTA MAM: Setting side key to ${msg.mamData.sideKey}`);
-              setSideKey(msg.mamData.sideKey);
-              break;
-            }
-            default:
-            {
-              const errorMessage = `Unknown message type: ${msg.type}`;
-              notify(errorMessage, 'error')
-              throw new Error(errorMessage);
-            }
-        }
-      })
-        .catch(console.log); // eslint-disable-line no-console
+           console.log(`IOTA: Received new message of type ${msg.type}`);
+           notify(`IOTA: Received new message of type ${msg.type}`);
+           switch (msg.type) {
+             case MAM_DATA_TYPE:
+             {
+               notify(`IOTA MAM: Setting root to ${formatTrytes(msg.mamData.root)}`);
+               setRoot(msg.mamData.root);
+               notify(`IOTA MAM: Setting side key to ${msg.mamData.sideKey}`);
+               setSideKey(msg.mamData.sideKey);
+               break;
+             }
+             default:
+             {
+               const errorMessage = `Unknown message type: ${msg.type}`;
+               notify(errorMessage, 'error')
+               throw new Error(errorMessage);
+             }
+           }
+         })
+         .catch(console.log); // eslint-disable-line no-console
      }
 
      // non lazy and non tail recursive take while function
@@ -271,7 +271,7 @@
            }
 
            // Store the data messages in our backing field
-           notify(`IOTA MAM: Received ${usage.length} energy usage data messages`)
+           notify(`IOTA MAM: Received ${usage.length} energy usage data messages`);
            ENERGY_USAGE_DATA.push(...usage);
 
            // Update to use the next root
@@ -288,15 +288,15 @@
              if (typeof keyRotationMessage[address] === 'undefined') {
                notify('No longer authorized :(', 'warning');
                console.log('No longer authorized :(');
-               setRoot("");
-               setSideKey("");
+               setRoot('');
+               setSideKey('');
              // If contains ourselves decrypt, update ROOT and side key
              } else {
                // TODO: encryption
                const encryptedSideKey = keyRotationMessage[address];
                notify('Still authorized, update side key');
                console.log('Still authorized, update side key');
-               notify(`IOTA MAM: Updating side key to ${encryptedSideKey}`)
+               notify(`IOTA MAM: Updating side key to ${encryptedSideKey}`);
                setSideKey(encryptedSideKey);
              }
            }
@@ -304,6 +304,7 @@
          .then(() => drawLineChart('line-chart', ENERGY_USAGE_DATA))
          .catch(console.log);
      };
+
     </script>
   </head>
   <body>
