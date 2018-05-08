@@ -39,6 +39,6 @@ describe('Iota', () => {
       iota.getLastMessage({ addresses: [receiveAddress] })
         .then(messageFromIota =>
 
-          expect(messageFromIota).to.deep.equal(message)));
+          expect(messageFromIota).to.have.property('message').and.to.equal(message.message)));
   });
 });
