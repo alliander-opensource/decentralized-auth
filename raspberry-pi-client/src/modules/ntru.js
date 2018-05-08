@@ -22,13 +22,11 @@ function toBytes(str) {
  *
  * @function createAsymmetricKeyPair
  * @param {string} seed IOTA seed to generate key pair with
- * @returns {Promise} With Key pair object
+ * @returns {Object} Key pair with private and public keys
  */
 function createAsymmetricKeyPair(seed) {
   const bytes = toBytes(seed);
-  const keyPair = ntru.createKeyWithSeed(bytes);
-
-  return keyPair;
+  return ntru.createKeyWithSeed(bytes);
 }
 
 

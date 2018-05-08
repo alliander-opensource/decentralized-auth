@@ -13,9 +13,9 @@ describe('NTRU', () => {
     }));
 
   describe('ntru.createAsymmetricKeyPair', () =>
-    it('should create an asymmetric key pair based on seed, deterministically', async () => {
-      const keyPair1 = await ntru.createAsymmetricKeyPair(seed);
-      const keyPair2 = await ntru.createAsymmetricKeyPair(seed);
+    it('should create an asymmetric key pair based on seed, deterministically', () => {
+      const keyPair1 = ntru.createAsymmetricKeyPair(seed);
+      const keyPair2 = ntru.createAsymmetricKeyPair(seed);
 
       expect(keyPair1.public).to.have.lengthOf(1027);
       expect(keyPair1.private).to.have.lengthOf(1120);
@@ -23,8 +23,8 @@ describe('NTRU', () => {
     }));
 
   describe('ntru.base64 and back', () =>
-    it('convert base 64 and back', async () => {
-      const keyPair = await ntru.createAsymmetricKeyPair(seed);
+    it('convert base 64 and back', () => {
+      const keyPair = ntru.createAsymmetricKeyPair(seed);
 
       const b64 = keyPair.public.toString('base64');
       const converted = Buffer.from(b64, 'base64');
@@ -33,16 +33,16 @@ describe('NTRU', () => {
     }));
 
   describe('ntru.toTrytes', () =>
-    it('should be able to convert keyPair to tryte representation', async () => {
-      const keyPair = await ntru.createAsymmetricKeyPair(seed);
+    it('should be able to convert keyPair to tryte representation', () => {
+      const keyPair = ntru.createAsymmetricKeyPair(seed);
       const publicKeyTrytes = ntru.toTrytes(keyPair.public);
 
       expect(publicKeyTrytes).to.have.lengthOf(2744);
     }));
 
   describe('ntru.fromTrytes', () =>
-    it('should be able to convert tryte representaton of keyPair to keyPair object', async () => {
-      const keyPair = await ntru.createAsymmetricKeyPair(seed);
+    it('should be able to convert tryte representaton of keyPair to keyPair object', () => {
+      const keyPair = ntru.createAsymmetricKeyPair(seed);
       const publicKeyTrytes = ntru.toTrytes(keyPair.public);
       const publicKeyConverted = ntru.fromTrytes(publicKeyTrytes);
 
