@@ -4,6 +4,8 @@
 
 const DURATION = 100;
 
+const noData = data => typeof data[0] === 'undefined';
+
 /**
  * Draw the fancy line chart.
  *
@@ -11,7 +13,7 @@ const DURATION = 100;
  * @param {array} data data
  */
 function drawLineChart(elementId, data) { // eslint-disable-line no-unused-vars
-  if (data === []) return;
+  if (noData(data)) return;
 
   const containerEl = document.getElementById(elementId);
   const width = containerEl.clientWidth;
