@@ -1,4 +1,5 @@
 const ntru = require('../src/modules/ntru');
+const NTRU = require('ntrujs');
 
 const { expect } = require('../src/common/test-utils');
 
@@ -47,5 +48,17 @@ describe('NTRU', () => {
       const publicKeyConverted = ntru.fromTrytes(publicKeyTrytes);
 
       expect(publicKeyConverted).to.deep.equal(keyPair.public);
+    }));
+
+  describe('ntru.encrypt and ntru.decrypt', () =>
+    it('should be able to encrypt and decrypt a message', () => {
+      const keyPair = ntru.createAsymmetricKeyPair(seed);
+
+      const plaintext = Buffer.from('hello', 'utf8');
+      const encrypted = ntru.encrypt(plaintext, keyPair.public);
+      const decrypted = ntru.decrypt(encrypted, keyPair.private);
+
+      expect(encrypted.toString()).to.not.equal(plaintext.toString());
+      expect(plaintext.toString()).to.equal(decrypted.toString());
     }));
 });

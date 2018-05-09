@@ -1,5 +1,5 @@
 const { TextEncoder } = require('util');
-const ntru = require('ntrujs');
+const NTRU = require('ntrujs');
 const iota = require('./iota');
 
 
@@ -26,7 +26,14 @@ function toBytes(str) {
  */
 function createAsymmetricKeyPair(seed) {
   const bytes = toBytes(seed);
-  return ntru.createKeyWithSeed(bytes);
+  const keyPair = NTRU.createKeyWithSeed(bytes);
+
+  // Need to call `NTRU.createKey` after `NTRU.createKeyWithSeed` for some
+  // reason, otherwise encrypting and decrypting does not work. See
+  // https://github.com/IDWMaster/ntrujs/issues/6.
+  NTRU.createKey();
+
+  return keyPair;
 }
 
 
@@ -60,9 +67,13 @@ function fromTrytes(keyTrytes) {
   return publicKey;
 }
 
+const { encrypt, decrypt } = NTRU;
+
 module.exports = {
   toBytes,
   createAsymmetricKeyPair,
   toTrytes,
   fromTrytes,
+  encrypt,
+  decrypt,
 };
