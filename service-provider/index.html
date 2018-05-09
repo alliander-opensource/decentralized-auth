@@ -126,21 +126,30 @@
       * NOTE: order is not necessarily chronological, but let's assume it is.
       *
       * @function getLastMessage
-      * @param {string} address Our IOTA address
+      * @param {Object} searchValues List of bundle hashes, addresses, tags or
+      *                              approvees (e.g., `{ hashes: ['ABCD'] }`)
       * @returns {JSON} Parsed message or `null` when no received transfers
       */
-     function getLastMessage(address) {
+     function getLastMessage(searchValues) {
        return new Promise((resolve, reject) => {
-         iota.api.findTransactionObjects({ addresses: [address] }, (err, transactions) => {
+         iota.api.findTransactionObjects(searchValues, (err, transactions) => {
            if (err) return reject(err);
            if (!transactions || transactions.length === 0) return reject(new Error('No transactions retrieved.'));
 
            const sortedTransactions = transactions.sort((a, b) => b.timestamp - a.timestamp);
            const lastTransaction = sortedTransactions[0];
-           const message = JSON.parse(iota.utils.extractJson([lastTransaction]));
-           const messageWithTimeStamp = { ...message, timestamp: lastTransaction.timestamp };
 
-           return resolve(messageWithTimeStamp);
+           return iota.api.findTransactionObjects({ bundles: [lastTransaction.bundle] }, (e, txs) => {
+             if (e) return reject(e);
+
+             // Transactions need to be sorted by currentIndex for extractJson to work
+             const sortedTxs = txs.sort((a, b) => a.currentIndex - b.currentIndex);
+             const message = JSON.parse(iota.utils.extractJson(sortedTxs));
+
+             const messageWithTimeStamp = { ...message, timestamp: lastTransaction.timestamp };
+
+             return resolve(messageWithTimeStamp);
+           });
          });
        });
      }
@@ -165,7 +174,7 @@
          return;
        }
 
-       getLastMessage(address)
+       getLastMessage({ addresses: [address] })
          .then((msg) => {
            if (!msg) {
              console.log('IOTA: No message');

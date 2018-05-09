@@ -9,6 +9,9 @@ describe('Iota', () => {
   const genMessage = () => ({ message: uuidv4() });
   const message = genMessage();
 
+  const genLongMessage = () => ({ message: Array(2000).join('A') });
+  const longMessage = genLongMessage(); // does not fit in one transaction
+
   let receiveAddress;
 
   before(() =>
@@ -40,5 +43,17 @@ describe('Iota', () => {
         .then(messageFromIota =>
 
           expect(messageFromIota).to.have.property('message').and.to.equal(message.message)));
+
+    it('should be able to send a message that spans multiple transactions', () =>
+      iota.send(seed, receiveAddress, longMessage)
+        .then(transactions =>
+
+          expect(transactions).to.be.an('array')));
+
+    it('should be able to retrieve a long message that spans multiple transactions', () =>
+      iota.getLastMessage({ addresses: [receiveAddress] })
+        .then(messageFromIota =>
+
+          expect(messageFromIota).to.have.property('message').and.to.equal(longMessage.message)));
   });
 });

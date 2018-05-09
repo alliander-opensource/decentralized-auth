@@ -52,10 +52,18 @@ function getLastMessage(searchValues) {
 
       const sortedTransactions = transactions.sort((a, b) => b.timestamp - a.timestamp);
       const lastTransaction = sortedTransactions[0];
-      const message = JSON.parse(iota.utils.extractJson([lastTransaction]));
-      const messageWithTimeStamp = { ...message, timestamp: lastTransaction.timestamp };
 
-      return resolve(messageWithTimeStamp);
+      return iota.api.findTransactionObjects({ bundles: [lastTransaction.bundle] }, (e, txs) => {
+        if (e) return reject(e);
+
+        // Transactions need to be sorted by currentIndex for extractJson to work
+        const sortedTxs = txs.sort((a, b) => a.currentIndex - b.currentIndex);
+        const message = JSON.parse(iota.utils.extractJson(sortedTxs));
+
+        const messageWithTimeStamp = { ...message, timestamp: lastTransaction.timestamp };
+
+        return resolve(messageWithTimeStamp);
+      });
     });
   });
 }

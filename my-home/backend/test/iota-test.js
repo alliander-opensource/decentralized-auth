@@ -9,6 +9,9 @@ describe('Iota', () => {
   const genMessage = () => ({ message: uuidv4() });
   const message = genMessage();
 
+  const genLongMessage = () => ({ message: Array(2000).join('A') });
+  const longMessage = genLongMessage(); // does not fit in one transaction
+
   let receiveAddress;
 
   before(() =>
@@ -39,18 +42,18 @@ describe('Iota', () => {
       iota.getLastMessage({ addresses: [receiveAddress] })
         .then(messageFromIota =>
 
-          expect(messageFromIota).to.have.property('message').to.equal(message.message)));
-  });
+          expect(messageFromIota).to.have.property('message').and.to.equal(message.message)));
 
-  describe('totrytes', () => {
-    const msg = {
-      type: 'CHALLENGE',
-      sender: 'AYIMLSFNKRYATURTECBQDZDDCDSXIDHYYIOBCSGKSPA9T9LNIXTNRKJMMYVMGSMKYADLBOPDXYVKRINOX',
-      challenge: 'SIRXT9YCKLZETSFMGNEIQFDYZOUPJJRATUXYNUHFEOKQMQML9OFCNKXGSCOL9IWBTKWKTPCJARCWS9PCLFYOYGPQDSVMPIWASJXHYDDYGHSRWAPVSSZXJKFAKVKUGHXTFSCVHLLCLQXKGIYSUUAVYADHLHW9ZEPTPXNEXZGTQCRCARAKZPVNZPRHFLNZZZTVCDZLXHCDNGPKUPBDCRAZBJTOIYOOS9NQGPSUQWXYBDHOCU',
-    };
+    it('should be able to send a message that spans multiple transactions', () =>
+      iota.send(seed, receiveAddress, longMessage)
+        .then(transactions =>
 
-    it('should be able to convert a message to trytes', () =>
+          expect(transactions).to.be.an('array')));
 
-      expect(iota.toTrytes(JSON.stringify(msg))).to.have.lengthOf(732));
+    it('should be able to retrieve a long message that spans multiple transactions', () =>
+      iota.getLastMessage({ addresses: [receiveAddress] })
+        .then(messageFromIota =>
+
+          expect(messageFromIota).to.have.property('message').and.to.equal(longMessage.message)));
   });
 });
