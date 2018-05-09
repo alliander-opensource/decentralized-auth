@@ -20,11 +20,11 @@ function toBytes(str) {
 /*
  * Creates an NTRU key pair based on a seed.
  *
- * @function createAsymmetricKeyPair
+ * @function createKeyPair
  * @param {string} seed IOTA seed to generate key pair with
  * @returns {Object} Key pair with private and public keys
  */
-function createAsymmetricKeyPair(seed) {
+function createKeyPair(seed) {
   const bytes = toBytes(seed);
   const keyPair = NTRU.createKeyWithSeed(bytes);
 
@@ -71,7 +71,7 @@ const { encrypt, decrypt } = NTRU;
 
 module.exports = {
   toBytes,
-  createAsymmetricKeyPair,
+  createKeyPair,
   toTrytes,
   fromTrytes,
   encrypt,

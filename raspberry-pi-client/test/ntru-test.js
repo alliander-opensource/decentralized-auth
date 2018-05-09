@@ -13,10 +13,10 @@ describe('NTRU', () => {
       expect(bytes).to.deep.equal(new Uint8Array([104, 101, 108, 108, 111]));
     }));
 
-  describe('ntru.createAsymmetricKeyPair', () =>
+  describe('ntru.createKeyPair', () =>
     it('should create an asymmetric key pair based on seed, deterministically', () => {
-      const keyPair1 = ntru.createAsymmetricKeyPair(seed);
-      const keyPair2 = ntru.createAsymmetricKeyPair(seed);
+      const keyPair1 = ntru.createKeyPair(seed);
+      const keyPair2 = ntru.createKeyPair(seed);
 
       expect(keyPair1.public).to.have.lengthOf(1027);
       expect(keyPair1.private).to.have.lengthOf(1120);
@@ -25,7 +25,7 @@ describe('NTRU', () => {
 
   describe('ntru.base64 and back', () =>
     it('convert base 64 and back', () => {
-      const keyPair = ntru.createAsymmetricKeyPair(seed);
+      const keyPair = ntru.createKeyPair(seed);
 
       const b64 = keyPair.public.toString('base64');
       const converted = Buffer.from(b64, 'base64');
@@ -35,7 +35,7 @@ describe('NTRU', () => {
 
   describe('ntru.toTrytes', () =>
     it('should be able to convert keyPair to tryte representation', () => {
-      const keyPair = ntru.createAsymmetricKeyPair(seed);
+      const keyPair = ntru.createKeyPair(seed);
       const publicKeyTrytes = ntru.toTrytes(keyPair.public);
 
       expect(publicKeyTrytes).to.have.lengthOf(2744);
@@ -43,7 +43,7 @@ describe('NTRU', () => {
 
   describe('ntru.fromTrytes', () =>
     it('should be able to convert tryte representaton of keyPair to keyPair object', () => {
-      const keyPair = ntru.createAsymmetricKeyPair(seed);
+      const keyPair = ntru.createKeyPair(seed);
       const publicKeyTrytes = ntru.toTrytes(keyPair.public);
       const publicKeyConverted = ntru.fromTrytes(publicKeyTrytes);
 
@@ -52,7 +52,7 @@ describe('NTRU', () => {
 
   describe('ntru.encrypt and ntru.decrypt', () =>
     it('should be able to encrypt and decrypt a message', () => {
-      const keyPair = ntru.createAsymmetricKeyPair(seed);
+      const keyPair = ntru.createKeyPair(seed);
 
       const plaintext = Buffer.from('hello', 'utf8');
       const encrypted = ntru.encrypt(plaintext, keyPair.public);
