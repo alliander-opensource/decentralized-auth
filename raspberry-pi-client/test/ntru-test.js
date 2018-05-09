@@ -1,5 +1,4 @@
 const ntru = require('../src/modules/ntru');
-const NTRU = require('ntrujs');
 
 const { expect } = require('../src/common/test-utils');
 
