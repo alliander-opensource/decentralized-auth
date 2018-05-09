@@ -41,33 +41,33 @@ function createKeyPair(seed) {
 
 
 /*
- * Converts a NTRU public key to trytes.
+ * Converts a Buffer to trytes.
  * First converts to base64 and then to trytes.
  *
  * @function toTrytes
- * @param {Buffer} key NTRU public key
- * @returns {string} Tryte representation of public key pair
+ * @param {Buffer} buffer Buffer to convert
+ * @returns {string} Tryte representation of buffer
  */
-function toTrytes(key) {
-  const publicKeyTrytes = iota.toTrytes(key.toString('base64'));
+function toTrytes(buffer) {
+  const trytes = iota.toTrytes(buffer.toString('base64'));
 
-  return publicKeyTrytes;
+  return trytes;
 }
 
 
 /*
- * Converts an NTRU public key that was converted to trytes by {@link toTrytes}
- * back to an NTRU public key.
+ * Converts a buffer that was converted to trytes by {@link toTrytes}
+ * back to a buffer.
  * First converts from trytes to base64 and then to Buffer.
  *
  * @function toTrytes
- * @param {string} keyTrytes NTRU public key converted to trytes
- * @returns {Buffer} NTRU public key
+ * @param {string} trytes Buffer converted to trytes
+ * @returns {Buffer} Original buffer
  */
-function fromTrytes(keyTrytes) {
-  const publicKey = Buffer.from(iota.fromTrytes(keyTrytes), 'base64');
+function fromTrytes(trytes) {
+  const buffer = Buffer.from(iota.fromTrytes(trytes), 'base64');
 
-  return publicKey;
+  return buffer;
 }
 
 const { encrypt, decrypt } = NTRU;
