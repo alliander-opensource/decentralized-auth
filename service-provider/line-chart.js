@@ -11,6 +11,8 @@ const DURATION = 100;
  * @param {array} data data
  */
 function drawLineChart(elementId, data) { // eslint-disable-line no-unused-vars
+  if (data === []) return;
+
   const containerEl = document.getElementById(elementId);
   const width = containerEl.clientWidth;
   const height = width * 0.4;
