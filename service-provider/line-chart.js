@@ -10,7 +10,7 @@ const noData = data => typeof data[0] === 'undefined';
  * Draw the fancy line chart.
  *
  * @param {string} elementId elementId
- * @param {array} data data
+ * @param {array} data Array of associative arrays with date and value keys
  */
 function drawLineChart(elementId, data) { // eslint-disable-line no-unused-vars
   if (noData(data)) return;
