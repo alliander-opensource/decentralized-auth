@@ -50,7 +50,7 @@ describe('NTRU', () => {
       expect(publicKeyConverted).to.deep.equal(keyPair.public);
     }));
 
-  describe('ntru.encrypt and ntru.decrypt', () =>
+  describe('ntru.encrypt and ntru.decrypt', () => {
     it('should be able to encrypt and decrypt a message', () => {
       const keyPair = ntru.createKeyPair(seed);
 
@@ -60,5 +60,20 @@ describe('NTRU', () => {
 
       expect(encrypted.toString()).to.not.equal(plaintext.toString());
       expect(plaintext.toString()).to.equal(decrypted.toString());
-    }));
+    });
+
+    it('should be able to decrypt with key that was converted to and from trytes', () => {
+      const keyPair = ntru.createKeyPair(seed);
+
+      const publicKeyTrytes = ntru.toTrytes(keyPair.public);
+      const publicKeyConverted = ntru.fromTrytes(publicKeyTrytes);
+
+      const plaintext = Buffer.from('hello', 'utf8');
+      const encrypted = ntru.encrypt(plaintext, publicKeyConverted);
+      const decrypted = ntru.decrypt(encrypted, keyPair.private);
+
+      expect(encrypted.toString()).to.not.equal(plaintext.toString());
+      expect(plaintext.toString()).to.equal(decrypted.toString());
+    });
+  });
 });
