@@ -48,8 +48,6 @@ Note: for simple use cases there is also the `diva.requireAttribute()` middlewar
 
 Note: for development, use `npm run dev` to run the application in development mode with hot reloading.
 
-Note: To use the map api functionality, the `BING_MAPS_API_KEY` environment variable must be set to a valid Bing maps API key.
-
 ## Dependencies
 
 #### T.L.D.R minimal required env var exports:
@@ -106,7 +104,11 @@ Generate a seed:
 cat /dev/urandom | LC_ALL=C tr -dc 'A-Z9' | fold -w 81 | head -n 1
 ```
 
-and place it in `config.deviceSeed`.
+and add it to the config.seed configuration variable.
+
+```
+export SEED=<seed>
+```
 
 ## Tests
 
