@@ -74,5 +74,19 @@ describe('NTRU', () => {
       expect(encrypted.toString()).to.not.equal(plaintext.toString());
       expect(plaintext.toString()).to.equal(decrypted.toString());
     });
+
+    it('should be able to decrypt message that was converted to and from trytes', () => {
+      const keyPair = ntru.createKeyPair(seed);
+
+      const plaintext = Buffer.from('hello', 'utf8');
+
+      const encrypted = ntru.encrypt(plaintext, keyPair.public);
+      const encryptedTrytes = ntru.toTrytes(encrypted);
+      const encryptedConverted = ntru.fromTrytes(encryptedTrytes);
+
+      const decrypted = ntru.decrypt(encryptedConverted, keyPair.private);
+
+      expect(plaintext.toString()).to.equal(decrypted.toString());
+    });
   });
 });
