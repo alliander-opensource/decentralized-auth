@@ -39,6 +39,17 @@ class App extends Component {
   }
 
   render() {
+    const requiredAttributes = [
+      {
+        label: 'Address',
+        attributes: ['pbdf.pbdf.idin.address'],
+      },
+      {
+        label: 'City',
+        attributes: ['pbdf.pbdf.idin.city'],
+      },
+    ];
+
     const RightMenu = props => (
       <IconMenu
         id="user-menu"
@@ -80,54 +91,19 @@ class App extends Component {
                   <Route exact path="/" component={Home} />
                   <Route
                     path="/my-devices"
-                    component={WithDivaAuthorization([
-                      {
-                        label: 'Address',
-                        attributes: ['pbdf.pbdf.idin.address'],
-                      },
-                      {
-                        label: 'City',
-                        attributes: ['pbdf.pbdf.idin.city'],
-                      },
-                    ])(MyDevices)}
+                    component={WithDivaAuthorization(requiredAttributes)(MyDevices)}
                   />
                   <Route
                     path="/new-device"
-                    component={WithDivaAuthorization([
-                      {
-                        label: 'Address',
-                        attributes: ['pbdf.pbdf.idin.address'],
-                      },
-                      {
-                        label: 'City',
-                        attributes: ['pbdf.pbdf.idin.city'],
-                      },
-                    ])(NewDevicePage)} />
+                    component={WithDivaAuthorization(requiredAttributes)(NewDevicePage)}
+                  />
                   <Route
                     path="/my-policies"
-                    component={WithDivaAuthorization([
-                      {
-                        label: 'Address',
-                        attributes: ['pbdf.pbdf.idin.address'],
-                      },
-                      {
-                        label: 'City',
-                        attributes: ['pbdf.pbdf.idin.city'],
-                      },
-                    ])(MyPolicies)}
+                    component={WithDivaAuthorization(requiredAttributes)(MyPolicies)}
                   />
                   <Route
                     path="/new-policy"
-                    component={WithDivaAuthorization([
-                      {
-                        label: 'Address',
-                        attributes: ['pbdf.pbdf.idin.address'],
-                      },
-                      {
-                        label: 'City',
-                        attributes: ['pbdf.pbdf.idin.city'],
-                      },
-                    ])(NewPolicyPage)}
+                    component={WithDivaAuthorization(requiredAttributes)(NewPolicyPage)}
                   />
                 </Paper>
               </Col>
