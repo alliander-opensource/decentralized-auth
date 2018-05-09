@@ -107,6 +107,45 @@ module.exports = class DeviceClient {
 
 
   /**
+   * Informs {@link authorizedServiceProviders} of the new side key. The 'key
+   * rotation' message is transferred via MAM, and the new side key is encrypted
+   * with the public key of the remaining authorized service providers (if any).
+   *
+   * Message has structure:
+   * ```
+   * {
+   *   type: 'KEY_ROTATION,
+   *   authorizedSp1: 'Side key encrypted with authorizedSp1's key',
+   *   authorizedSp2: 'Side key encrypted with authorizedSp2's key'
+   * }
+   * ```
+   *
+   * @function informUpdateSideKey
+   * @param {string} authorizedServiceProviders List of remaining authorized
+   *                 service providers
+   * @param {string} newSideKey Our new side key we are using
+   * @returns {null}
+   */
+  informUpdateSideKey(authorizedServiceProviders, newSideKey) {
+    // TODO: encrypt
+    const keysForServiceProviders = authorizedServiceProviders.map(sp => ({
+      key: sp,
+      val: newSideKey,
+    })).reduce((map, obj) => {
+      map[obj.key] = obj.val; // eslint-disable-line no-param-reassign
+      return map;
+    }, {});
+
+    const message = {
+      type: 'KEY_ROTATION',
+      ...keysForServiceProviders,
+    };
+
+    return this.mam.attach(message);
+  }
+
+
+  /**
    * Message handler for the P1 port
    *
    * @function handleP1Message
