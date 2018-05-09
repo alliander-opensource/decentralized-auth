@@ -37,8 +37,6 @@ app.post('/api/start-disclosure-session', require('./actions/start-disclosure-se
 app.post('/api/start-irma-session', require('./actions/start-irma-session'));
 app.get('/api/disclosure-status', require('./actions/disclosure-status'));
 
-app.use('/api/images/address.jpg', diva.requireAttributes(['pbdf.pbdf.idin.address', 'pbdf.pbdf.idin.city']), require('./actions/get-address-map'));
-
 // DIVA signature endpoints
 app.get('/api/signature-status', require('./actions/signature-status'));
 
