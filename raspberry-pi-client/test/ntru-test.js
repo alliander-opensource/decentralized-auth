@@ -53,12 +53,12 @@ describe('NTRU', () => {
     it('should be able to encrypt and decrypt a message', () => {
       const keyPair = ntru.createKeyPair(seed);
 
-      const plaintext = Buffer.from('hello', 'utf8');
-      const encrypted = ntru.encrypt(plaintext, keyPair.public);
+      const plainText = Buffer.from('hello', 'utf8');
+      const encrypted = ntru.encrypt(plainText, keyPair.public);
       const decrypted = ntru.decrypt(encrypted, keyPair.private);
 
-      expect(encrypted.toString()).to.not.equal(plaintext.toString());
-      expect(plaintext.toString()).to.equal(decrypted.toString());
+      expect(encrypted.toString()).to.not.equal(plainText.toString());
+      expect(plainText.toString()).to.equal(decrypted.toString());
     });
 
     it('should be able to decrypt with key that was converted to and from trytes', () => {
@@ -67,26 +67,26 @@ describe('NTRU', () => {
       const publicKeyTrytes = ntru.toTrytes(keyPair.public);
       const publicKeyConverted = ntru.fromTrytes(publicKeyTrytes);
 
-      const plaintext = Buffer.from('hello', 'utf8');
-      const encrypted = ntru.encrypt(plaintext, publicKeyConverted);
+      const plainText = Buffer.from('hello', 'utf8');
+      const encrypted = ntru.encrypt(plainText, publicKeyConverted);
       const decrypted = ntru.decrypt(encrypted, keyPair.private);
 
-      expect(encrypted.toString()).to.not.equal(plaintext.toString());
-      expect(plaintext.toString()).to.equal(decrypted.toString());
+      expect(encrypted.toString()).to.not.equal(plainText.toString());
+      expect(plainText.toString()).to.equal(decrypted.toString());
     });
 
     it('should be able to decrypt message that was converted to and from trytes', () => {
       const keyPair = ntru.createKeyPair(seed);
 
-      const plaintext = Buffer.from('hello', 'utf8');
+      const plainText = Buffer.from('hello', 'utf8');
 
-      const encrypted = ntru.encrypt(plaintext, keyPair.public);
+      const encrypted = ntru.encrypt(plainText, keyPair.public);
       const encryptedTrytes = ntru.toTrytes(encrypted);
       const encryptedConverted = ntru.fromTrytes(encryptedTrytes);
 
       const decrypted = ntru.decrypt(encryptedConverted, keyPair.private);
 
-      expect(plaintext.toString()).to.equal(decrypted.toString());
+      expect(plainText.toString()).to.equal(decrypted.toString());
     });
   });
 });
