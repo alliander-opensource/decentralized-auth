@@ -30,7 +30,7 @@
     "cypres:open": "npx cypress open",
     "dev": "react-scripts start",
     "eject": "react-scripts eject",
-    "lint": "./node_modules/.bin/eslint -c ../../.eslintrc src",
+    "lint": "./node_modules/.bin/eslint -c .eslintrc src",
     "start": "react-scripts start",
     "test": "react-scripts test --env=jsdom"
   },
