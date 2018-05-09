@@ -87,6 +87,7 @@
        }).show();
      };
 
+
      /**
       * Requests consent at My Home. When consent is provided the service
       * provider will receive the MAM root and side key on the address.
@@ -159,6 +160,14 @@
      const seenMessages = new Set(); // mutable set
 
 
+     const setMamData = (mamData) => {
+       notify(`IOTA MAM: Setting root to ${formatTrytes(mamData.root)}`);
+       setRoot(mamData.root);
+       notify(`IOTA MAM: Setting side key to ${mamData.sideKey}`);
+       setSideKey(mamData.sideKey);
+     }
+
+
      /**
       * Retrieves and processes an IOTA message by dispatching the type of
       * message to its handler
@@ -194,11 +203,7 @@
            switch (msg.type) {
              case MAM_DATA_MESSAGE_TYPE:
              {
-               notify(`IOTA MAM: Setting root to ${formatTrytes(msg.mamData.root)}`);
-               setRoot(msg.mamData.root);
-               notify(`IOTA MAM: Setting side key to ${msg.mamData.sideKey}`);
-               setSideKey(msg.mamData.sideKey);
-               break;
+               return setMamData(msg.mamData);
              }
              default:
              {
@@ -231,6 +236,48 @@
      };
 
 
+     // MAM data handlers
+
+     const addUsageData = (msg) => {
+       notify(`IOTA MAM: Received an energy usage data message`);
+       const usage = {
+         date: toDate(msg.timestamp),
+         value: toElectricityUsage(msg.raw),
+       };
+       // Store the data messages in our backing field
+       ENERGY_USAGE_DATA.push(usage);
+     }
+
+
+     const retractAuthorization = () => {
+       notify('No longer authorized :(', 'warning');
+       setRoot('');
+       setSideKey('');
+     }
+
+     const updateAuthorization = (encryptedSideKey) => {
+       // TODO: encryption
+       notify('Still authorized. Updating side key...');
+       notify(`IOTA MAM: Updating side key to ${encryptedSideKey}`);
+       setSideKey(encryptedSideKey);
+     }
+
+     const processKeyRotationMessage = (message) => {
+       notify(`IOTA MAM: Got key rotation message ${JSON.stringify(message)}`);
+
+       const address = getAddress();
+
+       // If we are not in the message we are no longer authorized
+       const encryptedSideKey = message[address];
+       if (typeof encryptedSideKey === 'undefined') {
+         retractAuthorization();
+       // If our key is included in the message, decrypt, update ROOT and side key
+       } else {
+         updateAuthorization(encryptedSideKey);
+       }
+     }
+
+
      /**
       * Retrieves and processes MAM messages by dispatching the type of message to
       * its handler
@@ -260,33 +307,15 @@
            switch (jsonMessage.type) {
              case DATA_MESSAGE_TYPE:
              {
-               notify(`IOTA MAM: Received an energy usage data message`);
-               const usage = {
-                 date: toDate(jsonMessage.timestamp),
-                 value: toElectricityUsage(jsonMessage.raw),
-               };
-               // Store the data messages in our backing field
-               ENERGY_USAGE_DATA.push(usage);
-               break;
+               return addUsageData(jsonMessage);
              }
              case KEY_ROTATION_MESSAGE_TYPE:
              {
-               notify(`IOTA MAM: Got key rotation message ${JSON.stringify(jsonMessage)}`);
-
-               const address = getAddress();
-               if (typeof jsonMessage[address] === 'undefined') {
-                 notify('No longer authorized :(', 'warning');
-                 setRoot('');
-                 setSideKey('');
-                 // If contains ourselves decrypt, update ROOT and side key
-               } else {
-                 // TODO: encryption
-                 const encryptedSideKey = jsonMessage[address];
-                 notify('Still authorized, update side key');
-                 notify(`IOTA MAM: Updating side key to ${encryptedSideKey}`);
-                 setSideKey(encryptedSideKey);
-               }
-               break;
+               return processKeyRotationMessage(jsonMessage);
+             }
+             default:
+             {
+               throw new Error(`Unknown MAM msg type: ${jsonMessage.type}`);
              }
            }
 
