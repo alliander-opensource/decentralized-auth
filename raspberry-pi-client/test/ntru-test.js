@@ -1,5 +1,4 @@
 const ntru = require('../src/modules/ntru');
-
 const { expect } = require('../src/common/test-utils');
 
 const seed = 'AYYUXKIAEOGGXPZIM9GGDLERZEBKVNEOGR9SPSF9ANHWSISVHKEQNTADSZFSMYFKGVVRAYFNTXEPWRLJK';
@@ -75,10 +74,11 @@ describe('NTRU', () => {
       expect(plainText.toString()).to.equal(decrypted.toString());
     });
 
-    it('should be able to decrypt message that was converted to and from trytes', () => {
+    it('should be able to decrypt object that was converted to and from trytes', () => {
       const keyPair = ntru.createKeyPair(seed);
 
-      const plainText = Buffer.from('hello', 'utf8');
+      const object = { foo: 'bar' };
+      const plainText = Buffer.from(JSON.stringify(object), 'utf8');
 
       const encrypted = ntru.encrypt(plainText, keyPair.public);
       const encryptedTrytes = ntru.toTrytes(encrypted);
@@ -86,7 +86,7 @@ describe('NTRU', () => {
 
       const decrypted = ntru.decrypt(encryptedConverted, keyPair.private);
 
-      expect(plainText.toString()).to.equal(decrypted.toString());
+      expect(object).to.deep.equal(JSON.parse(decrypted.toString()));
     });
   });
 });
