@@ -91,7 +91,18 @@ class App extends Component {
                       },
                     ])(MyDevices)}
                   />
-                  <Route path="/new-device" component={NewDevicePage} />
+                  <Route
+                    path="/new-device"
+                    component={WithDivaAuthorization([
+                      {
+                        label: 'Address',
+                        attributes: ['pbdf.pbdf.idin.address'],
+                      },
+                      {
+                        label: 'City',
+                        attributes: ['pbdf.pbdf.idin.city'],
+                      },
+                    ])(NewDevicePage)} />
                   <Route
                     path="/my-policies"
                     component={WithDivaAuthorization([
