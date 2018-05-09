@@ -28,8 +28,8 @@ function createKeyPair(seed) {
   const bytes = toBytes(seed);
   const keyPair = NTRU.createKeyWithSeed(bytes);
 
-  // Need to call `NTRU.createKey` after `NTRU.createKeyWithSeed` for some
-  // reason, otherwise encrypting and decrypting does not work. See
+  // Need to call `NTRU.createKey` after `NTRU.createKeyWithSeed`, otherwise
+  // encrypting and decrypting does not work. See
   // https://github.com/IDWMaster/ntrujs/issues/6.
   NTRU.createKey();
 
