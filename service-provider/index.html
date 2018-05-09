@@ -286,7 +286,7 @@
            setRoot(nextRoot);
          })
          .then(() => drawLineChart('line-chart', ENERGY_USAGE_DATA))
-         .catch(err => notify(err, 'error'));
+         .catch(err => notify(err.message, 'error'));
      };
 
     </script>
