@@ -41,6 +41,7 @@
     "knex": "0.14.4",
     "mam.client.js": "git+ssh://git@github.com/iotaledger/mam.client.js.git",
     "npm": "5.8.0",
+    "ntrujs": "1.0.18",
     "objection": "1.0.0",
     "pg": "7.4.1",
     "promise-retryer": "0.0.1",
