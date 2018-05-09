@@ -11,10 +11,8 @@ class NewDevicePage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // Device address of device with seed
-      // GOYM9ANDMIHYZUWUBPEVLPRSUGDZHDDVTLS9HBOGNOGLGQTPQTAZNVIWIVVXAVVSZWZJWZHSEVTPNBYWE
       iotaAddress: 'FODEYEQHYCWYTDEDWZLPCLRDIU9RFKU9AFQSEOR9RSGEPDGQBGMYXIQCENBDGYFFS9AJK9GJJZJGEUEW9',
-      secret: 'HUMMUS',
+      secret: 'APPLE',
     };
 
     // Prevent ECMAscript not binding this (which we need for setState)
