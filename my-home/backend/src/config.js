@@ -1,3 +1,7 @@
+const ntru = require('./modules/ntru');
+
+const iotaSeed = 'EDIKGHUPRVZQBWYPSEXHALLOTFYYDJMJGGKEUZJJSB9NKDVJNQIFHTIQSNHPXWNNPFIEXQGDXXDUPGEAB';
+
 const config = {
   port: process.env.PORT ? process.env.PORT : 4000,
   cookieSecret: process.env.COOKIE_SECRET ? process.env.COOKIE_SECRET : 'StRoNGs3crE7',
@@ -19,8 +23,10 @@ const config = {
   iotaMinWeightMagnitude: 10, // Only works on testnet, use >14 for main net
   iotaDepth: 5,
   iotaSecurityLevel: 2,
-  iotaSeed: 'EDIKGHUPRVZQBWYPSEXHALLOTFYYDJMJGGKEUZJJSB9NKDVJNQIFHTIQSNHPXWNNPFIEXQGDXXDUPGEAB',
-  iotaAddress: 'KENICAJYD9XQEOATSBMWYPZOIICKHENBUKPHN9FZXCYTMDXVFWOSJNCZCFWQGKRIULOWMMYQVGOEQFQLZ',
+  iotaSeed,
+  iotaAddress: 'KENICAJYD9XQEOATSBMWYPZOIICKHENBUKPHN9FZXCYTMDXVFWOSJNCZCFWQGKRIULOWMMYQVGOEQFQLZ', // first address of seed above
+
+  ntruKeyPair: ntru.createKeyPair(iotaSeed),
 
   apiKey: process.env.IRMA_API_SERVER_KEY ? process.env.IRMA_API_SERVER_KEY : 'FILL_IN',
   irmaApiServerUrl: process.env.IRMA_API_SERVER_URL ? process.env.IRMA_API_SERVER_URL : 'http://localhost:8081/irma_api_server',

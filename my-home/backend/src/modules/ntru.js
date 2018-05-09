@@ -1,6 +1,7 @@
 const { TextEncoder } = require('util');
 const NTRU = require('ntrujs');
 const iota = require('./iota');
+const logger = require('../logger')(module);
 
 
 /*
@@ -25,6 +26,8 @@ function toBytes(str) {
  * @returns {Object} Key pair with private and public keys
  */
 function createKeyPair(seed) {
+  logger.info(`Creating key pair from seed ${seed}`);
+
   const bytes = toBytes(seed);
   const keyPair = NTRU.createKeyWithSeed(bytes);
 
