@@ -174,7 +174,7 @@
       * @function processIotaMessage
       * @returns {undefined}
       */
-     const processIotaMessage = () => {
+     const processIotaMessage = async () => {
        const address = getAddress();
        console.log(`Getting last message from address ${address}...`);
 
@@ -183,37 +183,38 @@
          return;
        }
 
-       getLastMessage({ addresses: [address] })
-         .then((msg) => {
-           if (!msg) {
-             console.log('IOTA: No message');
-             return null;
-           }
+       try {
+         const msg = await getLastMessage({ addresses: [address] });
+         if (!msg) {
+           console.log('IOTA: No message');
+           return null;
+         }
 
-           // To avoid processing the same last message over and over we keep track
-           // of already processed messages (note: stringified versions so set
-           // operations that use equals (like set.has()) work as intended)
-           if (seenMessages.has(JSON.stringify(msg))) {
-             console.log('IOTA: No new message');
-             return null;
-           }
-           seenMessages.add(JSON.stringify(msg));
+         // To avoid processing the same last message over and over we keep track
+         // of already processed messages (note: stringified versions so set
+         // operations that use equals (like set.has()) work as intended)
+         if (seenMessages.has(JSON.stringify(msg))) {
+           console.log('IOTA: No new message');
+           return null;
+         }
+         seenMessages.add(JSON.stringify(msg));
 
-           notify(`IOTA: Received new message of type ${msg.type}`);
-           switch (msg.type) {
-             case MAM_DATA_MESSAGE_TYPE:
-             {
-               return setMamData(msg.mamData);
-             }
-             default:
-             {
-               const errorMessage = `Unknown message type: ${msg.type}`;
-               notify(errorMessage, 'error')
-               throw new Error(errorMessage);
-             }
+         notify(`IOTA: Received new message of type ${msg.type}`);
+         switch (msg.type) {
+           case MAM_DATA_MESSAGE_TYPE:
+           {
+             return setMamData(msg.mamData);
            }
-         })
-         .catch(console.log); // eslint-disable-line no-console
+           default:
+           {
+             const errorMessage = `Unknown message type: ${msg.type}`;
+             notify(errorMessage, 'error')
+             throw new Error(errorMessage);
+           }
+         }
+       } catch (err) {
+         console.log(err); // eslint-disable-line no-console
+       }
      }
 
 
@@ -285,7 +286,7 @@
       * @function processIotaMessage
       * @returns {undefined}
       */
-     const processMamMessage = () => {
+     const processMamMessage = async () => {
        const root = getRoot();
        const sideKey = getSideKey();
        const mode = 'restricted';
@@ -299,32 +300,33 @@
 
        notify(`IOTA MAM: Fetching from root ${formatTrytes(root)} with side key ${sideKey}`);
 
-       Mam
-         .fetchSingle(root, mode, sideKey)
-         .then(({ nextRoot, payload }) => {
-           const jsonMessage = JSON.parse(fromTrytes(payload));
+       try {
+         const { nextRoot, payload } = await Mam.fetchSingle(root, mode, sideKey);
+         const jsonMessage = JSON.parse(fromTrytes(payload));
 
-           switch (jsonMessage.type) {
-             case DATA_MESSAGE_TYPE:
-             {
-               return addUsageData(jsonMessage);
-             }
-             case KEY_ROTATION_MESSAGE_TYPE:
-             {
-               return processKeyRotationMessage(jsonMessage);
-             }
-             default:
-             {
-               throw new Error(`Unknown MAM msg type: ${jsonMessage.type}`);
-             }
+         switch (jsonMessage.type) {
+           case DATA_MESSAGE_TYPE:
+           {
+             return addUsageData(jsonMessage);
            }
+           case KEY_ROTATION_MESSAGE_TYPE:
+           {
+             return processKeyRotationMessage(jsonMessage);
+           }
+           default:
+           {
+             throw new Error(`Unknown MAM msg type: ${jsonMessage.type}`);
+           }
+         }
 
-           // Update to use the next root
-           notify(`IOTA MAM: Setting next root to ${formatTrytes(nextRoot)}`);
-           setRoot(nextRoot);
-         })
-         .then(() => drawLineChart('line-chart', ENERGY_USAGE_DATA))
-         .catch(err => notify(err.message, 'error'));
+         // Update to use the next root
+         notify(`IOTA MAM: Setting next root to ${formatTrytes(nextRoot)}`);
+         setRoot(nextRoot);
+
+         drawLineChart('line-chart', ENERGY_USAGE_DATA);
+       } catch (err) {
+         notify(err.message, 'error');
+       }
      };
 
     </script>
