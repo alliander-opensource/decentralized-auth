@@ -1,5 +1,3 @@
-const ntru = require('./modules/ntru');
-
 const iotaSeed = 'EDIKGHUPRVZQBWYPSEXHALLOTFYYDJMJGGKEUZJJSB9NKDVJNQIFHTIQSNHPXWNNPFIEXQGDXXDUPGEAB';
 
 const config = {
@@ -26,7 +24,7 @@ const config = {
   iotaSeed,
   iotaAddress: 'KENICAJYD9XQEOATSBMWYPZOIICKHENBUKPHN9FZXCYTMDXVFWOSJNCZCFWQGKRIULOWMMYQVGOEQFQLZ', // first address of seed above
 
-  ntruKeyPair: ntru.createKeyPair(iotaSeed),
+  ntruKeyPair: null, // Initialize when loading NTRU module to avoid circular dependency
 
   apiKey: process.env.IRMA_API_SERVER_KEY ? process.env.IRMA_API_SERVER_KEY : 'FILL_IN',
   irmaApiServerUrl: process.env.IRMA_API_SERVER_URL ? process.env.IRMA_API_SERVER_URL : 'http://localhost:8081/irma_api_server',

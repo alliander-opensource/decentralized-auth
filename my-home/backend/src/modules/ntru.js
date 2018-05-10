@@ -108,7 +108,6 @@ function encrypt(str, publicKey) {
   return encryptedTrytes;
 }
 
-
 module.exports = {
   toBytes,
   createKeyPair,

@@ -6,6 +6,7 @@ const cookieEncrypter = require('cookie-encrypter');
 const diva = require('diva-irma-js');
 const simpleSession = require('./modules/simple-session');
 const config = require('./config');
+const ntru = require('./modules/ntru');
 
 const initializeDatabase = require('./database/initialize-database');
 
@@ -18,6 +19,10 @@ diva.init({
   irmaApiServerPublicKey: config.irmaApiServerPublicKey,
   useRedis: config.useRedis,
 });
+
+
+// Create key pair here to avoid circular dependency with config
+config.ntruKeyPair = ntru.createKeyPair(config.iotaSeed);
 
 const app = express();
 app.use(cookieParser(config.cookieSecret));
