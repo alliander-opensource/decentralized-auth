@@ -3,6 +3,7 @@ const logger = require('./logger')(module);
 
 const iota = require('./modules/iota');
 const mam = require('./modules/iota-mam');
+const ntru = require('./modules/ntru');
 
 const p1Reader = require('./device-client/p1');
 
@@ -58,15 +59,15 @@ module.exports = class DeviceClient {
 
 
   /**
-  * Returns a challenge to the sender.
-  *
-  * @function sendChallenge
-  * @param {string} seed Our IOTA seed
-  * @param {string} sender Our IOTA address
-  * @param {string} receiver IOTA address of receiver of the challenge
-  * @param {string} challenge Challenge to be returned signed with key on the box
-  * @returns {Promise}
-  */
+   * Returns a challenge to the sender.
+   *
+   * @function sendChallenge
+   * @param {string} seed Our IOTA seed
+   * @param {string} sender Our IOTA address
+   * @param {string} receiver IOTA address of receiver of the challenge
+   * @param {string} challenge Challenge to be returned signed with key on the box
+   * @returns {Promise}
+   */
   sendChallenge(seed, sender, receiver) {
     const challenge = DeviceClient.createChallenge(this.secret.length);
     const message = { type: SEND_CHALLENGE_TYPE, sender, challenge };
@@ -78,26 +79,37 @@ module.exports = class DeviceClient {
     return iota.send(seed, receiver, message);
   }
 
+  static makeMamData(root, sideKey) {
+    return { root, sideKey };
+  }
+
 
   /**
-  * Sends claim result (including MAM message when result was 'OK').
-  *
-  * @function endClaimResult
-  * @param {string} seed Our IOTA seed
-  * @param {string} sender Our IOTA address
-  * @param {string} receiver IOTA address of receiver of successful claim
-  * @param {string} status 'OK' or 'NOK'
-  * @returns {null}
-  */
-  sendClaimResult(seed, sender, receiver, signedChallenge) {
+   * Sends claim result to receiver. Claim results includes MAM data when
+   * returned signed data is valid.
+   *
+   * @function sendClaimResult
+   * @param {string} seed Our IOTA seed
+   * @param {string} sender Our IOTA address
+   * @param {string} receiver IOTA address of receiver of successful claim
+   * @param {string} publicKey Tryte encoded public key of receiver
+   * @param {string} signedChallenge Signed challenge send by sender
+   * @param {string} status 'OK' or 'NOK'
+   * @returns {null}
+   */
+  sendClaimResult(seed, sender, receiver, publicKey, signedChallenge) {
     const { channel: { side_key, next_root } } = mam.getMamState();
 
-    const message = utils.merge(
-      { type: CLAIM_RESULT_TYPE, sender },
-      this.signedChallenges.isValid(signedChallenge) ?
-        { status: 'OK', mamData: { root: next_root, sideKey: side_key } } :
-        { status: 'NOK', reason: 'Signed challenge invalid' },
-    );
+    let message;
+    if (this.signedChallenges.isValid(signedChallenge)) {
+      const mamData = {
+        root: ntru.encrypt(next_root, publicKey),
+        sideKey: ntru.encrypt(side_key, publicKey),
+      };
+      message = { type: CLAIM_RESULT_TYPE, status: 'OK', sender, mamData };
+    } else {
+      message = { type: CLAIM_RESULT_TYPE, status: 'NOK', reason: 'Signed challenge invalid' };
+    }
 
     // Only use signed challenge once to prevent replay attacks
     this.signedChallenges.remove(signedChallenge);
@@ -206,6 +218,7 @@ module.exports = class DeviceClient {
               this.seed,
               address,
               msg.sender,
+              msg.publicKey,
               msg.signedChallenge,
             );
           }

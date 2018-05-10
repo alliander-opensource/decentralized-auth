@@ -1,4 +1,5 @@
 const iota = require('../src/modules/iota');
+const ntru = require('../src/modules/ntru');
 const pairingMock = require('./pairing-mock');
 
 const DeviceClient = require('../src/device-client');
@@ -10,6 +11,7 @@ describe('Pairing of a device by calling methods on DeviceClient', () => {
   const deviceSeed = generateSeedForTestingPurposes();
   const deviceSecret = 'APPLE';
   const initialSideKey = 'BANANA';
+  const myHouseKeyPair = ntru.createKeyPair(myHouseSeed);
 
   let myHouseAddress;
   let deviceClient;
@@ -33,7 +35,12 @@ describe('Pairing of a device by calling methods on DeviceClient', () => {
 
   describe('myHouse.claimDevice', () => {
     it('should send a claim message to a device', () =>
-      pairingMock.claimDevice(myHouseSeed, myHouseAddress, deviceAddress)
+      pairingMock.claimDevice(
+        myHouseSeed,
+        myHouseAddress,
+        ntru.toTrytes(myHouseKeyPair.public),
+        deviceAddress,
+      )
         .then(transactions =>
 
           expect(transactions).to.be.an('array')));
@@ -97,6 +104,7 @@ describe('Pairing of a device by calling methods on DeviceClient', () => {
       pairingMock.answerChallenge(
         myHouseSeed,
         myHouseAddress,
+        ntru.toTrytes(myHouseKeyPair.public),
         deviceAddress,
         testSignedChallenge,
       )
@@ -132,6 +140,7 @@ describe('Pairing of a device by calling methods on DeviceClient', () => {
         deviceSeed,
         deviceAddress,
         testSender,
+        ntru.toTrytes(myHouseKeyPair.public),
         testSignedChallenge,
       )
         .then(transactions =>
@@ -147,7 +156,14 @@ describe('Pairing of a device by calling methods on DeviceClient', () => {
 
   describe('myHouse.retrieveClaim', () => {
     it('should be able to retrieve the successful claim result', () =>
-      pairingMock.retrieveClaim(myHouseAddress, deviceAddress)
+      iota.getLastMessage({ addresses: [myHouseAddress] })
+        .then((claim) => {
+          if (!pairingMock.isSuccessfulClaim(claim, deviceAddress)) {
+            throw new Error(`Claim failed with reason ${claim.reason}`);
+          }
+          const decryptedClaim = pairingMock.decryptMamData(claim, myHouseKeyPair.private);
+          return decryptedClaim;
+        })
         .then((claim) => {
           expect(claim).to.have.property('sender');
           expect(claim).to.have.property('status');
