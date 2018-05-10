@@ -70,7 +70,40 @@ function fromTrytes(trytes) {
   return buffer;
 }
 
-const { encrypt, decrypt } = NTRU;
+
+/**
+ * Decrypts trytes with NTRU encoded cipher text with private key.
+ *
+ * @function encrypt
+ * @param {string} trytes Trytes to decrypt
+ * @param {Buffer} privateKey Private key
+ * @returns {string} Plain text string
+ */
+function decrypt(trytes, privateKey) {
+  const buffer = fromTrytes(trytes);
+  const decrypted = NTRU.decrypt(buffer, privateKey);
+
+  return decrypted.toString();
+}
+
+
+/**
+ * Encrypts string with public key.
+ *
+ * @function encrypt
+ * @param {string} str String to encrypt
+ * @param {string} publicKey Tryte encoded public key
+ * @returns {string} Tryte encoded NTRU encrypted MAM data
+ */
+function encrypt(str, publicKey) {
+  const publicKeyBuffer = fromTrytes(publicKey);
+  const plainText = Buffer.from(str, 'utf8');
+  const encrypted = NTRU.encrypt(plainText, publicKeyBuffer);
+  const encryptedTrytes = toTrytes(encrypted);
+
+  return encryptedTrytes;
+}
+
 
 module.exports = {
   toBytes,

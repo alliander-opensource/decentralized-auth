@@ -53,40 +53,32 @@ describe('NTRU', () => {
       const keyPair = ntru.createKeyPair(seed);
 
       const plainText = Buffer.from('hello', 'utf8');
-      const encrypted = ntru.encrypt(plainText, keyPair.public);
+      const encrypted = ntru.encrypt(plainText, ntru.toTrytes(keyPair.public));
       const decrypted = ntru.decrypt(encrypted, keyPair.private);
 
       expect(encrypted.toString()).to.not.equal(plainText.toString());
       expect(plainText.toString()).to.equal(decrypted.toString());
     });
 
-    it('should be able to decrypt with key that was converted to and from trytes', () => {
+    it('should be able to decrypt messages up to and including length 107', () => {
+
       const keyPair = ntru.createKeyPair(seed);
 
-      const publicKeyTrytes = ntru.toTrytes(keyPair.public);
-      const publicKeyConverted = ntru.fromTrytes(publicKeyTrytes);
-
-      const plainText = Buffer.from('hello', 'utf8');
-      const encrypted = ntru.encrypt(plainText, publicKeyConverted);
+      const plainText = Buffer.from(Array(107).join('A'), 'utf8');
+      const encrypted = ntru.encrypt(plainText, ntru.toTrytes(keyPair.public));
       const decrypted = ntru.decrypt(encrypted, keyPair.private);
 
-      expect(encrypted.toString()).to.not.equal(plainText.toString());
-      expect(plainText.toString()).to.equal(decrypted.toString());
+      expect(decrypted.toString()).to.equal(plainText.toString());
     });
 
-    it('should be able to decrypt object that was converted to and from trytes', () => {
+    it('fails on string longer than 107', () => {
       const keyPair = ntru.createKeyPair(seed);
 
-      const object = { foo: 'bar' };
-      const plainText = Buffer.from(JSON.stringify(object), 'utf8');
+      const plainText = Buffer.from(Array(108).join('A'), 'utf8');
+      const encrypted = ntru.encrypt(plainText, ntru.toTrytes(keyPair.public));
+      const decrypted = ntru.decrypt(encrypted, keyPair.private); // all \u0000
 
-      const encrypted = ntru.encrypt(plainText, keyPair.public);
-      const encryptedTrytes = ntru.toTrytes(encrypted);
-      const encryptedConverted = ntru.fromTrytes(encryptedTrytes);
-
-      const decrypted = ntru.decrypt(encryptedConverted, keyPair.private);
-
-      expect(object).to.deep.equal(JSON.parse(decrypted.toString()));
+      expect(decrypted[0]).to.equal('\u0000');
     });
   });
 });
