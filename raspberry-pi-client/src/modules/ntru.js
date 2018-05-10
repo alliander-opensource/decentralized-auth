@@ -96,6 +96,10 @@ function decrypt(trytes, privateKey) {
  * @returns {string} Tryte encoded NTRU encrypted MAM data
  */
 function encrypt(str, publicKey) {
+  if (str.length > 106) {
+    throw new Error(`Cannot encrypt string ${str} because it is longer than 106 characters`);
+  }
+
   const publicKeyBuffer = fromTrytes(publicKey);
   const plainText = Buffer.from(str, 'utf8');
   const encrypted = NTRU.encrypt(plainText, publicKeyBuffer);

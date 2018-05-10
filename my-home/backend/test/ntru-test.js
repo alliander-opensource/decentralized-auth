@@ -61,7 +61,6 @@ describe('NTRU', () => {
     });
 
     it('should be able to decrypt messages up to and including length 107', () => {
-
       const keyPair = ntru.createKeyPair(seed);
 
       const plainText = Buffer.from(Array(107).join('A'), 'utf8');
@@ -75,10 +74,8 @@ describe('NTRU', () => {
       const keyPair = ntru.createKeyPair(seed);
 
       const plainText = Buffer.from(Array(108).join('A'), 'utf8');
-      const encrypted = ntru.encrypt(plainText, ntru.toTrytes(keyPair.public));
-      const decrypted = ntru.decrypt(encrypted, keyPair.private); // all \u0000
 
-      expect(decrypted[0]).to.equal('\u0000');
+      expect(() => ntru.encrypt(plainText, ntru.toTrytes(keyPair.public))).to.throw();
     });
   });
 });
