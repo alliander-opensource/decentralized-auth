@@ -2,6 +2,7 @@ const diva = require('diva-irma-js');
 const logger = require('./../../logger')(module);
 const Device = require('./../../database/models/Device');
 const iota = require('./../iota');
+const ntru = require('./../ntru');
 const pairing = require('./pairing');
 const signing = require('../../modules/signing');
 const config = require('./../../config');
@@ -58,7 +59,12 @@ module.exports = function requestHandler(req, res) {
       city: attributes['pbdf.pbdf.idin.city'][0],
     }))
     .then((owner) => {
-      pairing.claimDevice(config.iotaSeed, config.iotaAddress, device.iotaAddress)
+      pairing.claimDevice(
+        config.iotaSeed,
+        config.iotaAddress,
+        ntru.toTrytes(config.ntruKeyPair.public),
+        device.iotaAddress,
+      )
         .then(() =>
           waitForMessage(
             () => iota.getLastMessage({ addresses: [config.iotaAddress] }),
@@ -69,18 +75,24 @@ module.exports = function requestHandler(req, res) {
           pairing.answerChallenge(
             config.iotaSeed,
             config.iotaAddress,
+            ntru.toTrytes(config.ntruKeyPair.public),
             device.iotaAddress,
             signedChallenge,
           );
         })
         .then(() =>
           waitForMessage(
-            () => pairing.retrieveClaim(
-              config.iotaAddress,
-              device.iotaAddress,
-            ),
+            () => iota.getLastMessage({ addresses: [config.iotaAddress] }),
             'CLAIM_RESULT',
           ))
+        .then((claim) => {
+          logger.info(`Received claim ${JSON.stringify(claim)}`);
+          if (!pairing.isSuccessfulClaim(claim, device.iotaAddress)) {
+            throw new Error(`Claim failed with reason ${claim.reason}`);
+          }
+          const decryptedClaim = pairing.decryptMamData(claim, config.ntruKeyPair.private);
+          return decryptedClaim;
+        })
         .then(({ mamData: { root, sideKey } }) =>
           Device.query().insert({
             id: transactionHash,

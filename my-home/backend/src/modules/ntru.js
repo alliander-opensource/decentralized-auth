@@ -96,7 +96,7 @@ function decrypt(trytes, privateKey) {
  * @returns {string} Tryte encoded NTRU encrypted MAM data
  */
 function encrypt(str, publicKey) {
-  if (str.length > 107) {
+  if (str.length > 106) {
     throw new Error(`Cannot encrypt string ${str} because it is longer than 107 characters`);
   }
 

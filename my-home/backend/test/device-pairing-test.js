@@ -1,5 +1,6 @@
 const { exec } = require('child_process');
 const iota = require('../src/modules/iota');
+const ntru = require('../src/modules/ntru');
 const pairing = require('../src/modules/device/pairing');
 const signing = require('../src/modules/iota/kerl/signing');
 const { expect, generateSeedForTestingPurposes } = require('../src/common/test-utils');
@@ -15,6 +16,8 @@ describe('Pairing of a device using a Device Client instance', () => {
   // We will need to wait on the Device to have processed the messages we send
   const WAIT_TIME_MS = 5000;
   const MAX_RETRIES = 3;
+
+  const myHouseKeyPair = ntru.createKeyPair(myHouseSeed);
 
   let myHouseAddress;
   let deviceAddress;
@@ -34,7 +37,12 @@ describe('Pairing of a device using a Device Client instance', () => {
 
   describe('myHouse.claimDevice', () => {
     it('should send a claim message to a device', () =>
-      pairing.claimDevice(myHouseSeed, myHouseAddress, deviceAddress)
+      pairing.claimDevice(
+        myHouseSeed,
+        myHouseAddress,
+        ntru.toTrytes(myHouseKeyPair.public),
+        deviceAddress,
+      )
         .then(transactions =>
 
           expect(transactions).to.be.an('array')));
@@ -51,10 +59,9 @@ describe('Pairing of a device using a Device Client instance', () => {
         validate: msg =>
           new Promise((resolve, reject) => {
             if (!!msg && msg.type === 'CHALLENGE') {
-              resolve(msg);
-            } else {
-              reject(new Error('Response was not a challenge'));
+              return resolve(msg);
             }
+            return reject(new Error('Response was not a challenge'));
           }),
       })
         .then((message) => {
@@ -80,6 +87,7 @@ describe('Pairing of a device using a Device Client instance', () => {
       pairing.answerChallenge(
         myHouseSeed,
         myHouseAddress,
+        ntru.toTrytes(myHouseKeyPair.public),
         deviceAddress,
         testSignedChallenge,
       )
@@ -94,7 +102,7 @@ describe('Pairing of a device using a Device Client instance', () => {
       PromiseRetryer.run({
         delay: WAIT_TIME_MS,
         maxRetries: MAX_RETRIES,
-        promise: () => pairing.retrieveClaim(myHouseAddress, deviceAddress),
+        promise: () => iota.getLastMessage({ addresses: [myHouseAddress] }),
         validate: msg =>
           new Promise((resolve, reject) => {
             if (!!msg && msg.type === 'CLAIM_RESULT') {
@@ -104,6 +112,13 @@ describe('Pairing of a device using a Device Client instance', () => {
             }
           }),
       })
+        .then((claim) => {
+          if (!pairing.isSuccessfulClaim(claim, deviceAddress)) {
+            throw new Error(`Claim failed with reason ${claim.reason}`);
+          }
+          const decryptedClaim = pairing.decryptMamData(claim, myHouseKeyPair.private);
+          return decryptedClaim;
+        })
         .then((claim) => {
           expect(claim).to.have.property('sender');
           expect(claim).to.have.property('status');

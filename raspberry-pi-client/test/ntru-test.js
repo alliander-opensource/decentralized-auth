@@ -61,7 +61,6 @@ describe('NTRU', () => {
     });
 
     it('should be able to decrypt messages up to and including length 107', () => {
-
       const keyPair = ntru.createKeyPair(seed);
 
       const plainText = Buffer.from(Array(107).join('A'), 'utf8');
