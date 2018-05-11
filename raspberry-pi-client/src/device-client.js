@@ -1,4 +1,3 @@
-const utils = require('./common/utils');
 const logger = require('./logger')(module);
 
 const iota = require('./modules/iota');
