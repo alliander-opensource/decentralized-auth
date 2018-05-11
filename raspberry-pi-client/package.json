@@ -10,7 +10,7 @@
   "scripts": {
     "start": "node src/main.js",
     "lint": "./node_modules/.bin/eslint -c ../.eslintrc src test",
-    "test": "mocha --timeout 30000"
+    "test": "mocha --timeout 60000"
   },
   "keywords": [
     "iota",
