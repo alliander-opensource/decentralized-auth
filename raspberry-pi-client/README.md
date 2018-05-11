@@ -43,10 +43,36 @@ git checkout origin/master -- raspberry-pi-client
 
 Install dependencies on Pi:
 
+Install Node dependencies:
+
 ```
 cd raspberry-pi-client
 npm i
 ```
+
+Install NTRU quantum proof asymmetric encryption lib:
+```
+sudo apt-get install autoconf libtool # needed for ntrujs
+git clone https://github.com/NTRUOpenSourceProject/NTRUEncrypt
+cd NTRUEncrypt
+./autogen.sh
+./configure
+sudo make install
+cp /usr/local/lib/libntruencrypt* ~/raspberry-pi-client/node_modules/ntrujs/lib/
+cp /usr/local/lib/libntruencrypt* ~/raspberry-pi-client/node_modules/ntrujs/lib/lib/
+cd ~/raspberry-pi-client/node_modules/ntrujs/build
+make
+cp Release/addon.node ../lib/addon-linux-arm.node
+cd ~/raspberry-pi-client
+```
+
+Test installation with:
+
+```
+npm run test
+```
+
+Running for real:
 
 Generate a seed with `cat /dev/urandom | LC_ALL=C tr -dc 'A-Z9' | fold -w 81 | head -n 1` and add it into the SEED environment variable:
 
@@ -54,7 +80,7 @@ Generate a seed with `cat /dev/urandom | LC_ALL=C tr -dc 'A-Z9' | fold -w 81 | h
 export SEED=<seed>
 ```
 
-Start the client with `npm start`, e.g.:
+Start the client with `npm start`.
 
 ## Running the application locally
 
