@@ -8,9 +8,10 @@
     "dev": "nodemon -e js,html src/server.js",
     "prod": "./node_modules/.bin/knex migrate:latest; node src/server.js",
     "lint": "./node_modules/.bin/eslint -c ../../.eslintrc src test",
-    "migrate": "./node_modules/.bin/knex migrate:latest",
-    "test": "mocha 'src/**/*.e2e.js'",
+    "integration-test": "mocha 'src/**/*.e2e.js'",
     "iota-test": "mocha --timeout 30000",
+    "migrate": "./node_modules/.bin/knex migrate:latest",
+    "test": "npm run integration-test; npm run iota-test",
     "test:watch": "mocha --watch 'src/**/*.e2e.js'",
     "test:unit": "mocha 'src/**/*.spec.js'"
   },
