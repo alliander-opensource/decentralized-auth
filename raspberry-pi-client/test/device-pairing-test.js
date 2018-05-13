@@ -38,7 +38,6 @@ describe('Pairing of a device by calling methods on DeviceClient', () => {
       pairingMock.claimDevice(
         myHouseSeed,
         myHouseAddress,
-        ntru.toTrytes(myHouseKeyPair.public),
         deviceAddress,
       )
         .then(transactions =>

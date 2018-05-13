@@ -62,7 +62,6 @@ module.exports = function requestHandler(req, res) {
       pairing.claimDevice(
         config.iotaSeed,
         config.iotaAddress,
-        ntru.toTrytes(config.ntruKeyPair.public),
         device.iotaAddress,
       )
         .then(() =>

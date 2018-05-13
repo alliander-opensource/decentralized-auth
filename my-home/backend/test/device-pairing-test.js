@@ -27,12 +27,14 @@ describe('Pairing of a device using a Device Client instance', () => {
     [deviceAddress] = await iota.getAddress(deviceSeed, 1);
 
     // Start the device client
-    exec(`cd ../../raspberry-pi-client; SEED=${deviceSeed} \
-          npm start`, (err) => {
-        if (err) {
-          throw new Error(err);
-        }
-      });
+    exec(`cd ../../raspberry-pi-client; SEED=${deviceSeed} npm start`, (err, out, code) => {
+      if (err) {
+        process.stderr.write(err);
+        throw new Error(err);
+      }
+      process.stdout.write(out);
+      process.exit(code);
+    });
   });
 
   describe('myHouse.claimDevice', () => {
@@ -40,7 +42,6 @@ describe('Pairing of a device using a Device Client instance', () => {
       pairing.claimDevice(
         myHouseSeed,
         myHouseAddress,
-        ntru.toTrytes(myHouseKeyPair.public),
         deviceAddress,
       )
         .then(transactions =>
