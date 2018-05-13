@@ -7,7 +7,7 @@ const { expect, generateSeedForTestingPurposes } = require('../src/common/test-u
 const PromiseRetryer = require('promise-retryer')(Promise);
 
 
-describe('Pairing of a device using a Device Client instance', () => {
+describe('Pairing of a device using a Device Client started with npm start', () => {
   const myHouseSeed = generateSeedForTestingPurposes();
   const deviceSeed = generateSeedForTestingPurposes();
   const deviceSecret = 'APPLE';
