@@ -1,4 +1,5 @@
 const logger = require('./logger')(module);
+const config = require('./config');
 
 const iota = require('./modules/iota');
 const mam = require('./modules/iota-mam');
@@ -169,7 +170,16 @@ module.exports = class DeviceClient {
       timestamp: Date.now(),
     };
 
-    this.mam.attach(message);
+    // 2.2 sends one message every 10 seconds, newer versions one every second
+    if (!config.smartMeterVersion === 2.2) {
+      // Only handle 1 in 10 messages, because otherwise we get too much PoW on
+      // the node and it crashes
+      if (Math.floor(Math.random() * 10) === 0) {
+        this.mam.attach(message);
+      }
+    } else {
+      this.mam.attach(message);
+    }
   }
 
 
