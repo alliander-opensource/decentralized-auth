@@ -16,17 +16,17 @@ const p1Configs = {
     parity: 'even',
   },
   4.0: {
-    baudrate: 15200,
+    baudrate: 115200,
     databits: 8,
     parity: 'none',
   },
   4.2: {
-    baudrate: 15200,
+    baudrate: 115200,
     databits: 7,
     parity: 'none',
   },
   5.0: {
-    baudrate: 15200,
+    baudrate: 115200,
     databits: 8,
     parity: 'none',
   },
