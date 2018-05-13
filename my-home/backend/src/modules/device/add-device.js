@@ -8,7 +8,7 @@ const signing = require('../../modules/signing');
 const config = require('./../../config');
 const PromiseRetryer = require('promise-retryer')(Promise);
 
-const DELAY_MS = 2500;
+const DELAY_MS = 5000;
 const MAX_RETRIES = 15;
 
 /**
