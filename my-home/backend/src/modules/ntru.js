@@ -31,11 +31,6 @@ function createKeyPair(seed) {
   const bytes = toBytes(seed);
   const keyPair = NTRU.createKeyWithSeed(bytes);
 
-  // Need to call `NTRU.createKey` after `NTRU.createKeyWithSeed`, otherwise
-  // encrypting and decrypting does not work. See
-  // https://github.com/IDWMaster/ntrujs/issues/6.
-  NTRU.createKey();
-
   return keyPair;
 }
 
@@ -97,7 +92,7 @@ function decrypt(trytes, privateKey) {
  */
 function encrypt(str, publicKey) {
   if (str.length > 106) {
-    throw new Error(`Cannot encrypt string ${str} because it is longer than 107 characters`);
+    throw new Error(`Cannot encrypt string ${str} because it is longer than 106 characters`);
   }
 
   const publicKeyBuffer = fromTrytes(publicKey);
@@ -107,6 +102,13 @@ function encrypt(str, publicKey) {
 
   return encryptedTrytes;
 }
+
+
+// Need to call `NTRU.createKey` before creating a key pair or encrypting or
+// decrypting, otherwise it does not work. See
+// https://github.com/IDWMaster/ntrujs/issues/6.
+
+NTRU.createKey();
 
 module.exports = {
   toBytes,
