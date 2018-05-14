@@ -4,9 +4,6 @@ Demo for GDPR proof IOTA MAM for the Raspberry Pi. This client reads P1 data and
 
 ## Requirements
 
-- Raspberry Pi with internet connection
-- Connected via a P1 cable (RJ11 to USB) to a Dutch smart meter
-
 ## Features
 
 This client in demonstrates:
@@ -31,7 +28,13 @@ npm run test
 
 ## Production
 
-Get the raspberry-pi-client on your Pi:
+Requirements:
+- Raspberry Pi with:
+  - OS (code is tested with Raspbian Stretch Lite)
+  - Internet connection
+- P1 cable (RJ11 to USB) in smart meter and USB port of Raspberry Pi
+
+Clone the raspberry-pi-client on your Pi:
 
 ```
 ssh pi@<pi's IP>
