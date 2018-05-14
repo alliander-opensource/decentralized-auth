@@ -15,7 +15,7 @@ describe('Pairing of a device using a Device Client started with npm start', () 
 
   // We will need to wait on the Device to have processed the messages we send
   const WAIT_TIME_MS = 5000;
-  const MAX_RETRIES = 3;
+  const MAX_RETRIES = 50;
 
   const myHouseKeyPair = ntru.createKeyPair(myHouseSeed);
 

@@ -20,7 +20,7 @@ const INFORM_UPDATE_SIDE_KEY_TYPE = 'INFORM_UPDATE_SIDE_KEY';
 // MAM message type
 const DATA_MESSAGE_TYPE = 'DATA';
 
-const CHECK_MESSAGE_INTERVAL_MS = 5000;
+const CHECK_MESSAGE_INTERVAL_MS = 10000;
 
 
 module.exports = class DeviceClient {
