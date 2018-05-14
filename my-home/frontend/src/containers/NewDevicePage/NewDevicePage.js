@@ -65,7 +65,7 @@ class NewDevicePage extends Component {
               <span>
                 Pairing device via the IOTA Tangle.
                 Please wait.
-                Sending messages back and forth can take up to 30 seconds!
+                Sending messages back and forth can take up to three minutes!
               </span>
             </Col>
           </Row>
