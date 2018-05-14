@@ -10,11 +10,15 @@ const p1Reader = require('./device-client/p1');
 const SignedChallenges = require('./device-client/signed-challenges');
 const signing = require('./modules/iota/kerl/signing');
 
+// IOTA message types
 const SEND_CHALLENGE_TYPE = 'CHALLENGE';
 const CLAIM_RESULT_TYPE = 'CLAIM_RESULT';
 const CLAIM_DEVICE_TYPE = 'CLAIM_DEVICE';
 const ANSWER_CHALLENGE_TYPE = 'ANSWER_CHALLENGE';
 const INFORM_UPDATE_SIDE_KEY_TYPE = 'INFORM_UPDATE_SIDE_KEY';
+
+// MAM message type
+const DATA_MESSAGE_TYPE = 'DATA';
 
 const CHECK_MESSAGE_INTERVAL_MS = 5000;
 
@@ -166,6 +170,7 @@ module.exports = class DeviceClient {
    */
   handleP1Message(telegram) {
     const message = {
+      type: DATA_MESSAGE_TYPE,
       raw: telegram,
       timestamp: Date.now(),
     };
