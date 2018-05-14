@@ -15,6 +15,11 @@ const noData = data => typeof data[0] === 'undefined';
 function drawLineChart(elementId, data) { // eslint-disable-line no-unused-vars
   if (noData(data)) return;
 
+  // Only show 26 elements
+  if (data.length > 26) {
+    data = data.slice(data.length - 26, data.length - 1); // eslint-disable-line no-param-reassign
+  }
+
   const containerEl = document.getElementById(elementId);
   const width = containerEl.clientWidth;
   const height = width * 0.4;
