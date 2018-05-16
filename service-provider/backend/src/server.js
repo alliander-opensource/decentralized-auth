@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const logger = require('./logger')(module);
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -10,10 +11,11 @@ const ntru = require('./modules/ntru');
 config.ntruKeyPair = ntru.createKeyPair(config.iotaSeed);
 
 const app = express();
+app.use(cors({ origin: /.*wattt.nl$/}));
 app.use(cookieParser(config.cookieSecret));
 app.use(cookieEncrypter(config.cookieSecret));
-app.use(bodyParser.text()); // TODO: restrict to one endpoint
-app.use(bodyParser.json()); // TODO: restrict to one endpoint
+app.use(bodyParser.text());
+app.use(bodyParser.json());
 app.use(simpleSession);
 
 
