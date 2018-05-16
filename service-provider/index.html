@@ -257,7 +257,7 @@
      }
 
      const updateAuthorization = (encryptedSideKey) => {
-       // TODO: encryption
+       // TODO: decryption
        notify('Still authorized. Updating side key...');
        notify(`IOTA MAM: Updating side key to ${encryptedSideKey}`);
        setSideKey(encryptedSideKey);
@@ -307,11 +307,13 @@
          switch (jsonMessage.type) {
            case DATA_MESSAGE_TYPE:
            {
-             return addUsageData(jsonMessage);
+             addUsageData(jsonMessage);
+             break;
            }
            case KEY_ROTATION_MESSAGE_TYPE:
            {
-             return processKeyRotationMessage(jsonMessage);
+             processKeyRotationMessage(jsonMessage);
+             break;
            }
            default:
            {
