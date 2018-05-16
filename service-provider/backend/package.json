@@ -1,37 +1,37 @@
 {
-  "name": "decentralized-auth-raspberry-pi-client",
+  "name": "service-provider-backend",
   "version": "1.0.0",
-  "description": "The Raspberry Pi client for providing your smart meter energy data to those you have given consent",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/alliander/decentralized-auth.git"
-  },
-  "main": "src/main.js",
+  "description": "A backend for NTRU related stuff for the service provider",
+  "main": "src/server.js",
   "scripts": {
-    "start": "node src/main.js",
-    "lint": "./node_modules/.bin/eslint -c ../.eslintrc src test",
-    "test": "mocha --timeout 60000"
+    "start": "node src/server.js",
+    "dev": "nodemon -e js,html src/server.js",
+    "lint": "./node_modules/.bin/eslint -c ../../.eslintrc src test",
+    "test": "mocha",
+    "test:watch": "mocha --watch 'src/**/*.e2e.js'",
+    "test:unit": "mocha 'src/**/*.spec.js'"
   },
+  "private": true,
   "keywords": [
-    "iota",
-    "gdpr"
+    "ntru"
   ],
   "contributors": [
     "Alliander N.V. (https://alliander.com/)"
   ],
-  "license": "BSD-3",
+  "license": "MIT",
   "dependencies": {
-    "ajv": "^6.0.1",
-    "bn.js": "^4.11.8",
+    "basic-auth": "2.0.0",
+    "bn.js": "4.11.8",
+    "cookie-encrypter": "0.2.3",
+    "cookie-parser": "1.4.3",
     "crypto-js": "3.1.9-1",
-    "express": "^4.16.3",
+    "express": "4.16.1",
     "get-random-values": "1.2.0",
     "iota.lib.js": "0.4.7",
-    "mam.client.js": "git+https://github.com/iotaledger/mam.client.js.git",
-    "npm": "^5.8.0",
+    "npm": "5.8.0",
     "ntrujs": "1.0.18",
-    "promise-retryer": "0.0.1",
-    "serialport": "4.0.7",
+    "pg": "7.4.1",
+    "superagent": "3.8.0",
     "uuid": "3.1.0",
     "winston": "3.0.0-rc3"
   },
@@ -45,7 +45,9 @@
     "eslint-plugin-jsx-a11y": "5.1.1",
     "eslint-plugin-mocha": "4.11.0",
     "eslint-plugin-react": "7.4.0",
+    "keccak": "1.4.0",
     "mocha": "4.0.1",
+    "nodemon": "1.17.2",
     "supertest": "3.0.0",
     "supertest-as-promised": "4.0.2"
   }
