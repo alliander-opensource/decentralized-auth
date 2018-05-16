@@ -6,7 +6,7 @@ const config = {
   cookieName: 'wattt-session',
   cookieSettings: {
     httpOnly: true,
-    maxAge: 300000,
+    maxAge: 30000000,
     sameSite: true,
     signed: true,
     secure: false, // TODO: NOTE: must be set to true and be used with HTTPS only!
