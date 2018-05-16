@@ -230,7 +230,7 @@
 
      const toElectricityUsage = (telegram) => {
        // 1.7.0 is OBIS code for positive active instantaneous power (A+) [kW]
-       const CAPTURE_USAGE_PATTERN = /1.7.0\((.{7})\*kW\)/;
+       const CAPTURE_USAGE_PATTERN = /1.7.0\((.{4,9})\*kW\)/;
        const value = CAPTURE_USAGE_PATTERN.exec(telegram)[1];
 
        return parseFloat(value);
