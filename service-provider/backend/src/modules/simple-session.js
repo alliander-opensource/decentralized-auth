@@ -1,6 +1,5 @@
 const uuidv4 = require('uuid/v4');
 const config = require('./../config');
-const ntru = require('./../modules/ntru');
 
 function deauthenticate(req, res) {
   req.sessionId = uuidv4();

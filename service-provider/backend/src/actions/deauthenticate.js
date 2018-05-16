@@ -9,7 +9,6 @@ const simpleSession = require('./../modules/simple-session');
  */
 module.exports = function requestHandler(req, res) {
   simpleSession.deauthenticate(req, res); // Create a new sessionId
-
   return res.json({
     sessionId: req.sessionId,
   });

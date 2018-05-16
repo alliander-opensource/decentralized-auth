@@ -11,7 +11,7 @@ const ntru = require('./modules/ntru');
 config.ntruKeyPair = ntru.createKeyPair(config.iotaSeed);
 
 const app = express();
-app.use(cors({ origin: /.*wattt.nl$/}));
+app.use(cors({ origin: /.*wattt.nl$/, credentials: true }));
 app.use(cookieParser(config.cookieSecret));
 app.use(cookieEncrypter(config.cookieSecret));
 app.use(bodyParser.text());
@@ -27,6 +27,7 @@ app.get('/api/init', require('./actions/init'));
 app.get('/api/get-address', require('./actions/get-address'));
 app.get('/api/get-public-key', require('./actions/get-public-key'));
 app.get('/api/decrypt', require('./actions/decrypt'));
+
 
 const server = app.listen(config.port, () => {
   logger.info(`Service Provider Party backend listening on port ${config.port} !`);

@@ -1,6 +1,8 @@
 const ntru = require('./../modules/ntru');
 const config = require('./../config');
 const generateSeed = require('./../modules/gen-seed');
+const logger = require('./../logger')(module);
+const { deauthenticate } = require('./../modules/simple-session');
 
 
 /**
@@ -11,7 +13,11 @@ const generateSeed = require('./../modules/gen-seed');
  * @returns {undefined}
  */
 module.exports = async function requestHandler(req, res) {
+
+  deauthenticate(req, res); // (re)sets sessionId
   const { sessionId } = req;
+
+  logger.info(`Init for session id ${sessionId}`);
 
   if (typeof config.iotaSeeds[sessionId] === 'undefined') {
     config.iotaSeeds[sessionId] = await generateSeed();

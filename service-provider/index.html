@@ -34,32 +34,75 @@
 
     <script src="https://d3js.org/d3.v3.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
-
-    <script src="generate-address.js"></script>
-
     <script src="node_modules/iota.lib.js/dist/iota.js"></script>
     <script src="node_modules/mam.client.js/lib/mam.web.js"></script>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
     <script type="text/javascript">
      let IS_AUTHORIZED = false;
 
      const POLLING_INTERVAL_MS = 5000; // How often to poll for IOTA and MAM messages
-
      const ENERGY_USAGE_DATA = []; // Mutable array of { date, value } tuples
-
-     const ADDRESS_COOKIE_NAME = 'wattt-iota-address';
 
      const MAM_DATA_MESSAGE_TYPE = 'MAM_DATA';
      const DATA_MESSAGE_TYPE = 'DATA';
      const KEY_ROTATION_MESSAGE_TYPE = 'KEY_ROTATION';
 
-     const getAddress = () => Cookies.get(ADDRESS_COOKIE_NAME);
+     const createOrResetSession = async () => await axios.get(
+       'http://localhost:4000/api/deauthenticate',
+       { withCredentials: true },
+     );
 
-     const setAddress = (address) => {
-       console.log(`Setting address ${address} in cookie...`);
-       Cookies.set(ADDRESS_COOKIE_NAME, address);
-     };
+     const initNtru = async () => await axios.get(
+       'http://localhost:4000/api/init',
+       { withCredentials: true },
+     );
+
+     let addressCache;
+     const getAddress = async () => {
+       try {
+         if (typeof addressCache !== 'undefined') return addressCache;
+         const res = await axios.get(
+           'http://localhost:4000/api/get-address',
+           { withCredentials: true },
+         );
+         const address= res.data.message;
+         addressCache = address;
+
+         return address;
+       } catch (err) {
+         console.log(`get-address failed: ${err}`);
+       }
+     }
+
+     const getPublicKeyTrytes = async () => {
+       try {
+         const res = await axios.get(
+           'http://localhost:4000/api/get-public-key',
+           { withCredentials: true },
+         );
+         const publicKeyTrytes= res.data.message;
+
+         return publicKeyTrytes;
+       } catch (err) {
+         console.log(`get-public-key-trytes failed: ${err}`);
+       }
+     }
+
+     const decrypt = async (trytes) => {
+       try {
+         const res = await axios.get(
+           `http://localhost:4000/api/decrypt?trytes=${trytes}`,
+           { withCredentials: true },
+         );
+         const decrypted = res.data.message;
+
+         return decrypted;
+       } catch (err) {
+         console.log(`decrypt failed: ${err}`);
+       }
+     }
 
 
      /*
@@ -95,8 +138,8 @@
       * @function requestAuthorization
       * @returns {undefined}
       */
-     const requestAuthorization = () => {
-       const address = getAddress();
+     const requestAuthorization = async () => {
+       const address = await getAddress();
        const url = window.location.href;
        const goal = document.getElementById('goal-text-box').value;
        const publicKeyTrytes = 'TODO';
@@ -106,7 +149,6 @@
      };
 
      const iota = new IOTA({ provider: 'http://node01.testnet.iotatoken.nl:16265' });
-
      const Mam = require('mam.web.js');
 
      Mam.init(iota);
@@ -176,7 +218,7 @@
       * @returns {undefined}
       */
      const processIotaMessage = async () => {
-       const address = getAddress();
+       const address = await getAddress();
        console.log(`Getting last message from address ${address}...`);
 
        if (address === '') {
@@ -257,17 +299,17 @@
        setSideKey('');
      }
 
-     const updateAuthorization = (encryptedSideKey) => {
-       // TODO: decryption
+     const updateAuthorization = (sideKey) => {
        notify('Still authorized. Updating side key...');
-       notify(`IOTA MAM: Updating side key to ${encryptedSideKey}`);
-       setSideKey(encryptedSideKey);
+       notify(`IOTA MAM: Updating side key to ${sideKey}`);
+
+       setSideKey(sideKey);
      }
 
-     const processKeyRotationMessage = (message) => {
+     const processKeyRotationMessage = async (message) => {
        notify(`IOTA MAM: Got key rotation message ${JSON.stringify(message)}`);
 
-       const address = getAddress();
+       const address = await getAddress();
 
        // If we are not in the message we are no longer authorized
        const encryptedSideKey = message[address];
@@ -275,7 +317,8 @@
          retractAuthorization();
        // If our key is included in the message, decrypt, update ROOT and side key
        } else {
-         updateAuthorization(encryptedSideKey);
+         const sideKey = await decrypt(encryptedSideKey);
+         updateAuthorization(sideKey);
        }
      }
 
@@ -386,19 +429,14 @@
     <script src="line-chart.js">
     </script>
     <script>
+     (async () => {
+       await initNtru();
 
-     // Get and set initial address
-     const address = getAddress();
-     if (typeof address === 'undefined') {
-       const newAddress = generateAddressForTestingPurposes();
-       setAddress(newAddress);
-     }
+       // Process IOTA and MAM messages every 5 seconds
+       setInterval(processIotaMessage, POLLING_INTERVAL_MS);
+       setInterval(processMamMessage, POLLING_INTERVAL_MS);
+     })();
 
-     // Process IOTA and MAM messages now and every 5 seconds
-     processIotaMessage();
-     setInterval(processIotaMessage, POLLING_INTERVAL_MS);
-     processMamMessage();
-     setInterval(processMamMessage, POLLING_INTERVAL_MS);
     </script>
     <div id="noty_layout__bottom" role="alert" aria-live="polite" class="noty_layout">
       <div class="noty_bar noty_type__error noty_theme__mint noty_effects_open">

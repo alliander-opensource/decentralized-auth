@@ -1,8 +1,6 @@
 const iota = require('./../modules/iota');
-const ntru = require('./../modules/ntru');
 const config = require('./../config');
-const generateSeed = require('./../modules/gen-seed');
-
+const logger = require('./../logger')(module);
 
 /**
  * Request handler
@@ -14,7 +12,10 @@ const generateSeed = require('./../modules/gen-seed');
 module.exports = async function requestHandler(req, res) {
   const { sessionId } = req;
 
-  if (typeof config.iotaSeeds[sessionId] === 'undefined') {
+  logger.info(`Getting address for session id ${sessionId}`);
+
+  const seed = config.iotaSeeds[sessionId];
+  if (typeof seed === 'undefined') {
     return res
       .status(500)
       .send({
