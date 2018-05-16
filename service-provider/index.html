@@ -383,12 +383,10 @@
     <script src="line-chart.js">
     </script>
     <script>
+
      // Get and set initial address
      const address = getAddress();
-
-     if (typeof address !== 'undefined') {
-       setAddress(address);
-     } else {
+     if (typeof address === 'undefined') {
        const newAddress = generateAddressForTestingPurposes();
        setAddress(newAddress);
      }
