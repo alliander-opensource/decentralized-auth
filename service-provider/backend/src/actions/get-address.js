@@ -23,7 +23,7 @@ module.exports = async function requestHandler(req, res) {
       });
   }
 
-  const address = await iota.getAddress(config.iotaSeeds[sessionId], 1);
+  const [address] = await iota.getAddress(seed, 1);
   return res
     .status(200)
     .send({
