@@ -175,11 +175,11 @@ module.exports = class DeviceClient {
       timestamp: Date.now(),
     };
 
-    // 2.2 sends one message every 10 seconds, newer versions one every second
-    if (!config.smartMeterVersion === 2.2) {
-      // Only handle 1 in 10 messages, because otherwise we get too much PoW on
-      // the node and it crashes
-      if (Math.floor(Math.random() * 10) === 0) {
+    // 5.0 sends one message every 10 seconds, newer versions one every second
+    if (config.smartMeterVersion === 5.0) {
+      // Only handle 1 in 60 messages for now, because otherwise we get too much
+      // PoW on the node and it crashes
+      if (Math.floor(Math.random() * 60) === 0) {
         this.mam.attach(message);
       }
     } else {
