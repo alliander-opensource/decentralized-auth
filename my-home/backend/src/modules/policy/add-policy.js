@@ -1,4 +1,5 @@
 const diva = require('diva-irma-js');
+const ntru = require('../ntru');
 const mamDataSender = require('./mam_data_sender');
 const logger = require('../../logger')(module);
 
@@ -26,8 +27,12 @@ module.exports = function requestHandler(req, res) {
   };
 
   // TODO: do not send or retrieve this information to the front end (get device
-  //       from database backend)
-  const mamData = { root: device.mamRoot, sideKey: device.mamSideKey };
+  //       from database backend)? or is it save since the frontend is in our
+  //       house?
+  const mamData = {
+    root: ntru.encrypt(device.mamRoot),
+    sideKey: ntru.encrypt(device.mamSideKey),
+  };
 
   diva
     .getAttributes(sessionId)
@@ -55,7 +60,10 @@ module.exports = function requestHandler(req, res) {
               serviceProvider,
             })
         ))
-        .then(() => mamDataSender.sendMamData(serviceProvider.iotaAddress, mamData))
+        .then(() => mamDataSender.sendMamData(
+          serviceProvider.iotaAddress,
+          mamData,
+        ))
         .catch((err) => {
           logger.error(err);
           return res

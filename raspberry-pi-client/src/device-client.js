@@ -145,8 +145,8 @@ module.exports = class DeviceClient {
   informUpdateSideKey(authorizedServiceProviders, newSideKey) {
     // TODO: encrypt
     const keysForServiceProviders = authorizedServiceProviders.map(sp => ({
-      key: sp,
-      val: newSideKey,
+      key: sp.iotaAddress,
+      val: ntru.encrypt(newSideKey, sp.publicKeyTrytes),
     })).reduce((map, obj) => {
       map[obj.key] = obj.val; // eslint-disable-line no-param-reassign
       return map;

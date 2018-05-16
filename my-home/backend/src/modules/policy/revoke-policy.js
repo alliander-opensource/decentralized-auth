@@ -47,7 +47,7 @@ module.exports = async function requestHandler(req, res) {
       .where('id', '=', policyToDelete.deviceId)
       .first();
 
-    const authorizedServiceProviders = remainingPolicies.map(p => p.policy.actorName);
+    const authorizedServiceProviders = remainingPolicies.map(p => p.serviceProvider);
     mamDataSender.informUpdateSideKey(
       device.iotaAddress,
       authorizedServiceProviders,

@@ -99,7 +99,8 @@
        const address = getAddress();
        const url = window.location.href;
        const goal = document.getElementById('goal-text-box').value;
-       const myHouseUrl = `http://localhost:3000/new-policy?iotaAddress=${address}&url=${url}&goal=${goal}`;
+       const publicKeyTrytes = 'TODO';
+       const myHouseUrl = `http://localhost:3000/new-policy?iotaAddress=${address}&publicKeyTrytes=${publicKeyTrytes}&url=${url}&goal=${goal}`;
 
        window.location = myHouseUrl;
      };

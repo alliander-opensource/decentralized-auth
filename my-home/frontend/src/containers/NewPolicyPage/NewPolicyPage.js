@@ -24,6 +24,7 @@ class NewPolicyPage extends Component {
   getServiceProvider = () => ({
     url: queryString.parse(this.props.location.search).url,
     iotaAddress: queryString.parse(this.props.location.search).iotaAddress,
+    publicKeyTrytes: queryString.parse(this.props.location.search).publicKeyTrytes,
   })
 
   getGoal = () => queryString.parse(this.props.location.search).goal;
