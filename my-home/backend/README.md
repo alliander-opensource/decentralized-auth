@@ -112,7 +112,7 @@ export SEED=<seed>
 
 ## Tests
 
-Run IOTA integration tests with `npm run iota-test`. It will start the `raspberry-pi-client` in the test.
+Run IOTA integration tests with `npm run test:iota`. It will start the `raspberry-pi-client` in the test.
 
 Run end-to-end tests with `npm run integration-test`.
 
