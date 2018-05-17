@@ -7,7 +7,7 @@
     "start": "node src/server.js",
     "dev": "nodemon -e js,html src/server.js",
     "lint": "./node_modules/.bin/eslint -c ../../.eslintrc src test",
-    "test": "mocha",
+    "test": "mocha --timeout 60000",
     "test:watch": "mocha --watch 'src/**/*.e2e.js'",
     "test:unit": "mocha 'src/**/*.spec.js'"
   },

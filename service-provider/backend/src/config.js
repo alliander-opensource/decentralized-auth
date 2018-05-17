@@ -12,6 +12,7 @@ const config = {
     secure: false, // TODO: NOTE: must be set to true and be used with HTTPS only!
   },
   baseUrl: process.env.SP_BASE_URL ? process.env.SP_BASE_URL : 'http://localhost:5000',
+  iotaProvider: process.env.IOTA_PROVIDER ? process.env.IOTA_PROVIDER : 'http://localhost:14700',
 };
 
 module.exports = config;
