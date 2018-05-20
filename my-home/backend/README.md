@@ -18,27 +18,6 @@ This backend in particular demonstrates
 - How to pair with a device via IOTA
 - How to provide consent to access data of that device
 
-- How attribute based authentication can be integrated into a backend application using [diva-irma-js](https://github.com/Alliander/diva-irma-js).
-- How attribute based authorization can be integrated into a backend application using [diva-irma-js](https://github.com/Alliander/diva-irma-js).
-- How to integrate DIVA session management with express application session management.
-
-# DIVA middleware components
-
-DIVA supplies express middleware to control identity requirements for API endpoints.
-For example to require the `pbdf.pbdf.idin.address` and `pbdf.pbdf.idin.city` attributes,
-
-```
-app.use('/api/images/address.jpg', require('./actions/get-address-map'));
-```
-
-becomes
-
-```
-app.use('/api/images/address.jpg', diva.requireAttributes(['pbdf.pbdf.idin.address', 'pbdf.pbdf.idin.city']), require('./actions/get-address-map'));
-```
-
-Note: for simple use cases there is also the `diva.requireAttribute()` middleware method.
-
 ## Running the application
 
 - Checkout the code
