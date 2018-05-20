@@ -5,10 +5,7 @@ const config = require('../config');
 const logger = require('../logger')(module);
 
 
-// Mutable field to share the mamState
-
 module.exports = class MamClient {
-
   constructor(seed, sideKey) {
     this.mamState = null;
     this.init(seed, sideKey);
