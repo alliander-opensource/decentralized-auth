@@ -1,4 +1,4 @@
-const mam = require('../src/modules/iota-mam');
+const MamClient = require('../src/modules/iota-mam');
 const { expect, generateSeedForTestingPurposes } = require('../src/common/test-utils');
 
 describe('MAM', () => {
@@ -7,9 +7,11 @@ describe('MAM', () => {
   // MAM seems shared over tests, so use same side key as in other tests for now
   const sideKey = 'SWEETPOTATO';
 
-  it('should initialize the MAM library', () => {
-    mam.init(mamSeed, sideKey);
+  let mam = null;
+  let mam2 = null;
 
+  it('should initialize the MAM library', () => {
+    mam = new MamClient(mamSeed, sideKey);
     const mamState = mam.getMamState();
 
     expect(mamState).to.have.property('subscribed');
@@ -17,6 +19,18 @@ describe('MAM', () => {
     expect(mamState).to.have.property('seed');
     expect(mamState.seed).to.equal(mamSeed);
     expect(mamState.channel.side_key).to.equal(sideKey);
+  });
+
+  it('should initialize a second MAM public library instance without side key', () => {
+    mam2 = new MamClient(mamSeed);
+
+    const mamState = mam2.getMamState();
+
+    expect(mamState).to.have.property('subscribed');
+    expect(mamState).to.have.property('channel').and.to.have.property('mode').and.to.equal('public');
+    expect(mamState).to.have.property('seed');
+    expect(mamState.seed).to.equal(mamSeed);
+    expect(mamState.channel.side_key).to.equal(null);
   });
 
   const message1 = { type: 'BANANA' };
@@ -47,7 +61,7 @@ describe('MAM', () => {
       }));
 
   it('should be able to fetch the two messages', () =>
-    mam.fetch(testRoot1, sideKey)
+    MamClient.fetch(testRoot1, 'restricted', sideKey)
       .then((res) => {
         expect(res.nextRoot).to.have.lengthOf(81);
         expect(res.messages).to.be.an('array');
@@ -56,10 +70,30 @@ describe('MAM', () => {
       }));
 
   it('should be able to fetch from the second root', () =>
-    mam.fetch(testRoot2, sideKey)
+    MamClient.fetch(testRoot2, 'restricted', sideKey)
       .then((res) => {
         expect(res.nextRoot).to.have.lengthOf(81);
         expect(res.messages).to.be.an('array');
         expect(res.messages[0]).to.deep.equal(message2);
+      }));
+
+  let testRoot3 = '';
+
+  it('should be able to attach a public message using second lib and get the root', () =>
+    mam2.attach(message1)
+      .then((root) => {
+        testRoot3 = root;
+        return root;
+      })
+      .then(root =>
+
+        expect(root).to.have.lengthOf(81)));
+
+  it('should be able to fetch from the root using the second lib', () =>
+    MamClient.fetch(testRoot3, 'public')
+      .then((res) => {
+        expect(res.nextRoot).to.have.lengthOf(81);
+        expect(res.messages).to.be.an('array');
+        expect(res.messages[0]).to.deep.equal(message1);
       }));
 });

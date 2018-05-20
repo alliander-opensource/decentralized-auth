@@ -5,7 +5,7 @@ const config = require('../config');
 const logger = require('../logger')(module);
 
 
-const mode = 'restricted';
+const mode = 'public';
 
 
 // Mutable field to share the mamState
@@ -15,30 +15,14 @@ function setMamState(state) { mamState = state; }
 
 
 /**
- * Sets or changes the MAM side key.
- * @function changeSideKey
- * @param {string} sideKey Side key
- * @returns {undefined}
- */
-function changeSideKey(sideKey) {
-  logger.info(`Changing side key to ${sideKey}`);
-  MAM.changeMode(getMamState(), mode, sideKey);
-}
-
-
-/**
  * Initialize MAM.
  * @function init
- * @param {string} seed Seed and side key to initialize MAM with
+ * @param {string} seed Seed to initialize MAM with
  * @returns {Object} MAM state
  */
-function init(seed, sideKey) {
+function init(seed) {
   const state = MAM.init(iota, seed, config.iotaSecurityLevel);
   setMamState(state);
-  changeSideKey(sideKey);
-
-  // Initial create to have a next_root on the MAM state...
-  MAM.create(getMamState(), { type: 'INITIALIZE' });
 
   return getMamState();
 }
@@ -74,11 +58,10 @@ function attach(packet) {
  * NOTE: Expects JSON messages only.
  * @function fetch
  * @param {string} root Root from where to fetch
- * @param {string} sideKey Side key
  * @returns {Promise} Contains the root and the messages
  */
-function fetch(root, sideKey) {
-  return MAM.fetch(root, mode, sideKey)
+function fetch(root) {
+  return MAM.fetch(root, mode)
     .then(({ nextRoot, messages }) => {
       const jsonMessages = messages.map(m => JSON.parse(fromTrytes(m)));
       return {
@@ -92,7 +75,6 @@ function fetch(root, sideKey) {
 module.exports = {
   init,
   getMamState,
-  changeSideKey,
   attach,
   fetch,
 };

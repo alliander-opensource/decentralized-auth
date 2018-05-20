@@ -4,11 +4,8 @@ const { expect, generateSeedForTestingPurposes } = require('../src/common/test-u
 describe('MAM', () => {
   const mamSeed = generateSeedForTestingPurposes();
 
-  // MAM seems shared over tests, so use same side key as in other tests for now
-  const sideKey = 'SWEETPOTATO';
-
   it('should initialize the MAM library', () => {
-    mam.init(mamSeed, sideKey);
+    mam.init(mamSeed);
 
     const mamState = mam.getMamState();
 
@@ -16,7 +13,6 @@ describe('MAM', () => {
     expect(mamState).to.have.property('channel').and.to.have.property('side_key');
     expect(mamState).to.have.property('seed');
     expect(mamState.seed).to.equal(mamSeed);
-    expect(mamState.channel.side_key).to.equal(sideKey);
   });
 
   const message1 = { type: 'BANANA' };
@@ -47,7 +43,7 @@ describe('MAM', () => {
       }));
 
   it('should be able to fetch the two messages', () =>
-    mam.fetch(testRoot1, sideKey)
+    mam.fetch(testRoot1)
       .then((res) => {
         expect(res.nextRoot).to.have.lengthOf(81);
         expect(res.messages).to.be.an('array');
@@ -56,7 +52,7 @@ describe('MAM', () => {
       }));
 
   it('should be able to fetch from the second root', () =>
-    mam.fetch(testRoot2, sideKey)
+    mam.fetch(testRoot2)
       .then((res) => {
         expect(res.nextRoot).to.have.lengthOf(81);
         expect(res.messages).to.be.an('array');

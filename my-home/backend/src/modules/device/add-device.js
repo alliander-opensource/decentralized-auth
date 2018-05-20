@@ -1,6 +1,7 @@
 const logger = require('./../../logger')(module);
 const Device = require('./../../database/models/Device');
 const iota = require('./../iota');
+const mam = require('./../iota-mam');
 const ntru = require('./../ntru');
 const pairing = require('./pairing');
 const signing = require('../../modules/signing');
@@ -9,6 +10,8 @@ const PromiseRetryer = require('promise-retryer')(Promise);
 
 const DELAY_MS = 10000;
 const MAX_RETRIES = 25;
+
+mam.init(config.iotaSeed, )
 
 /**
  * Retries promise till message of {@link msgType} is received.
@@ -83,7 +86,7 @@ module.exports = function requestHandler(req, res) {
       return decryptedClaim;
     })
     .then(({ mamData: { root, sideKey } }) =>
-      sideKey) // TODO: store somewhere
+      mam.) // TODO: store somewhere
     .catch((err) => {
       logger.error(`add-device: ${err}`);
       return res

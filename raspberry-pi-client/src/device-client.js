@@ -2,7 +2,7 @@ const logger = require('./logger')(module);
 const config = require('./config');
 
 const iota = require('./modules/iota');
-const mam = require('./modules/iota-mam');
+const MamClient = require('./modules/iota-mam');
 const ntru = require('./modules/ntru');
 
 const p1Reader = require('./device-client/p1');
@@ -17,7 +17,6 @@ const CLAIM_DEVICE_TYPE = 'CLAIM_DEVICE';
 const ANSWER_CHALLENGE_TYPE = 'ANSWER_CHALLENGE';
 const MAM_DATA_TYPE = 'MAM_DATA';
 const INFORM_UPDATE_SIDE_KEY_TYPE = 'INFORM_UPDATE_SIDE_KEY';
-
 
 
 // MAM message type
@@ -35,8 +34,7 @@ module.exports = class DeviceClient {
     this.signedChallenges = new SignedChallenges();
     this.seenMessages = new Set(); // To avoid processing same message (below)
 
-    this.mam = mam;
-    this.mam.init(seed, initialSideKey);
+    this.mam = new MamClient(seed, initialSideKey);
 
     this.init(CHECK_MESSAGE_INTERVAL_MS);
   }
@@ -105,7 +103,7 @@ module.exports = class DeviceClient {
    * @returns {null}
    */
   sendClaimResult(seed, sender, receiver, publicKey, signedChallenge) {
-    const { channel: { side_key, next_root } } = mam.getMamState();
+    const { channel: { side_key, next_root } } = this.mam.getMamState();
 
     let message;
     if (this.signedChallenges.isValid(signedChallenge)) {
@@ -134,7 +132,7 @@ module.exports = class DeviceClient {
    * @returns {Promise}
    */
   sendMamData(serviceProviderAddress, publicKey) {
-    const { channel: { side_key, next_root } } = mam.getMamState();
+    const { channel: { side_key, next_root } } = this.mam.getMamState();
     const mamData = {
       root: ntru.encrypt(next_root, publicKey),
       sideKey: ntru.encrypt(side_key, publicKey),
