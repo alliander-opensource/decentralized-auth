@@ -7,8 +7,8 @@ const signing = require('../../modules/signing');
 const config = require('./../../config');
 const PromiseRetryer = require('promise-retryer')(Promise);
 
-const DELAY_MS = 10000;
-const MAX_RETRIES = 25;
+const DELAY_MS = 5000;
+const MAX_RETRIES = 15;
 
 /**
  * Retries promise till message of {@link msgType} is received.
