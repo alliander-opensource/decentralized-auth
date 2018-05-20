@@ -17,6 +17,9 @@ config.ntruKeyPair = ntru.createKeyPair(config.iotaSeed);
 // state)
 mam.init(config.iotaSeed);
 
+config.mamRoot = mam.getMamState().channel.next_root;
+logger.info(`Set MAM root to ${config.mamRoot}`);
+
 const app = express();
 app.use(cookieParser(config.cookieSecret));
 app.use(cookieEncrypter(config.cookieSecret));

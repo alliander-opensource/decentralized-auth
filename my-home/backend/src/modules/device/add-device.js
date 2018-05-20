@@ -52,6 +52,7 @@ module.exports = function requestHandler(req, res) {
   pairing.claimDevice(
     config.iotaSeed,
     config.iotaAddress,
+    mam.getMamState().channel.next_root,
     device.iotaAddress,
   )
     .then(() =>

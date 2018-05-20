@@ -1,6 +1,6 @@
 const util = require('util');
 const MAM = require('./../../node_modules/mam.client.js/lib/mam.client.js');
-const { iota, toTrytes, fromTrytes } = require('./iota');
+const { iota, getAddress, toTrytes, fromTrytes } = require('./iota');
 const config = require('../config');
 const logger = require('../logger')(module);
 
@@ -23,6 +23,8 @@ function setMamState(state) { mamState = state; }
 function init(seed) {
   const state = MAM.init(iota, seed, config.iotaSecurityLevel);
   setMamState(state);
+
+  this.attach({ type: 'INITIALIZED' });
 
   return getMamState();
 }
@@ -61,6 +63,7 @@ function attach(packet) {
  * @returns {Promise} Contains the root and the messages
  */
 function fetch(root) {
+  logger.info(`Fetching from root ${root}`);
   return MAM.fetch(root, mode)
     .then(({ nextRoot, messages }) => {
       const jsonMessages = messages.map(m => JSON.parse(fromTrytes(m)));

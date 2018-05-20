@@ -25,6 +25,7 @@ This backend in particular demonstrates
 - `npm start`
 
 Note: for development, use `npm run dev` to run the application in development mode with hot reloading.
+      TODO: does not work properly at the moment, because SEED does needs to be reset.
 
 ## IOTA setup
 

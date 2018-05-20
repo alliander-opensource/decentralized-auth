@@ -15,13 +15,14 @@ const ANSWER_CHALLENGE_TYPE = 'ANSWER_CHALLENGE';
  * @function claimDevice
  * @param {string} seed IOTA seed of the sender
  * @param {string} sender IOTA address of the sender
+ * @param {string} root IOTA MAM root of the sender (device will listen to it)
  * @param {string} deviceAddress IOTA address of the receiving device
  * @returns {Promise}
  */
-function claimDevice(seed, sender, deviceAddress) {
+function claimDevice(seed, sender, root, deviceAddress) {
   logger.info(`Initiate device claim of ${deviceAddress}`);
 
-  const message = { type: CLAIM_DEVICE_TYPE, sender };
+  const message = { type: CLAIM_DEVICE_TYPE, root, sender };
   return iota.send(seed, deviceAddress, message);
 }
 

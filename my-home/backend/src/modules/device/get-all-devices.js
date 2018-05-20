@@ -10,8 +10,8 @@ const mam = require('../iota-mam');
  * @returns {undefined}
  */
 module.exports = function requestHandler(req, res) {
-  mam.fetch(config.iotaAddress)
-    .then(messages => messages.filter(m => m.type === 'DEVICE_ADDED'))
+  mam.fetch(config.mamRoot)
+    .then(({ messages }) => messages.filter(m => m.type === 'DEVICE_ADDED'))
     .then(deviceMessages => deviceMessages.map(m => m.device))
     .then(devices => res.json(devices))
     .catch((err) => {
