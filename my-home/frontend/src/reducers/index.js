@@ -5,7 +5,6 @@ import {
 
   REQUEST_DEVICES,
   RECEIVE_DEVICES,
-  REQUEST_DELETE_DEVICE,
   DEVICE_DELETED,
   REQUEST_ADD_DEVICE,
   RECEIVE_DEVICE,
@@ -43,19 +42,20 @@ function user(
   }
 }
 
-function device(state = { isFetching: false, device: null }, action) {
+function device(state = { isFetching: false, device: null, devices: [] }, action) {
   switch (action.type) {
     case REQUEST_ADD_DEVICE:
       return Object.assign({}, state, {
         ...state,
         isFetching: true,
       });
-    case RECEIVE_DEVICE:
+    case RECEIVE_DEVICE: {
       return Object.assign({}, state, {
         ...state,
         isFetching: false,
         device: action.device,
       });
+    }
     default:
       return state;
   }
@@ -75,18 +75,19 @@ function devices(
         isFetching: true,
       });
     case RECEIVE_DEVICES:
-      return {
+      return Object.assign({}, state, {
         ...state,
         isFetching: false,
         devices: action.devices,
-      };
-    case REQUEST_DELETE_DEVICE: {
-      const deletingIndex = state.devices.findIndex(p => p.id === action.id);
-      state.devices[deletingIndex].isDeleting = true; // eslint-disable-line no-param-reassign
-      return state;
+      });
+    case RECEIVE_DEVICE: {
+      state.devices.push(action.device);
+      return Object.assign({}, state, {
+        ...state,
+      });
     }
     case DEVICE_DELETED: {
-      const deletedIndex = state.devices.findIndex(p => p.id === action.id);
+      const deletedIndex = state.devices.findIndex(d => d === action.id);
       state.devices.splice(deletedIndex, 1);
       return Object.assign({}, state, {
         ...state,
@@ -117,12 +118,12 @@ function policies(
         policies: action.policies,
       });
     case REQUEST_DELETE_POLICY: {
-      const deletingIndex = state.policies.findIndex(p => p.id === action.id);
+      const deletingIndex = state.policies.findIndex(p => p === action.id);
       state.policies[deletingIndex].isDeleting = true; // eslint-disable-line no-param-reassign
       return state;
     }
     case POLICY_DELETED: {
-      const deletedIndex = state.policies.findIndex(p => p.id === action.id);
+      const deletedIndex = state.policies.findIndex(p => p === action.id);
       state.policies.splice(deletedIndex, 1);
       return Object.assign({}, state, {
         ...state,

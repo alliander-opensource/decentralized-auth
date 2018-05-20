@@ -20,7 +20,7 @@ describe('Pairing of a device using a Device Client started with npm start', () 
   const myHouseKeyPair = ntru.createKeyPair(myHouseSeed);
 
   let myHouseAddress;
-  let myHouseRoot = '';
+  const myHouseRoot = '';
   let deviceAddress;
 
   before(async () => {

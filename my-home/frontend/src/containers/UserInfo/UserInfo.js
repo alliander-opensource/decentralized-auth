@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import Paper from 'material-ui/Paper';
 import { List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
-import IconActionLabel from 'material-ui/svg-icons/action/label';
 import IconSocialPerson from 'material-ui/svg-icons/social/person';
 
 import { fetchSession } from '../../actions';

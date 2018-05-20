@@ -40,7 +40,7 @@ class MyDevices extends Component {
           <div>
             {
               devices.devices.map(device => (
-                <div key={device.id} style={deviceContainerStyle}>
+                <div key={device.iotaAddress} style={deviceContainerStyle}>
                   <Row>
                     <Col xs={8}>
                       {device.type} with IOTA address {device.iotaAddress.substring(0, 10)}...
@@ -48,7 +48,7 @@ class MyDevices extends Component {
                     </Col>
                     <Col xs={4} style={{ textAlign: 'right' }}>
                       <RaisedButton
-                        onClick={() => this.props.deleteDevice(device.id)}
+                        onClick={() => this.props.deleteDevice(device)}
                         label="Delete"
                         primary
                         disabled={device.isDeleting}

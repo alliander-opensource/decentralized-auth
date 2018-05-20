@@ -36,12 +36,12 @@ app.get('/api/deauthenticate', require('./actions/deauthenticate'));
 // Device endpoints
 app.post('/api/device/new', require('./modules/device/add-device'));
 app.get('/api/device/all', require('./modules/device/get-all-devices'));
-app.delete('/api/device/:id', require('./modules/device/delete-device'));
+app.post('/api/device/delete', require('./modules/device/delete-device'));
 
 // Policy endpoints
 app.post('/api/policy/new', require('./modules/policy/add-policy'));
 app.get('/api/policy/all', require('./modules/policy/get-all-policies'));
-app.delete('/api/policy/:id', require('./modules/policy/revoke-policy'));
+app.delete('/api/policy', require('./modules/policy/revoke-policy')); // TODO
 app.get('/api/policy/by-sp', require('./modules/policy/get-all-policies-by-sp'));
 app.post('/api/policy/get-message-for-policy', require('./modules/policy/get-message-for-policy'));
 

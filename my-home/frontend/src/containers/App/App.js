@@ -37,17 +37,6 @@ class App extends Component {
   }
 
   render() {
-    const requiredAttributes = [
-      {
-        label: 'Address',
-        attributes: ['pbdf.pbdf.idin.address'],
-      },
-      {
-        label: 'City',
-        attributes: ['pbdf.pbdf.idin.city'],
-      },
-    ];
-
     const RightMenu = props => (
       <IconMenu
         id="user-menu"

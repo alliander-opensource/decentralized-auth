@@ -71,7 +71,14 @@ module.exports = async function requestHandler(req, res) {
       throw new Error(`Claim failed with reason ${claim.reason}`);
     }
     const event = { type: DEVICE_ADDED_TYPE, device };
-    return mam.attach(event);
+    mam.attach(event);
+    return res
+      .status(200)
+      .send({
+        success: true,
+        message: 'Created',
+        device,
+      });
   } catch (err) {
     logger.error(`add-device: ${err}`);
     return res

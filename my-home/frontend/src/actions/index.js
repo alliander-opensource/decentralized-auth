@@ -208,11 +208,11 @@ function deviceDeleted(json) {
   };
 }
 
-export function deleteDevice(id) {
+export function deleteDevice(device) {
   return (dispatch) => {
-    dispatch(requestDeleteDevice(id));
+    dispatch(requestDeleteDevice(device));
     return axios
-      .delete(`/api/device/${id}`, {
+      .post('/api/device/delete', { device }, {
         withCredentials: true,
       })
       .then(response => response.data)

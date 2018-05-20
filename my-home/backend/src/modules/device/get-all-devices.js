@@ -2,6 +2,9 @@ const logger = require('../../logger')(module);
 const config = require('../../config');
 const mam = require('../iota-mam');
 
+const { messagesToDevices } = require('./projections');
+
+
 /**
  * Request handler
  * @function requestHandler
@@ -11,8 +14,7 @@ const mam = require('../iota-mam');
  */
 module.exports = function requestHandler(req, res) {
   mam.fetch(config.mamRoot)
-    .then(({ messages }) => messages.filter(m => m.type === 'DEVICE_ADDED'))
-    .then(deviceMessages => deviceMessages.map(m => m.device))
+    .then(messagesToDevices)
     .then(devices => res.json(devices))
     .catch((err) => {
       logger.error(`error in get-all-devices: ${err}`);
