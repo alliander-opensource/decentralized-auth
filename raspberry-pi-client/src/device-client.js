@@ -15,7 +15,10 @@ const SEND_CHALLENGE_TYPE = 'CHALLENGE';
 const CLAIM_RESULT_TYPE = 'CLAIM_RESULT';
 const CLAIM_DEVICE_TYPE = 'CLAIM_DEVICE';
 const ANSWER_CHALLENGE_TYPE = 'ANSWER_CHALLENGE';
+const MAM_DATA_TYPE = 'MAM_DATA';
 const INFORM_UPDATE_SIDE_KEY_TYPE = 'INFORM_UPDATE_SIDE_KEY';
+
+
 
 // MAM message type
 const DATA_MESSAGE_TYPE = 'DATA';
@@ -119,6 +122,28 @@ module.exports = class DeviceClient {
     this.signedChallenges.remove(signedChallenge);
 
     return iota.send(seed, receiver, message);
+  }
+
+
+  /**
+   * Send encrypted MAM data to a service provider.
+   *
+   * @function sendMamData
+   * @param {string} serviceProviderAddress IOTA address of the service provider
+   * @param {string} publicKey Public key of the service provider
+   * @returns {Promise}
+   */
+  sendMamData(serviceProviderAddress, publicKey) {
+    const { channel: { side_key, next_root } } = mam.getMamState();
+    const mamData = {
+      root: ntru.encrypt(next_root, publicKey),
+      sideKey: ntru.encrypt(side_key, publicKey),
+    };
+
+    logger.info(`Provide service provider ${serviceProviderAddress} with MAM data ${mamData}`);
+
+    const message = { type: MAM_DATA_TYPE, mamData };
+    return iota.send(config.iotaSeed, serviceProviderAddress, message);
   }
 
 
@@ -236,7 +261,7 @@ module.exports = class DeviceClient {
               msg.signedChallenge,
             );
           }
-          case INFORM_UPDATE_SIDE_KEY_TYPE:
+          case INFORM_UPDATE_SIDE_KEY_TYPE: // TODO: refactor: get authorization and keep event list
           {
             const sideKeys = ['HUMMUS', 'SWEETPOTATO', 'FRIES'];
             const randomIndex = Math.floor(Math.random() * sideKeys.length);

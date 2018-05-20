@@ -2,27 +2,7 @@ const logger = require('../../logger')(module);
 const iota = require('../iota');
 const config = require('./../../config');
 
-
-const MAM_DATA_TYPE = 'MAM_DATA';
 const INFORM_UPDATE_SIDE_KEY_TYPE = 'INFORM_UPDATE_SIDE_KEY';
-
-
-/**
- * Send MAM data to a service provider.
- * TODO: encrypt with public key of service provider
- *
- * @function sendMamData
- * @param {string} serviceProviderAddress IOTA address of the service provider
- * @param {object} mamData MAM root and side key
- * @returns {Promise}
- */
-function sendMamData(serviceProviderAddress, mamData) {
-  logger.info(`Provide service provider ${serviceProviderAddress} with MAM data ${mamData}`);
-
-  const message = { type: MAM_DATA_TYPE, mamData };
-  return iota.send(config.iotaSeed, serviceProviderAddress, message);
-}
-
 
 /**
  * Informs the device to update the side key and gives the currently authorized
@@ -44,6 +24,5 @@ function informUpdateSideKey(deviceAddress, authorizedServiceProviders) {
 
 
 module.exports = {
-  sendMamData,
   informUpdateSideKey,
 };
