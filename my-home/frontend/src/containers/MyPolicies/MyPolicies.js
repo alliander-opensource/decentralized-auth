@@ -81,10 +81,8 @@ MyPolicies.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { user, policies } = state;
+  const { policies } = state;
   return {
-    addresses: user.attributes['pbdf.pbdf.idin.address'],
-    cities: user.attributes['pbdf.pbdf.idin.city'],
     policies,
   };
 }

@@ -1,4 +1,3 @@
-const diva = require('diva-irma-js');
 const logger = require('../../logger')(module);
 const Device = require('../../database/models/Device');
 
@@ -11,13 +10,7 @@ const Device = require('../../database/models/Device');
  */
 module.exports = function requestHandler(req, res) {
   const { sessionId } = req;
-  diva
-    .getAttributes(sessionId)
-    .then(attributes => ({
-      street: attributes['pbdf.pbdf.idin.address'][0],
-      city: attributes['pbdf.pbdf.idin.city'][0],
-    }))
-    .then(owner => Device.query().where('owner', '=', owner))
+  Promise.resolve() // TODO: get devices from somewhere
     .then(devices => res.json(devices))
     .catch((err) => {
       logger.error(`error in get-all-devices: ${err}`);

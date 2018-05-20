@@ -1,5 +1,3 @@
-const diva = require('diva-irma-js');
-
 /**
  * Request handler
  * @function requestHandler
@@ -8,11 +6,6 @@ const diva = require('diva-irma-js');
  * @returns {undefined}
  */
 module.exports = function requestHandler(req, res) {
-  const sessionId = req.sessionId;
-  diva
-    .getAttributes(sessionId)
-    .then(attributes => res.json({
-      sessionId,
-      attributes,
-    }));
+  const { sessionId } = req;
+  return res.json({ sessionId });
 };

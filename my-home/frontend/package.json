@@ -1,11 +1,11 @@
 {
-  "name": "diva-js-reference-3p-frontend",
+  "name": "decentralized-auth-my-home-frontend",
   "version": "1.0.0",
-  "description": "A frontend for a reference implementation that uses the Diva SDK to verify IRMA attributes.",
+  "description": "Frontend for my home to demonstrate GDPR proof energy data streams",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/Alliander/diva-js.git"
+    "url": "git+ssh://git@github.com/Alliander/decentralized-auth.git"
   },
   "dependencies": {
     "axios": "0.17.0",
@@ -35,15 +35,16 @@
     "test": "react-scripts test --env=jsdom"
   },
   "keywords": [
-    "irma",
-    "attributes",
     "privacy",
     "identity",
-    "management"
+    "management",
+    "GDPR",
+    "IOTA"
   ],
   "contributors": [
     "Koen van Ingen",
     "Timen Olthof",
+    "Erwin Rooijakkers",
     "Alliander N.V. (https://alliander.com/)"
   ],
   "license": "BSD-3-Clause",

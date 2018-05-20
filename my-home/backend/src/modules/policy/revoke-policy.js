@@ -1,4 +1,3 @@
-const diva = require('diva-irma-js');
 const logger = require('../../logger')(module);
 const mamDataSender = require('./mam_data_sender');
 
@@ -24,46 +23,12 @@ module.exports = async function requestHandler(req, res) {
   try {
     const policyId = req.params.id;
 
-    const attributes = await diva.getAttributes(req.sessionId);
-    const owner = {
-      street: attributes['pbdf.pbdf.idin.address'][0],
-      city: attributes['pbdf.pbdf.idin.city'][0],
-    };
-
-    const policyToDelete = await Policy
-      .query()
-      .where('owner', '=', owner)
-      .andWhere('id', '=', policyId)
-      .first();
-
-    const remainingPolicies = await Policy
-      .query()
-      .where('owner', '=', owner)
-      .andWhere('id', '!=', policyId)
-      .andWhere('deviceId', '=', policyToDelete.deviceId);
-
-    const device = await Device
-      .query()
-      .where('id', '=', policyToDelete.deviceId)
-      .first();
-
-    const authorizedServiceProviders = remainingPolicies.map(p => p.serviceProvider);
-    mamDataSender.informUpdateSideKey(
-      device.iotaAddress,
-      authorizedServiceProviders,
-    );
-
-    const numDeleted = await Policy
-      .query()
-      .delete()
-      .where('owner', '=', owner)
-      .andWhere('id', '=', policyId);
+    // TODO: do something smart with reading the stream
 
     return res.status(200)
       .send({
         success: true,
         message: 'Deleted',
-        numDeleted,
         id: policyId,
       });
   } catch (err) {

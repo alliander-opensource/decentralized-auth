@@ -1,7 +1,7 @@
 {
-  "name": "diva-js-reference-3p-backend",
+  "name": "decentralized-auth-my-home-backend",
   "version": "1.0.0",
-  "description": "A backend for a reference implementation that uses the Diva SDK to verify IRMA attributes.",
+  "description": "Backend for my home to demonstrate GDPR proof energy data streams",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
@@ -17,15 +17,16 @@
   },
   "private": true,
   "keywords": [
-    "irma",
-    "attributes",
     "privacy",
     "identity",
-    "management"
+    "management",
+    "gdpr",
+    "IOTA"
   ],
   "contributors": [
     "Koen van Ingen",
     "Timen Olthof",
+    "Erwin Rooijakkers",
     "Alliander N.V. (https://alliander.com/)"
   ],
   "license": "BSD-3-Clause",
@@ -35,7 +36,6 @@
     "cookie-encrypter": "0.2.3",
     "cookie-parser": "1.4.3",
     "crypto-js": "3.1.9-1",
-    "diva-irma-js": "git+https://github.com/Alliander/diva-irma-js.git#28ad1fbe4bc5f590c9d7471308c8b2646bbe03f6",
     "express": "4.16.1",
     "get-random-values": "1.2.0",
     "iota.lib.js": "0.4.7",

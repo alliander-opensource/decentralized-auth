@@ -86,10 +86,8 @@ MyDevices.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { user, devices } = state;
+  const { devices } = state;
   return {
-    addresses: user.attributes['pbdf.pbdf.idin.address'],
-    cities: user.attributes['pbdf.pbdf.idin.city'],
     devices,
   };
 }

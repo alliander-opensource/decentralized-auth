@@ -10,8 +10,6 @@ import IconSocialPerson from 'material-ui/svg-icons/social/person';
 import MenuItem from 'material-ui/MenuItem';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 
-import WithDivaAuthorization from '../../util/WithDivaAuthorization';
-
 import SideMenu from '../../components/SideMenu/SideMenu';
 
 import Home from '../../containers/Home/Home';
@@ -89,22 +87,10 @@ class App extends Component {
               <Col xs>
                 <Paper style={styles.main} id="main-content">
                   <Route exact path="/" component={Home} />
-                  <Route
-                    path="/my-devices"
-                    component={WithDivaAuthorization(requiredAttributes)(MyDevices)}
-                  />
-                  <Route
-                    path="/new-device"
-                    component={WithDivaAuthorization(requiredAttributes)(NewDevicePage)}
-                  />
-                  <Route
-                    path="/my-policies"
-                    component={WithDivaAuthorization(requiredAttributes)(MyPolicies)}
-                  />
-                  <Route
-                    path="/new-policy"
-                    component={WithDivaAuthorization(requiredAttributes)(NewPolicyPage)}
-                  />
+                  <Route path="/my-devices" component={MyDevices} />
+                  <Route path="/new-device" component={NewDevicePage} />
+                  <Route path="/my-policies" component={MyPolicies} />
+                  <Route path="/new-policy" component={NewPolicyPage} />
                 </Paper>
               </Col>
 

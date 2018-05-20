@@ -1,4 +1,3 @@
-const diva = require('diva-irma-js');
 const ntru = require('../ntru');
 const mamDataSender = require('./mam_data_sender');
 const logger = require('../../logger')(module);
@@ -34,52 +33,18 @@ module.exports = function requestHandler(req, res) {
     sideKey: ntru.encrypt(device.mamSideKey),
   };
 
-  diva
-    .getAttributes(sessionId)
-    .then(attributes => ({
-      street: attributes['pbdf.pbdf.idin.address'][0],
-      city: attributes['pbdf.pbdf.idin.city'][0],
-    }))
-    .then(owner =>
-      Policy.query().insert({
-        id: transactionHash,
-        deviceId: device.id,
-        policy,
-        message: toMessage(policy),
-        serviceProvider,
-        owner,
-      })
-        .then(dbResult => (
-          res
-            .status(201)
-            .send({
-              success: true,
-              message: 'Created',
-              id: dbResult.id,
-              ...policy,
-              serviceProvider,
-            })
-        ))
-        .then(() => mamDataSender.sendMamData(
-          serviceProvider.iotaAddress,
-          mamData,
-        ))
-        .catch((err) => {
-          logger.error(err);
-          return res
-            .status(500)
-            .send({
-              success: false,
-              message: err,
-            });
-        }))
+  Promise.resolve() // TODO: policy stored in MAM
+    .then(() => mamDataSender.sendMamData(
+      serviceProvider.iotaAddress,
+      mamData,
+    ))
     .catch((err) => {
-      logger.error(`get IRMA attributes: ${err}`);
+      logger.error(err);
       return res
         .status(500)
         .send({
           success: false,
-          message: 'error_get_irma_attributes',
+          message: err,
         });
     });
 };
