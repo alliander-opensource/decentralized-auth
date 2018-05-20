@@ -34,6 +34,11 @@ function waitForMessage(promise, msgType) {
 }
 
 
+const CHALLENGE_TYPE = 'CHALLENGE';
+const CLAIM_RESULT_TYPE = 'CLAIM_RESULT';
+const DEVICE_ADDED_TYPE = 'DEVICE_ADDED';
+
+
 /**
  * Request handler
  * @function requestHandler
@@ -41,57 +46,39 @@ function waitForMessage(promise, msgType) {
  * @param {object} res Express response object
  * @returns {undefined}
  */
-module.exports = function requestHandler(req, res) {
-  const {
-    body: {
-      device,
-      secret,
-    },
-  } = req;
-
-  pairing.claimDevice(
-    config.iotaSeed,
-    config.iotaAddress,
-    mam.getMamState().channel.next_root,
-    device.iotaAddress,
-  )
-    .then(() =>
-      waitForMessage(
-        () => iota.getLastMessage({ addresses: [config.iotaAddress] }),
-        'CHALLENGE',
-      ))
-    .then(({ challenge }) => {
-      const signedChallenge = signing.sign(challenge, secret);
-      pairing.answerChallenge(
-        config.iotaSeed,
-        config.iotaAddress,
-        ntru.toTrytes(config.ntruKeyPair.public),
-        device.iotaAddress,
-        signedChallenge,
-      );
-    })
-    .then(() =>
-      waitForMessage(
-        () => iota.getLastMessage({ addresses: [config.iotaAddress] }),
-        'CLAIM_RESULT',
-      ))
-    .then((claim) => {
-      logger.info(`Received claim ${JSON.stringify(claim)}`);
-      if (!pairing.isSuccessfulClaim(claim, device.iotaAddress)) {
-        throw new Error(`Claim failed with reason ${claim.reason}`);
-      }
-    })
-    .then(() => {
-      const event = { type: 'DEVICE_ADDED', device };
-      return mam.attach(event);
-    })
-    .catch((err) => {
-      logger.error(`add-device: ${err}`);
-      return res
-        .status(500)
-        .send({
-          success: false,
-          message: err.toString(),
-        });
-    });
+module.exports = async function requestHandler(req, res) {
+  const { body: { device, secret } } = req;
+  try {
+    pairing.claimDevice(config.iotaSeed, config.iotaAddress, config.mamRoot, device.iotaAddress);
+    const { challenge } = await waitForMessage(
+      () => iota.getLastMessage({ addresses: [config.iotaAddress] }),
+      CHALLENGE_TYPE,
+    );
+    const signedChallenge = signing.sign(challenge, secret);
+    pairing.answerChallenge(
+      config.iotaSeed,
+      config.iotaAddress,
+      ntru.toTrytes(config.ntruKeyPair.public),
+      device.iotaAddress,
+      signedChallenge,
+    );
+    const claim = await waitForMessage(
+      () => iota.getLastMessage({ addresses: [config.iotaAddress] }),
+      CLAIM_RESULT_TYPE,
+    );
+    logger.info(`Received claim ${JSON.stringify(claim)}`);
+    if (!pairing.isSuccessfulClaim(claim, device.iotaAddress)) {
+      throw new Error(`Claim failed with reason ${claim.reason}`);
+    }
+    const event = { type: DEVICE_ADDED_TYPE, device };
+    return mam.attach(event);
+  } catch (err) {
+    logger.error(`add-device: ${err}`);
+    return res
+      .status(500)
+      .send({
+        success: false,
+        message: err.toString(),
+      });
+  }
 };
