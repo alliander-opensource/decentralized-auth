@@ -6,13 +6,16 @@ const cookieEncrypter = require('cookie-encrypter');
 const simpleSession = require('./modules/simple-session');
 const config = require('./config');
 const ntru = require('./modules/ntru');
-
-const initializeDatabase = require('./database/initialize-database');
-
-initializeDatabase(); // Required for policy saving
+const mam = require('./modules/iota-mam');
 
 // Create key pair here to avoid circular dependency with config
 config.ntruKeyPair = ntru.createKeyPair(config.iotaSeed);
+
+
+// Our MAM channel for publishing information to for the device
+// We also misuse it is a database for now (read the event stream and build the
+// state)
+mam.init(config.iotaSeed);
 
 const app = express();
 app.use(cookieParser(config.cookieSecret));

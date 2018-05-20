@@ -1,5 +1,4 @@
 const logger = require('./../../logger')(module);
-const Device = require('./../../database/models/Device');
 const iota = require('./../iota');
 const mam = require('./../iota-mam');
 const ntru = require('./../ntru');
@@ -10,8 +9,6 @@ const PromiseRetryer = require('promise-retryer')(Promise);
 
 const DELAY_MS = 10000;
 const MAX_RETRIES = 25;
-
-mam.init(config.iotaSeed, )
 
 /**
  * Retries promise till message of {@link msgType} is received.
@@ -82,11 +79,11 @@ module.exports = function requestHandler(req, res) {
       if (!pairing.isSuccessfulClaim(claim, device.iotaAddress)) {
         throw new Error(`Claim failed with reason ${claim.reason}`);
       }
-      const decryptedClaim = pairing.decryptMamData(claim, config.ntruKeyPair.private);
-      return decryptedClaim;
     })
-    .then(({ mamData: { root, sideKey } }) =>
-      mam.) // TODO: store somewhere
+    .then(() => {
+      const event = { type: 'DEVICE_ADDED', device };
+      return mam.attach(event);
+    })
     .catch((err) => {
       logger.error(`add-device: ${err}`);
       return res
