@@ -16,7 +16,7 @@ module.exports = function requestHandler(req, res) {
   // TODO: check if device belongs to owner
 
   const { sessionId } = req;
-  const { transactionHash, device, serviceProvider, goal } = req.body;
+  const { device, serviceProvider, goal } = req.body;
   const policy = {
     actorName: serviceProvider.iotaAddress,
     action: 'read',

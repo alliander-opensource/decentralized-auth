@@ -1,5 +1,4 @@
 import axios from 'axios';
-import uuidv4 from 'uuid';
 
 // action types
 export const REQUEST_SESSION = 'get_session';
@@ -23,10 +22,6 @@ export const RECEIVE_DEVICES = 'update_devices';
 
 export const REQUEST_DELETE_DEVICE = 'request_delete_device';
 export const DEVICE_DELETED = 'device_deleted';
-
-function generateId() {
-  return uuidv4();
-}
 
 export function requestSession() {
   return { type: REQUEST_SESSION };
@@ -89,8 +84,7 @@ function receivePolicy(json) {
 }
 
 export function addPolicy(device, serviceProvider, goal) {
-  const transactionHash = generateId();
-  const body = { transactionHash, device, serviceProvider, goal };
+  const body = { device, serviceProvider, goal };
 
   const options = {
     headers: {
@@ -120,9 +114,8 @@ function receiveDevice(json) {
 }
 
 export function addDevice(iotaAddress, secret) {
-  const transactionHash = generateId();
   const device = { iotaAddress, type: 'Raspberry Pi' };
-  const body = { transactionHash, device, secret };
+  const body = { device, secret };
 
   const options = {
     headers: {

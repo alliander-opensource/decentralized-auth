@@ -44,7 +44,6 @@ function waitForMessage(promise, msgType) {
 module.exports = function requestHandler(req, res) {
   const {
     body: {
-      transactionHash,
       device,
       secret,
     },
