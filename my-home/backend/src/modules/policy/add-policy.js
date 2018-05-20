@@ -2,7 +2,6 @@ const ntru = require('../ntru');
 const mamDataSender = require('./mam_data_sender');
 const logger = require('../../logger')(module);
 
-const Policy = require('../../database/models/Policy');
 const { toMessage } = require('./policy');
 
 /**

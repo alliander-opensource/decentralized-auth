@@ -1,8 +1,6 @@
 const basicAuth = require('basic-auth');
 const logger = require('../../logger')(module);
 
-const Policy = require('../../database/models/Policy');
-
 /**
  * Request handler
  * @function requestHandler

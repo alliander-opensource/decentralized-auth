@@ -1,5 +1,6 @@
 const logger = require('../../logger')(module);
-const Device = require('../../database/models/Device');
+const config = require('../../config');
+const mam = require('../iota-mam');
 
 /**
  * Request handler
@@ -9,8 +10,9 @@ const Device = require('../../database/models/Device');
  * @returns {undefined}
  */
 module.exports = function requestHandler(req, res) {
-  const { sessionId } = req;
-  Promise.resolve() // TODO: get devices from somewhere
+  mam.fetch(config.iotaAddress)
+    .then(messages => messages.filter(m => m.type === 'DEVICE_ADDED'))
+    .then(deviceMessages => deviceMessages.map(m => m.device))
     .then(devices => res.json(devices))
     .catch((err) => {
       logger.error(`error in get-all-devices: ${err}`);

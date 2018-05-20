@@ -1,5 +1,4 @@
 const logger = require('../../logger')(module);
-const Device = require('../../database/models/Device');
 
 /**
  * Request handler

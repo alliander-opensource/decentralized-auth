@@ -1,10 +1,6 @@
 const logger = require('../../logger')(module);
 const mamDataSender = require('./mam_data_sender');
 
-const Policy = require('../../database/models/Policy');
-const Device = require('../../database/models/Device');
-
-
 /**
  * Request handler for revoking a policy
  * - Remove the policy from the database

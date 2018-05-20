@@ -42,53 +42,12 @@ Note: for simple use cases there is also the `diva.requireAttribute()` middlewar
 ## Running the application
 
 - Checkout the code
-- Run steps in Postgrep setup below
 - `npm install` (or `npm install --python=python2.6` when a gyp error appears)
 - `npm start`
 
 Note: for development, use `npm run dev` to run the application in development mode with hot reloading.
 
-## Dependencies
-
-#### T.L.D.R minimal required env var exports:
-
-```
-export IRMA_API_SERVER_URL='https://url-to-irma-api-server'
-export IRMA_API_SERVER_PUBLIC_KEY="-----BEGIN PUBLIC KEY-----
-(...)
------END PUBLIC KEY-----"
-export IRMA_API_SERVER_KEY="-----BEGIN RSA PRIVATE KEY-----
-(...)
------END RSA PRIVATE KEY-----"
-export BING_MAPS_API_KEY='key'
-```
-
-### IRMA API server
-
-This DIVA reference implementation requires and instance of the [IRMA API server](https://github.com/credentials/irma_api_server) to be started as a separate application alongside it. Configure the communication between the IRMA API server and the DIVA reference implementation by setting the following environment variables:
-
-- `IRMA_API_SERVER_URL`: the url where the api server is reachable
-- `IRMA_API_SERVER_PUBLIC_KEY`: the public key of the IRMA API server (as configured in the IRMA API server)
-- `IRMA_API_SERVER_KEY`: the private key of the DIVA reference implementation (the corresponding public key should be added to the IRMA API server configuration)
-
-To run your own local IRMA API SERVER, see it's [README](https://github.com/privacybydesign/irma_api_server/blob/master/README.md)
-
-
-### Postgres setup
-
-```
-psql -c "create user my_home with password 'my_home';"
-
-psql -c "ALTER USER my_home WITH SUPERUSER"
-
-createdb -e -O my_home my_home
-
-export MY_HOME_DATABASE_URL=postgres://my_home:my_home@localhost:5432/my_home
-
-npm run migrate
-```
-
-### IOTA setup
+## IOTA setup
 
 Either run local node on port 14700 by following the steps in [running your own IOTA testnet not connected to the public testnet or mainnet](https://github.com/schierlm/private-iota-testnet). Then run the testnet on port 14700:
 
