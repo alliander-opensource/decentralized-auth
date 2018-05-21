@@ -1,4 +1,8 @@
 const logger = require('../../logger')(module);
+const config = require('../../config');
+const mam = require('../iota-mam');
+
+const { toPolicies } = require('./projections');
 
 /**
  * Request handler
@@ -8,11 +12,11 @@ const logger = require('../../logger')(module);
  * @returns {undefined}
  */
 module.exports = function requestHandler(req, res) {
-  const { sessionId } = req;
-  Promise.resolve() // TODO: get stuff from MAM
+  mam.fetch(config.mamRoot)
+    .then(toPolicies)
     .then(policies => res.json(policies))
     .catch((err) => {
-      logger.error(err);
+      logger.error(`error in get-all-policies: ${err}`);
       return res.end('Something went wrong.');
     });
 };

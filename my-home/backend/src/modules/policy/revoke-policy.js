@@ -1,39 +1,36 @@
 const logger = require('../../logger')(module);
-const mamDataSender = require('./mam_data_sender');
+const mam = require('../../modules/iota-mam');
+
+const AUTHORIZATION_REVOKED_TYPE = 'AUTHORIZATION_REVOKED';
 
 /**
- * Request handler for revoking a policy
- * - Remove the policy from the database
- * - Informs device that it needs to update its side key and communicate it to
-     remaining authorized service providers
+ * Request handler
  * @function requestHandler
  * @param {object} req Express request object
  * @param {object} res Express response object
  * @returns {undefined}
  */
-module.exports = async function requestHandler(req, res) {
-  if (!req.params.id) {
-    throw new Error('No policyId specified.');
+module.exports = function requestHandler(req, res) {
+  // TODO: Code runs in home (?) so no need for extra checks.....
+  if (!req.body.policy) {
+    throw new Error('No policy specified.');
   }
 
-  try {
-    const policyId = req.params.id;
+  const { policy } = req.body;
 
-    // TODO: do something smart with reading the stream
-
-    return res.status(200)
+  mam.attach({ type: AUTHORIZATION_REVOKED_TYPE, policy })
+    .then(() => res
+      .status(200)
       .send({
         success: true,
-        message: 'Deleted',
-        id: policyId,
-      });
-  } catch (err) {
-    logger.error(`revoke-policy: ${err}`);
-    return res
-      .status(400)
-      .send({
-        success: false,
-        message: 'Something went wrong',
-      });
-  }
+      }))
+    .catch((err) => {
+      logger.error(`revoke-policy: ${err}`);
+      return res
+        .status(400)
+        .send({
+          success: false,
+          message: 'Something went wrong',
+        });
+    });
 };
