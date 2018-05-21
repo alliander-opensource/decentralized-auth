@@ -1,6 +1,6 @@
 const { expect } = require('../src/common/test-utils');
 
-const { toDevices } = require('../src/modules/device/projections');
+const { toDevices, toPolicies } = require('../src/modules/device/projections');
 
 describe('Get all devices', () => {
   it('should build projection of device events', () => {
@@ -18,5 +18,26 @@ describe('Get all devices', () => {
     const devices = toDevices(mamMessages);
 
     expect(devices).to.deep.equal([2, 3]);
+  });
+});
+
+
+describe('Get all policies', () => {
+  it('should build projection of policy events', () => {
+    const mamMessages = {
+      messages: [
+        { type: 'AUTHORIZE', policy: { serviceProvider: 1, device: { iotaAddress: 1 } } },
+        { type: 'DUMMY' },
+        { },
+        { type: 'AUTHORIZE', policy: { serviceProvider: 2, device: { iotaAddress: 2 } } },
+        { type: 'REVOKE_AUTHORIZATION', policy: { serviceProvider: 1, device: { iotaAddress: 1 } } },
+        { type: 'AUTHORIZE', policy: { serviceProvider: 3, device: { iotaAddress: 3 } } },
+        { type: 'DEVICE_DELETED', device: { iotaAddress: 3 } },
+      ],
+    };
+
+    const policies = toPolicies(mamMessages);
+
+    expect(policies).to.deep.equal([{ serviceProvider: 2, device: { iotaAddress: 2 } }]);
   });
 });
