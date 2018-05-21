@@ -1,6 +1,5 @@
 const ntru = require('../ntru');
 const mam = require('./../iota-mam');
-const mamDataSender = require('./mam_data_sender');
 const logger = require('../../logger')(module);
 
 const AUTHORIZE_TYPE = 'AUTHORIZE';
