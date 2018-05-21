@@ -1,6 +1,6 @@
 const { expect } = require('../src/common/test-utils');
 
-const { messagesToDevices } = require('../src/modules/device/projections');
+const { toDevices } = require('../src/modules/device/projections');
 
 describe('Get all devices', () => {
   it('should build projection of device events', () => {
@@ -15,7 +15,7 @@ describe('Get all devices', () => {
       ],
     };
 
-    const devices = messagesToDevices(mamMessages);
+    const devices = toDevices(mamMessages);
 
     expect(devices).to.deep.equal([2, 3]);
   });

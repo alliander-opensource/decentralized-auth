@@ -81,7 +81,7 @@ function devices(
         devices: action.devices,
       });
     case RECEIVE_DEVICE: {
-      state.devices.push(action.device);
+      state.devices.push(action.device.device);
       return Object.assign({}, state, {
         ...state,
       });

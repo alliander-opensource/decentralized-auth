@@ -4,13 +4,15 @@ const DEVICE_DELETED_TYPE = 'DEVICE_DELETED';
 
 /**
  * Builds a projection of available devices from the MAM stream.
- * @function messagesToDevices
+ * @function toDevices
  * @param {array} mamMessages Raw messages from the MAM stream
- * @returns {undefined}
+ * @returns {array} Array of devices (device is object with iotaAddress and
+ *                  type)
  */
-function messagesToDevices(mamMessages) {
+function toDevices(mamMessages) {
   const { messages } = mamMessages;
   const devicesSet = messages.reduce((devices, { type, device }) => {
+    // Turn the device into JSON for equality operator to work...
     switch (type) {
       case DEVICE_ADDED_TYPE:
         return devices.add(JSON.stringify(device));
@@ -26,4 +28,4 @@ function messagesToDevices(mamMessages) {
   return devices;
 }
 
-module.exports = { messagesToDevices };
+module.exports = { toDevices };
