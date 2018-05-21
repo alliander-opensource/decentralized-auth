@@ -25,6 +25,9 @@ const DATA_MESSAGE_TYPE = 'DATA';
 const CHECK_MESSAGE_INTERVAL_MS = 10000;
 
 
+// TODO: LISTEN TO AUTHORIZE AND AUTHORIZATION_REVOKED EVENTS
+
+
 module.exports = class DeviceClient {
   constructor(seed, sharedSecret, initialSideKey) {
     this.seed = seed;

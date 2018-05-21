@@ -2,7 +2,7 @@ const logger = require('../../logger')(module);
 const config = require('../../config');
 const mam = require('../iota-mam');
 
-const { toPolicies } = require('./projections');
+const { toPolicies } = require('../projections');
 
 /**
  * Request handler

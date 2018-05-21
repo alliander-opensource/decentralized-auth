@@ -1,6 +1,6 @@
 const { expect } = require('../src/common/test-utils');
 
-const { toDevices, toPolicies } = require('../src/modules/device/projections');
+const { toDevices, toPolicies } = require('../src/modules/projections');
 
 describe('Get all devices', () => {
   it('should build projection of device events', () => {
