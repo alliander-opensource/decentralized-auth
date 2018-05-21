@@ -1,3 +1,7 @@
+/*
+ * Creates event sourced projections based on messages from a MAM stream.
+ */
+
 const DEVICE_ADDED_TYPE = 'DEVICE_ADDED';
 const DEVICE_DELETED_TYPE = 'DEVICE_DELETED';
 
