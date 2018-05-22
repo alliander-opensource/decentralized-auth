@@ -22,7 +22,6 @@ const config = {
   iotaDepth: 5,
   iotaSecurityLevel: 2,
   iotaSeed,
-  iotaAddress: 'KENICAJYD9XQEOATSBMWYPZOIICKHENBUKPHN9FZXCYTMDXVFWOSJNCZCFWQGKRIULOWMMYQVGOEQFQLZ', // first address of seed above
 
   apiKey: process.env.IRMA_API_SERVER_KEY ? process.env.IRMA_API_SERVER_KEY : 'FILL_IN',
   irmaApiServerUrl: process.env.IRMA_API_SERVER_URL ? process.env.IRMA_API_SERVER_URL : 'http://localhost:8081/irma_api_server',
