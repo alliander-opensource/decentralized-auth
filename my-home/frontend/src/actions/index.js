@@ -22,7 +22,6 @@ export const RECEIVE_DEVICES = 'update_devices';
 export const REQUEST_EVENTS = 'get_events';
 export const RECEIVE_EVENTS = 'update_events';
 
-export const REQUEST_DELETE_DEVICE = 'request_delete_device';
 export const DEVICE_DELETED = 'device_deleted';
 
 export function requestSession() {
