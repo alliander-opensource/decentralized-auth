@@ -104,6 +104,7 @@ module.exports = class DeviceClient {
   processChallenge(seed, sender, receiver, root, signedChallenge) {
     let message;
     if (this.signedChallenges.isValid(signedChallenge)) {
+      logger.info(`Setting MAM root to ${root}`);
       this.root = root;
       message = { type: CLAIM_RESULT_TYPE, status: 'OK', sender };
     } else {
@@ -178,7 +179,7 @@ module.exports = class DeviceClient {
 
 
   /**
-   * Message handler for the P1 port
+   * Message handler for the P1 port.
    *
    * @function handleP1Message
    * @param {string} P1 telegram
@@ -276,7 +277,7 @@ module.exports = class DeviceClient {
       logger.info('IOTA MAM: No root received (device not paired)');
       return;
     }
-    logger.info(`IOTA MAM: Fetching from root ${this.formatTrytes(this.root)}`);
+    logger.info(`IOTA MAM: Fetching from root ${DeviceClient.formatTrytes(this.root)}`);
     try {
       const { nextRoot, message } = await this.mam.fetchSingle(this.root, mode);
       switch (message.type) {
@@ -303,7 +304,7 @@ module.exports = class DeviceClient {
           logger.error(`Unknown MAM msg type: ${message.type}`);
         }
       }
-      logger.info(`IOTA MAM: Setting root to ${this.formatTrytes(nextRoot)}`);
+      logger.info(`IOTA MAM: Setting root to ${DeviceClient.formatTrytes(nextRoot)}`);
       this.root = nextRoot;
     } catch (err) {
       logger.error(`In processMamMessage: ${err}`);

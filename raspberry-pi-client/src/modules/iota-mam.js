@@ -80,7 +80,7 @@ module.exports = class MamClient {
    * @param {string} sideKey Optional side key
    * @returns {Promise} Contains the root and the messages
    */
-  static fetch(root, mode, sideKey) {
+  fetch(root, mode, sideKey) { // eslint-disable-line class-methods-use-this
     return MAM.fetch(root, mode, sideKey)
       .then(({ nextRoot, messages }) => {
         const jsonMessages = messages.map(m => JSON.parse(fromTrytes(m)));
@@ -101,7 +101,7 @@ module.exports = class MamClient {
    * @param {string} sideKey Optional side key (when mode is 'restricted')
    * @returns {Promise} Contains the root and the parsed message
    */
-  static fetchSingle(root, mode, sideKey) {
+  fetchSingle(root, mode, sideKey) { // eslint-disable-line class-methods-use-this
     return MAM.fetch(root, mode, sideKey)
       .then(({ nextRoot, payload }) => {
         const message = JSON.parse(iota.fromTrytes(payload));
