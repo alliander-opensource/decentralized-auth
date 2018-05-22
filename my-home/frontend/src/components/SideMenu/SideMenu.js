@@ -24,7 +24,7 @@ const SideMenu = () => {
             <ListItem primaryText="My Policies" leftIcon={<IconSocialMood />} />
           </Link>
           <Link to="/events">
-            <ListItem primaryText="MAM Event Stream" leftIcon={<IconActionEvent />} />
+            <ListItem primaryText="My MAM Event Stream" leftIcon={<IconActionEvent />} />
           </Link>
         </List>
       </Paper>
