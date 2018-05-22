@@ -4,7 +4,6 @@
  */
 const logger = require('../src/logger')(module);
 const iota = require('../src/modules/iota');
-const ntru = require('../src/modules/ntru');
 
 
 const CLAIM_DEVICE_TYPE = 'CLAIM_DEVICE';
@@ -72,33 +71,10 @@ function isSuccessfulClaim(claimMessage, deviceAddress) {
 }
 
 
-/**
- * Decrypts mamData in a claim with the privateKey.
- *
- * @function decryptMamData
- * @param {Object} claim Claim result where mamData field is encrypted
- * @param {Buffer} privateKey Private key to decrypt the MAM data with
- * @returns {Promise} With last successful claim, "NOK" or reject "NO RESULT"
- */
-function decryptMamData(claim, privateKey) {
-  const { sideKey, root } = claim.mamData;
-  const decryptedMamData = {
-    sideKey: ntru.decrypt(sideKey, privateKey),
-    root: ntru.decrypt(root, privateKey),
-  };
-
-  const decryptedClaim = claim;
-  decryptedClaim.mamData = decryptedMamData;
-
-  return decryptedClaim;
-}
-
-
 module.exports = {
   claimDevice,
   answerChallenge,
   isSuccessfulClaim,
-  decryptMamData,
   CLAIM_DEVICE_TYPE,
   ANSWER_CHALLENGE_TYPE,
 };
