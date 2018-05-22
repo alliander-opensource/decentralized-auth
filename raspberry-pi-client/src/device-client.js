@@ -271,11 +271,9 @@ module.exports = class DeviceClient {
    */
   async processMamMessage() {
     const mode = 'public';
-    const IS_CLAIMED = (
-      typeof this.root !== 'undefined'
-        || typeof this.myHouseEvents !== 'undefined');
-    if (!IS_CLAIMED) {
-      logger.info('IOTA MAM: No root received');
+    const IS_PAIRED = (typeof this.root !== 'undefined');
+    if (!IS_PAIRED) {
+      logger.info('IOTA MAM: No root received (device not paired)');
       return;
     }
     logger.info(`IOTA MAM: Fetching from root ${this.formatTrytes(this.root)}`);
