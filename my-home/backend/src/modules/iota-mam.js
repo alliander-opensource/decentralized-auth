@@ -1,6 +1,6 @@
 const util = require('util');
 const MAM = require('./../../node_modules/mam.client.js/lib/mam.client.js');
-const { iota, getAddress, toTrytes, fromTrytes } = require('./iota');
+const { iota, toTrytes, fromTrytes } = require('./iota');
 const config = require('../config');
 const logger = require('../logger')(module);
 
