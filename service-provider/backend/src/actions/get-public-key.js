@@ -21,7 +21,7 @@ module.exports = function requestHandler(req, res) {
           message: 'no key pair in session, call api/init first',
         });
     }
-    const publicKey = ntru.toTrytes(keyPairs[sessionId]);
+    const publicKey = ntru.toTrytes(keyPairs[sessionId].public);
     return res
       .status(200)
       .send({
