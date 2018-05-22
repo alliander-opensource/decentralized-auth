@@ -14,13 +14,11 @@ module.exports = function requestHandler(req, res) {
   try {
     const { device, serviceProvider, goal } = req.body;
     const policy = {
-      actorName: serviceProvider.iotaAddress,
-      action: 'read',
-      actee: `${device.type} P1 energy data`,
+      serviceProvider, // actor
+      action: 'read P1 energy data',
+      device, // actee
       goal,
       conditions: [],
-      device,
-      serviceProvider,
     };
     const event = { type: AUTHORIZED_TYPE, policy };
     mam.attach(event);
