@@ -19,6 +19,7 @@ class Events extends Component {
       padding: '10px',
       backgroundColor: '#b3f0ff',
       marginBottom: '10px',
+      'white-space': 'pre',
     };
 
     return (
@@ -40,7 +41,7 @@ class Events extends Component {
                 events.events.map(event => (
                   <div key={event} style={eventContainerStyle}>
                     <Row>
-                      {JSON.stringify(event)}
+                      {JSON.stringify(event, null, '\t')}
                     </Row>
                     <br />
                   </div>
