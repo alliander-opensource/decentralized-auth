@@ -89,10 +89,6 @@ module.exports = class DeviceClient {
     return iota.send(seed, receiver, message);
   }
 
-  static makeMamData(root, sideKey) {
-    return { root, sideKey };
-  }
-
 
   /**
    * Sends claim result to receiver. Claim results includes MAM data when
