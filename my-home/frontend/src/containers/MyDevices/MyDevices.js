@@ -39,25 +39,30 @@ class MyDevices extends Component {
         { devices.isFetching ? <CircularProgress /> : (
           <div>
             {
-              devices.devices.map(device => (
-                <div key={device.iotaAddress} style={deviceContainerStyle}>
-                  <Row>
-                    <Col xs={8}>
-                      {device.type} with IOTA address {device.iotaAddress.substring(0, 10)}...
-                      (added: <Moment format="MM DD YYYY HH:mm" date={device.created_at} />)
-                    </Col>
-                    <Col xs={4} style={{ textAlign: 'right' }}>
-                      <RaisedButton
-                        onClick={() => this.props.deleteDevice(device)}
-                        label="Delete"
-                        primary
-                        disabled={device.isDeleting}
-                        style={{}}
-                      />
-                    </Col>
-                  </Row>
-                </div>
-              ))
+              devices.devices.length === 0 ? (
+                <Row>
+                  No device paired yet.
+                </Row>
+              ) :
+                devices.devices.map(device => (
+                  <div key={device.iotaAddress} style={deviceContainerStyle}>
+                    <Row>
+                      <Col xs={8}>
+                        {device.type} with IOTA address {device.iotaAddress.substring(0, 10)}...
+                        (added: <Moment format="MM DD YYYY HH:mm" date={device.created_at} />)
+                      </Col>
+                      <Col xs={4} style={{ textAlign: 'right' }}>
+                        <RaisedButton
+                          onClick={() => this.props.deleteDevice(device)}
+                          label="Delete"
+                          primary
+                          disabled={device.isDeleting}
+                          style={{}}
+                        />
+                      </Col>
+                    </Row>
+                  </div>
+                ))
             }
           </div>
         )}
