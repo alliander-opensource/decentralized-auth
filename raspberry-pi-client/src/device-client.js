@@ -123,21 +123,21 @@ module.exports = class DeviceClient {
    * Send encrypted MAM data to a service provider.
    *
    * @function sendMamData
-   * @param {string} serviceProviderAddress IOTA address of the service provider
+   * @param {string} address IOTA address of the service provider
    * @param {string} publicKey Public key of the service provider in trytes
    * @returns {Promise}
    */
-  sendMamData(serviceProviderAddress, publicKey) {
+  sendMamData(address, publicKey) {
     const { channel: { side_key, next_root } } = this.mam.getMamState();
     const mamData = {
       root: ntru.encrypt(next_root, publicKey),
       sideKey: ntru.encrypt(side_key, publicKey),
     };
 
-    logger.info(`Provide service provider ${serviceProviderAddress} with MAM data ${mamData}`);
+    logger.info(`Provide service provider ${address} with MAM data ${mamData}`);
 
     const message = { type: MAM_DATA_TYPE, mamData };
-    return iota.send(config.iotaSeed, serviceProviderAddress, message);
+    return iota.send(config.iotaSeed, address, message);
   }
 
 
