@@ -11,7 +11,6 @@ export const RECEIVE_POLICIES = 'update_policies';
 export const REQUEST_ADD_POLICY = 'request_add_policy';
 export const RECEIVE_POLICY = 'receive_policy';
 
-export const REQUEST_DELETE_POLICY = 'request_delete_policy';
 export const POLICY_DELETED = 'policy_deleted';
 
 export const REQUEST_ADD_DEVICE = 'request_add_device';
@@ -191,20 +190,6 @@ export function deauthenticate() {
         withCredentials: true,
       })
       .then(() => dispatch(fetchSession()));
-}
-
-export function requestDeletePolicy(id) {
-  return {
-    type: REQUEST_DELETE_POLICY,
-    id,
-  };
-}
-
-export function requestDeleteDevice(id) {
-  return {
-    type: REQUEST_DELETE_DEVICE,
-    id,
-  };
 }
 
 function policyDeleted(json) {

@@ -13,7 +13,6 @@ import {
   RECEIVE_POLICIES,
   REQUEST_ADD_POLICY,
   RECEIVE_POLICY,
-  REQUEST_DELETE_POLICY,
   POLICY_DELETED,
 
   REQUEST_EVENTS,
@@ -120,11 +119,6 @@ function policies(
         isFetching: false,
         policies: action.policies,
       });
-    case REQUEST_DELETE_POLICY: {
-      const deletingIndex = state.policies.findIndex(p => p === action.id);
-      state.policies[deletingIndex].isDeleting = true; // eslint-disable-line no-param-reassign
-      return state;
-    }
     case POLICY_DELETED: {
       const deletedIndex = state.policies.findIndex(p => p === action.id);
       state.policies.splice(deletedIndex, 1);
