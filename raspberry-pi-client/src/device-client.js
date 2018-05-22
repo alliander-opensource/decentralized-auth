@@ -282,8 +282,8 @@ module.exports = class DeviceClient {
       switch (message.type) {
         case AUTHORIZED_TYPE: {
           const { policy: serviceProvider } = message;
-          this.sendMamData(serviceProvider.iotaAddress, serviceProvider.publicKeyTrytes);
           this.authorizedServiceProviders.add(serviceProvider);
+          this.sendMamData(serviceProvider.iotaAddress, serviceProvider.publicKeyTrytes);
           break;
         }
         case REVOKE_AUTHORIZATION_TYPE: {
