@@ -8,6 +8,7 @@ const ntru = require('./modules/ntru');
 const p1Reader = require('./device-client/p1');
 
 const SignedChallenges = require('./device-client/signed-challenges');
+const ServiceProviders = require('./device-client/service-providers');
 const signing = require('./modules/iota/kerl/signing');
 
 // IOTA message types
@@ -35,6 +36,7 @@ module.exports = class DeviceClient {
     this.sideKey = initialSideKey;
 
     this.signedChallenges = new SignedChallenges();
+    this.authorizedServiceProviders = new ServiceProviders();
     this.seenMessages = new Set(); // To avoid processing same message (below)
 
     this.mam = new MamClient(seed, initialSideKey);
@@ -106,15 +108,9 @@ module.exports = class DeviceClient {
    * @returns {null}
    */
   sendClaimResult(seed, sender, receiver, publicKey, signedChallenge) {
-    const { channel: { side_key, next_root } } = this.mam.getMamState();
-
     let message;
     if (this.signedChallenges.isValid(signedChallenge)) {
-      const mamData = {
-        root: ntru.encrypt(next_root, publicKey),
-        sideKey: ntru.encrypt(side_key, publicKey),
-      };
-      message = { type: CLAIM_RESULT_TYPE, status: 'OK', sender, mamData };
+      message = { type: CLAIM_RESULT_TYPE, status: 'OK', sender };
     } else {
       message = { type: CLAIM_RESULT_TYPE, status: 'NOK', reason: 'Signed challenge invalid' };
     }

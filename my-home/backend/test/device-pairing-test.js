@@ -119,19 +119,10 @@ describe('Pairing of a device using a Device Client started with npm start', () 
           if (!pairing.isSuccessfulClaim(claim, deviceAddress)) {
             throw new Error(`Claim failed with reason ${claim.reason}`);
           }
-          const decryptedClaim = pairing.decryptMamData(claim, myHouseKeyPair.private);
-          return decryptedClaim;
-        })
-        .then((claim) => {
+
           expect(claim).to.have.property('sender');
           expect(claim).to.have.property('status');
           expect(claim.status).to.equal('OK');
-          expect(claim).to.have.property('mamData')
-            .and.to.have.property('sideKey')
-            .and.to.equal(initialSideKey);
-          expect(claim).to.have.property('mamData') // eslint-disable-line jasmine/new-line-before-expect
-            .and.to.have.property('root')
-            .and.to.have.lengthOf(81);
         }));
   });
 });

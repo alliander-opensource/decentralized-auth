@@ -203,6 +203,29 @@
      const seenMessages = new Set(); // mutable set
 
 
+     /**
+      * Decrypts mamData in a claim (by calling the backend).
+      *
+      * @function decryptMamData
+      * @param {Object} mamData Contains encrypted side key and root
+      * @returns {Promise} Decrypted MAM data
+      */
+     async function decryptMamData(mamData) {
+       notify(`Decrypting mamData ${JSON.stringify(mamData)}`);
+
+       const { sideKey, root } = mamData;
+
+       const decryptedMamData = {
+         sideKey: await decrypt(sideKey, privateKey),
+         root: await decrypt(root, privateKey),
+       };
+
+       notify(`Decrypted MAM data ${JSON.stringify(decryptedMamData)}`);
+
+       return decryptedMamData;
+     }
+
+
      const setMamData = (mamData) => {
        notify(`IOTA MAM: Setting root to ${formatTrytes(mamData.root)}`);
        setRoot(mamData.root);
@@ -246,7 +269,8 @@
          switch (msg.type) {
            case MAM_DATA_MESSAGE_TYPE:
            {
-             return setMamData(msg.mamData);
+             const decryptedMamData = await decryptMamData(msg.mamData);
+             return setMamData(decryptedMamData);
            }
            default:
            {

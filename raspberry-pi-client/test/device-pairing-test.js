@@ -147,18 +147,9 @@ describe('Pairing of a device by calling methods on DeviceClient', () => {
       if (!pairingMock.isSuccessfulClaim(claim, deviceAddress)) {
         throw new Error(`Claim failed with reason ${claim.reason}`);
       }
-      const decryptedClaim = pairingMock.decryptMamData(claim, myHouseKeyPair.private);
 
-      expect(decryptedClaim).to.have.property('sender');
-      expect(decryptedClaim).to.have.property('status');
-      expect(decryptedClaim.status).to.equal('OK');
-
-      expect(decryptedClaim).to.have.property('mamData')
-        .and.to.have.property('sideKey')
-        .and.to.equal('BANANA');
-
-      expect(decryptedClaim).to.have.property('mamData')
-        .and.to.have.property('root')
-        .and.to.have.lengthOf(81);
+      expect(claim).to.have.property('sender');
+      expect(claim).to.have.property('status');
+      expect(claim.status).to.equal('OK');
     }));
 });
