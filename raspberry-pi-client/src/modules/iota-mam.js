@@ -98,7 +98,7 @@ module.exports = class MamClient {
    */
   async fetchSingle(root, mode, sideKey) { // eslint-disable-line class-methods-use-this
     const { nextRoot, payload } = await MAM.fetch(root, mode, sideKey);
-    const message = JSON.parse(iota.fromTrytes(payload));
+    const message = JSON.parse(fromTrytes(payload));
     return { nextRoot, message };
   }
 };
