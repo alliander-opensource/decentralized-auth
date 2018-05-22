@@ -6,9 +6,6 @@ const cookieParser = require('cookie-parser');
 const cookieEncrypter = require('cookie-encrypter');
 const simpleSession = require('./modules/simple-session');
 const config = require('./config');
-const ntru = require('./modules/ntru');
-
-config.ntruKeyPair = ntru.createKeyPair(config.iotaSeed);
 
 const app = express();
 app.use(cors({ origin: /.*wattt.nl$/, credentials: true }));
