@@ -19,8 +19,8 @@ const ANSWER_CHALLENGE_TYPE = 'ANSWER_CHALLENGE';
 const MAM_DATA_TYPE = 'MAM_DATA';
 
 // MAM message types
-const AUTHORIZED_TYPE = 'AUTHORIZE';
-const REVOKE_AUTHORIZATION_TYPE = 'REVOKE_AUTHORIZATION';
+const AUTHORIZED_TYPE = 'AUTHORIZED';
+const AUTHORIZATION_REVOKED_TYPE = 'AUTHORIZATION_REVOKED';
 const DATA_MESSAGE_TYPE = 'DATA';
 const KEY_ROTATION_TYPE = 'KEY_ROTATION';
 
@@ -294,10 +294,10 @@ module.exports = class DeviceClient {
           this.sendMamData(serviceProvider.iotaAddress, serviceProvider.publicKeyTrytes);
           break;
         }
-        case REVOKE_AUTHORIZATION_TYPE: {
           const sideKeys = ['HUMMUS', 'SWEETPOTATO', 'FRIES'];
           const randomIndex = Math.floor(Math.random() * sideKeys.length);
           const newSideKey = sideKeys[randomIndex];
+        case AUTHORIZATION_REVOKED_TYPE: {
           this.authorizedServiceProviders.remove(message.serviceProvider);
           this.informUpdateSideKey(
             this.authorizedServiceProviders,
