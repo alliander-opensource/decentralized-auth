@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Row, Col } from 'react-flexbox-grid';
+import uuid from 'uuid';
 import CircularProgress from 'material-ui/CircularProgress';
 
 import { getEvents } from '../../actions';
@@ -39,7 +40,7 @@ class Events extends Component {
                 </Row>
               ) :
                 events.events.map(event => (
-                  <div key={event} style={eventContainerStyle}>
+                  <div key={uuid()} style={eventContainerStyle}>
                     <Row>
                       {JSON.stringify(event, null, '\t')}
                     </Row>
