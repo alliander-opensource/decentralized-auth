@@ -47,7 +47,6 @@ app.post('/api/device/delete', require('./modules/device/delete-device'));
 app.post('/api/policy/new', require('./modules/policy/add-policy'));
 app.get('/api/policy/all', require('./modules/policy/get-all-policies'));
 app.delete('/api/policy', require('./modules/policy/revoke-policy')); // TODO
-app.get('/api/policy/by-sp', require('./modules/policy/get-all-policies-by-sp'));
 app.post('/api/policy/get-message-for-policy', require('./modules/policy/get-message-for-policy'));
 
 const server = app.listen(config.port, () => {
