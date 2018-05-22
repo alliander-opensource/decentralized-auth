@@ -56,7 +56,7 @@ class NewPolicyPage extends Component {
           <div>
             {
               devices.devices.map(device => (
-                <div key={device.id} style={deviceContainerStyle}>
+                <div key={device} style={deviceContainerStyle}>
                   <Row>
                     <Col xs={8}>
                       {device.type} with IOTA address {this.formatAddress(device.iotaAddress)}...
