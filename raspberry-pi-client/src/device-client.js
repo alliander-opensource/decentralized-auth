@@ -300,7 +300,7 @@ module.exports = class DeviceClient {
           break;
         }
         default: {
-          throw new Error(`Unknown MAM msg type: ${message.type}`);
+          logger.error(`Unknown MAM msg type: ${message.type}`);
         }
       }
       logger.info(`IOTA MAM: Setting root to ${this.formatTrytes(nextRoot)}`);
