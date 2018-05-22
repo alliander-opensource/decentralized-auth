@@ -31,11 +31,11 @@ module.exports = class ServiceProviders {
 
   /*
    * Get all authorized service providers
-   * @function all
+   * @function getAll
    *
    * @returns {array} Authorized service providers
    */
-  all() {
+  getAll() {
     return Array.from(this.db).map(JSON.parse);
   }
 };

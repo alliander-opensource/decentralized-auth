@@ -304,7 +304,7 @@ module.exports = class DeviceClient {
     const newSideKey = DeviceClient.createSideKey();
     this.authorizedServiceProviders.remove(message.policy.serviceProvider);
     this.informUpdateSideKey(
-      this.authorizedServiceProviders,
+      this.authorizedServiceProviders.getAll(),
       newSideKey,
     )
       .then(() => this.mam.changeSideKey(newSideKey))
