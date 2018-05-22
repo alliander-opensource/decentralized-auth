@@ -39,23 +39,23 @@ describe('Pairing of a device using a Device Client started with npm start', () 
   });
 
   describe('myHouse.claimDevice', () => {
-    it('should send a claim message to a device', () =>
-      pairing.claimDevice(
+    it('should send a claim message to a device', async () => {
+      const transactions = await pairing.claimDevice(
         myHouseSeed,
         myHouseAddress,
         myHouseRoot,
         deviceAddress,
-      )
-        .then(transactions =>
+      );
 
-          expect(transactions).to.be.an('array')));
+      expect(transactions).to.be.an('array');
+    });
   });
 
   describe('myHouse.answerChallenge', () => {
     let testChallenge;
 
-    it('should be able to retrieve a challenge', () =>
-      PromiseRetryer.run({
+    it('should be able to retrieve a challenge', async () => {
+      const message = await PromiseRetryer.run({
         delay: WAIT_TIME_MS,
         maxRetries: MAX_RETRIES,
         promise: () => iota.getLastMessage({ addresses: [myHouseAddress] }),
@@ -66,14 +66,11 @@ describe('Pairing of a device using a Device Client started with npm start', () 
             }
             return reject(new Error('Response was not a challenge'));
           }),
-      })
-        .then((message) => {
-          testChallenge = message.challenge;
-          return message;
-        })
-        .then(message =>
+      });
+      testChallenge = message.challenge;
 
-          expect(message).to.have.property('challenge')));
+      expect(message).to.have.property('challenge');
+    });
 
     let testSignedChallenge = '';
 
@@ -86,23 +83,22 @@ describe('Pairing of a device using a Device Client started with npm start', () 
       testSignedChallenge = signedChallenge;
     });
 
-    it('should be able to answer a challenge', () => {
-      pairing.answerChallenge(
+    it('should be able to answer a challenge', async () => {
+      const transactions = await pairing.answerChallenge(
         myHouseSeed,
         myHouseAddress,
         ntru.toTrytes(myHouseKeyPair.public),
         deviceAddress,
         testSignedChallenge,
-      )
-        .then(transactions =>
+      );
 
-          expect(transactions).to.be.an('array'));
+      expect(transactions).to.be.an('array');
     });
   });
 
   describe('myHouse.retrieveClaim', () => {
-    it('should be able to retrieve the successful claim result', () =>
-      PromiseRetryer.run({
+    it('should be able to retrieve the successful claim result', async () => {
+      const claim = await PromiseRetryer.run({
         delay: WAIT_TIME_MS,
         maxRetries: MAX_RETRIES,
         promise: () => iota.getLastMessage({ addresses: [myHouseAddress] }),
@@ -114,15 +110,14 @@ describe('Pairing of a device using a Device Client started with npm start', () 
               reject(new Error('Response was not a claim result'));
             }
           }),
-      })
-        .then((claim) => {
-          if (!pairing.isSuccessfulClaim(claim, deviceAddress)) {
-            throw new Error(`Claim failed with reason ${claim.reason}`);
-          }
+      });
+      if (!pairing.isSuccessfulClaim(claim, deviceAddress)) {
+        throw new Error(`Claim failed with reason ${claim.reason}`);
+      }
 
-          expect(claim).to.have.property('sender');
-          expect(claim).to.have.property('status');
-          expect(claim.status).to.equal('OK');
-        }));
+      expect(claim).to.have.property('sender');
+      expect(claim).to.have.property('status');
+      expect(claim.status).to.equal('OK');
+    });
   });
 });
