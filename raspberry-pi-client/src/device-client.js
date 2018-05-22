@@ -279,10 +279,17 @@ module.exports = class DeviceClient {
     }
     logger.info(`IOTA MAM: Fetching from root ${DeviceClient.formatTrytes(this.root)}`);
     try {
-      const { nextRoot, message } = await this.mam.fetchSingle(this.root, mode);
+      const res = await this.mam.fetchSingle(this.root, mode);
+      if (typeof res === 'undefined') {
+        // no message, you can try again later, keep root
+        logger.info(`No new MAM message`);
+        return;
+      }
+      const { nextRoot, message } = res;
       switch (message.type) {
         case AUTHORIZED_TYPE: {
           const { policy: serviceProvider } = message;
+          logger.info(`Authorizing service provider ${JSON.stringify(serviceProvider)}`);
           this.authorizedServiceProviders.add(serviceProvider);
           this.sendMamData(serviceProvider.iotaAddress, serviceProvider.publicKeyTrytes);
           break;
@@ -301,7 +308,7 @@ module.exports = class DeviceClient {
           break;
         }
         default: {
-          logger.error(`Unknown MAM msg type: ${message.type}`);
+          logger.info(`Unknown MAM msg type: ${message.type}`);
         }
       }
       logger.info(`IOTA MAM: Setting root to ${DeviceClient.formatTrytes(nextRoot)}`);

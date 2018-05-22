@@ -48,7 +48,7 @@ function attach(packet) {
   setMamState(state);
   return MAM.attach(payload, address, config.iotaDepth, config.iotaMinWeightMagnitude)
     .then(() => {
-      logger.info(`Successfully attached to tangle at address ${address} and root ${root}.`);
+      logger.info(`Successfully attached to Tangle at address ${address} and root ${root}.`);
       return root;
     })
     .catch(logger.error);

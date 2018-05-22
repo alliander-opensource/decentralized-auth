@@ -64,7 +64,7 @@ module.exports = class MamClient {
     this.setMamState(state);
     return MAM.attach(payload, address, config.iotaDepth, config.iotaMinWeightMagnitude)
       .then(() => {
-        logger.info(`Successfully attached to tangle at address ${address} and root ${root}.`);
+        logger.info(`Successfully attached to Tangle at address ${address} and root ${root}.`);
         return root;
       })
       .catch(logger.error);
@@ -94,10 +94,13 @@ module.exports = class MamClient {
    * @param {string} root Root from where to fetch
    * @param {string} mode Either 'public' or 'private' or 'restricted'
    * @param {string} sideKey Optional side key (when mode is 'restricted')
-   * @returns {Promise} Contains the root and the parsed message
+   * @returns {Promise} Contains the root and the parsed message or null
    */
   async fetchSingle(root, mode, sideKey) { // eslint-disable-line class-methods-use-this
-    const { nextRoot, payload } = await MAM.fetch(root, mode, sideKey);
+    const res = await MAM.fetchSingle(root, mode, sideKey);
+    if (typeof res === 'undefined') return res; // No message
+    const { nextRoot, payload } = res;
+    logger.info(`Received nextRoot ${nextRoot} and payload ${payload}`);
     const message = JSON.parse(fromTrytes(payload));
     return { nextRoot, message };
   }
