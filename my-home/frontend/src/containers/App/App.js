@@ -64,7 +64,7 @@ class App extends Component {
       <BrowserRouter>
         <div>
           <AppBar
-            title={<Link to="/" style={{ color: 'white' }}>My Home</Link>}
+            title={<Link to="/" style={{ color: 'white' }}>My IOTA Home</Link>}
             iconElementRight={<RightMenu />}
           />
           <Grid fluid>
