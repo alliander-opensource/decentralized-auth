@@ -3,7 +3,7 @@ import React from 'react';
 const Home = () => (
   <div style={{ padding: '20px' }}>
     <h2>My Home</h2>
-    This application works with one IOTA seed. It's backend is a public MAM
+    This application works with one IOTA seed. It&apos;s backend is a public MAM
     stream on this seed.
     <br />
     <br />
