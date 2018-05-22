@@ -281,6 +281,36 @@ module.exports = class DeviceClient {
   static formatTrytes(trytes) { return `${trytes.slice(0, 10)}...`; }
 
 
+  /*
+   * Process MAM message for added authorization.
+   * @param message {Object} MAM message of type {@link AUTHORIZED_TYPE}.
+   * @returns {undefined}
+   */
+  processAuthorizedMessage(message) {
+    const { policy: serviceProvider } = message;
+    logger.info(`Authorizing service provider ${JSON.stringify(serviceProvider)}`);
+    this.authorizedServiceProviders.add(serviceProvider);
+    this.sendMamData(serviceProvider.iotaAddress, serviceProvider.publicKeyTrytes);
+  }
+
+
+  /*
+   * Process MAM message revoked: authorization
+   * @param message {Object} MAM message of type {@link AUTHORIZATION_REVOKED_TYPE}.
+   * @returns {undefined}
+   */
+  processAuthorizationRevokedMessage(message) {
+    const newSideKey = DeviceClient.createSideKey();
+    this.authorizedServiceProviders.remove(message.serviceProvider);
+    this.informUpdateSideKey(
+      this.authorizedServiceProviders,
+      newSideKey,
+    )
+      .then(() => this.mam.changeSideKey(newSideKey))
+      .catch(err => logger.error(`processAuthorizationRevokedMessage failed: ${err}`));
+  }
+
+
   /**
    * Retrieves and processes MAM messages by dispatching the type of message to
    * its handler.
@@ -306,21 +336,11 @@ module.exports = class DeviceClient {
       const { nextRoot, message } = res;
       switch (message.type) {
         case AUTHORIZED_TYPE: {
-          const { policy: serviceProvider } = message;
-          logger.info(`Authorizing service provider ${JSON.stringify(serviceProvider)}`);
-          this.authorizedServiceProviders.add(serviceProvider);
-          this.sendMamData(serviceProvider.iotaAddress, serviceProvider.publicKeyTrytes);
+          this.processAuthorizedMessage(message);
           break;
         }
         case AUTHORIZATION_REVOKED_TYPE: {
-          const newSideKey = DeviceClient.createSideKey();
-          this.authorizedServiceProviders.remove(message.serviceProvider);
-          this.informUpdateSideKey(
-            this.authorizedServiceProviders,
-            newSideKey,
-          )
-            .then(() => this.mam.changeSideKey(newSideKey))
-            .catch(err => logger.error(`changeSideKey failed: ${err}`));
+          this.processAuthorizationRevokedMessage(message);
           break;
         }
         default: {
