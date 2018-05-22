@@ -10,7 +10,7 @@ const AUTHORIZED_TYPE = 'AUTHORIZED';
  * @param {object} res Express response object
  * @returns {undefined}
  */
-module.exports = function requestHandler(req, res) {
+module.exports = async function requestHandler(req, res) {
   try {
     const { device, serviceProvider, goal } = req.body;
     const policy = {
@@ -21,7 +21,7 @@ module.exports = function requestHandler(req, res) {
       conditions: [],
     };
     const event = { type: AUTHORIZED_TYPE, policy };
-    mam.attach(event);
+    await mam.attach(event);
     return res
       .status(200)
       .send({
