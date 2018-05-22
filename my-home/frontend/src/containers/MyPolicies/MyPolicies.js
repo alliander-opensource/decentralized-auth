@@ -6,6 +6,7 @@ import { Row, Col } from 'react-flexbox-grid';
 import Moment from 'react-moment';
 import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
+import uuid from 'uuid';
 
 import { getPolicies, deletePolicy } from '../../actions';
 
@@ -43,7 +44,7 @@ class MyPolicies extends Component {
                 </Row>
               ) :
                 policies.policies.map(policy => (
-                  <div key={policy.id} style={policyContainerStyle}>
+                  <div key={uuid()} style={policyContainerStyle}>
                     <Row>
                       <Col xs={1} sm={2} md={2} lg={2}> { policy.serviceProvider.url } </Col>
                       <Col xs={11} sm={10} md={10} lg={10}> { policy.message }</Col>
