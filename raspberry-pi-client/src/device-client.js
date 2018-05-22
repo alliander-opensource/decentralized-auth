@@ -302,7 +302,7 @@ module.exports = class DeviceClient {
    */
   processAuthorizationRevokedMessage(message) {
     const newSideKey = DeviceClient.createSideKey();
-    this.authorizedServiceProviders.remove(message.serviceProvider);
+    this.authorizedServiceProviders.remove(message.policy.serviceProvider);
     this.informUpdateSideKey(
       this.authorizedServiceProviders,
       newSideKey,
