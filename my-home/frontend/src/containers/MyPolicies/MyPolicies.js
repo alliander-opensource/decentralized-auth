@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -37,8 +38,9 @@ class MyPolicies extends Component {
               policies.policies.length === 0 ? (
                 <Row>
                   No policies yet.
-                  <br />
-                  Go to a service provider to request access.
+                  Go to a service provider like&nbsp;
+                  <a href="http://www.wattt.nl">Wattt P1 Insights</a>
+                  &nbsp;to request access.
                 </Row>
               ) :
                 policies.policies.map(policy => (
