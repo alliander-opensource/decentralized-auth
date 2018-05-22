@@ -98,8 +98,6 @@ NewPolicyPage.propTypes = {
       device: PropTypes.object,
       iotaAddress: PropTypes.string,
       type: PropTypes.string,
-      mamRoot: PropTypes.string,
-      mamSideKey: PropTypes.string,
     })).isRequired,
   }),
 };
