@@ -250,8 +250,8 @@
        const { sideKey, root } = mamData;
 
        const decryptedMamData = {
-         sideKey: await decrypt(sideKey),
          root: await decrypt(root),
+         sideKey: await decrypt(sideKey),
        };
 
        notify(`Decrypted MAM data ${JSON.stringify(decryptedMamData)}`);
@@ -403,7 +403,14 @@
        notify(`IOTA MAM: Fetching from root ${formatTrytes(root)} with side key ${sideKey}`);
 
        try {
-         const { nextRoot, payload } = await Mam.fetchSingle(root, mode, sideKey);
+         const res = await Mam.fetchSingle(root, mode, sideKey);
+
+         if (typeof res === 'undefined') {
+           console.log('IOTA MAM: No new message');
+           return;
+         }
+
+         const { nextRoot, payload } = res;
          const jsonMessage = JSON.parse(fromTrytes(payload));
 
          switch (jsonMessage.type) {
