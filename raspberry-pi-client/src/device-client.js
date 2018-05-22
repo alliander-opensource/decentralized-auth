@@ -287,7 +287,7 @@ module.exports = class DeviceClient {
    * @returns {undefined}
    */
   processAuthorizedMessage(message) {
-    const { policy: serviceProvider } = message;
+    const { serviceProvider } = message.policy;
     logger.info(`Authorizing service provider ${JSON.stringify(serviceProvider)}`);
     this.authorizedServiceProviders.add(serviceProvider);
     this.sendMamData(serviceProvider.iotaAddress, serviceProvider.publicKeyTrytes);
