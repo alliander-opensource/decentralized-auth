@@ -50,12 +50,12 @@
      const KEY_ROTATION_MESSAGE_TYPE = 'KEY_ROTATION';
 
      const createOrResetSession = async () => await axios.get(
-       'http://localhost:4000/api/deauthenticate',
+       'http://localhost:5000/api/deauthenticate',
        { withCredentials: true },
      );
 
      const initNtru = async () => await axios.get(
-       'http://localhost:4000/api/init',
+       'http://localhost:5000/api/init',
        { withCredentials: true },
      );
 
@@ -64,7 +64,7 @@
        try {
          if (typeof addressCache !== 'undefined') return addressCache;
          const res = await axios.get(
-           'http://localhost:4000/api/get-address',
+           'http://localhost:5000/api/get-address',
            { withCredentials: true },
          );
          const address= res.data.message;
@@ -79,7 +79,7 @@
      const getPublicKeyTrytes = async () => {
        try {
          const res = await axios.get(
-           'http://localhost:4000/api/get-public-key',
+           'http://localhost:5000/api/get-public-key',
            { withCredentials: true },
          );
          const publicKeyTrytes= res.data.message;
@@ -93,7 +93,7 @@
      const decrypt = async (trytes) => {
        try {
          const res = await axios.get(
-           `http://localhost:4000/api/decrypt?trytes=${trytes}`,
+           `http://localhost:5000/api/decrypt?trytes=${trytes}`,
            { withCredentials: true },
          );
          const decrypted = res.data.message;
