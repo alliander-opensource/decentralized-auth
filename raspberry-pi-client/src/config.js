@@ -8,7 +8,7 @@ const config = {
   iotaDepth: 6,
 
   seed: process.env.SEED ? process.env.SEED : 'TLQPEYBND9AFCHFDLCWSVQU9ISCDTBKUQSLXEEUXFHVDEEQZZJPCBPBJ9QSVFBXUJXTIFBMTQSLVUFYTH',
-  secret: 'APPLE',
+  secret: 'PEAR',
   initialSideKey: 'BANANA',
 };
 

@@ -12,7 +12,7 @@ class NewDevicePage extends Component {
     super(props);
     this.state = {
       iotaAddress: 'FODEYEQHYCWYTDEDWZLPCLRDIU9RFKU9AFQSEOR9RSGEPDGQBGMYXIQCENBDGYFFS9AJK9GJJZJGEUEW9',
-      secret: 'APPLE',
+      secret: 'PEAR',
     };
 
     // Prevent ECMAscript not binding this (which we need for setState)

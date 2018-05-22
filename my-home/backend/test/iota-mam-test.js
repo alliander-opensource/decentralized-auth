@@ -16,7 +16,7 @@ describe('MAM', () => {
   });
 
   const message1 = { type: 'BANANA' };
-  const message2 = { type: 'APPLE' };
+  const message2 = { type: 'PEAR' };
 
   let testRoot1 = '';
   let testRoot2 = '';

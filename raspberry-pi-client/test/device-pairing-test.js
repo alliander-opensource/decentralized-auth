@@ -10,7 +10,7 @@ describe('Pairing of a device by calling methods on DeviceClient', () => {
   const myHouseSeed = generateSeedForTestingPurposes();
   const myHouseRoot = '';
   const deviceSeed = generateSeedForTestingPurposes();
-  const deviceSecret = 'APPLE';
+  const deviceSecret = 'PEAR';
   const initialSideKey = 'BANANA';
 
   let myHouseAddress;

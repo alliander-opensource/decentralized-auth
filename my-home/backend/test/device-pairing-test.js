@@ -9,7 +9,7 @@ const PromiseRetryer = require('promise-retryer')(Promise);
 describe('Pairing of a device using a Device Client started with npm start', () => {
   const myHouseSeed = generateSeedForTestingPurposes();
   const deviceSeed = generateSeedForTestingPurposes();
-  const deviceSecret = 'APPLE';
+  const deviceSecret = 'PEAR';
 
   // We will need to wait on the Device to have processed the messages we send
   const WAIT_TIME_MS = 5000;
