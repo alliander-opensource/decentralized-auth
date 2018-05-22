@@ -27,9 +27,6 @@ const KEY_ROTATION_TYPE = 'KEY_ROTATION';
 const CHECK_MESSAGE_INTERVAL_MS = 10000;
 
 
-// TODO: LISTEN TO AUTHORIZED AND AUTHORIZATION_REVOKED EVENTS
-
-
 module.exports = class DeviceClient {
   constructor(seed, sharedSecret, initialSideKey) {
     this.seed = seed;
@@ -92,18 +89,19 @@ module.exports = class DeviceClient {
 
 
   /**
-   * Sends claim result to receiver. Claim results includes MAM data when
-   * returned signed data is valid.
+   * Sends claim result to receiver. If signed challenge is valid, starts
+   * listening to the root
    *
-   * @function sendClaimResult
+   * @function processChallenge
    * @param {string} seed Our IOTA seed
    * @param {string} sender Our IOTA address
    * @param {string} receiver IOTA address of receiver of successful claim
+   * @param {string} root MAM Root of the sender we will start listening to
    * @param {string} signedChallenge Signed challenge send by sender
    * @param {string} status 'OK' or 'NOK'
    * @returns {null}
    */
-  sendClaimResult(seed, sender, receiver, signedChallenge) {
+  processChallenge(seed, sender, receiver, root, signedChallenge) {
     let message;
     if (this.signedChallenges.isValid(signedChallenge)) {
       this.root = root;
@@ -243,7 +241,7 @@ module.exports = class DeviceClient {
             );
           }
           case ANSWER_CHALLENGE_TYPE: {
-            return this.sendClaimResult(
+            return this.processChallenge(
               this.seed,
               address,
               msg.sender,
@@ -329,7 +327,7 @@ module.exports = class DeviceClient {
 
     p1Reader.tryInitP1(telegram => this.handleP1Message(telegram));
 
-    // Keep checking periodically
     setInterval(() => this.processIotaMessage(address), intervalMs);
+    setInterval(() => this.processMamMessage(), intervalMs);
   }
 };
