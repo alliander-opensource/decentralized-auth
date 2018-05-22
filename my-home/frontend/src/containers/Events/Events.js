@@ -19,7 +19,7 @@ class Events extends Component {
       padding: '10px',
       backgroundColor: '#b3f0ff',
       marginBottom: '10px',
-      'white-space': 'pre',
+      whiteSpace: 'pre',
     };
 
     return (
