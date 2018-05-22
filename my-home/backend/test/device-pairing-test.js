@@ -11,7 +11,6 @@ describe('Pairing of a device using a Device Client started with npm start', () 
   const myHouseSeed = generateSeedForTestingPurposes();
   const deviceSeed = generateSeedForTestingPurposes();
   const deviceSecret = 'APPLE';
-  const initialSideKey = 'BANANA';
 
   // We will need to wait on the Device to have processed the messages we send
   const WAIT_TIME_MS = 5000;
