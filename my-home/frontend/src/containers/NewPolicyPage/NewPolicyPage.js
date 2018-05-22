@@ -17,7 +17,7 @@ class NewPolicyPage extends Component {
   componentWillReceiveProps(nextProps) {
     if (this.props.policy.isFetching && !nextProps.policy.isFetching) {
       const { policy } = nextProps;
-      window.location = policy.serviceProvider.url;
+      window.location = policy.policy.serviceProvider.url;
     }
   }
 
