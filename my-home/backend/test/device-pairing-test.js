@@ -16,7 +16,6 @@ describe('Pairing of a device using a Device Client started with npm start', () 
   const WAIT_TIME_MS = 5000;
   const MAX_RETRIES = 50;
 
-  const myHouseKeyPair = ntru.createKeyPair(myHouseSeed);
 
   let myHouseAddress;
   const myHouseRoot = '';
@@ -86,7 +85,6 @@ describe('Pairing of a device using a Device Client started with npm start', () 
       const transactions = await pairing.answerChallenge(
         myHouseSeed,
         myHouseAddress,
-        ntru.toTrytes(myHouseKeyPair.public),
         deviceAddress,
         testSignedChallenge,
       );

@@ -29,24 +29,21 @@ function claimDevice(seed, sender, root, deviceAddress) {
 /**
  * Answer a challenge of a device with the message signed with the key on the
  * device. Result can be found via {@link iota.getLastMessage} and searching for
- * the {@link CLAIM_RESULT_TYPE}. Send public key along because when claim
- * status is OK response will contain MAM data encrypted with the public key.
+ * the {@link CLAIM_RESULT_TYPE}.
  *
  * @function answerChallenge
  * @param {string} seed IOTA seed of the sender
  * @param {string} sender IOTA address of the sender
- * @param {string} publicKey Tryte encoded public key of sender
  * @param {string} deviceAddress IOTA address of the receiving device
  * @param {string} signedChallenge Signed challenge of the device
  * @returns {Promise}
  */
-function answerChallenge(seed, sender, publicKey, deviceAddress, signedChallenge) {
+function answerChallenge(seed, sender, deviceAddress, signedChallenge) {
   logger.info(`Answering challenge of ${deviceAddress}`);
 
   const message = {
     type: ANSWER_CHALLENGE_TYPE,
     sender,
-    publicKey,
     signedChallenge,
   };
   return iota.send(seed, deviceAddress, message);

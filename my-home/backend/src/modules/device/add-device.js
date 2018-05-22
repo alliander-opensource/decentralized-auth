@@ -58,7 +58,6 @@ module.exports = async function requestHandler(req, res) {
     pairing.answerChallenge(
       config.iotaSeed,
       config.iotaAddress,
-      ntru.toTrytes(config.ntruKeyPair.public),
       device.iotaAddress,
       signedChallenge,
     );

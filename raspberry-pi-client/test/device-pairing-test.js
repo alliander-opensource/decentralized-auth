@@ -11,7 +11,6 @@ describe('Pairing of a device by calling methods on DeviceClient', () => {
   const deviceSeed = generateSeedForTestingPurposes();
   const deviceSecret = 'APPLE';
   const initialSideKey = 'BANANA';
-  const myHouseKeyPair = ntru.createKeyPair(myHouseSeed);
 
   let myHouseAddress;
   let deviceClient;
@@ -94,7 +93,6 @@ describe('Pairing of a device by calling methods on DeviceClient', () => {
       const transactions = await pairingMock.answerChallenge(
         myHouseSeed,
         myHouseAddress,
-        ntru.toTrytes(myHouseKeyPair.public),
         deviceAddress,
         testSignedChallenge,
       );
@@ -127,7 +125,6 @@ describe('Pairing of a device by calling methods on DeviceClient', () => {
         deviceSeed,
         deviceAddress,
         testSender,
-        ntru.toTrytes(myHouseKeyPair.public),
         testSignedChallenge,
       );
 

@@ -102,12 +102,11 @@ module.exports = class DeviceClient {
    * @param {string} seed Our IOTA seed
    * @param {string} sender Our IOTA address
    * @param {string} receiver IOTA address of receiver of successful claim
-   * @param {string} publicKey Tryte encoded public key of receiver
    * @param {string} signedChallenge Signed challenge send by sender
    * @param {string} status 'OK' or 'NOK'
    * @returns {null}
    */
-  sendClaimResult(seed, sender, receiver, publicKey, signedChallenge) {
+  sendClaimResult(seed, sender, receiver, signedChallenge) {
     let message;
     if (this.signedChallenges.isValid(signedChallenge)) {
       message = { type: CLAIM_RESULT_TYPE, status: 'OK', sender };
@@ -254,7 +253,6 @@ module.exports = class DeviceClient {
               this.seed,
               address,
               msg.sender,
-              msg.publicKey,
               msg.signedChallenge,
             );
           }
