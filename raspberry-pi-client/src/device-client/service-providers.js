@@ -18,13 +18,13 @@ module.exports = class ServiceProviders {
   }
 
   add(serviceProvider) {
-    logger.info(`Adding authorized service provider ${serviceProvider}`);
+    logger.info(`Adding authorized service provider ${serviceProvider.url}`);
     this.db.add(JSON.stringify(serviceProvider));
   }
 
 
   remove(serviceProvider) {
-    logger.info(`Removing authorized service ${serviceProvider}}`);
+    logger.info(`Removing authorized service ${serviceProvider.url}}`);
     this.db.delete(JSON.stringify(serviceProvider));
   }
 
