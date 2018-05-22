@@ -55,6 +55,12 @@
      const WATT_SESSION_COOKIE_NAME = 'wattt-session';
      const getSessionId = () => Cookies.get(WATT_SESSION_COOKIE_NAME);
 
+     /*
+      * Initializes a seed and NTRU session on the backend and sets a session
+      * cookie if not yet set
+      * @function initNtruSession
+      * @returns {undefined}
+      */
      const initNtruSession = async () => {
        if (typeof Cookies.get(WATT_SESSION_COOKIE_NAME) === 'undefined') {
          const sessionId = uuidv4();
@@ -67,6 +73,12 @@
 
 
      let addressCache;
+
+     /*
+      * Gets IOTA address from the backend.
+      * @function getAddress
+      * @returns {string} IOTA address
+      */
      const getAddress = async () => {
        try {
          if (typeof addressCache !== 'undefined') return addressCache;
@@ -83,6 +95,12 @@
        }
      }
 
+
+     /*
+      * Gets tryte representation of NTRU public key from the back end.
+      * @function getPublicKeyTrytes
+      * @returns {string} Public key in trytes
+      */
      const getPublicKeyTrytes = async () => {
        try {
          const res = await axios.get(
@@ -97,6 +115,13 @@
        }
      }
 
+
+     /*
+      * Decrypts the trytes on the backend.
+      * @function decrypt
+      * @param {string} Trytes to decrypt
+      * @returns {string}
+      */
      const decrypt = async (trytes) => {
        try {
          const res = await axios.get(
