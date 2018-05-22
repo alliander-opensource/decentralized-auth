@@ -53,22 +53,25 @@
      const KEY_ROTATION_MESSAGE_TYPE = 'KEY_ROTATION';
 
      const WATT_SESSION_COOKIE_NAME = 'wattt-session';
+     const getSessionId = () => Cookies.get(WATT_SESSION_COOKIE_NAME);
+
      const initNtruSession = async () => {
        if (typeof Cookies.get(WATT_SESSION_COOKIE_NAME) === 'undefined') {
          const sessionId = uuidv4();
          Cookies.set(WATT_SESSION_COOKIE_NAME, sessionId);
        }
        await axios.get(
-         `http://localhost:5000/api/init/${Cookies.get(WATT_SESSION_COOKIE_NAME)}`,
+         `http://localhost:5000/api/init/${getSessionId()}`,
        );
      }
+
 
      let addressCache;
      const getAddress = async () => {
        try {
          if (typeof addressCache !== 'undefined') return addressCache;
          const res = await axios.get(
-           `http://localhost:5000/api/get-address/${Cookies.get(WATT_SESSION_COOKIE_NAME)}`,
+           `http://localhost:5000/api/get-address/${getSessionId()}`,
            { withCredentials: true },
          );
          const address= res.data.message;
@@ -83,7 +86,7 @@
      const getPublicKeyTrytes = async () => {
        try {
          const res = await axios.get(
-           `http://localhost:5000/api/get-public-key/${Cookies.get(WATT_SESSION_COOKIE_NAME)}`,
+           `http://localhost:5000/api/get-public-key/${getSessionId()}`,
            { withCredentials: true },
          );
          const publicKeyTrytes= res.data.message;
@@ -97,7 +100,7 @@
      const decrypt = async (trytes) => {
        try {
          const res = await axios.get(
-           `http://localhost:5000/api/decrypt/${Cookies.get(WATT_SESSION_COOKIE_NAME)}?trytes=${trytes}`,
+           `http://localhost:5000/api/decrypt/${getSessionId()}?trytes=${trytes}`,
            { withCredentials: true },
          );
          const decrypted = res.data.message;
