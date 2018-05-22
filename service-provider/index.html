@@ -142,7 +142,7 @@
        const address = await getAddress();
        const url = window.location.href;
        const goal = document.getElementById('goal-text-box').value;
-       const publicKeyTrytes = 'TODO';
+       const publicKeyTrytes = await getPublicKeyTrytes();
        const myHouseUrl = `http://localhost:3000/new-policy?iotaAddress=${address}&publicKeyTrytes=${publicKeyTrytes}&url=${url}&goal=${goal}`;
 
        window.location = myHouseUrl;

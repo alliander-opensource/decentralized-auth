@@ -19,6 +19,9 @@ const ANSWER_CHALLENGE_TYPE = 'ANSWER_CHALLENGE';
 const MAM_DATA_TYPE = 'MAM_DATA';
 const INFORM_UPDATE_SIDE_KEY_TYPE = 'INFORM_UPDATE_SIDE_KEY';
 
+const AUTHORIZED_TYPE = 'AUTHORIZE';
+const REVOKE_AUTHORIZATION_TYPE = 'REVOKE_AUTHORIZATION';
+
 
 // MAM message type
 const DATA_MESSAGE_TYPE = 'DATA';
@@ -26,7 +29,7 @@ const DATA_MESSAGE_TYPE = 'DATA';
 const CHECK_MESSAGE_INTERVAL_MS = 10000;
 
 
-// TODO: LISTEN TO AUTHORIZE AND AUTHORIZATION_REVOKED EVENTS
+// TODO: LISTEN TO AUTHORIZED AND AUTHORIZATION_REVOKED EVENTS
 
 
 module.exports = class DeviceClient {
@@ -105,6 +108,7 @@ module.exports = class DeviceClient {
   sendClaimResult(seed, sender, receiver, signedChallenge) {
     let message;
     if (this.signedChallenges.isValid(signedChallenge)) {
+      this.root = root;
       message = { type: CLAIM_RESULT_TYPE, status: 'OK', sender };
     } else {
       message = { type: CLAIM_RESULT_TYPE, status: 'NOK', reason: 'Signed challenge invalid' };
@@ -122,7 +126,7 @@ module.exports = class DeviceClient {
    *
    * @function sendMamData
    * @param {string} serviceProviderAddress IOTA address of the service provider
-   * @param {string} publicKey Public key of the service provider
+   * @param {string} publicKey Public key of the service provider in trytes
    * @returns {Promise}
    */
   sendMamData(serviceProviderAddress, publicKey) {
@@ -160,7 +164,6 @@ module.exports = class DeviceClient {
    * @returns {null}
    */
   informUpdateSideKey(authorizedServiceProviders, newSideKey) {
-    // TODO: encrypt
     const keysForServiceProviders = authorizedServiceProviders.map(sp => ({
       key: sp.iotaAddress,
       val: ntru.encrypt(newSideKey, sp.publicKeyTrytes),
@@ -209,13 +212,12 @@ module.exports = class DeviceClient {
    * Retrieves one message from this device's address and dispatches it to the
    * appropriate message handler.
    *
-   * @function processMessage
+   * @function processIotaMessage
    * @param {string} address The address to fetch the message from
    * @returns {null}
    */
-  processMessage(address) {
+  processIotaMessage(address) {
     logger.info(`Getting last message from address ${address}...`);
-
 
     iota.getLastMessage({ addresses: [address] })
       .then((msg) => {
@@ -235,44 +237,84 @@ module.exports = class DeviceClient {
 
         logger.info(`Received new message of type ${msg.type}`);
         switch (msg.type) {
-          case CLAIM_DEVICE_TYPE:
-          {
+          case CLAIM_DEVICE_TYPE: {
             return this.sendChallenge(
               this.seed,
               address,
               msg.sender,
             );
           }
-          case ANSWER_CHALLENGE_TYPE:
-          {
+          case ANSWER_CHALLENGE_TYPE: {
             return this.sendClaimResult(
               this.seed,
               address,
               msg.sender,
+              msg.root,
               msg.signedChallenge,
             );
           }
-          case INFORM_UPDATE_SIDE_KEY_TYPE: // TODO: refactor: get authorization and keep event list
-          {
-            const sideKeys = ['HUMMUS', 'SWEETPOTATO', 'FRIES'];
-            const randomIndex = Math.floor(Math.random() * sideKeys.length);
-            const newSideKey = sideKeys[randomIndex];
-
-            return this.informUpdateSideKey(
-              msg.authorizedServiceProviders,
-              newSideKey,
-            )
-              .then(() => this.mam.changeSideKey(newSideKey))
-              .catch(err => logger.error(`change side key ${err}`));
-          }
-          default:
-          {
+          default: {
             throw new Error(`Unknown message type: ${msg.type}`);
           }
         }
       })
       // NOTE: Winston logger seems to swallow JavaScript errors
       .catch(console.log); // eslint-disable-line no-console
+  }
+
+
+  static formatTrytes(trytes) { return `${trytes.slice(0, 10)}...`; }
+
+
+  /**
+   * Retrieves and processes MAM messages by dispatching the type of message to
+   * its handler
+   *
+   * @function processMamMessage
+   * @returns {undefined}
+   */
+  async processMamMessage() {
+    const mode = 'public';
+    const IS_CLAIMED = (
+      typeof this.root !== 'undefined'
+        || typeof this.myHouseEvents !== 'undefined');
+    if (!IS_CLAIMED) {
+      logger.info('IOTA MAM: No root received');
+      return;
+    }
+    logger.info(`IOTA MAM: Fetching from root ${this.formatTrytes(this.root)}`);
+    try {
+      const { nextRoot, payload } = await this.myHouseEvents.fetchSingle(this.root, mode);
+      const message = JSON.parse(iota.fromTrytes(payload));
+      switch (message.type) {
+        case AUTHORIZED_TYPE: {
+          const { policy: serviceProvider } = message;
+          this.sendMamData(serviceProvider.iotaAddress, serviceProvider.publicKeyTrytes);
+          this.authorizedServiceProviders.add(serviceProvider);
+          break;
+        }
+        case REVOKE_AUTHORIZATION_TYPE: {
+          const sideKeys = ['HUMMUS', 'SWEETPOTATO', 'FRIES'];
+          const randomIndex = Math.floor(Math.random() * sideKeys.length);
+          const newSideKey = sideKeys[randomIndex];
+          this.authorizedServiceProviders.remove(message.serviceProvider);
+          this.informUpdateSideKey(
+            this.authorizedServiceProviders,
+            newSideKey,
+          )
+            .then(() => this.mam.changeSideKey(newSideKey))
+            .catch(err => logger.error(`changeSideKey failed: ${err}`));
+          break;
+        }
+        default: {
+          throw new Error(`Unknown MAM msg type: ${message.type}`);
+        }
+      }
+      logger.info(`IOTA MAM: Setting root to ${this.formatTrytes(nextRoot)}`);
+      this.root = nextRoot;
+    } catch (err) {
+      logger.error(`In processMamMessage: ${err}`);
+    }
   }
 
 
@@ -289,9 +331,7 @@ module.exports = class DeviceClient {
 
     p1Reader.tryInitP1(telegram => this.handleP1Message(telegram));
 
-    // Check immediately
-    this.processMessage(address);
     // Keep checking periodically
-    setInterval(() => this.processMessage(address), intervalMs);
+    setInterval(() => this.processIotaMessage(address), intervalMs);
   }
 };
