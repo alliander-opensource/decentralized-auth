@@ -3,10 +3,12 @@ import React from 'react';
 const Home = () => (
   <div style={{ padding: '20px' }}>
     <h2>My Home</h2>
-        This application runs on a server in your home.<br />
-        Claim devices and provide authorizations using the left menu.<br />
+    This application works with one IOTA seed. It's backend is a public MAM
+    stream on this seed.
     <br />
-    You can only change policies if you have disclosed the required IRMA attributes.<br />
+    <br />
+    Pair with devices, give consent to service providers to view their data, or
+    show the MAM events stream using the left menu.
   </div>
 );
 
