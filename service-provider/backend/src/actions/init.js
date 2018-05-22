@@ -2,7 +2,6 @@ const ntru = require('./../modules/ntru');
 const config = require('./../config');
 const generateSeed = require('./../modules/gen-seed');
 const logger = require('./../logger')(module);
-const { deauthenticate } = require('./../modules/simple-session');
 
 
 /**
@@ -14,8 +13,7 @@ const { deauthenticate } = require('./../modules/simple-session');
  */
 module.exports = async function requestHandler(req, res) {
 
-  deauthenticate(req, res); // (re)sets sessionId
-  const { sessionId } = req;
+  const { sessionId } = req.params;
 
   logger.info(`Init for session id ${sessionId}`);
 

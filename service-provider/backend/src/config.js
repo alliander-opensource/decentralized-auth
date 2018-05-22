@@ -7,8 +7,6 @@ const config = {
   cookieSettings: {
     httpOnly: true,
     maxAge: 30000000,
-    sameSite: true,
-    signed: true,
     secure: false, // TODO: NOTE: must be set to true and be used with HTTPS only!
   },
   baseUrl: process.env.SP_BASE_URL ? process.env.SP_BASE_URL : 'http://localhost:5000',

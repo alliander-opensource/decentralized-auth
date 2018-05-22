@@ -10,7 +10,7 @@ const logger = require('./../logger')(module);
  * @returns {undefined}
  */
 module.exports = async function requestHandler(req, res) {
-  const { sessionId } = req;
+  const { sessionId } = req.params;
 
   logger.info(`Getting address for session id ${sessionId}`);
 

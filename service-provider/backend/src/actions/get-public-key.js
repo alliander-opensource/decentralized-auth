@@ -12,7 +12,7 @@ const logger = require('./../logger')(module);
  */
 module.exports = function requestHandler(req, res) {
   try {
-    const { sessionId } = req;
+    const { sessionId } = req.params;
     logger.info(`Getting public key for session id ${sessionId}`);
 
     const keyPairs = config.ntruKeyPairs;
