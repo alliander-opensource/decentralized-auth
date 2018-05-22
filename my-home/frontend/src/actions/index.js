@@ -200,16 +200,13 @@ function policyDeleted(json) {
   };
 }
 
-export function deletePolicy(id) {
-  return (dispatch) => {
-    dispatch(requestDeletePolicy(id));
-    return axios
-      .delete(`/api/policy/${id}`, {
-        withCredentials: true,
-      })
-      .then(response => response.data)
-      .then(json => dispatch(policyDeleted(json)));
-  };
+export function deletePolicy(policy) {
+  return dispatch => axios
+    .post(`/api/policy/`, { policy }, {
+      withCredentials: true,
+    })
+    .then(response => response.data)
+    .then(json => dispatch(policyDeleted(json)));
 }
 
 function deviceDeleted(json) {
@@ -221,13 +218,10 @@ function deviceDeleted(json) {
 }
 
 export function deleteDevice(device) {
-  return (dispatch) => {
-    dispatch(requestDeleteDevice(device));
-    return axios
-      .post('/api/device/delete', { device }, {
-        withCredentials: true,
-      })
-      .then(response => response.data)
-      .then(json => dispatch(deviceDeleted(json)));
-  };
+  return dispatch => axios
+    .post('/api/device/delete', { device }, {
+      withCredentials: true,
+    })
+    .then(response => response.data)
+    .then(json => dispatch(deviceDeleted(json)));
 }

@@ -56,7 +56,7 @@ class MyPolicies extends Component {
                       </Col>
                       <Col xs={4} style={{ textAlign: 'right' }}>
                         <RaisedButton
-                          onClick={() => this.props.deletePolicy(policy.id)}
+                          onClick={() => this.props.deletePolicy(policy)}
                           label="Revoke"
                           primary
                           disabled={policy.isDeleting}
