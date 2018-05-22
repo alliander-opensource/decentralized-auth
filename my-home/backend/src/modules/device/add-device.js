@@ -1,7 +1,6 @@
 const logger = require('./../../logger')(module);
 const iota = require('./../iota');
 const mam = require('./../iota-mam');
-const ntru = require('./../ntru');
 const pairing = require('./pairing');
 const signing = require('../../modules/signing');
 const config = require('./../../config');

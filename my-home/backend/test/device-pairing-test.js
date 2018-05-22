@@ -1,6 +1,5 @@
 const { exec } = require('child_process');
 const iota = require('../src/modules/iota');
-const ntru = require('../src/modules/ntru');
 const pairing = require('../src/modules/device/pairing');
 const signing = require('../src/modules/iota/kerl/signing');
 const { expect, generateSeedForTestingPurposes } = require('../src/common/test-utils');

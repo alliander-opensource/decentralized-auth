@@ -24,8 +24,6 @@ const config = {
   iotaSeed,
   iotaAddress: 'KENICAJYD9XQEOATSBMWYPZOIICKHENBUKPHN9FZXCYTMDXVFWOSJNCZCFWQGKRIULOWMMYQVGOEQFQLZ', // first address of seed above
 
-  ntruKeyPair: null, // Initialize when loading NTRU module to avoid circular dependency
-
   apiKey: process.env.IRMA_API_SERVER_KEY ? process.env.IRMA_API_SERVER_KEY : 'FILL_IN',
   irmaApiServerUrl: process.env.IRMA_API_SERVER_URL ? process.env.IRMA_API_SERVER_URL : 'http://localhost:8081/irma_api_server',
   irmaApiServerPublicKey: process.env.IRMA_API_SERVER_PUBLIC_KEY ? process.env.IRMA_API_SERVER_PUBLIC_KEY : 'FILL_IN',
