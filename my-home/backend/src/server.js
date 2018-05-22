@@ -5,11 +5,7 @@ const cookieParser = require('cookie-parser');
 const cookieEncrypter = require('cookie-encrypter');
 const simpleSession = require('./modules/simple-session');
 const config = require('./config');
-const ntru = require('./modules/ntru');
 const mam = require('./modules/iota-mam');
-
-// Create key pair here to avoid circular dependency with config
-config.ntruKeyPair = ntru.createKeyPair(config.iotaSeed);
 
 
 // Our MAM channel for publishing information to for the device

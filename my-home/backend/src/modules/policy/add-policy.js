@@ -1,4 +1,3 @@
-const ntru = require('../ntru');
 const mam = require('./../iota-mam');
 const logger = require('../../logger')(module);
 
