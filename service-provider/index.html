@@ -221,8 +221,8 @@
        const { sideKey, root } = mamData;
 
        const decryptedMamData = {
-         sideKey: await decrypt(sideKey, privateKey),
-         root: await decrypt(root, privateKey),
+         sideKey: await decrypt(sideKey),
+         root: await decrypt(root),
        };
 
        notify(`Decrypted MAM data ${JSON.stringify(decryptedMamData)}`);
