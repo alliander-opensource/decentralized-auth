@@ -17,42 +17,36 @@ describe('Pairing of a device by calling methods on DeviceClient', () => {
   let deviceClient;
   let deviceAddress;
 
-  before(() => {
-    iota.getAddress(myHouseSeed, 1)
-      .then(([firstAddress]) => {
-        myHouseAddress = firstAddress;
-      });
-    iota.getAddress(deviceSeed, 1)
-      .then(([firstAddress]) => {
-        deviceAddress = firstAddress;
-        deviceClient = new DeviceClient(
-          deviceSeed,
-          deviceSecret,
-          initialSideKey,
-        );
-      });
+  before(async () => {
+    [myHouseAddress] = await iota.getAddress(myHouseSeed, 1);
+    [deviceAddress] = await iota.getAddress(deviceSeed, 1);
+
+    deviceClient = new DeviceClient(
+      deviceSeed,
+      deviceSecret,
+      initialSideKey,
+    );
   });
 
   describe('myHouse.claimDevice', () => {
-    it('should send a claim message to a device', () =>
-      pairingMock.claimDevice(
+    it('should send a claim message to a device', async () => {
+      const transactions = await pairingMock.claimDevice(
         myHouseSeed,
         myHouseAddress,
         deviceAddress,
-      )
-        .then(transactions =>
+      );
 
-          expect(transactions).to.be.an('array')));
+      expect(transactions).to.be.an('array');
+    });
   });
 
   describe('deviceClient.getLastMessage', () =>
-    it('should be able to retrieve the last message', () =>
-      iota.getLastMessage({ addresses: [deviceAddress] })
-        .then((message) => {
-          expect(message).to.have.property('type').and.equal(pairingMock.CLAIM_DEVICE_TYPE);
+    it('should be able to retrieve the last message', async () => {
+      const message = await iota.getLastMessage({ addresses: [deviceAddress] });
 
-          expect(message).to.have.property('sender').and.equal(myHouseAddress);
-        })));
+      expect(message).to.have.property('type').and.equal(pairingMock.CLAIM_DEVICE_TYPE);
+      expect(message).to.have.property('sender').and.equal(myHouseAddress);
+    }));
 
   describe('deviceClient.sendChallenge', () => {
     it('should be able to create a challenge that can be signed', () => {
@@ -62,15 +56,15 @@ describe('Pairing of a device by calling methods on DeviceClient', () => {
       expect(challenge).to.have.lengthOf(HASH_LENGTH - deviceSecret.length);
     });
 
-    it('should be able to send a challenge', () =>
-      deviceClient.sendChallenge(
+    it('should be able to send a challenge', async () => {
+      const transactions = await deviceClient.sendChallenge(
         deviceSeed,
         deviceAddress,
         myHouseAddress,
-      )
-        .then(transactions =>
+      );
 
-          expect(transactions).to.be.an('array')));
+      expect(transactions).to.be.an('array');
+    });
 
     it('should have stored the signed challenge for later', () => {});
   });
@@ -78,15 +72,12 @@ describe('Pairing of a device by calling methods on DeviceClient', () => {
   describe('myHouse.answerChallenge', () => {
     let testChallenge;
 
-    it('should be able to retrieve a challenge', () =>
-      iota.getLastMessage({ addresses: [myHouseAddress] })
-        .then((message) => {
-          testChallenge = message.challenge;
-          return message;
-        })
-        .then(message =>
+    it('should be able to retrieve a challenge', async () => {
+      const message = await iota.getLastMessage({ addresses: [myHouseAddress] });
+      testChallenge = message.challenge;
 
-          expect(message).to.have.property('challenge')));
+      expect(message).to.have.property('challenge');
+    });
 
     let testSignedChallenge = '';
 
@@ -99,34 +90,31 @@ describe('Pairing of a device by calling methods on DeviceClient', () => {
       testSignedChallenge = signedChallenge;
     });
 
-    it('should be able to answer a challenge', () =>
-      pairingMock.answerChallenge(
+    it('should be able to answer a challenge', async () => {
+      const transactions = await pairingMock.answerChallenge(
         myHouseSeed,
         myHouseAddress,
         ntru.toTrytes(myHouseKeyPair.public),
         deviceAddress,
         testSignedChallenge,
-      )
-        .then(transactions =>
+      );
 
-          expect(transactions).to.be.an('array')));
+      expect(transactions).to.be.an('array');
+    });
   });
 
   describe('deviceClient.sendClaimResult', () => {
     let testSender;
     let testSignedChallenge;
 
-    it('should be able to receive a claim result', () =>
-      iota.getLastMessage({ addresses: [deviceAddress] })
-        .then((message) => {
-          testSender = message.sender;
-          testSignedChallenge = message.signedChallenge;
-          return message;
-        })
-        .then((message) => {
-          expect(message).to.have.property('signedChallenge');
-          expect(message).to.have.property('sender');
-        }));
+    it('should be able to receive a claim result', async () => {
+      const message = await iota.getLastMessage({ addresses: [deviceAddress] });
+      testSender = message.sender;
+      testSignedChallenge = message.signedChallenge;
+
+      expect(message).to.have.property('signedChallenge');
+      expect(message).to.have.property('sender');
+    });
 
     it('should be able to see if a signed challenge is valid', () => {
       const isValid = deviceClient.signedChallenges.isValid(testSignedChallenge);
@@ -134,17 +122,17 @@ describe('Pairing of a device by calling methods on DeviceClient', () => {
       expect(isValid).to.be.true; // eslint-disable-line no-unused-expressions
     });
 
-    it('should be able to send the claim result', () =>
-      deviceClient.sendClaimResult(
+    it('should be able to send the claim result', async () => {
+      const transactions = await deviceClient.sendClaimResult(
         deviceSeed,
         deviceAddress,
         testSender,
         ntru.toTrytes(myHouseKeyPair.public),
         testSignedChallenge,
-      )
-        .then(transactions =>
+      );
 
-          expect(transactions).to.be.an('array')));
+      expect(transactions).to.be.an('array');
+    });
 
     it('should prevent replay attacks (only use signed challenge once)', () => {
       const isValid = deviceClient.signedChallenges.isValid(testSignedChallenge);
@@ -153,26 +141,24 @@ describe('Pairing of a device by calling methods on DeviceClient', () => {
     });
   });
 
-  describe('myHouse.retrieveClaim', () => {
-    it('should be able to retrieve the successful claim result', () =>
-      iota.getLastMessage({ addresses: [myHouseAddress] })
-        .then((claim) => {
-          if (!pairingMock.isSuccessfulClaim(claim, deviceAddress)) {
-            throw new Error(`Claim failed with reason ${claim.reason}`);
-          }
-          const decryptedClaim = pairingMock.decryptMamData(claim, myHouseKeyPair.private);
-          return decryptedClaim;
-        })
-        .then((claim) => {
-          expect(claim).to.have.property('sender');
-          expect(claim).to.have.property('status');
-          expect(claim.status).to.equal('OK');
-          expect(claim).to.have.property('mamData')
-            .and.to.have.property('sideKey')
-            .and.to.equal('BANANA');
-          expect(claim).to.have.property('mamData') // eslint-disable-line jasmine/new-line-before-expect
-            .and.to.have.property('root')
-            .and.to.have.lengthOf(81);
-        }));
-  });
+  describe('myHouse.retrieveClaim', () =>
+    it('should be able to retrieve the successful claim result', async () => {
+      const claim = await iota.getLastMessage({ addresses: [myHouseAddress] });
+      if (!pairingMock.isSuccessfulClaim(claim, deviceAddress)) {
+        throw new Error(`Claim failed with reason ${claim.reason}`);
+      }
+      const decryptedClaim = pairingMock.decryptMamData(claim, myHouseKeyPair.private);
+
+      expect(decryptedClaim).to.have.property('sender');
+      expect(decryptedClaim).to.have.property('status');
+      expect(decryptedClaim.status).to.equal('OK');
+
+      expect(decryptedClaim).to.have.property('mamData')
+        .and.to.have.property('sideKey')
+        .and.to.equal('BANANA');
+
+      expect(decryptedClaim).to.have.property('mamData')
+        .and.to.have.property('root')
+        .and.to.have.lengthOf(81);
+    }));
 });

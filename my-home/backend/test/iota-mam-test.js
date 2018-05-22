@@ -21,41 +21,35 @@ describe('MAM', () => {
   let testRoot1 = '';
   let testRoot2 = '';
 
-  it('should be able to attach a message and get the root', () =>
-    mam.attach(message1)
-      .then((root) => {
-        testRoot1 = root;
-        return root;
-      })
-      .then(root =>
+  it('should be able to attach a message and get the root', async () => {
+    const root = await mam.attach(message1);
+    testRoot1 = root;
 
-        expect(root).to.have.lengthOf(81)));
+    expect(root).to.have.lengthOf(81);
+  });
 
-  it('should be able to attach another message and get the root', () =>
-    mam.attach(message2)
-      .then((root) => {
-        testRoot2 = root;
-        return root;
-      })
-      .then((root) => {
-        expect(root).to.have.lengthOf(81);
-        expect(root).to.not.equal(testRoot1);
-      }));
+  it('should be able to attach another message and get the root', async () => {
+    const root = await mam.attach(message2);
+    testRoot2 = root;
 
-  it('should be able to fetch the two messages', () =>
-    mam.fetch(testRoot1)
-      .then((res) => {
-        expect(res.nextRoot).to.have.lengthOf(81);
-        expect(res.messages).to.be.an('array');
-        expect(res.messages[0]).to.deep.equal(message1);
-        expect(res.messages[1]).to.deep.equal(message2);
-      }));
+    expect(root).to.have.lengthOf(81);
+    expect(root).to.not.equal(testRoot1);
+  });
 
-  it('should be able to fetch from the second root', () =>
-    mam.fetch(testRoot2)
-      .then((res) => {
-        expect(res.nextRoot).to.have.lengthOf(81);
-        expect(res.messages).to.be.an('array');
-        expect(res.messages[0]).to.deep.equal(message2);
-      }));
+  it('should be able to fetch the two messages', async () => {
+    const res = await mam.fetch(testRoot1);
+
+    expect(res.nextRoot).to.have.lengthOf(81);
+    expect(res.messages).to.be.an('array');
+    expect(res.messages[0]).to.deep.equal(message1);
+    expect(res.messages[1]).to.deep.equal(message2);
+  });
+
+  it('should be able to fetch from the second root', async () => {
+    const res = await mam.fetch(testRoot2);
+
+    expect(res.nextRoot).to.have.lengthOf(81);
+    expect(res.messages).to.be.an('array');
+    expect(res.messages[0]).to.deep.equal(message2);
+  });
 });

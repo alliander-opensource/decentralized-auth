@@ -39,61 +39,52 @@ describe('MAM', () => {
   let testRoot1 = '';
   let testRoot2 = '';
 
-  it('should be able to attach a message and get the root', () =>
-    mam.attach(message1)
-      .then((root) => {
-        testRoot1 = root;
-        return root;
-      })
-      .then(root =>
+  it('should be able to attach a message and get the root', async () => {
+    const root = await mam.attach(message1);
+    testRoot1 = root;
 
-        expect(root).to.have.lengthOf(81)));
+    expect(root).to.have.lengthOf(81);
+  });
 
-  it('should be able to attach another message and get the root', () =>
-    mam.attach(message2)
-      .then((root) => {
-        testRoot2 = root;
-        return root;
-      })
-      .then((root) => {
-        expect(root).to.have.lengthOf(81);
-        expect(root).to.not.equal(testRoot1);
-      }));
+  it('should be able to attach another message and get the root', async () => {
+    const root = await mam.attach(message2);
+    testRoot2 = root;
 
-  it('should be able to fetch the two messages', () =>
-    MamClient.fetch(testRoot1, 'restricted', sideKey)
-      .then((res) => {
-        expect(res.nextRoot).to.have.lengthOf(81);
-        expect(res.messages).to.be.an('array');
-        expect(res.messages[0]).to.deep.equal(message1);
-        expect(res.messages[1]).to.deep.equal(message2);
-      }));
+    expect(root).to.have.lengthOf(81);
+    expect(root).to.not.equal(testRoot1);
+  });
 
-  it('should be able to fetch from the second root', () =>
-    MamClient.fetch(testRoot2, 'restricted', sideKey)
-      .then((res) => {
-        expect(res.nextRoot).to.have.lengthOf(81);
-        expect(res.messages).to.be.an('array');
-        expect(res.messages[0]).to.deep.equal(message2);
-      }));
+  it('should be able to fetch the two messages', async () => {
+    const res = await MamClient.fetch(testRoot1, 'restricted', sideKey);
+
+    expect(res.nextRoot).to.have.lengthOf(81);
+    expect(res.messages).to.be.an('array');
+    expect(res.messages[0]).to.deep.equal(message1);
+    expect(res.messages[1]).to.deep.equal(message2);
+  });
+
+  it('should be able to fetch from the second root', async () => {
+    const res = await MamClient.fetch(testRoot2, 'restricted', sideKey);
+
+    expect(res.nextRoot).to.have.lengthOf(81);
+    expect(res.messages).to.be.an('array');
+    expect(res.messages[0]).to.deep.equal(message2);
+  });
 
   let testRoot3 = '';
 
-  it('should be able to attach a public message using second lib and get the root', () =>
-    mam2.attach(message1)
-      .then((root) => {
-        testRoot3 = root;
-        return root;
-      })
-      .then(root =>
+  it('should be able to attach a public message using second lib and get the root', async () => {
+    const root = await mam2.attach(message1);
+    testRoot3 = root;
 
-        expect(root).to.have.lengthOf(81)));
+    expect(root).to.have.lengthOf(81);
+  });
 
-  it('should be able to fetch from the root using the second lib', () =>
-    MamClient.fetch(testRoot3, 'public')
-      .then((res) => {
-        expect(res.nextRoot).to.have.lengthOf(81);
-        expect(res.messages).to.be.an('array');
-        expect(res.messages[0]).to.deep.equal(message1);
-      }));
+  it('should be able to fetch from the root using the second lib', async () => {
+    const res = await MamClient.fetch(testRoot3, 'public');
+
+    expect(res.nextRoot).to.have.lengthOf(81);
+    expect(res.messages).to.be.an('array');
+    expect(res.messages[0]).to.deep.equal(message1);
+  });
 });
