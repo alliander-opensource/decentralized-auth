@@ -20,6 +20,9 @@ export const RECEIVE_DEVICE = 'receive_device';
 export const REQUEST_DEVICES = 'get_devices';
 export const RECEIVE_DEVICES = 'update_devices';
 
+export const REQUEST_EVENTS = 'get_events';
+export const RECEIVE_EVENTS = 'update_events';
+
 export const REQUEST_DELETE_DEVICE = 'request_delete_device';
 export const DEVICE_DELETED = 'device_deleted';
 
@@ -154,6 +157,30 @@ export function getDevices() {
       })
       .then(response => response.data)
       .then(json => dispatch(receiveDevices(json)));
+  };
+}
+
+export function requestEvents() {
+  return { type: REQUEST_EVENTS };
+}
+
+function receiveEvents(json) {
+  return {
+    type: RECEIVE_EVENTS,
+    events: json,
+    receivedAt: Date.now(),
+  };
+}
+
+export function getEvents() {
+  return (dispatch) => {
+    dispatch(requestEvents());
+    return axios
+      .get('/api/event/all', {
+        withCredentials: true,
+      })
+      .then(response => response.data)
+      .then(json => dispatch(receiveEvents(json)));
   };
 }
 

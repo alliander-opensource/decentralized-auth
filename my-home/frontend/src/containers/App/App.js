@@ -15,6 +15,7 @@ import SideMenu from '../../components/SideMenu/SideMenu';
 import Home from '../../containers/Home/Home';
 import MyPolicies from '../../containers/MyPolicies/MyPolicies';
 import MyDevices from '../../containers/MyDevices/MyDevices';
+import Events from '../../containers/Events/Events';
 import NewPolicyPage from '../NewPolicyPage/NewPolicyPage';
 import NewDevicePage from '../NewDevicePage/NewDevicePage';
 
@@ -75,6 +76,7 @@ class App extends Component {
               <Col xs>
                 <Paper style={styles.main} id="main-content">
                   <Route exact path="/" component={Home} />
+                  <Route path="/events" component={Events} />
                   <Route path="/my-devices" component={MyDevices} />
                   <Route path="/new-device" component={NewDevicePage} />
                   <Route path="/my-policies" component={MyPolicies} />

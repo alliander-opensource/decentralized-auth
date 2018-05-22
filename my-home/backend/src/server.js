@@ -49,7 +49,11 @@ app.get('/api/policy/all', require('./modules/policy/get-all-policies'));
 app.delete('/api/policy', require('./modules/policy/revoke-policy')); // TODO
 app.post('/api/policy/get-message-for-policy', require('./modules/policy/get-message-for-policy'));
 
+// Events
+app.get('/api/event/all', require('./modules/get-all-events'));
+
 const server = app.listen(config.port, () => {
+  logger.info(`My Home backend uses seed ${config.iotaSeed}`);
   logger.info(`My Home backend listening on port ${config.port} !`);
 });
 

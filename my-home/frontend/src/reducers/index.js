@@ -15,6 +15,9 @@ import {
   RECEIVE_POLICY,
   REQUEST_DELETE_POLICY,
   POLICY_DELETED,
+
+  REQUEST_EVENTS,
+  RECEIVE_EVENTS,
 } from '../actions';
 
 function user(
@@ -159,12 +162,32 @@ function policy(
       return state;
   }
 }
+
+function events(state = { events: [] }, action) {
+  switch (action.type) {
+    case REQUEST_EVENTS:
+      return Object.assign({}, state, {
+        ...state,
+        isFetching: true,
+      });
+    case RECEIVE_EVENTS:
+      return Object.assign({}, state, {
+        ...state,
+        isFetching: false,
+        ...action.events,
+      });
+    default:
+      return state;
+  }
+}
+
 const rootReducer = combineReducers({
   user,
   device,
   devices,
   policy,
   policies,
+  events,
 });
 
 export default rootReducer;
