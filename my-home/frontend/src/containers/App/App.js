@@ -15,7 +15,6 @@ import SideMenu from '../../components/SideMenu/SideMenu';
 import Home from '../../containers/Home/Home';
 import MyPolicies from '../../containers/MyPolicies/MyPolicies';
 import MyDevices from '../../containers/MyDevices/MyDevices';
-import UserInfo from '../../containers/UserInfo/UserInfo';
 import NewPolicyPage from '../NewPolicyPage/NewPolicyPage';
 import NewDevicePage from '../NewDevicePage/NewDevicePage';
 
@@ -81,10 +80,6 @@ class App extends Component {
                   <Route path="/my-policies" component={MyPolicies} />
                   <Route path="/new-policy" component={NewPolicyPage} />
                 </Paper>
-              </Col>
-
-              <Col xs={12} sm={3}>
-                <UserInfo />
               </Col>
             </Row>
           </Grid>

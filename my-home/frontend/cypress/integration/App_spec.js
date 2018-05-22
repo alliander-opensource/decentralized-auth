@@ -19,17 +19,6 @@ describe('The app', function() {
     });
   });
 
-  describe('The UserInfoPanel', function() {
-    it('is displayed', function() {
-      cy.wait('@get-session');
-      cy.get('#user-panel');
-    });
-
-    it('contains the session id', function() {
-      cy.get('#session-id');
-    });
-  });
-
   describe('The navigation bar', function() {
     it('contains a user icon', function() {
       cy.get('#navbar-user-icon');
