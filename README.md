@@ -1,6 +1,11 @@
 # Energy usage data streams with consent of device owner
 
 
+## Advantages
+
+### Device and My Home are in sync since they use the same backend (the MAM stream)
+Because of distributed ledger technology.
+
 ## Known Issues
 
 ### State of app
