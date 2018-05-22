@@ -264,7 +264,7 @@ module.exports = class DeviceClient {
 
   /**
    * Retrieves and processes MAM messages by dispatching the type of message to
-   * its handler
+   * its handler.
    *
    * @function processMamMessage
    * @returns {undefined}
