@@ -12,6 +12,7 @@ const logger = require('./../logger');
  */
 module.exports = async function requestHandler(req, res) {
   const { sessionId, query: { trytes } } = req;
+  logger.info(`Decrypting trytes ${trytes} for session id ${sessionId}`);
   return res
     .status(200)
     .send({

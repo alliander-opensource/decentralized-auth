@@ -1,5 +1,6 @@
 const ntru = require('./../modules/ntru');
 const config = require('./../config');
+const logger = require('./../logger')(module);
 
 
 /**
@@ -12,6 +13,8 @@ const config = require('./../config');
 module.exports = function requestHandler(req, res) {
   try {
     const { sessionId } = req;
+    logger.info(`Getting public key for session id ${sessionId}`);
+
     const keyPairs = config.ntruKeyPairs;
     if (typeof keyPairs[sessionId] === 'undefined') {
       return res
@@ -22,6 +25,7 @@ module.exports = function requestHandler(req, res) {
         });
     }
     const publicKey = ntru.toTrytes(keyPairs[sessionId].public);
+    logger.info(`Sending public key ${publicKey}`);
     return res
       .status(200)
       .send({
