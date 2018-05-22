@@ -90,4 +90,22 @@ module.exports = class MamClient {
         };
       });
   }
+
+
+  /**
+   * Fetch a single MAM message.
+   * NOTE: Expects JSON MAM message only.
+   * @function fetch
+   * @param {string} root Root from where to fetch
+   * @param {string} mode Either 'public' or 'private' or 'restricted'
+   * @param {string} sideKey Optional side key (when mode is 'restricted')
+   * @returns {Promise} Contains the root and the parsed message
+   */
+  static fetchSingle(root, mode, sideKey) {
+    return MAM.fetch(root, mode, sideKey)
+      .then(({ nextRoot, payload }) => {
+        const message = JSON.parse(iota.fromTrytes(payload));
+        return { nextRoot, message };
+      });
+  }
 };

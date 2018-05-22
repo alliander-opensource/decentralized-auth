@@ -280,8 +280,7 @@ module.exports = class DeviceClient {
     }
     logger.info(`IOTA MAM: Fetching from root ${this.formatTrytes(this.root)}`);
     try {
-      const { nextRoot, payload } = await this.myHouseEvents.fetchSingle(this.root, mode);
-      const message = JSON.parse(iota.fromTrytes(payload));
+      const { nextRoot, message } = await this.mam.fetchSingle(this.root, mode);
       switch (message.type) {
         case AUTHORIZED_TYPE: {
           const { policy: serviceProvider } = message;
