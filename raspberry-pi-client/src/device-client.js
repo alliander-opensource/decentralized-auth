@@ -227,12 +227,12 @@ module.exports = class DeviceClient {
         // of already processed messages (note: stringified versions so set
         // operations that use equals (like set.has()) work as intended)
         if (this.seenMessages.has(JSON.stringify(msg))) {
-          logger.info('No new messages');
+          logger.info('No new IOTA messages');
           return null;
         }
         this.seenMessages.add(JSON.stringify(msg));
 
-        logger.info(`Received new message of type ${msg.type}`);
+        logger.info(`Received new IOTA message of type ${msg.type}`);
         switch (msg.type) {
           case CLAIM_DEVICE_TYPE: {
             return this.sendChallenge(
@@ -251,7 +251,7 @@ module.exports = class DeviceClient {
             );
           }
           default: {
-            throw new Error(`Unknown message type: ${msg.type}`);
+            throw new Error(`Unknown IOTA message type: ${msg.type}`);
           }
         }
       })
