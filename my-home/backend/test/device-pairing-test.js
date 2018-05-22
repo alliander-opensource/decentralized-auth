@@ -41,7 +41,6 @@ describe('Pairing of a device using a Device Client started with npm start', () 
       const transactions = await pairing.claimDevice(
         myHouseSeed,
         myHouseAddress,
-        myHouseRoot,
         deviceAddress,
       );
 
@@ -85,6 +84,7 @@ describe('Pairing of a device using a Device Client started with npm start', () 
       const transactions = await pairing.answerChallenge(
         myHouseSeed,
         myHouseAddress,
+        myHouseRoot,
         deviceAddress,
         testSignedChallenge,
       );

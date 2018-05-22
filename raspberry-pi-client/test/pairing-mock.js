@@ -38,16 +38,18 @@ function claimDevice(seed, sender, deviceAddress) {
  * @function answerChallenge
  * @param {string} seed IOTA seed of the sender
  * @param {string} sender IOTA address of the sender
+ * @param {string} root IOTA MAM root of the sender (device will listen to it)
  * @param {string} deviceAddress IOTA address of the receiving device
  * @param {string} signedChallenge Signed challenge of the device
  * @returns {Promise}
  */
-function answerChallenge(seed, sender, deviceAddress, signedChallenge) {
+function answerChallenge(seed, sender, root, deviceAddress, signedChallenge) {
   logger.info(`Answering challenge of ${deviceAddress}`);
 
   const message = {
     type: ANSWER_CHALLENGE_TYPE,
     sender,
+    root,
     signedChallenge,
   };
   return iota.send(seed, deviceAddress, message);

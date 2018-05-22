@@ -8,6 +8,7 @@ const { expect, generateSeedForTestingPurposes } = require('../src/common/test-u
 
 describe('Pairing of a device by calling methods on DeviceClient', () => {
   const myHouseSeed = generateSeedForTestingPurposes();
+  const myHouseRoot = '';
   const deviceSeed = generateSeedForTestingPurposes();
   const deviceSecret = 'APPLE';
   const initialSideKey = 'BANANA';
@@ -93,6 +94,7 @@ describe('Pairing of a device by calling methods on DeviceClient', () => {
       const transactions = await pairingMock.answerChallenge(
         myHouseSeed,
         myHouseAddress,
+        myHouseRoot,
         deviceAddress,
         testSignedChallenge,
       );

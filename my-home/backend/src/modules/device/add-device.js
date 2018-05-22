@@ -49,7 +49,7 @@ const DEVICE_ADDED_TYPE = 'DEVICE_ADDED';
 module.exports = async function requestHandler(req, res) {
   const { body: { device, secret } } = req;
   try {
-    pairing.claimDevice(config.iotaSeed, config.iotaAddress, config.mamRoot, device.iotaAddress);
+    pairing.claimDevice(config.iotaSeed, config.iotaAddress, device.iotaAddress);
     const { challenge } = await waitForMessage(
       () => iota.getLastMessage({ addresses: [config.iotaAddress] }),
       CHALLENGE_TYPE,
@@ -58,6 +58,7 @@ module.exports = async function requestHandler(req, res) {
     pairing.answerChallenge(
       config.iotaSeed,
       config.iotaAddress,
+      config.mamRoot,
       device.iotaAddress,
       signedChallenge,
     );
