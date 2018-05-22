@@ -282,7 +282,7 @@ module.exports = class DeviceClient {
       const res = await this.mam.fetchSingle(this.root, mode);
       if (typeof res === 'undefined') {
         // no message, you can try again later, keep root
-        logger.info(`No new MAM message`);
+        logger.info('No new MAM message');
         return;
       }
       const { nextRoot, message } = res;
