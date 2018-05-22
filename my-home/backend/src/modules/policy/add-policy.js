@@ -2,7 +2,7 @@ const ntru = require('../ntru');
 const mam = require('./../iota-mam');
 const logger = require('../../logger')(module);
 
-const AUTHORIZE_TYPE = 'AUTHORIZE';
+const AUTHORIZED_TYPE = 'AUTHORIZED';
 
 /**
  * Request handler
@@ -23,7 +23,7 @@ module.exports = function requestHandler(req, res) {
       device,
       serviceProvider,
     };
-    const event = { type: AUTHORIZE_TYPE, policy };
+    const event = { type: AUTHORIZED_TYPE, policy };
     mam.attach(event);
     return res
       .status(200)

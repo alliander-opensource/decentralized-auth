@@ -2,8 +2,12 @@
  * Creates event sourced projections based on messages from a MAM stream.
  */
 
+// Event types
 const DEVICE_ADDED_TYPE = 'DEVICE_ADDED';
 const DEVICE_DELETED_TYPE = 'DEVICE_DELETED';
+const AUTHORIZED_TYPE = 'AUTHORIZED';
+const AUTHORIZATION_REVOKED_TYPE = 'AUTHORIZATION_REVOKED';
+
 
 /**
  * Builds a projection of available devices from the MAM stream.
@@ -31,9 +35,6 @@ function toDevices(mamMessages) {
   return devices;
 }
 
-const AUTHORIZE_TYPE = 'AUTHORIZE';
-const REVOKE_AUTHORIZATION_TYPE = 'REVOKE_AUTHORIZATION';
-
 
 /*
  * @function toPolicies
@@ -46,9 +47,9 @@ function toPolicies(mamMessages) {
   const policiesSet = messages.reduce((policies, { type, policy, device }) => {
     // Turn the device into JSON for equality operator to work...
     switch (type) {
-      case AUTHORIZE_TYPE:
+      case AUTHORIZED_TYPE:
         return policies.add(JSON.stringify(policy));
-      case REVOKE_AUTHORIZATION_TYPE: {
+      case AUTHORIZATION_REVOKED_TYPE: {
         policies.delete(JSON.stringify(policy)); // returns true or false
         return policies;
       }
