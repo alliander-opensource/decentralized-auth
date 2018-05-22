@@ -29,6 +29,7 @@ class NewDevicePage extends Component {
     // When device is received move to new page
     if (this.props.isFetching && !nextProps.isFetching) {
       this.props.history.push('/my-devices');
+      window.location.reload();
     }
   }
 
