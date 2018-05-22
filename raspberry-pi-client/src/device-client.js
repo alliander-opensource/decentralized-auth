@@ -18,12 +18,11 @@ const CLAIM_DEVICE_TYPE = 'CLAIM_DEVICE';
 const ANSWER_CHALLENGE_TYPE = 'ANSWER_CHALLENGE';
 const MAM_DATA_TYPE = 'MAM_DATA';
 
+// MAM message types
 const AUTHORIZED_TYPE = 'AUTHORIZE';
 const REVOKE_AUTHORIZATION_TYPE = 'REVOKE_AUTHORIZATION';
-
-
-// MAM message type
 const DATA_MESSAGE_TYPE = 'DATA';
+const KEY_ROTATION_TYPE = 'KEY_ROTATION';
 
 const CHECK_MESSAGE_INTERVAL_MS = 10000;
 
@@ -172,7 +171,7 @@ module.exports = class DeviceClient {
     }, {});
 
     const message = {
-      type: 'KEY_ROTATION',
+      type: KEY_ROTATION_TYPE,
       ...keysForServiceProviders,
     };
 
