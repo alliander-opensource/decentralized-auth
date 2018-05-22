@@ -67,6 +67,24 @@ module.exports = class DeviceClient {
 
 
   /**
+   * Creates a random tryte string of 10 characters
+   *
+   * @function createSideKey
+   * @returns {string} The side key
+   */
+  static createSideKey() {
+    const trytes = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ9';
+    const SIDE_KEY_LENGTH = 10;
+    const sideKey = new Array(SIDE_KEY_LENGTH)
+      .fill()
+      .map(() => trytes.charAt(Math.floor(trytes.length * Math.random())))
+      .join('');
+
+    return sideKey;
+  }
+
+
+  /**
    * Returns a challenge to the sender.
    *
    * @function sendChallenge
@@ -294,10 +312,8 @@ module.exports = class DeviceClient {
           this.sendMamData(serviceProvider.iotaAddress, serviceProvider.publicKeyTrytes);
           break;
         }
-          const sideKeys = ['HUMMUS', 'SWEETPOTATO', 'FRIES'];
-          const randomIndex = Math.floor(Math.random() * sideKeys.length);
-          const newSideKey = sideKeys[randomIndex];
         case AUTHORIZATION_REVOKED_TYPE: {
+          const newSideKey = DeviceClient.createSideKey();
           this.authorizedServiceProviders.remove(message.serviceProvider);
           this.informUpdateSideKey(
             this.authorizedServiceProviders,
