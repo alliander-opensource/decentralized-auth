@@ -62,16 +62,11 @@ function attach(packet) {
  * @param {string} root Root from where to fetch
  * @returns {Promise} Contains the root and the messages
  */
-function fetch(root) {
+async function fetch(root) {
   logger.info(`Fetching from root ${root}`);
-  return MAM.fetch(root, mode)
-    .then(({ nextRoot, messages }) => {
-      const jsonMessages = messages.map(m => JSON.parse(fromTrytes(m)));
-      return {
-        nextRoot,
-        messages: jsonMessages,
-      };
-    });
+  const { nextRoot, messages } = await MAM.fetch(root, mode);
+  const jsonMessages = messages.map(m => JSON.parse(fromTrytes(m)));
+  return { nextRoot, messages: jsonMessages };
 }
 
 module.exports = {

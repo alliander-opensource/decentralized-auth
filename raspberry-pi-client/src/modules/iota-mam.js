@@ -80,15 +80,10 @@ module.exports = class MamClient {
    * @param {string} sideKey Optional side key
    * @returns {Promise} Contains the root and the messages
    */
-  fetch(root, mode, sideKey) { // eslint-disable-line class-methods-use-this
-    return MAM.fetch(root, mode, sideKey)
-      .then(({ nextRoot, messages }) => {
-        const jsonMessages = messages.map(m => JSON.parse(fromTrytes(m)));
-        return {
-          nextRoot,
-          messages: jsonMessages,
-        };
-      });
+  async fetch(root, mode, sideKey) { // eslint-disable-line class-methods-use-this
+    const { nextRoot, messages } = await MAM.fetch(root, mode, sideKey);
+    const jsonMessages = messages.map(m => JSON.parse(fromTrytes(m)));
+    return { nextRoot, messages: jsonMessages };
   }
 
 
@@ -101,11 +96,9 @@ module.exports = class MamClient {
    * @param {string} sideKey Optional side key (when mode is 'restricted')
    * @returns {Promise} Contains the root and the parsed message
    */
-  fetchSingle(root, mode, sideKey) { // eslint-disable-line class-methods-use-this
-    return MAM.fetch(root, mode, sideKey)
-      .then(({ nextRoot, payload }) => {
-        const message = JSON.parse(iota.fromTrytes(payload));
-        return { nextRoot, message };
-      });
+  async fetchSingle(root, mode, sideKey) { // eslint-disable-line class-methods-use-this
+    const { nextRoot, payload } = await MAM.fetch(root, mode, sideKey);
+    const message = JSON.parse(iota.fromTrytes(payload));
+    return { nextRoot, message };
   }
 };
