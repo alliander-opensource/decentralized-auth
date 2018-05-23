@@ -13,7 +13,7 @@ module.exports = async function requestHandler(req, res) {
   try {
     const messages = await mam.fetch(config.mamRoot);
     logger.info(`Received MAM messages: ${JSON.stringify(messages)}`);
-    res.json({ events: messages.messages });
+    return res.json({ events: messages.messages });
   } catch (err) {
     logger.error(`error in get-all-messages: ${err}`);
     return res.end('Something went wrong.');
