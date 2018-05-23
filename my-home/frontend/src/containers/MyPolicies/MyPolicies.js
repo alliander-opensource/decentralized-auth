@@ -62,10 +62,7 @@ class MyPolicies extends Component {
                     </Row>
                     <br />
                     <Row>
-                      <Col xs={8}>
-                        Added: <Moment format="YYYY MMM D HH:mm" date={policy.created_at} />
-                      </Col>
-                      <Col xs={4} style={{ textAlign: 'right' }}>
+                      <Col xs={12} style={{ textAlign: 'right' }}>
                         <RaisedButton
                           onClick={() => this.props.deletePolicy(policy)}
                           label="Revoke"
