@@ -230,52 +230,55 @@ module.exports = class DeviceClient {
    *
    * @function processIotaMessage
    * @param {string} address The address to fetch the message from
-   * @returns {null}
+   * @returns {Promise} with transactions or null
    */
-  processIotaMessage(address) {
+  async processIotaMessage(address) {
     logger.info(`Getting last message from address ${address}...`);
 
-    iota.getLastMessage({ addresses: [address] })
-      .then((msg) => {
-        if (!msg) {
-          logger.info('No messages');
-          return null;
-        }
+    try {
+      const msg = await iota.getLastMessage({ addresses: [address] });
+      if (!msg) {
+        logger.info('No messages');
+        return null;
+      }
 
-        // To avoid processing the same last message over and over we keep track
-        // of already processed messages (note: stringified versions so set
-        // operations that use equals (like set.has()) work as intended)
-        if (this.seenMessages.has(JSON.stringify(msg))) {
-          logger.info('No new IOTA messages');
-          return null;
-        }
-        this.seenMessages.add(JSON.stringify(msg));
+      // To avoid processing the same last message over and over we keep track
+      // of already processed messages (note: stringified versions so set
+      // operations that use equals (like set.has()) work as intended)
+      if (this.seenMessages.has(JSON.stringify(msg))) {
+        logger.info('No new IOTA messages');
+        return null;
+      }
+      this.seenMessages.add(JSON.stringify(msg));
 
-        logger.info(`Received new IOTA message of type ${msg.type}`);
-        switch (msg.type) {
-          case CLAIM_DEVICE_TYPE: {
-            return this.sendChallenge(
-              this.seed,
-              address,
-              msg.sender,
-            );
-          }
-          case ANSWER_CHALLENGE_TYPE: {
-            return this.processChallenge(
-              this.seed,
-              address,
-              msg.sender,
-              msg.root,
-              msg.signedChallenge,
-            );
-          }
-          default: {
-            throw new Error(`Unknown IOTA message type: ${msg.type}`);
-          }
+      logger.info(`Received new IOTA message of type ${msg.type}`);
+      switch (msg.type) {
+        case CLAIM_DEVICE_TYPE: {
+          return this.sendChallenge(
+            this.seed,
+            address,
+            msg.sender,
+          );
         }
-      })
+        case ANSWER_CHALLENGE_TYPE: {
+          return this.processChallenge(
+            this.seed,
+            address,
+            msg.sender,
+            msg.root,
+            msg.signedChallenge,
+          );
+        }
+        default: {
+          throw new Error(`Unknown IOTA message type: ${msg.type}`);
+        }
+      }
+    } catch (err) {
       // NOTE: Winston logger seems to swallow JavaScript errors
-      .catch(console.log); // eslint-disable-line no-console
+      // console.log(err.message);
+      logger.error(err.message);
+      return null;
+    }
   }
 
 
