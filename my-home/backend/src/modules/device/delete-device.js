@@ -18,7 +18,7 @@ module.exports = function requestHandler(req, res) {
 
   const { device } = req.body;
 
-  mam.attach({ type: DEVICE_DELETED_TYPE, created_at: Date.now(), device })
+  mam.attach({ type: DEVICE_DELETED_TYPE, timestamp: Date.now(), device })
     .then(() => res
       .status(200)
       .send({

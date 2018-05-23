@@ -20,7 +20,7 @@ module.exports = async function requestHandler(req, res) {
       goal,
       conditions: [],
     };
-    const event = { type: AUTHORIZED_TYPE, created_at: Date.now(), policy };
+    const event = { type: AUTHORIZED_TYPE, timestamp: Date.now(), policy };
     await mam.attach(event);
     return res
       .status(200)
