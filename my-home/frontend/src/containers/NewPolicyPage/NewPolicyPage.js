@@ -60,7 +60,6 @@ class NewPolicyPage extends Component {
                   <Row>
                     <Col xs={8}>
                       {device.type} with IOTA address {this.formatAddress(device.iotaAddress)}...
-                      (added: <Moment format="MM DD YYYY HH:mm" date={device.created_at} />)
                     </Col>
                     <Col xs={4} style={{ textAlign: 'right' }}>
                       <RaisedButton

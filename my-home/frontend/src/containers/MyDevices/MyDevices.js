@@ -49,7 +49,6 @@ class MyDevices extends Component {
                     <Row>
                       <Col xs={8}>
                         {device.type} with IOTA address {device.iotaAddress.substring(0, 10)}...
-                        (added: <Moment format="MM DD YYYY HH:mm" date={device.created_at} />)
                       </Col>
                       <Col xs={4} style={{ textAlign: 'right' }}>
                         <RaisedButton
