@@ -69,7 +69,7 @@ module.exports = async function requestHandler(req, res) {
     if (!pairing.isSuccessfulClaim(claim, device.iotaAddress)) {
       throw new Error(`Claim failed with reason ${claim.reason}`);
     }
-    const event = { type: DEVICE_ADDED_TYPE, device };
+    const event = { type: DEVICE_ADDED_TYPE, created_at: Date.now(), device };
     mam.attach(event);
     return res
       .status(200)

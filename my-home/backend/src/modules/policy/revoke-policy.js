@@ -18,7 +18,7 @@ module.exports = function requestHandler(req, res) {
 
   const { policy } = req.body;
 
-  mam.attach({ type: AUTHORIZATION_REVOKED_TYPE, policy })
+  mam.attach({ type: AUTHORIZATION_REVOKED_TYPE, created_at: Date.now(), policy })
     .then(() => res
       .status(200)
       .send({
