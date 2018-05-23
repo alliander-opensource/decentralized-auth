@@ -85,6 +85,12 @@ export SEED=<seed>
 
 Start the client with `npm start`.
 
+Or run with new SEED without exporting it:
+
+```
+SEED=$(cat /dev/urandom | LC_ALL=C tr -dc 'A-Z9' | fold -w 81 | head -n 1) npm start
+```
+
 ## Running the application locally
 
 - Checkout the code
