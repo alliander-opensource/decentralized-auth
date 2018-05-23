@@ -21,7 +21,7 @@
 (defn mount-root []
   (re-frame/clear-subscription-cache!)
   (r/render [views/main-panel]
-                  (.getElementById js/document "app")))
+            (.getElementById js/document "app")))
 
 
 (def noty-appender
