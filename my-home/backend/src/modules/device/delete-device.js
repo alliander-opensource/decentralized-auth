@@ -1,5 +1,5 @@
 const logger = require('../../logger')(module);
-const mam = require('../../modules/iota-mam');
+const config = require('../../config');
 
 const DEVICE_DELETED_TYPE = 'DEVICE_DELETED';
 
@@ -17,8 +17,9 @@ module.exports = function requestHandler(req, res) {
   }
 
   const { device } = req.body;
+  const mamClient = config.mamClients[req.sessionId];
 
-  mam.attach({ type: DEVICE_DELETED_TYPE, timestamp: Date.now(), device })
+  mamClient.attach({ type: DEVICE_DELETED_TYPE, timestamp: Date.now(), device })
     .then(() => res
       .status(200)
       .send({

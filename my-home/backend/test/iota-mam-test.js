@@ -1,12 +1,14 @@
-const mam = require('../src/modules/iota-mam');
+const MamClient = require('../src/modules/iota-mam');
 const { expect, generateSeedForTestingPurposes } = require('../src/common/test-utils');
+
 
 describe('MAM', () => {
   const mamSeed = generateSeedForTestingPurposes();
+  const mamSeed2 = generateSeedForTestingPurposes();
+  const mam = new MamClient(mamSeed);
+  const mam2 = new MamClient(mamSeed2);
 
   it('should initialize the MAM library', () => {
-    mam.init(mamSeed);
-
     const mamState = mam.getMamState();
 
     expect(mamState).to.have.property('subscribed');
@@ -51,5 +53,22 @@ describe('MAM', () => {
     expect(res.nextRoot).to.have.lengthOf(81);
     expect(res.messages).to.be.an('array');
     expect(res.messages[0]).to.deep.equal(message2);
+  });
+
+  let testRoot3 = '';
+
+  it('should be able to attach a public message using second lib and get the root', async () => {
+    const root = await mam2.attach(message1);
+    testRoot3 = root;
+
+    expect(root).to.have.lengthOf(81);
+  });
+
+  it('should be able to fetch from the root using the second lib', async () => {
+    const res = await mam2.fetch(testRoot3, 'public');
+
+    expect(res.nextRoot).to.have.lengthOf(81);
+    expect(res.messages).to.be.an('array');
+    expect(res.messages[0]).to.deep.equal(message1);
   });
 });

@@ -5,25 +5,6 @@ const cookieParser = require('cookie-parser');
 const cookieEncrypter = require('cookie-encrypter');
 const simpleSession = require('./modules/simple-session');
 const config = require('./config');
-const mam = require('./modules/iota-mam');
-const iota = require('./modules/iota');
-
-
-// Our MAM channel for publishing information to for the device
-// We also misuse it is a database for now (read the event stream and build the
-// state)
-mam.init(config.iotaSeed);
-
-config.mamRoot = mam.getMamState().channel.next_root;
-logger.info(`Set MAM root to ${config.mamRoot}`);
-
-const setIotaAddress = async () => {
-  const [address] = await iota.getAddress(config.iotaSeed, 1);
-  logger.info(`Setting IOTA address to ${address}`);
-  config.iotaAddress = address;
-};
-
-setIotaAddress();
 
 const app = express();
 app.use(cookieParser(config.cookieSecret));
@@ -52,7 +33,6 @@ app.post('/api/policy', require('./modules/policy/revoke-policy')); // TODO
 app.get('/api/event/all', require('./modules/get-all-events'));
 
 const server = app.listen(config.port, () => {
-  logger.info(`My Home backend uses seed ${config.iotaSeed}`);
   logger.info(`My Home backend listening on port ${config.port} !`);
 });
 

@@ -1,6 +1,5 @@
 const logger = require('./../../logger')(module);
 const iota = require('./../iota');
-const mam = require('./../iota-mam');
 const pairing = require('./pairing');
 const signing = require('../../modules/signing');
 const config = require('./../../config');
@@ -46,23 +45,27 @@ const DEVICE_ADDED_TYPE = 'DEVICE_ADDED';
  * @returns {undefined}
  */
 module.exports = async function requestHandler(req, res) {
-  const { body: { device, secret } } = req;
+  const { body: { device, secret }, sessionId } = req;
+  const iotaSeed = config.iotaSeeds[sessionId];
+  const iotaAddress = config.iotaAddresses[sessionId];
+  const mamClient = config.mamClients[sessionId];
+  const mamRoot = config.mamRoots[sessionId];
   try {
-    pairing.claimDevice(config.iotaSeed, config.iotaAddress, device.iotaAddress);
+    pairing.claimDevice(iotaSeed, iotaAddress, device.iotaAddress);
     const { challenge } = await waitForMessage(
-      () => iota.getLastMessage({ addresses: [config.iotaAddress] }),
+      () => iota.getLastMessage({ addresses: [iotaAddress] }),
       CHALLENGE_TYPE,
     );
     const signedChallenge = signing.sign(challenge, secret);
     pairing.answerChallenge(
-      config.iotaSeed,
-      config.iotaAddress,
-      config.mamRoot,
+      iotaSeed,
+      iotaAddress,
+      mamRoot,
       device.iotaAddress,
       signedChallenge,
     );
     const claim = await waitForMessage(
-      () => iota.getLastMessage({ addresses: [config.iotaAddress] }),
+      () => iota.getLastMessage({ addresses: [iotaAddress] }),
       CLAIM_RESULT_TYPE,
     );
     logger.info(`Received claim ${JSON.stringify(claim)}`);
@@ -70,7 +73,7 @@ module.exports = async function requestHandler(req, res) {
       throw new Error(`Claim failed with reason ${claim.reason}`);
     }
     const event = { type: DEVICE_ADDED_TYPE, timestamp: Date.now(), device };
-    mam.attach(event);
+    mamClient.attach(event);
     return res
       .status(200)
       .send({

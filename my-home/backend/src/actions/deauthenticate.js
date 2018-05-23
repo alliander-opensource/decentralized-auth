@@ -8,7 +8,8 @@ const simpleSession = require('./../modules/simple-session');
  * @returns {undefined}
  */
 module.exports = function requestHandler(req, res) {
-  simpleSession.deauthenticate(req, res); // Create a new sessionId
+  // Create a new sessionId, IOTA seed/address and MAM instance
+  simpleSession.deauthenticate(req, res);
 
   return res.json({
     sessionId: req.sessionId,

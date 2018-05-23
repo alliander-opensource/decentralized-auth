@@ -1,5 +1,5 @@
-const mam = require('./../iota-mam');
 const logger = require('../../logger')(module);
+const config = require('../../config');
 
 const AUTHORIZED_TYPE = 'AUTHORIZED';
 
@@ -13,6 +13,9 @@ const AUTHORIZED_TYPE = 'AUTHORIZED';
 module.exports = async function requestHandler(req, res) {
   try {
     const { device, serviceProvider, goal } = req.body;
+    const { sessionId } = req;
+    const mamClient = config.mamClients[sessionId];
+
     const policy = {
       serviceProvider, // actor
       action: 'read P1 energy data',
@@ -21,7 +24,7 @@ module.exports = async function requestHandler(req, res) {
       conditions: [],
     };
     const event = { type: AUTHORIZED_TYPE, timestamp: Date.now(), policy };
-    await mam.attach(event);
+    await mamClient.attach(event);
     return res
       .status(200)
       .send({

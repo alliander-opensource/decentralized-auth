@@ -19,7 +19,7 @@ import Events from '../../containers/Events/Events';
 import NewPolicyPage from '../NewPolicyPage/NewPolicyPage';
 import NewDevicePage from '../NewDevicePage/NewDevicePage';
 
-import { deauthenticate } from '../../actions';
+import { deauthenticate, fetchSession } from '../../actions';
 
 import './App.css';
 
@@ -31,6 +31,11 @@ const styles = {
 };
 
 class App extends Component {
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch(fetchSession()); // Initializes the IOTA things :)
+  }
+
   handleDeauth() {
     const { dispatch } = this.props;
     dispatch(deauthenticate());
@@ -93,6 +98,7 @@ class App extends Component {
 
 App.propTypes = {
   dispatch: PropTypes.func,
+  fetchSession: PropTypes.func,
 };
 
 export default connect()(App);

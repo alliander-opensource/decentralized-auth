@@ -1,5 +1,5 @@
 const logger = require('../../logger')(module);
-const mam = require('../../modules/iota-mam');
+const config = require('../../config');
 
 const AUTHORIZATION_REVOKED_TYPE = 'AUTHORIZATION_REVOKED';
 
@@ -17,8 +17,10 @@ module.exports = function requestHandler(req, res) {
   }
 
   const { policy } = req.body;
+  const { sessionId } = req;
+  const mamClient = config.mamClients[sessionId];
 
-  mam.attach({ type: AUTHORIZATION_REVOKED_TYPE, timestamp: Date.now(), policy })
+  mamClient.attach({ type: AUTHORIZATION_REVOKED_TYPE, timestamp: Date.now(), policy })
     .then(() => res
       .status(200)
       .send({

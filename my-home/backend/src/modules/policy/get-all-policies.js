@@ -1,6 +1,5 @@
 const logger = require('../../logger')(module);
 const config = require('../../config');
-const mam = require('../iota-mam');
 
 const { toPolicies } = require('../projections');
 
@@ -12,7 +11,10 @@ const { toPolicies } = require('../projections');
  * @returns {undefined}
  */
 module.exports = function requestHandler(req, res) {
-  mam.fetch(config.mamRoot)
+  const { sessionId } = req;
+  const mamClient = config.mamClients[sessionId];
+  const mamRoot = config.mamRoots[sessionId];
+  mamClient.fetch(mamRoot)
     .then(toPolicies)
     .then(policies => res.json(policies))
     .catch((err) => {

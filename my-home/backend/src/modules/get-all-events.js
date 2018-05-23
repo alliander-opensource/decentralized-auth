@@ -1,6 +1,5 @@
 const logger = require('../logger')(module);
 const config = require('../config');
-const mam = require('./iota-mam');
 
 /**
  * Request handler to get all MAM events
@@ -10,8 +9,11 @@ const mam = require('./iota-mam');
  * @returns {undefined}
  */
 module.exports = async function requestHandler(req, res) {
+  const { sessionId } = req;
+  const mamClient = config.mamClients[sessionId];
+  const mamRoot = config.mamRoots[sessionId];
   try {
-    const messages = await mam.fetch(config.mamRoot);
+    const messages = await mamClient.fetch(mamRoot);
     logger.info(`Received MAM messages: ${JSON.stringify(messages)}`);
     return res.json({ events: messages.messages });
   } catch (err) {
