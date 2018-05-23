@@ -2,6 +2,12 @@
  * Creates event sourced projections based on messages from a MAM stream.
  */
 
+const _ = require('lodash');
+const HashSet = require('hash-set');
+
+const JsonSet = HashSet(JSON.stringify); // Set with JSON.stringify comparator
+
+
 // Event types
 const DEVICE_ADDED_TYPE = 'DEVICE_ADDED';
 const DEVICE_DELETED_TYPE = 'DEVICE_DELETED';
@@ -19,19 +25,18 @@ const AUTHORIZATION_REVOKED_TYPE = 'AUTHORIZATION_REVOKED';
 function toDevices(mamMessages) {
   const { messages } = mamMessages;
   const devicesSet = messages.reduce((devices, { type, device }) => {
-    // Turn the device into JSON for equality operator to work...
     switch (type) {
       case DEVICE_ADDED_TYPE:
-        return devices.add(JSON.stringify(device));
+        return devices.add(device);
       case DEVICE_DELETED_TYPE: {
-        devices.delete(JSON.stringify(device)); // returns true or false
+        devices.delete(device); // returns true or false
         return devices;
       }
       default:
         return devices;
     }
-  }, new Set());
-  const devices = Array.from(devicesSet).map(JSON.parse);
+  }, new JsonSet());
+  const devices = Array.from(devicesSet.entries());
   return devices;
 }
 
@@ -45,20 +50,18 @@ function toDevices(mamMessages) {
 function toPolicies(mamMessages) {
   const { messages } = mamMessages;
   const policiesSet = messages.reduce((policies, { type, policy, device }) => {
-    // Turn the device into JSON for equality operator to work...
     switch (type) {
       case AUTHORIZED_TYPE:
-        return policies.add(JSON.stringify(policy));
+        return policies.add(policy);
       case AUTHORIZATION_REVOKED_TYPE: {
-        policies.delete(JSON.stringify(policy)); // returns true or false
+        policies.delete(policy); // returns true or false
         return policies;
       }
       case DEVICE_DELETED_TYPE: {
         // Remove policies associated with device
         policies.forEach((p) => {
-          // Back to JS object, and then to string representation for comparison :'(
-          if (JSON.stringify(JSON.parse(p).device) === JSON.stringify(device)) {
-            policies.delete(p); // p is already stringified
+          if (_.isEqual(p.device, device)) {
+            policies.delete(p);
           }
         });
         return policies;
@@ -66,8 +69,8 @@ function toPolicies(mamMessages) {
       default:
         return policies;
     }
-  }, new Set());
-  const policies = Array.from(policiesSet).map(JSON.parse);
+  }, new JsonSet());
+  const policies = Array.from(policiesSet.entries());
   return policies;
 }
 module.exports = { toDevices, toPolicies };

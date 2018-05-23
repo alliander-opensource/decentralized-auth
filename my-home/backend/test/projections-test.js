@@ -26,12 +26,12 @@ describe('Get all policies', () => {
   it('should build projection of policy events', () => {
     const mamMessages = {
       messages: [
-        { type: 'AUTHORIZE', policy: { serviceProvider: 1, device: { iotaAddress: 1 } } },
+        { type: 'AUTHORIZED', policy: { serviceProvider: 1, device: { iotaAddress: 1 } } },
         { type: 'DUMMY' },
         { },
-        { type: 'AUTHORIZE', policy: { serviceProvider: 2, device: { iotaAddress: 2 } } },
-        { type: 'REVOKE_AUTHORIZATION', policy: { serviceProvider: 1, device: { iotaAddress: 1 } } },
-        { type: 'AUTHORIZE', policy: { serviceProvider: 3, device: { iotaAddress: 3 } } },
+        { type: 'AUTHORIZED', policy: { serviceProvider: 2, device: { iotaAddress: 2 } } },
+        { type: 'AUTHORIZATION_REVOKED', policy: { serviceProvider: 1, device: { iotaAddress: 1 } } },
+        { type: 'AUTHORIZED', policy: { serviceProvider: 3, device: { iotaAddress: 3 } } },
         { type: 'DEVICE_DELETED', device: { iotaAddress: 3 } },
       ],
     };
