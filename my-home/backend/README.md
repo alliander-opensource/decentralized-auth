@@ -4,19 +4,12 @@ My Home backend that can be used for claiming an IOT-device and storing policies
 
 Based on [diva-js-reference-3p-backend](https://github.com/Alliander/diva-js-reference-3p-backend).
 
-## IRMA / DIVA
-
-This repository contains an example/reference backend implementation that uses the DIVA SDK [diva-irma-js](https://github.com/Alliander/diva-irma-js) to easily integrate [IRMA attributes](https://privacybydesign.foundation/irma-verifier/) into NodeJS based applications.
-
-For a compatible frontend example see [diva-js-reference-3p-frontend](https://github.com/Alliander/diva-js-reference-3p-frontend).
-
-IRMA is a decentralized, attribute based Identity Management protocol that allows easy and fine-grained authentication (and based on specific attributes) authorization. Attributes are issued by trusted issuers and therefore provide easy validation of users.
-
 ## Features
 
 This backend in particular demonstrates
 - How to pair with a device via IOTA
 - How to provide consent to access data of that device
+- How to store event stream (device pairing and providing consent) on IOTA
 
 ## Running the application
 
@@ -37,18 +30,6 @@ java -jar target/iri-1.4.2.1.jar --testnet -p 14700
 
 or set the IOTA_PROVIDER environment variable to a public testnet or mainnet node.
 
-Generate a seed:
-
-```
-cat /dev/urandom | LC_ALL=C tr -dc 'A-Z9' | fold -w 81 | head -n 1
-```
-
-and add it to the config.seed configuration variable.
-
-```
-export SEED=<seed>
-```
-
 ## Tests
 
 Run IOTA integration tests with `npm run test:iota`. It will start the `raspberry-pi-client` in the test.
@@ -56,18 +37,3 @@ Run IOTA integration tests with `npm run test:iota`. It will start the `raspberr
 Run end-to-end tests with `npm run integration-test`.
 
 Run all tests with `npm run test`.
-
-## IRMA
-
-For more information about IRMA, see: https://privacybydesign.foundation/irma/
-
-The IRMA client apps can be downloaded from their respective app stores:
-
-- [Apple App Store](https://itunes.apple.com/nl/app/irma-authentication/id1294092994?mt=8)
-- [Google Play Store](https://play.google.com/store/apps/details?id=org.irmacard.cardemu)
-
-Other components in the IRMA ecosystem include:
-
-- [IRMA Android app](https://github.com/credentials/irma_android_cardemu)
-- [IRMA iOS app](https://github.com/credentials/irma_mobile)
-- [IRMA API server](https://github.com/credentials/irma_api_server)

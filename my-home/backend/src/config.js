@@ -22,12 +22,6 @@ const config = {
   iotaDepth: 5,
   iotaSecurityLevel: 2,
   iotaSeed,
-
-  apiKey: process.env.IRMA_API_SERVER_KEY ? process.env.IRMA_API_SERVER_KEY : 'FILL_IN',
-  irmaApiServerUrl: process.env.IRMA_API_SERVER_URL ? process.env.IRMA_API_SERVER_URL : 'http://localhost:8081/irma_api_server',
-  irmaApiServerPublicKey: process.env.IRMA_API_SERVER_PUBLIC_KEY ? process.env.IRMA_API_SERVER_PUBLIC_KEY : 'FILL_IN',
-
-  bingMapsApiKey: process.env.BING_MAPS_API_KEY ? process.env.BING_MAPS_API_KEY : '',
 };
 
 module.exports = config;
