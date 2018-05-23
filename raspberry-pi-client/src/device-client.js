@@ -233,7 +233,7 @@ module.exports = class DeviceClient {
    * @returns {Promise} with transactions or null
    */
   async processIotaMessage(address) {
-    logger.info(`Getting last message from address ${address}...`);
+    logger.info(`Getting last message from address ${address} ...`);
 
     try {
       const msg = await iota.getLastMessage({ addresses: [address] });
