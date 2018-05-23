@@ -1,7 +1,5 @@
-import Moment from 'react-moment';
 import CircularProgress from 'material-ui/CircularProgress';
 import queryString from 'query-string';
-import 'moment/locale/nl';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col } from 'react-flexbox-grid';

@@ -4,8 +4,6 @@ import { history as historyPropTypes } from 'history-prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Row, Col } from 'react-flexbox-grid';
-import Moment from 'react-moment';
-import 'moment/locale/nl';
 import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
 
