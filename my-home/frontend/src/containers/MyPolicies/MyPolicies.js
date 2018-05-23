@@ -46,8 +46,19 @@ class MyPolicies extends Component {
                 policies.policies.map(policy => (
                   <div key={uuid()} style={policyContainerStyle}>
                     <Row>
-                      <Col xs={1} sm={2} md={2} lg={2}> { policy.serviceProvider.url } </Col>
-                      <Col xs={11} sm={10} md={10} lg={10}> { policy.message }</Col>
+                      <Col xs={1} sm={2} md={2} lg={2}>
+                        <strong>
+                          { policy.serviceProvider.url }
+                        </strong>
+                      </Col>
+                      <Col xs={1} sm={2} md={2} lg={2}>
+                        (Iota address: { policy.serviceProvider.iotaAddress })
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col xs={11} sm={10} md={10} lg={10}>
+                        <i>is allowed to</i> {policy.action} <i>to</i> { policy.goal }
+                      </Col>
                     </Row>
                     <br />
                     <Row>
