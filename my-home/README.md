@@ -1,14 +1,13 @@
-# My Home backend
+# My Home
 
-My Home backend that can be used for claiming an IOT-device and storing policies related to its data distribution.
-
-Based on [diva-js-reference-3p-backend](https://github.com/Alliander/diva-js-reference-3p-backend).
+Example of IOTA user interface for pairing with a energy data reader device and providing a service provider with consent to retrieve that data.
 
 ## Features
 
-This backend in particular demonstrates
+My Home in particular demonstrates
 - How to pair with a device via IOTA
 - How to provide consent to access data of that device
+- How to revoke consent to access data of that device
 - How to store event stream (device pairing and providing consent) on IOTA
 
 ## Running the application

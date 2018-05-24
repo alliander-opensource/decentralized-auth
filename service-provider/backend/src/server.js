@@ -28,6 +28,6 @@ const server = app.listen(config.port, () => {
   logger.info(`Service Provider Party backend listening on port ${config.port} !`);
 });
 
-app.use(serveStatic('./frontend/', { index: ['index.html', 'index.htm'] }));
+app.use(serveStatic('../frontend/', { index: ['index.html', 'index.htm'] }));
 
 module.exports = { app, server };
