@@ -15,7 +15,7 @@ This backend in particular demonstrates
 
 - Checkout the code
 - `npm install` (or `npm install --python=python2.6` when a gyp error appears)
-- `cd frontend && npm build && cd ..`
+- `cd src/frontend && npm build && cd ../..`
 - `npm start`
 
 Note: for development, use `npm run dev` to run the application in development mode with hot reloading.
