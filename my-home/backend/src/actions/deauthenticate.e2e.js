@@ -42,7 +42,6 @@ describe('Deauthenticate', () => {
       .expect(200)
       .expect((res) => {
         expect(res.body).to.have.property('sessionId');
-        expect(res.body).to.have.property('attributes');
         expect(res.body.sessionId).to.equal(newSessionId);
       }));
 });

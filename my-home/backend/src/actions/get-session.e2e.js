@@ -18,7 +18,6 @@ describe('Get session', () => {
       .expect((res) => {
         expect(res.headers).to.have.property('set-cookie');
         expect(res.body).to.have.property('sessionId');
-        expect(res.body).to.have.property('attributes');
         sessionId = res.body.sessionId;
         cookie = res.headers['set-cookie'];
       }));
@@ -30,7 +29,6 @@ describe('Get session', () => {
       .expect(200)
       .expect((res) => {
         expect(res.body).to.have.property('sessionId');
-        expect(res.body).to.have.property('attributes');
         expect(res.body.sessionId).to.equal(sessionId);
       }));
 });
