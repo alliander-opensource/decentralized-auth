@@ -10,9 +10,8 @@
     "lint": "./node_modules/.bin/eslint -c ../../.eslintrc src test",
     "integration-test": "mocha 'src/**/*.e2e.js' --timeout 5000",
     "test": "npm run integration-test; npm run test:iota",
-    "test:iota": "mocha --timeout 60000",
-    "test:watch": "mocha --watch 'src/**/*.e2e.js'",
-    "test:unit": "mocha 'src/**/*.spec.js'"
+    "test:unit": "mocha --timeout 60000",
+    "test:watch": "mocha --watch 'src/**/*.e2e.js'"
   },
   "private": true,
   "keywords": [
