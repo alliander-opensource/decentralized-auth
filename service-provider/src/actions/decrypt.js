@@ -1,5 +1,5 @@
 const ntru = require('./../modules/ntru');
-const config = require('./../config');
+const sessionState = require('./../session-state');
 const logger = require('./../logger')(module);
 
 
@@ -11,13 +11,13 @@ const logger = require('./../logger')(module);
  * @returns {undefined}
  */
 module.exports = async function requestHandler(req, res) {
-  const { query: { trytes } } = req;
-  const { sessionId } = req.params;
+  const { query: { trytes }, sessionId } = req;
   logger.info(`Decrypting trytes ${trytes} for session id ${sessionId}`);
+  const privateKey = sessionState[sessionId].ntruKeyPairs.private;
   return res
     .status(200)
     .send({
       success: true,
-      message: ntru.decrypt(trytes, config.ntruKeyPairs[sessionId].private),
+      message: ntru.decrypt(trytes, privateKey),
     });
 };

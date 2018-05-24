@@ -32,9 +32,6 @@ There is a risk that the encryption (although we use the quantum proof NTRU) wil
 ### State of app
 Only the happy flow works at the moment. Edge cases and error handling still need to be implemented.
 
-###  NTRU backend keeps session via URL, this can be sniffed
-Which means an attacker can use the backend to decrypt the MAM data.
-
 ### DDOS attacks
 Addresses are public. So service providers and Raspberry Pi Energy Data Readers can easily be DDOSed.
 
