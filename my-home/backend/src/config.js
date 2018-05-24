@@ -1,7 +1,6 @@
 const config = {
   // Server
   port: process.env.PORT ? process.env.PORT : 4000,
-  baseUrl: process.env.BASE_URL ? process.env.BASE_URL : 'http://localhost:4000',
 
   // Session cookie
   cookieSecret: process.env.COOKIE_SECRET ? process.env.COOKIE_SECRET : 'StRoNGs3crE7',
