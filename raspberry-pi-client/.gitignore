@@ -12,6 +12,3 @@ error.log
 # Other
 .DS_Store
 *.swp
-
-# GPL licensed
-mam.node.js
