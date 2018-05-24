@@ -201,7 +201,7 @@ function policyDeleted(json) {
 
 export function deletePolicy(policy) {
   return dispatch => axios
-    .post(`/api/policy/`, { policy }, {
+    .post('/api/policy/', { policy }, {
       withCredentials: true,
     })
     .then(response => response.data)

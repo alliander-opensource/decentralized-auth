@@ -1,3 +1,4 @@
+/* eslint-disable */
 // SOURCE: https://stackoverflow.com/a/2117523
 function uuidv4() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
