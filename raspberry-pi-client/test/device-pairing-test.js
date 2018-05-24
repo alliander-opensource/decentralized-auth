@@ -1,5 +1,4 @@
 const iota = require('../src/modules/iota');
-const ntru = require('../src/modules/ntru');
 const pairingMock = require('./pairing-mock');
 
 const DeviceClient = require('../src/device-client');
