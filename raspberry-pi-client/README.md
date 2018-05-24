@@ -97,6 +97,10 @@ SEED=$(cat /dev/urandom | LC_ALL=C tr -dc 'A-Z9' | fold -w 81 | head -n 1) npm s
 - `npm install`
 - `npm start`
 
-Or run with specific seed:
+Run with specific seed:
 
 - `SEED=HWMLSSBKJOTBKVQTJE9OWPPMPZJTDUDIHMMUFIBQJCDJDPRNLAAG99J9UXZIKSQJDTUWFPSXJIZEJMTXV npm start`
+
+Run with random seed:
+
+- `SEED=$(cat /dev/urandom | LC_ALL=C tr -dc 'A-Z9' | fold -w 81 | head -n 1) npm start`
