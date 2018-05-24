@@ -3,6 +3,7 @@ const logger = require('./logger')(module);
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cookieEncrypter = require('cookie-encrypter');
+const serveStatic = require('serve-static');
 const simpleSession = require('./modules/simple-session');
 const config = require('./config');
 
@@ -35,5 +36,7 @@ app.get('/api/event/all', require('./modules/get-all-events'));
 const server = app.listen(config.port, () => {
   logger.info(`My Home backend listening on port ${config.port} !`);
 });
+
+app.use(serveStatic('./frontend/build', { index: ['index.html'] }));
 
 module.exports = { app, server };
