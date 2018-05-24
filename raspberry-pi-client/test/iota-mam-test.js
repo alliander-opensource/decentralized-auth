@@ -55,7 +55,7 @@ describe('MAM', () => {
   });
 
   it('should be able to fetch the two messages', async () => {
-    const res = await MamClient.fetch(testRoot1, 'restricted', sideKey);
+    const res = await mam.fetch(testRoot1, 'restricted', sideKey);
 
     expect(res.nextRoot).to.have.lengthOf(81);
     expect(res.messages).to.be.an('array');
@@ -64,7 +64,7 @@ describe('MAM', () => {
   });
 
   it('should be able to fetch from the second root', async () => {
-    const res = await MamClient.fetch(testRoot2, 'restricted', sideKey);
+    const res = await mam.fetch(testRoot2, 'restricted', sideKey);
 
     expect(res.nextRoot).to.have.lengthOf(81);
     expect(res.messages).to.be.an('array');
@@ -81,7 +81,7 @@ describe('MAM', () => {
   });
 
   it('should be able to fetch from the root using the second lib', async () => {
-    const res = await MamClient.fetch(testRoot3, 'public');
+    const res = await mam2.fetch(testRoot3, 'public');
 
     expect(res.nextRoot).to.have.lengthOf(81);
     expect(res.messages).to.be.an('array');
