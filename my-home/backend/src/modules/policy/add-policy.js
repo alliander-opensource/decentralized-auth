@@ -1,5 +1,5 @@
 const logger = require('../../logger')(module);
-const config = require('../../config');
+const sessionState = require('../../sessionState');
 
 const AUTHORIZED_TYPE = 'AUTHORIZED';
 
@@ -10,12 +10,10 @@ const AUTHORIZED_TYPE = 'AUTHORIZED';
  * @param {object} res Express response object
  * @returns {undefined}
  */
-module.exports = async function requestHandler(req, res) {
+module.exports = function requestHandler(req, res) {
   try {
     const { device, serviceProvider, goal } = req.body;
-    const { sessionId } = req;
-    const mamClient = config.mamClients[sessionId];
-
+    const { mamClient } = sessionState[req.sessionId];
     const policy = {
       serviceProvider, // actor
       action: 'read P1 energy data',
@@ -24,7 +22,7 @@ module.exports = async function requestHandler(req, res) {
       conditions: [],
     };
     const event = { type: AUTHORIZED_TYPE, timestamp: Date.now(), policy };
-    await mamClient.attach(event);
+    mamClient.attach(event);
     return res
       .status(200)
       .send({
@@ -33,7 +31,7 @@ module.exports = async function requestHandler(req, res) {
         policy,
       });
   } catch (err) {
-    logger.error(err);
+    logger.error(err.message);
     return res
       .status(500)
       .send({

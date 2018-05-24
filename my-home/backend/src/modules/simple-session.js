@@ -2,6 +2,7 @@ const uuidv4 = require('uuid/v4');
 const MamClient = require('./../modules/iota-mam');
 const iota = require('./../modules/iota');
 const config = require('./../config');
+const sessionState = require('./../sessionState');
 const logger = require('./../logger')(module);
 const generateSeed = require('./../modules/gen-seed');
 
@@ -13,13 +14,16 @@ async function deauthenticate(req, res) {
   res.cookie(config.cookieName, req.sessionId, config.cookieSettings);
 
   const seed = await generateSeed();
+
+  sessionState[sessionId] = {};
+
   logger.info(`Storing new IOTA seed ${seed} for session ${sessionId}`);
-  config.iotaSeeds[sessionId] = seed;
+  sessionState[sessionId].iotaSeed = seed;
 
   const setIotaAddress = async () => {
     const [address] = await iota.getAddress(seed, 1);
     logger.info(`Storing IOTA address ${address} for session ${sessionId}`);
-    config.iotaAddresses[sessionId] = address;
+    sessionState[sessionId].iotaAddress = address;
   };
 
   await setIotaAddress();
@@ -29,16 +33,15 @@ async function deauthenticate(req, res) {
   // using `projections.js`)
   logger.info(`Creating MAM client for session ${sessionId}`);
   const mam = new MamClient(seed);
-  config.mamClients[sessionId] = mam;
+  sessionState[sessionId].mamClient = mam;
   const mamRoot = mam.getMamState().channel.next_root;
   logger.info(`Set MAM root to ${mamRoot} for session ${sessionId}`);
-  config.mamRoots[sessionId] = mamRoot;
-
-  logger.info(`IOTA seeds is: ${JSON.stringify(config.iotaSeeds)}`);
+  sessionState[sessionId].mamRoot = mamRoot;
 }
 
 function simpleSessionCookieParser(req, res, next) {
   if (!req.signedCookies[config.cookieName]) {
+    logger.info('NOW DEAUTHNETICATING!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
     deauthenticate(req, res);
   } else {
     req.sessionId = req.signedCookies[config.cookieName];

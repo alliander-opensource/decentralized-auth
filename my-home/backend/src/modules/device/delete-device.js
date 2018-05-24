@@ -1,5 +1,6 @@
 const logger = require('../../logger')(module);
 const config = require('../../config');
+const sessionState = require('../../sessionState');
 
 const DEVICE_DELETED_TYPE = 'DEVICE_DELETED';
 
@@ -17,7 +18,7 @@ module.exports = function requestHandler(req, res) {
   }
 
   const { device } = req.body;
-  const mamClient = config.mamClients[req.sessionId];
+  const { mamClient } = sessionState[req.sessionId];
 
   mamClient.attach({ type: DEVICE_DELETED_TYPE, timestamp: Date.now(), device })
     .then(() => res

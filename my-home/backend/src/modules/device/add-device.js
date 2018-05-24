@@ -2,7 +2,7 @@ const logger = require('./../../logger')(module);
 const iota = require('./../iota');
 const pairing = require('./pairing');
 const signing = require('../../modules/signing');
-const config = require('./../../config');
+const sessionState = require('./../../sessionState');
 const PromiseRetryer = require('promise-retryer')(Promise);
 
 const DELAY_MS = 5000;
@@ -46,10 +46,7 @@ const DEVICE_ADDED_TYPE = 'DEVICE_ADDED';
  */
 module.exports = async function requestHandler(req, res) {
   const { body: { device, secret }, sessionId } = req;
-  const iotaSeed = config.iotaSeeds[sessionId];
-  const iotaAddress = config.iotaAddresses[sessionId];
-  const mamClient = config.mamClients[sessionId];
-  const mamRoot = config.mamRoots[sessionId];
+  const { iotaSeed, iotaAddress, mamClient, mamRoot } = sessionState[sessionId];
   try {
     pairing.claimDevice(iotaSeed, iotaAddress, device.iotaAddress);
     const { challenge } = await waitForMessage(

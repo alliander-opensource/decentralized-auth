@@ -7,10 +7,10 @@ const chaiAsPromised = require('chai-as-promised');
 const request = require('supertest-as-promised');
 
 chai.use(chaiAsPromised);
-const expect = chai.expect;
+const { expect } = chai;
 
-const app = require('../server').app;
-const server = require('../server').server;
+const { app } = require('../server');
+const { server } = require('../server');
 
 const getRandomValues = require('get-random-values');
 

@@ -1,5 +1,5 @@
 const logger = require('../../logger')(module);
-const config = require('../../config');
+const sessionState = require('../../sessionState');
 
 const AUTHORIZATION_REVOKED_TYPE = 'AUTHORIZATION_REVOKED';
 
@@ -17,8 +17,7 @@ module.exports = function requestHandler(req, res) {
   }
 
   const { policy } = req.body;
-  const { sessionId } = req;
-  const mamClient = config.mamClients[sessionId];
+  const { mamClient } = sessionState[req.sessionId];
 
   mamClient.attach({ type: AUTHORIZATION_REVOKED_TYPE, timestamp: Date.now(), policy })
     .then(() => res

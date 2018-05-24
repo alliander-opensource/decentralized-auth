@@ -1,5 +1,5 @@
 const logger = require('../logger')(module);
-const config = require('../config');
+const sessionState = require('../sessionState');
 
 /**
  * Request handler to get all MAM events
@@ -10,8 +10,7 @@ const config = require('../config');
  */
 module.exports = async function requestHandler(req, res) {
   const { sessionId } = req;
-  const mamClient = config.mamClients[sessionId];
-  const mamRoot = config.mamRoots[sessionId];
+  const { mamRoot, mamClient } = sessionState[sessionId];
   try {
     const messages = await mamClient.fetch(mamRoot);
     logger.info(`Received MAM messages: ${JSON.stringify(messages)}`);

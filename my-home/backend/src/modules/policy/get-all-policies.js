@@ -1,5 +1,5 @@
 const logger = require('../../logger')(module);
-const config = require('../../config');
+const sessionState = require('../../sessionState');
 
 const { toPolicies } = require('../projections');
 
@@ -12,8 +12,7 @@ const { toPolicies } = require('../projections');
  */
 module.exports = function requestHandler(req, res) {
   const { sessionId } = req;
-  const mamClient = config.mamClients[sessionId];
-  const mamRoot = config.mamRoots[sessionId];
+  const { mamRoot, mamClient } = sessionState[sessionId];
   mamClient.fetch(mamRoot)
     .then(toPolicies)
     .then(policies => res.json(policies))
