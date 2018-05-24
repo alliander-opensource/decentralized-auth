@@ -382,11 +382,12 @@
        const encryptedSideKey = message[address];
        if (typeof encryptedSideKey === 'undefined') {
          retractAuthorization();
-       // If our key is included in the message, decrypt, update ROOT and side key
-       } else {
-         const sideKey = await decrypt(encryptedSideKey);
-         updateAuthorization(sideKey);
+         return false;
        }
+       // If our key is included in the message, decrypt, update ROOT and side key
+       const sideKey = await decrypt(encryptedSideKey);
+       updateAuthorization(sideKey);
+       return true;
      }
 
 
@@ -430,8 +431,12 @@
            }
            case KEY_ROTATION_MESSAGE_TYPE:
            {
-             processKeyRotationMessage(jsonMessage);
-             break;
+             const stillAuthorized = await processKeyRotationMessage(jsonMessage);
+             if (stillAuthorized) {
+               break;
+             } else {
+               return; // Do not set state again later
+             }
            }
            default:
            {
