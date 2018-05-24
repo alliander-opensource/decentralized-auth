@@ -11,7 +11,7 @@
     "gdpr"
   ],
   "scripts": {
-    "lint": "./node_modules/.bin/eslint -c ./../.eslintrc ."
+    "lint": "./node_modules/.bin/eslint -c .eslintrc ."
   },
   "contributors": [
     "Alliander N.V. (https://alliander.com/)"
