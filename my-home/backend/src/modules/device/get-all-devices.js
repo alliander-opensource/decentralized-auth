@@ -1,5 +1,5 @@
 const logger = require('../../logger')(module);
-const sessionState = require('../../sessionState');
+const sessionState = require('../../session-state');
 
 const { toDevices } = require('../projections');
 

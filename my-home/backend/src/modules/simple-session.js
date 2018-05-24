@@ -2,7 +2,7 @@ const uuidv4 = require('uuid/v4');
 const MamClient = require('./../modules/iota-mam');
 const iota = require('./../modules/iota');
 const config = require('./../config');
-const sessionState = require('./../sessionState');
+const sessionState = require('./../session-state');
 const logger = require('./../logger')(module);
 const generateSeed = require('./../modules/gen-seed');
 

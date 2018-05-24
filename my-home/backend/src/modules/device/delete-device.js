@@ -1,6 +1,5 @@
 const logger = require('../../logger')(module);
-const config = require('../../config');
-const sessionState = require('../../sessionState');
+const sessionState = require('../../session-state');
 
 const DEVICE_DELETED_TYPE = 'DEVICE_DELETED';
 

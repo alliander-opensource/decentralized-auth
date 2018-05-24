@@ -2,7 +2,7 @@ const logger = require('./../../logger')(module);
 const iota = require('./../iota');
 const pairing = require('./pairing');
 const signing = require('../../modules/signing');
-const sessionState = require('./../../sessionState');
+const sessionState = require('./../../session-state');
 const PromiseRetryer = require('promise-retryer')(Promise);
 
 const DELAY_MS = 5000;
