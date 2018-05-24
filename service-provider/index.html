@@ -373,6 +373,14 @@
        setSideKey(sideKey);
      }
 
+
+     /**
+      * Processes key rotation message, either update current authorization with
+      * new side key, or retract authorization.
+      * @function processKeyRotationMessage
+      * @param {Object} message JSON message taken from the MAM stream
+      * @returns {Promise} Boolean true if still authorized, false if not
+      */
      const processKeyRotationMessage = async (message) => {
        notify(`IOTA MAM: Got key rotation message ${JSON.stringify(message)}`);
 
