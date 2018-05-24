@@ -10,6 +10,9 @@ const config = {
     secure: false, // TODO: NOTE: must be set to true and be used with HTTPS only!
   },
   iotaProvider: process.env.IOTA_PROVIDER ? process.env.IOTA_PROVIDER : 'http://localhost:14700',
+  iotaMinWeightMagnitude: process.env.IOTA_MIN_WEIGHT_MAGNITUDE
+    ? process.env.IOTA_MIN_WEIGHT_MAGNITUDE
+    : 14, // 10 for testnet
 };
 
 module.exports = config;
