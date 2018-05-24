@@ -8,7 +8,12 @@ For creating and storing a key pair, receiving our public key, and encrypting an
 
 ## Run
 
+The backend serves the static frontend:
+
 ```
+cd frontend
+npm i
+cd ../backend
 npm i
 npm start
 ```

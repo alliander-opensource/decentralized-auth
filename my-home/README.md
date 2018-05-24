@@ -2,6 +2,23 @@
 
 Example of IOTA user interface for pairing with a energy data reader device and providing a service provider with consent to retrieve that data.
 
+## Run
+
+The backend can serve the static frontend:
+
+```
+cd frontend
+npm run build
+cd ../backend
+npm i
+npm start
+```
+
+For running the frontend and backend separately:
+- Disable the serve-static line in backend/server.js.
+- `cd frontend && npm run dev`
+- `cd backend && npm run dev`
+
 ## Features
 
 My Home in particular demonstrates
