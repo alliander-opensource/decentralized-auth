@@ -1,6 +1,6 @@
 # My Home backend
 
-My Home backend that can be used for claiming an IOT-device and storing policies related to its data distribution.
+My Home backend that can be used for claiming an energy data reader device (see raspberry-pi-client) and retrieving policies related to the device's data distribution.
 
 Based on [diva-js-reference-3p-backend](https://github.com/Alliander/diva-js-reference-3p-backend).
 
