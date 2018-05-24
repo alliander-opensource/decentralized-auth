@@ -46,6 +46,14 @@
     <script src="uuid.js"></script>
 
     <script type="text/javascript">
+
+     const ADDRESS_BAR_URL = window.location.href.slice(0, -1);
+     const IS_DEV_ENVIRONMENT = ADDRESS_BAR_URL === 'http://localhost:5000';
+     const BACKEND_BASE_URL = ADDRESS_BAR_URL;
+     const MY_HOUSE_BASE_URL = IS_DEV_ENVIRONMENT
+       ? 'http://localhost:4000'
+       : 'https://decentralized-auth-iota-ui.appx.cloud';
+
      let IS_AUTHORIZED = false;
 
      const POLLING_INTERVAL_MS = 5000; // How often to poll for IOTA and MAM messages
@@ -64,7 +72,7 @@
       */
      const initNtruSession = async () => {
        await axios.get(
-         'http://localhost:5000/api/init',
+         `${BACKEND_BASE_URL}/api/init`,
           { withCredentials: true },
        );
      }
@@ -81,7 +89,7 @@
        try {
          if (typeof addressCache !== 'undefined') return addressCache;
          const res = await axios.get(
-           'http://localhost:5000/api/get-address',
+           `${BACKEND_BASE_URL}/api/get-address`,
            { withCredentials: true },
          );
          const address= res.data.message;
@@ -102,7 +110,7 @@
      const getPublicKeyTrytes = async () => {
        try {
          const res = await axios.get(
-           'http://localhost:5000/api/get-public-key',
+           `${BACKEND_BASE_URL}/api/get-public-key`,
            { withCredentials: true },
          );
          const publicKeyTrytes= res.data.message;
@@ -123,7 +131,7 @@
      const decrypt = async (trytes) => {
        try {
          const res = await axios.get(
-           `http://localhost:5000/api/decrypt?trytes=${trytes}`,
+           `${BACKEND_BASE_URL}/api/decrypt?trytes=${trytes}`,
            { withCredentials: true },
          );
          const decrypted = res.data.message;
@@ -173,7 +181,7 @@
        const url = window.location.href;
        const goal = document.getElementById('goal-text-box').value;
        const publicKeyTrytes = await getPublicKeyTrytes();
-       const myHouseUrl = `http://localhost:3000/new-policy?iotaAddress=${address}&publicKeyTrytes=${publicKeyTrytes}&url=${url}&goal=${goal}`;
+       const myHouseUrl = `${MY_HOUSE_BASE_URL}/new-policy?iotaAddress=${address}&publicKeyTrytes=${publicKeyTrytes}&url=${url}&goal=${goal}`;
 
        window.location = myHouseUrl;
      };
