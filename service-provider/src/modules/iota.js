@@ -1,5 +1,4 @@
 const config = require('./../config');
-const logger = require('../logger')(module);
 const IOTA = require('iota.lib.js');
 
 const iota = new IOTA({
