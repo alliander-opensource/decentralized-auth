@@ -13,7 +13,7 @@ Only need to MAM root and side key (and a decrypting backend). No need for compl
 Only need MAM library and address of an IOTA node.
 
 ### Multiplexing
-Once the data is published on a MAM address multiple authorized listeners can fetch the data.
+Once the data is published on an MAM address multiple authorized listeners can fetch the data.
 
 ## Disadvantages of using IOTA for GDPR proof energy data streams
 
