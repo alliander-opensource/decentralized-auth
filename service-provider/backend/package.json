@@ -1,5 +1,5 @@
 {
-  "name": "service-provider-backend",
+  "name": "decentralized-auth-service-provider-backend",
   "version": "1.0.0",
   "description": "A backend for NTRU related stuff for the service provider",
   "main": "src/server.js",

@@ -1,5 +1,5 @@
 {
-  "name": "decentralized-auth-service-provider",
+  "name": "decentralized-auth-service-provider-frontend",
   "version": "1.0.0",
   "description": "The front end for requesting consent and displaying energy data",
   "repository": {
