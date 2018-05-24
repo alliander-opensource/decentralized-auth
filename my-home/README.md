@@ -2,7 +2,7 @@
 
 My Home backend that can be used for claiming an IOT-device and storing policies related to its data distribution.
 
-Based on [diva-js-reference-3p-backend](https://github.com/Alliander/diva-js-reference-3p-backend).
+Based on [diva-js-reference-3p-backend](https://github.com/Alliander/diva-js-reference-3p-backend) and [diva-js-reference-3p-frontend](https://github.com/Alliander/diva-js-reference-3p-frontend).
 
 ## Features
 
