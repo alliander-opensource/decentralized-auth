@@ -41,7 +41,7 @@ async function deauthenticate(req, res) {
 
 function simpleSessionCookieParser(req, res, next) {
   if (!req.signedCookies[config.cookieName]) {
-    logger.info('NOW DEAUTHNETICATING!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+    logger.info('Deauthenticating...');
     deauthenticate(req, res);
   } else {
     req.sessionId = req.signedCookies[config.cookieName];
