@@ -17,7 +17,7 @@ const config = {
 
   // IOTA
   iotaProvider: process.env.IOTA_PROVIDER ? process.env.IOTA_PROVIDER : 'http://localhost:14700',
-  iotaMinWeightMagnitude: 10, // 14 for mainnet
+  iotaMinWeightMagnitude: 14, // 10 for testnet
   iotaDepth: 5,
   iotaSecurityLevel: 2,
 };

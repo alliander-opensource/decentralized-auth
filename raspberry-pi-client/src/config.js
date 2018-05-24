@@ -4,7 +4,7 @@ const config = {
   p1SerialPort: process.env.P1_SERIAL_PORT ? process.env.P1_SERIAL_PORT : '/dev/ttyUSB0',
 
   iotaProvider: process.env.IOTA_PROVIDER ? process.env.IOTA_PROVIDER : 'http://node02.iotatoken.nl:14265',
-  iotaMinWeightMagnitude: 11, // 14 for mainnet
+  iotaMinWeightMagnitude: 14, // 10 for testnet
   iotaDepth: 6,
 
   seed: process.env.SEED ? process.env.SEED : 'TLQPEYBND9AFCHFDLCWSVQU9ISCDTBKUQSLXEEUXFHVDEEQZZJPCBPBJ9QSVFBXUJXTIFBMTQSLVUFYTH',
