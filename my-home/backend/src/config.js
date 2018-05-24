@@ -2,6 +2,8 @@ const config = {
   // Server
   port: process.env.PORT ? process.env.PORT : 4000,
 
+  frontendDir: process.env.FRONTEND_DIR ? process.env.FRONTEND_DIR : '../frontend/build',
+
   // Session cookie
   cookieSecret: process.env.COOKIE_SECRET ? process.env.COOKIE_SECRET : 'StRoNGs3crE7',
   cookieName: process.env.COOKIE_NAME ? process.env.COOKIE_NAME : 'my-iota-home-session',

@@ -37,6 +37,6 @@ const server = app.listen(config.port, () => {
   logger.info(`My Home backend listening on port ${config.port} !`);
 });
 
-app.use(serveStatic('../frontend/build', { index: ['index.html'] }));
+app.use(serveStatic(config.frontendDir, { index: ['index.html'] }));
 
 module.exports = { app, server };

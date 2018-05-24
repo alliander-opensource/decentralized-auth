@@ -1,5 +1,6 @@
 const config = {
   port: process.env.SP_PORT ? process.env.SP_PORT : 5000,
+  frontendDir: process.env.FRONTEND_DIR ? process.env.FRONTEND_DIR : '../frontend',
   cookieSecret: process.env.COOKIE_SECRET ? process.env.COOKIE_SECRET : 'StRoNGs3crE7',
   cookieName: 'wattt-session',
   cookieSettings: {
