@@ -2,7 +2,7 @@
 
 My Home backend that can be used for claiming an IOT-device and storing policies related to its data distribution.
 
-Based on [diva-js-reference-3p-backend](https://github.com/Alliander/diva-js-reference-3p-backend) and [diva-js-reference-3p-frontend](https://github.com/Alliander/diva-js-reference-3p-frontend).
+Based on [diva-js-reference-3p-backend](https://github.com/Alliander/diva-js-reference-3p-backend).
 
 ## Features
 
@@ -15,7 +15,7 @@ This backend in particular demonstrates
 
 - Checkout the code
 - `npm install` (or `npm install --python=python2.6` when a gyp error appears)
-- `cd src/frontend && npm build && cd ../..`
+- `cd frontend && npm build && cd ..`
 - `npm start`
 
 Note: for development, use `npm run dev` to run the application in development mode with hot reloading.
