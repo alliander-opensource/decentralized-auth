@@ -27,7 +27,6 @@
   "proxy": "http://localhost:4000",
   "scripts": {
     "build": "react-scripts build",
-    "cypres:open": "npx cypress open",
     "dev": "react-scripts start",
     "eject": "react-scripts eject",
     "lint": "./node_modules/.bin/eslint -c .eslintrc src",
@@ -49,7 +48,6 @@
   ],
   "license": "BSD-3-Clause",
   "devDependencies": {
-    "cypress": "1.0.3",
     "eslint": "4.8.0",
     "eslint-config-airbnb": "15.1.0",
     "eslint-config-react-app": "2.0.1",

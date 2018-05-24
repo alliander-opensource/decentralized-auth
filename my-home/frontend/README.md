@@ -17,13 +17,3 @@ This frontend in particular demonstrates
 - `npm start`
 
 Note: for development, use `npm run dev` to run the application in development mode with hot reloading.
-
-## Tests
-
-[Cypress.io](https://cypress.io) is used to perform frontend tests.
-To run the tests:
-
-- make sure the frontend is running
-- `npm run test`
-
-Note: during tests, the backend is mocked.
