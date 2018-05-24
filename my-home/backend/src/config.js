@@ -13,10 +13,6 @@ const config = {
     secure: false, // TODO: NOTE: must be set to true and be used with HTTPS only!
   },
 
-  // Smart meter related
-  smartMeterVersion: 2.2, // DSRM 2.2, 4.0, 4.2, or 5.0
-  p1SerialPort: process.env.P1_SERIAL_PORT ? process.env.P1_SERIAL_PORT : '/dev/ttyUSB0',
-
   // IOTA
   iotaProvider: process.env.IOTA_PROVIDER ? process.env.IOTA_PROVIDER : 'http://localhost:14700',
   iotaMinWeightMagnitude: 10, // 14 for mainnet
