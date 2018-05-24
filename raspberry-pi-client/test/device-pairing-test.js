@@ -122,10 +122,11 @@ describe('Pairing of a device by calling methods on DeviceClient', () => {
     });
 
     it('should be able to send the claim result', async () => {
-      const transactions = await deviceClient.sendClaimResult(
+      const transactions = await deviceClient.processChallenge(
         deviceSeed,
         deviceAddress,
         testSender,
+        myHouseRoot,
         testSignedChallenge,
       );
 
