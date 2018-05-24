@@ -4,6 +4,10 @@ My Home backend that can be used for claiming an IOT-device and storing policies
 
 Based on [diva-js-reference-3p-backend](https://github.com/Alliander/diva-js-reference-3p-backend).
 
+## Run
+
+`npm run dev`
+
 ## Tests
 
 Run integration test with
