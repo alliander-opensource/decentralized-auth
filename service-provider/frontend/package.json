@@ -18,6 +18,7 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "eslint": "^4.19.1",
     "iota.lib.js": "0.4.7",
     "mam.client.js": "git+https://github.com/iotaledger/mam.client.js.git"
   }
