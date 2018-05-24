@@ -280,10 +280,10 @@
       */
      const processIotaMessage = async () => {
        const address = await getAddress();
-       console.log(`Getting last message from address ${address} ...`);
+       console.log(`IOTA: Getting last message from address ${address} ...`);
 
        if (address === '') {
-         console.log('No address so cannot process message');
+         console.log('IOTA: No address so cannot process message');
          return;
        }
 
@@ -312,7 +312,7 @@
            }
            default:
            {
-             const errorMessage = `Unknown message type: ${msg.type}`;
+             const errorMessage = `IOTA: Unknown message type: ${msg.type}`;
              notify(errorMessage, 'error')
              throw new Error(errorMessage);
            }
@@ -443,7 +443,7 @@
            }
            default:
            {
-             throw new Error(`Unknown MAM msg type: ${jsonMessage.type}`);
+             throw new Error(`IOTA MAM: Unknown MAM msg type: ${jsonMessage.type}`);
            }
          }
 
