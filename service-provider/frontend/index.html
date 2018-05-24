@@ -305,13 +305,11 @@
 
          notify(`IOTA: Received new message of type ${msg.type}`);
          switch (msg.type) {
-           case MAM_DATA_MESSAGE_TYPE:
-           {
+           case MAM_DATA_MESSAGE_TYPE: {
              const decryptedMamData = await decryptMamData(msg.mamData);
              return setMamData(decryptedMamData);
            }
-           default:
-           {
+           default: {
              const errorMessage = `IOTA: Unknown message type: ${msg.type}`;
              notify(errorMessage, 'error')
              throw new Error(errorMessage);
@@ -427,13 +425,11 @@
          const jsonMessage = JSON.parse(fromTrytes(payload));
 
          switch (jsonMessage.type) {
-           case DATA_MESSAGE_TYPE:
-           {
+           case DATA_MESSAGE_TYPE: {
              addUsageData(jsonMessage);
              break;
            }
-           case KEY_ROTATION_MESSAGE_TYPE:
-           {
+           case KEY_ROTATION_MESSAGE_TYPE: {
              const stillAuthorized = await processKeyRotationMessage(jsonMessage);
              if (stillAuthorized) {
                break;
@@ -441,8 +437,7 @@
                return; // Do not set state again later
              }
            }
-           default:
-           {
+           default: {
              throw new Error(`IOTA MAM: Unknown MAM msg type: ${jsonMessage.type}`);
            }
          }
