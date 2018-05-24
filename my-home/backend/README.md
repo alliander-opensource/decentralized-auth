@@ -4,9 +4,23 @@ My Home backend that can be used for claiming an energy data reader device (see 
 
 Based on [diva-js-reference-3p-backend](https://github.com/Alliander/diva-js-reference-3p-backend).
 
+## Install dependencies
+
+```
+npm install
+```
+
 ## Run
 
-`npm run dev`
+```
+npm start
+```
+
+With hot code reloading:
+
+```
+npm run dev
+```
 
 ## Tests
 
