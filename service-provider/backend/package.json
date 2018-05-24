@@ -33,6 +33,7 @@
     "npm": "5.8.0",
     "ntrujs": "1.0.18",
     "pg": "7.4.1",
+    "serve-static": "^1.13.2",
     "superagent": "3.8.0",
     "uuid": "3.1.0",
     "winston": "3.0.0-rc3"
