@@ -5,16 +5,34 @@ const { expect, generateSeedForTestingPurposes } = require('../src/common/test-u
 describe('MAM', () => {
   const mamSeed = generateSeedForTestingPurposes();
   const mamSeed2 = generateSeedForTestingPurposes();
-  const mam = new MamClient(mamSeed);
-  const mam2 = new MamClient(mamSeed2);
+
+  // MAM seems shared over tests, so use same side key as in other tests for now
+  const sideKey = 'SWEETPOTATO';
+
+  let mam = null;
+  let mam2 = null;
 
   it('should initialize the MAM library', () => {
+    mam = new MamClient(mamSeed, 'restricted', sideKey);
     const mamState = mam.getMamState();
 
     expect(mamState).to.have.property('subscribed');
     expect(mamState).to.have.property('channel').and.to.have.property('side_key');
     expect(mamState).to.have.property('seed');
     expect(mamState.seed).to.equal(mamSeed);
+    expect(mamState.channel.side_key).to.equal(sideKey);
+  });
+
+  it('should initialize a second MAM public library instance without side key', () => {
+    mam2 = new MamClient(mamSeed2, 'private');
+
+    const mamState = mam2.getMamState();
+
+    expect(mamState).to.have.property('subscribed');
+    expect(mamState).to.have.property('channel').and.to.have.property('mode').and.to.equal('private');
+    expect(mamState).to.have.property('seed');
+    expect(mamState.seed).to.equal(mamSeed2);
+    expect(mamState.channel.side_key).to.equal(null);
   });
 
   const message1 = { type: 'BANANA' };
@@ -39,7 +57,7 @@ describe('MAM', () => {
   });
 
   it('should be able to fetch the two messages', async () => {
-    const res = await mam.fetch(testRoot1);
+    const res = await mam.fetch(testRoot1, 'restricted', sideKey);
 
     expect(res.nextRoot).to.have.lengthOf(81);
     expect(res.messages).to.be.an('array');
@@ -48,7 +66,7 @@ describe('MAM', () => {
   });
 
   it('should be able to fetch from the second root', async () => {
-    const res = await mam.fetch(testRoot2);
+    const res = await mam.fetch(testRoot2, 'restricted', sideKey);
 
     expect(res.nextRoot).to.have.lengthOf(81);
     expect(res.messages).to.be.an('array');

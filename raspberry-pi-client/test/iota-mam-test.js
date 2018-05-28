@@ -1,8 +1,10 @@
 const MamClient = require('../src/modules/iota-mam');
 const { expect, generateSeedForTestingPurposes } = require('../src/common/test-utils');
 
+
 describe('MAM', () => {
   const mamSeed = generateSeedForTestingPurposes();
+  const mamSeed2 = generateSeedForTestingPurposes();
 
   // MAM seems shared over tests, so use same side key as in other tests for now
   const sideKey = 'SWEETPOTATO';
@@ -11,7 +13,7 @@ describe('MAM', () => {
   let mam2 = null;
 
   it('should initialize the MAM library', () => {
-    mam = new MamClient(mamSeed, sideKey);
+    mam = new MamClient(mamSeed, 'restricted', sideKey);
     const mamState = mam.getMamState();
 
     expect(mamState).to.have.property('subscribed');
@@ -22,14 +24,14 @@ describe('MAM', () => {
   });
 
   it('should initialize a second MAM public library instance without side key', () => {
-    mam2 = new MamClient(mamSeed);
+    mam2 = new MamClient(mamSeed2, 'private');
 
     const mamState = mam2.getMamState();
 
     expect(mamState).to.have.property('subscribed');
     expect(mamState).to.have.property('channel').and.to.have.property('mode').and.to.equal('private');
     expect(mamState).to.have.property('seed');
-    expect(mamState.seed).to.equal(mamSeed);
+    expect(mamState.seed).to.equal(mamSeed2);
     expect(mamState.channel.side_key).to.equal(null);
   });
 

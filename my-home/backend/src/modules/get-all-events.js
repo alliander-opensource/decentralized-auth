@@ -12,7 +12,7 @@ module.exports = async function requestHandler(req, res) {
   const { sessionId } = req;
   const { mamRoot, mamClient } = sessionState[sessionId];
   try {
-    const messages = await mamClient.fetch(mamRoot);
+    const messages = await mamClient.fetch(mamRoot, 'private');
     logger.info(`Received MAM messages: ${JSON.stringify(messages)}`);
     return res.json({ events: messages.messages });
   } catch (err) {

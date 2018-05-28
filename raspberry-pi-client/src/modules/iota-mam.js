@@ -6,9 +6,9 @@ const logger = require('../logger')(module);
 
 
 module.exports = class MamClient {
-  constructor(seed, sideKey) {
+  constructor(seed, mode, sideKey) {
     this.mamState = null;
-    this.init(seed, sideKey);
+    this.init(seed, mode, sideKey);
   }
 
   getMamState() { return this.mamState; }
@@ -16,30 +16,21 @@ module.exports = class MamClient {
 
 
   /**
-   * Sets or changes the MAM side key.
-   * @function changeSideKey
-   * @param {string} sideKey Side key
-   * @returns {undefined}
-   */
-  changeSideKey(sideKey) {
-    const mode = 'restricted';
-    MAM.changeMode(this.getMamState(), mode, sideKey);
-  }
-
-
-  /**
    * Initialize MAM (mode private or mode restricted if sideKey is provided).
    * @function init
    * @param {string} seed Seed to initialize MAM with
+   * @param {string} mode Mode to initialize MAM with ('public', 'private' or restricted')
    * @param {string} sideKey Optional side key to initialize MAM with (restricted)
    * @returns {Object} MAM state
    */
-  init(seed, sideKey) {
+  init(seed, mode, sideKey) {
     const state = MAM.init(iota, seed, config.iotaSecurityLevel);
-    const mode = 'private';
-    MAM.changeMode(state, mode);
+    if (mode === 'private') MAM.changeMode(state, mode);
     this.setMamState(state);
-    if (sideKey) this.changeSideKey(sideKey);
+    if (mode === 'restricted') {
+      if (typeof sideKey === 'undefined') throw new Error('Side key needed in restricted');
+      MAM.changeMode(state, mode, sideKey);
+    }
 
     // Initial create to have a next_root on the MAM state...
     MAM.create(this.getMamState(), { type: 'INITIALIZE' });
@@ -83,6 +74,7 @@ module.exports = class MamClient {
    * @returns {Promise} Contains the root and the messages
    */
   async fetch(root, mode, sideKey) { // eslint-disable-line class-methods-use-this
+    logger.info(`Fetching from root ${root}`);
     const { nextRoot, messages } = await MAM.fetch(root, mode, sideKey);
     const jsonMessages = messages.map(m => JSON.parse(fromTrytes(m)));
     return { nextRoot, messages: jsonMessages };

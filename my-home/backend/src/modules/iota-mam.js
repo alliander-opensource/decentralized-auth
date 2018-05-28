@@ -6,10 +6,9 @@ const logger = require('../logger')(module);
 
 
 module.exports = class MamClient {
-  constructor(seed) {
+  constructor(seed, mode, sideKey) {
     this.mamState = null;
-    this.mode = 'private';
-    this.init(seed);
+    this.init(seed, mode, sideKey);
   }
 
   getMamState() { return this.mamState; }
@@ -20,13 +19,18 @@ module.exports = class MamClient {
    * Initialize MAM (mode private or mode restricted if sideKey is provided).
    * @function init
    * @param {string} seed Seed to initialize MAM with
+   * @param {string} mode Mode to initialize MAM with ('public', 'private' or restricted')
+   * @param {string} sideKey Optional side key to initialize MAM with (restricted)
    * @returns {Object} MAM state
    */
-  init(seed) {
+  init(seed, mode, sideKey) {
     const state = MAM.init(iota, seed, config.iotaSecurityLevel);
-    const mode = 'private';
-    MAM.changeMode(state, mode);
+    if (mode === 'private') MAM.changeMode(state, mode);
     this.setMamState(state);
+    if (mode === 'restricted') {
+      if (typeof sideKey === 'undefined') throw new Error('Side key needed in restricted');
+      MAM.changeMode(state, mode, sideKey);
+    }
 
     // Initial create to have a next_root on the MAM state...
     MAM.create(this.getMamState(), { type: 'INITIALIZE' });
@@ -65,12 +69,33 @@ module.exports = class MamClient {
    * NOTE: Expects JSON messages only.
    * @function fetch
    * @param {string} root Root from where to fetch
-   * @returns {Promise} Contains the nextRoot and the messages
+   * @param {string} mode Either 'public', 'private' or 'restricted'
+   * @param {string} sideKey Optional side key
+   * @returns {Promise} Contains the root and the messages
    */
-  async fetch(root) {
+  async fetch(root, mode, sideKey) { // eslint-disable-line class-methods-use-this
     logger.info(`Fetching from root ${root}`);
-    const { nextRoot, messages } = await MAM.fetch(root, this.mode);
+    const { nextRoot, messages } = await MAM.fetch(root, mode, sideKey);
     const jsonMessages = messages.map(m => JSON.parse(fromTrytes(m)));
     return { nextRoot, messages: jsonMessages };
+  }
+
+
+  /**
+   * Fetch a single MAM message.
+   * NOTE: Expects JSON MAM message only.
+   * @function fetch
+   * @param {string} root Root from where to fetch
+   * @param {string} mode Either 'public' or 'private' or 'restricted'
+   * @param {string} sideKey Optional side key (when mode is 'restricted')
+   * @returns {Promise} Contains the root and the parsed message or null
+   */
+  async fetchSingle(root, mode, sideKey) { // eslint-disable-line class-methods-use-this
+    const res = await MAM.fetchSingle(root, mode, sideKey);
+    if (typeof res === 'undefined') return res; // No message
+    const { nextRoot, payload } = res;
+    logger.info(`Received nextRoot ${nextRoot} and payload ${payload}`);
+    const message = JSON.parse(fromTrytes(payload));
+    return { nextRoot, message };
   }
 };

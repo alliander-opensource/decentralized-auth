@@ -38,8 +38,7 @@ module.exports = class DeviceClient {
     this.signedChallenges = new SignedChallenges();
     this.authorizedServiceProviders = new ServiceProviders();
     this.seenMessages = new Set(); // To avoid processing same message (below)
-
-    this.mam = new MamClient(seed, initialSideKey);
+    this.mam = new MamClient(seed, 'restricted', initialSideKey);
 
     this.init(CHECK_MESSAGE_INTERVAL_MS);
   }
@@ -325,7 +324,6 @@ module.exports = class DeviceClient {
    * @returns {undefined}
    */
   async processMamMessage() {
-    const mode = 'private';
     const IS_PAIRED = (typeof this.root !== 'undefined');
     if (!IS_PAIRED) {
       logger.info('IOTA MAM: No root received (device not paired)');
@@ -333,6 +331,7 @@ module.exports = class DeviceClient {
     }
     logger.info(`IOTA MAM: Fetching from root ${DeviceClient.formatTrytes(this.root)}`);
     try {
+      const mode = 'private';
       const res = await this.mam.fetchSingle(this.root, mode);
       if (typeof res === 'undefined') {
         // no message, you can try again later, keep root

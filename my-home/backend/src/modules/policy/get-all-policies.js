@@ -13,7 +13,7 @@ const { toPolicies } = require('../projections');
 module.exports = function requestHandler(req, res) {
   const { sessionId } = req;
   const { mamRoot, mamClient } = sessionState[sessionId];
-  mamClient.fetch(mamRoot)
+  mamClient.fetch(mamRoot, 'private')
     .then(toPolicies)
     .then(policies => res.json(policies))
     .catch((err) => {

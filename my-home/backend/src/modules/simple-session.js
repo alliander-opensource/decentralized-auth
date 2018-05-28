@@ -32,7 +32,7 @@ async function deauthenticate(req, res) {
   // We also use it as a database (to read the event stream and build the state
   // using `projections.js`)
   logger.info(`Creating MAM client for session ${sessionId}`);
-  const mam = new MamClient(seed);
+  const mam = new MamClient(seed, 'private');
   sessionState[sessionId].mamClient = mam;
   const mamRoot = mam.getMamState().channel.next_root;
   logger.info(`Set MAM root to ${mamRoot} for session ${sessionId}`);
