@@ -9,7 +9,7 @@ module.exports = class MamClient {
    * @constructor MamClient
    * @param {object} iotaOptions with:
    *                 - {string} seed IOTA seed of the device client
-   *                 - {number} iotaSecurityLevel Security level (0, 1 or 2)
+   *                 - {number} iotaSecurityLevel Security level (1, 2 or 3)
    *                 - {number} iotaDepth IOTA depth
    * @param {object} logger Should support the methods info and error
    * @param {string} mamMode MAM mode, either 'public' or 'private' or 'restricted'
