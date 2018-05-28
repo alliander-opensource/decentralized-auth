@@ -3,7 +3,9 @@ const MAM = require('./../../node_modules/mam.client.js/lib/mam.client.js');
 const { iota, toTrytes, fromTrytes } = require('./iota');
 
 
-module.exports = class MamClient {
+module.exports = class MamClient { // eslint-disable-line padded-blocks
+
+
   /**
    * Constructor for a MamClient.
    * @constructor MamClient
