@@ -1,7 +1,8 @@
+const { expect } = require('chai');
+const config = require('../src/config');
+const unitializedLogger = require('../src/logger');
 const MamClient = require('../src/modules/iota-mam');
 const generateSeed = require('../src/modules/gen-seed');
-const { expect } = require('chai');
-
 
 describe('MAM', () => {
   let mamSeed;
@@ -19,7 +20,15 @@ describe('MAM', () => {
   let mam2 = null;
 
   it('should initialize the MAM library', () => {
-    mam = new MamClient(mamSeed, 'restricted', sideKey);
+    mam = new MamClient(
+      mamSeed,
+      config.iotaSecurityLevel,
+      config.iotaDepth,
+      unitializedLogger,
+      'restricted',
+      sideKey,
+    );
+
     const mamState = mam.getMamState();
 
     expect(mamState).to.have.property('subscribed');
@@ -30,7 +39,13 @@ describe('MAM', () => {
   });
 
   it('should initialize a second MAM public library instance without side key', () => {
-    mam2 = new MamClient(mamSeed2, 'private');
+    mam2 = new MamClient(
+      mamSeed2,
+      config.iotaSecurityLevel,
+      config.iotaDepth,
+      unitializedLogger,
+      'private',
+    );
 
     const mamState = mam2.getMamState();
 

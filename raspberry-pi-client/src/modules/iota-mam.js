@@ -1,14 +1,27 @@
 const util = require('util');
 const MAM = require('./../../node_modules/mam.client.js/lib/mam.client.js');
 const { iota, toTrytes, fromTrytes } = require('./iota');
-const config = require('../config');
-const logger = require('../logger')(module);
 
 
 module.exports = class MamClient {
-  constructor(seed, mode, sideKey) {
+  /**
+   * Constructor for a MamClient.
+   * @constructor MamClient
+   * @param {string} seed IOTA seed of the device client
+   * @param {number} iotaSecurityLevel Security level (0, 1 or 2)
+   * @param {number} iotaDepth IOTA depth
+   * @param {object} logger Should be able to be initialized by passing the
+   *                        module (so it knows where it's logging from) and
+   *                        support the methods info and error
+   * @param {string} mamMode MAM mode, either 'public' or 'private' or 'restricted'
+   * @param {string} sideKey Optional side key (when mode is 'restricted')
+   */
+  constructor(seed, iotaSecurityLevel, iotaDepth, logger, mamMode, sideKey) {
     this.mamState = null;
-    this.init(seed, mode, sideKey);
+    this.iotaSecurityLevel = iotaSecurityLevel;
+    this.iotaDepth = iotaDepth;
+    this.logger = logger(module);
+    this.init(seed, mamMode, sideKey);
   }
 
   getMamState() { return this.mamState; }
@@ -24,7 +37,7 @@ module.exports = class MamClient {
    * @returns {Object} MAM state
    */
   init(seed, mode, sideKey) {
-    const state = MAM.init(iota, seed, config.iotaSecurityLevel);
+    const state = MAM.init(iota, seed, this.iotaSecurityLevel);
     if (mode === 'private') MAM.changeMode(state, mode);
     this.setMamState(state);
     if (mode === 'restricted') {
@@ -46,7 +59,7 @@ module.exports = class MamClient {
    * @returns {Promise} Containing the root
    */
   attach(packet) {
-    logger.info(`Attaching packet ${util.inspect(packet)} to the Tangle`);
+    this.logger.info(`Attaching packet ${util.inspect(packet)} to the Tangle`);
 
     const trytes = toTrytes(JSON.stringify(packet));
     const { state, payload, root, address } = MAM.create(
@@ -55,12 +68,12 @@ module.exports = class MamClient {
     );
 
     this.setMamState(state);
-    return MAM.attach(payload, address, config.iotaDepth, config.iotaMinWeightMagnitude)
+    return MAM.attach(payload, address, this.iotaDepth, this.iotaMinWeightMagnitude)
       .then(() => {
-        logger.info(`Successfully attached to Tangle at address ${address} and root ${root}.`);
+        this.logger.info(`Successfully attached to Tangle at address ${address} and root ${root}.`);
         return root;
       })
-      .catch(logger.error);
+      .catch(this.logger.error);
   }
 
 
@@ -74,7 +87,7 @@ module.exports = class MamClient {
    * @returns {Promise} Contains the root and the messages
    */
   async fetch(root, mode, sideKey) { // eslint-disable-line class-methods-use-this
-    logger.info(`Fetching from root ${root}`);
+    this.logger.info(`Fetching from root ${root}`);
     const { nextRoot, messages } = await MAM.fetch(root, mode, sideKey);
     const jsonMessages = messages.map(m => JSON.parse(fromTrytes(m)));
     return { nextRoot, messages: jsonMessages };
@@ -94,7 +107,7 @@ module.exports = class MamClient {
     const res = await MAM.fetchSingle(root, mode, sideKey);
     if (typeof res === 'undefined') return res; // No message
     const { nextRoot, payload } = res;
-    logger.info(`Received nextRoot ${nextRoot} and payload ${payload}`);
+    this.logger.info(`Received nextRoot ${nextRoot} and payload ${payload}`);
     const message = JSON.parse(fromTrytes(payload));
     return { nextRoot, message };
   }
