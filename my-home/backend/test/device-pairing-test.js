@@ -1,26 +1,29 @@
 const { exec } = require('child_process');
+const { expect } = require('chai');
 const iota = require('../src/modules/iota');
 const pairing = require('../src/modules/device/pairing');
+const generateSeed = require('../src/modules/gen-seed');
 const signing = require('../src/modules/iota/kerl/signing');
-const { expect, generateSeedForTestingPurposes } = require('../src/common/test-utils');
 const PromiseRetryer = require('promise-retryer')(Promise);
 
 
 describe('Pairing of a device using a Device Client started with npm start', () => {
-  const myHouseSeed = generateSeedForTestingPurposes();
-  const deviceSeed = generateSeedForTestingPurposes();
   const deviceSecret = 'PEAR';
 
   // We will need to wait on the Device to have processed the messages we send
   const WAIT_TIME_MS = 5000;
   const MAX_RETRIES = 50;
 
-
+  let myHouseSeed;
   let myHouseAddress;
-  const myHouseRoot = '';
+  let deviceSeed;
   let deviceAddress;
 
+  const myHouseRoot = '';
+
   before(async () => {
+    myHouseSeed = await generateSeed();
+    deviceSeed = await generateSeed();
     [myHouseAddress] = await iota.getAddress(myHouseSeed, 1);
     [deviceAddress] = await iota.getAddress(deviceSeed, 1);
 

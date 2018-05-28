@@ -1,6 +1,6 @@
 const iota = require('../src/modules/iota');
 const uuidv4 = require('uuid/v4');
-const { expect } = require('../src/common/test-utils');
+const { expect } = require('chai');
 
 const seed = 'AYYUXKIAEOGGXPZIM9GGDLERZEBKVNEOGR9SPSF9ANHWSISVHKEQNTADSZFSMYFKGVVRAYFNTXEPWRLJK';
 const addr = 'TYQFOPRBMRMFNX9DITYKIRGKZLFSQBGQSHARNPJJMWVMOGGPEXWZSBSIA9EZOFYLJFKGDLLXYZSLLMFIX';

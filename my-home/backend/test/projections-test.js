@@ -1,4 +1,4 @@
-const { expect } = require('../src/common/test-utils');
+const { expect } = require('chai');
 
 const { toDevices, toPolicies } = require('../src/modules/projections');
 

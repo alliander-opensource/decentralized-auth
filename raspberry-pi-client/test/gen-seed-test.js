@@ -1,4 +1,6 @@
-const { expect } = require('chai');
+const chai = require('chai');
+
+const { expect } = chai;
 const generateSeed = require('./../src/modules/gen-seed');
 
 

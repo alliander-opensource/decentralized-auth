@@ -1,10 +1,16 @@
 const MamClient = require('../src/modules/iota-mam');
-const { expect, generateSeedForTestingPurposes } = require('../src/common/test-utils');
+const generateSeed = require('../src/modules/gen-seed');
+const { expect } = require('chai');
 
 
 describe('MAM', () => {
-  const mamSeed = generateSeedForTestingPurposes();
-  const mamSeed2 = generateSeedForTestingPurposes();
+  let mamSeed;
+  let mamSeed2;
+
+  before('initialize seeds', async () => {
+    mamSeed = await generateSeed();
+    mamSeed2 = await generateSeed();
+  });
 
   // MAM seems shared over tests, so use same side key as in other tests for now
   const sideKey = 'SWEETPOTATO';

@@ -3,12 +3,13 @@ const pairingMock = require('./pairing-mock');
 
 const DeviceClient = require('../src/device-client');
 const signing = require('../src/modules/iota/kerl/signing');
-const { expect, generateSeedForTestingPurposes } = require('../src/common/test-utils');
+const { expect } = require('chai');
+const generateSeed = require('../src/modules/gen-seed');
 
 describe('Pairing of a device by calling methods on DeviceClient', () => {
-  const myHouseSeed = generateSeedForTestingPurposes();
+  let myHouseSeed;
   const myHouseRoot = '';
-  const deviceSeed = generateSeedForTestingPurposes();
+  let deviceSeed;
   const deviceSecret = 'PEAR';
   const initialSideKey = 'BANANA';
 
@@ -17,6 +18,8 @@ describe('Pairing of a device by calling methods on DeviceClient', () => {
   let deviceAddress;
 
   before(async () => {
+    myHouseSeed = await generateSeed();
+    deviceSeed = await generateSeed();
     [myHouseAddress] = await iota.getAddress(myHouseSeed, 1);
     [deviceAddress] = await iota.getAddress(deviceSeed, 1);
 
