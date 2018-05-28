@@ -1,5 +1,5 @@
+const { expect } = require('chai');
 const ntru = require('../src/modules/ntru');
-const { expect } = require('../src/common/test-utils');
 
 const seed = 'AYYUXKIAEOGGXPZIM9GGDLERZEBKVNEOGR9SPSF9ANHWSISVHKEQNTADSZFSMYFKGVVRAYFNTXEPWRLJK';
 
