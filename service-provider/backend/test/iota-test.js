@@ -2,15 +2,14 @@ const { expect } = require('chai');
 const iota = require('../src/modules/iota');
 
 const seed = 'AYYUXKIAEOGGXPZIM9GGDLERZEBKVNEOGR9SPSF9ANHWSISVHKEQNTADSZFSMYFKGVVRAYFNTXEPWRLJK';
-const addr = 'TYQFOPRBMRMFNX9DITYKIRGKZLFSQBGQSHARNPJJMWVMOGGPEXWZSBSIA9EZOFYLJFKGDLLXYZSLLMFIX';
+const addr = 'JHLL9VAGBCTCCARFSIKNNWEGHQFHQYDCWEQYTDUISHLIPQPZGOUQAJWY9VSP9BNAZNZUCFGMKPXOPFULY';
 
 describe('Iota', () => {
   describe('getAddress', () =>
-    it('should return a new address', () => {
+    it('should return a new address', async () => {
       const total = 1;
-      iota.getAddress(seed, total)
-        .then(([address]) =>
+      const [address] = await iota.getAddress(seed, total);
 
-          expect(address).to.equal(addr));
+      expect(address).to.equal(addr);
     }));
 });

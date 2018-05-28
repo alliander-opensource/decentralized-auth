@@ -1,6 +1,6 @@
 const util = require('util');
 const MAM = require('./../../node_modules/mam.client.js/lib/mam.client.js');
-const { iota, toTrytes, fromTrytes } = require('./iota');
+const iota = require('./iota');
 
 
 module.exports = class MamClient { // eslint-disable-line padded-blocks
@@ -38,7 +38,7 @@ module.exports = class MamClient { // eslint-disable-line padded-blocks
    * @returns {Object} MAM state
    */
   init(seed, mode, sideKey) {
-    const state = MAM.init(iota, seed, this.iotaSecurityLevel);
+    const state = MAM.init(iota.iota, seed, this.iotaSecurityLevel);
     if (mode === 'private') MAM.changeMode(state, mode);
     this.setMamState(state);
     if (mode === 'restricted') {
@@ -62,7 +62,7 @@ module.exports = class MamClient { // eslint-disable-line padded-blocks
   attach(packet) {
     this.logger.info(`Attaching packet ${util.inspect(packet)} to the Tangle`);
 
-    const trytes = toTrytes(JSON.stringify(packet));
+    const trytes = iota.toTrytes(JSON.stringify(packet));
     const { state, payload, root, address } = MAM.create(
       this.getMamState(),
       trytes,
@@ -90,7 +90,7 @@ module.exports = class MamClient { // eslint-disable-line padded-blocks
   async fetch(root, mode, sideKey) { // eslint-disable-line class-methods-use-this
     this.logger.info(`Fetching from root ${root}`);
     const { nextRoot, messages } = await MAM.fetch(root, mode, sideKey);
-    const jsonMessages = messages.map(m => JSON.parse(fromTrytes(m)));
+    const jsonMessages = messages.map(m => JSON.parse(iota.fromTrytes(m)));
     return { nextRoot, messages: jsonMessages };
   }
 
@@ -109,7 +109,7 @@ module.exports = class MamClient { // eslint-disable-line padded-blocks
     if (typeof res === 'undefined') return res; // No message
     const { nextRoot, payload } = res;
     this.logger.info(`Received nextRoot ${nextRoot} and payload ${payload}`);
-    const message = JSON.parse(fromTrytes(payload));
+    const message = JSON.parse(iota.fromTrytes(payload));
     return { nextRoot, message };
   }
 };

@@ -13,6 +13,7 @@ const config = {
   iotaMinWeightMagnitude: process.env.IOTA_MIN_WEIGHT_MAGNITUDE
     ? parseInt(process.env.IOTA_MIN_WEIGHT_MAGNITUDE, 0)
     : 14, // 10 for testnet
+  iotaSecurityLevel: 2,
 };
 
 module.exports = config;
