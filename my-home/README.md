@@ -48,7 +48,7 @@ or set the IOTA_PROVIDER environment variable to a public testnet or mainnet nod
 
 ## Tests
 
-Run IOTA integration tests with `npm run test:iota`. It will start the `raspberry-pi-client` in the test.
+Run unit tests with `npm run test:unit`. Note that it start the `raspberry-pi-client` in the test and passes messages over IOTA (so tests that use this are more integration tests than unit tests).
 
 Run end-to-end tests with `npm run integration-test`.
 
