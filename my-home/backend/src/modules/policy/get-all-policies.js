@@ -1,7 +1,7 @@
 const logger = require('../../logger')(module);
 const sessionState = require('../../session-state');
 
-const { toPolicies } = require('../projections');
+const { toPolicies } = require('./policies');
 
 /**
  * Request handler

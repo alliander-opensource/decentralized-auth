@@ -1,27 +1,10 @@
 const { expect } = require('chai');
 
-const { toDevices, toPolicies } = require('../src/modules/projections');
-
-describe('Get devices', () => {
-  it('should build projection of device events', () => {
-    const messages = [
-      { type: 'DEVICE_ADDED', device: 1 },
-      { type: 'DUMMY' },
-      { },
-      { type: 'DEVICE_ADDED', device: 2 },
-      { type: 'DEVICE_DELETED', device: 1 },
-      { type: 'DEVICE_ADDED', device: 3 },
-    ];
-
-    const devices = toDevices(messages);
-
-    expect(devices).to.deep.equal([2, 3]);
-  });
-});
+const { toPolicies } = require('../src/modules/policy/policies');
 
 
 describe('Get policies', () => {
-  it('should build projection of policy events', () => {
+  it('should build policies aggregate from policy events', () => {
     const messages = [
       { type: 'AUTHORIZED', policy: { serviceProvider: 1, device: { iotaAddress: 1 } } },
       { type: 'DUMMY' },

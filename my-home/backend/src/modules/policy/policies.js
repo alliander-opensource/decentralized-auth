@@ -1,6 +1,6 @@
 /**
- * @module projections
- * Creates event sourced projections based on messages from am MAM stream.
+ * @module devices
+ * Aggregate created from MAM event stream.
  */
 
 const _ = require('lodash');
@@ -17,31 +17,7 @@ const AUTHORIZATION_REVOKED_TYPE = 'AUTHORIZATION_REVOKED';
 
 
 /**
- * Builds a projection of available devices from the MAM stream.
- * @function toDevices
- * @param {array} messages Messages from an MAM stream
- * @returns {array} Array of devices (device is object with iotaAddress and
- *                  type)
- */
-function toDevices(messages) {
-  const devicesSet = messages.reduce((devices, { type, device }) => {
-    switch (type) {
-      case DEVICE_ADDED_TYPE:
-        return devices.add(device);
-      case DEVICE_DELETED_TYPE: {
-        devices.delete(device); // returns true or false
-        return devices;
-      }
-      default:
-        return devices;
-    }
-  }, new JsonSet());
-  const devices = Array.from(devicesSet.entries());
-  return devices;
-}
-
-
-/**
+ * Creates the policies aggregate from the MAM event stream.
  * @function toPolicies
  * @param {array} messages Messages from an MAM stream
  * @returns {array} Array of policies (policy is object with device and
@@ -73,4 +49,6 @@ function toPolicies(messages) {
   const policies = Array.from(policiesSet.entries());
   return policies;
 }
-module.exports = { toDevices, toPolicies };
+
+
+module.exports = { toPolicies };
