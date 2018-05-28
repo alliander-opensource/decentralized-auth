@@ -1,4 +1,4 @@
-# Known Issues
+# Known issues
 
 This document describes known issues with the decentralized-auth software.
 
