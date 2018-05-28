@@ -27,7 +27,7 @@ describe('MAM', () => {
     const mamState = mam2.getMamState();
 
     expect(mamState).to.have.property('subscribed');
-    expect(mamState).to.have.property('channel').and.to.have.property('mode').and.to.equal('public');
+    expect(mamState).to.have.property('channel').and.to.have.property('mode').and.to.equal('private');
     expect(mamState).to.have.property('seed');
     expect(mamState.seed).to.equal(mamSeed);
     expect(mamState.channel.side_key).to.equal(null);
@@ -81,7 +81,7 @@ describe('MAM', () => {
   });
 
   it('should be able to fetch from the root using the second lib', async () => {
-    const res = await mam2.fetch(testRoot3, 'public');
+    const res = await mam2.fetch(testRoot3, 'private');
 
     expect(res.nextRoot).to.have.lengthOf(81);
     expect(res.messages).to.be.an('array');

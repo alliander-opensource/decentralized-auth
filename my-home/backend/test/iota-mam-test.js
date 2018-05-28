@@ -65,7 +65,7 @@ describe('MAM', () => {
   });
 
   it('should be able to fetch from the root using the second lib', async () => {
-    const res = await mam2.fetch(testRoot3, 'public');
+    const res = await mam2.fetch(testRoot3, 'private');
 
     expect(res.nextRoot).to.have.lengthOf(81);
     expect(res.messages).to.be.an('array');

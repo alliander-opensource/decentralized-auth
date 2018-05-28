@@ -28,7 +28,7 @@ module.exports = class MamClient {
 
 
   /**
-   * Initialize MAM.
+   * Initialize MAM (mode private or mode restricted if sideKey is provided).
    * @function init
    * @param {string} seed Seed to initialize MAM with
    * @param {string} sideKey Optional side key to initialize MAM with (restricted)
@@ -36,6 +36,8 @@ module.exports = class MamClient {
    */
   init(seed, sideKey) {
     const state = MAM.init(iota, seed, config.iotaSecurityLevel);
+    const mode = 'private';
+    MAM.changeMode(state, mode);
     this.setMamState(state);
     if (sideKey) this.changeSideKey(sideKey);
 

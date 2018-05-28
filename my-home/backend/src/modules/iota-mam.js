@@ -8,7 +8,7 @@ const logger = require('../logger')(module);
 module.exports = class MamClient {
   constructor(seed) {
     this.mamState = null;
-    this.mode = 'public';
+    this.mode = 'private';
     this.init(seed);
   }
 
@@ -17,13 +17,15 @@ module.exports = class MamClient {
 
 
   /**
-   * Initialize MAM.
+   * Initialize MAM (mode private or mode restricted if sideKey is provided).
    * @function init
    * @param {string} seed Seed to initialize MAM with
    * @returns {Object} MAM state
    */
   init(seed) {
     const state = MAM.init(iota, seed, config.iotaSecurityLevel);
+    const mode = 'private';
+    MAM.changeMode(state, mode);
     this.setMamState(state);
 
     // Initial create to have a next_root on the MAM state...

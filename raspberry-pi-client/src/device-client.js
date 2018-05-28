@@ -325,7 +325,7 @@ module.exports = class DeviceClient {
    * @returns {undefined}
    */
   async processMamMessage() {
-    const mode = 'public';
+    const mode = 'private';
     const IS_PAIRED = (typeof this.root !== 'undefined');
     if (!IS_PAIRED) {
       logger.info('IOTA MAM: No root received (device not paired)');
