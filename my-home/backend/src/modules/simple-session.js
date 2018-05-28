@@ -4,7 +4,6 @@ const iota = require('./../modules/iota');
 const config = require('./../config');
 const sessionState = require('./../session-state');
 const logger = require('./../logger')(module);
-const unitializedLogger = require('./../logger');
 const generateSeed = require('./../modules/gen-seed');
 
 // Initializes loads of stuff. TODO: refactor (extract methods); add docstring
@@ -33,13 +32,12 @@ async function deauthenticate(req, res) {
   // We also use it as a database (to read the event stream and build the state
   // using `projections.js`)
   logger.info(`Creating MAM client for session ${sessionId}`);
-  const mam = new MamClient(
+  const iotaOptions = {
     seed,
-    config.iotaSecurityLevel,
-    config.iotaDepth,
-    unitializedLogger,
-    'private',
-  );
+    iotaSecurityLevel: config.iotaSecurityLevel,
+    iotaDepth: config.iotaDepth,
+  };
+  const mam = new MamClient(iotaOptions, logger, 'private');
   sessionState[sessionId].mamClient = mam;
   const mamRoot = mam.getMamState().channel.next_root;
   logger.info(`Set MAM root to ${mamRoot} for session ${sessionId}`);

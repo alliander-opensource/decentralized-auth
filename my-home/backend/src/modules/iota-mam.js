@@ -7,20 +7,19 @@ module.exports = class MamClient {
   /**
    * Constructor for a MamClient.
    * @constructor MamClient
-   * @param {string} seed IOTA seed of the device client
-   * @param {number} iotaSecurityLevel Security level (0, 1 or 2)
-   * @param {number} iotaDepth IOTA depth
-   * @param {object} logger Should be able to be initialized by passing the
-   *                        module (so it knows where it's logging from) and
-   *                        support the methods info and error
+   * @param {object} iotaOptions with:
+   *                 - {string} seed IOTA seed of the device client
+   *                 - {number} iotaSecurityLevel Security level (0, 1 or 2)
+   *                 - {number} iotaDepth IOTA depth
+   * @param {object} logger Should support the methods info and error
    * @param {string} mamMode MAM mode, either 'public' or 'private' or 'restricted'
    * @param {string} sideKey Optional side key (when mode is 'restricted')
    */
-  constructor(seed, iotaSecurityLevel, iotaDepth, logger, mamMode, sideKey) {
+  constructor({ seed, iotaSecurityLevel, iotaDepth }, logger, mamMode, sideKey) {
     this.mamState = null;
     this.iotaSecurityLevel = iotaSecurityLevel;
     this.iotaDepth = iotaDepth;
-    this.logger = logger(module);
+    this.logger = logger;
     this.init(seed, mamMode, sideKey);
   }
 

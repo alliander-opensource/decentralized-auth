@@ -1,6 +1,6 @@
 const { expect } = require('chai');
 const config = require('../src/config');
-const unitializedLogger = require('../src/logger');
+const logger = require('../src/logger')(module);
 const MamClient = require('../src/modules/iota-mam');
 const generateSeed = require('../src/modules/gen-seed');
 
@@ -20,14 +20,12 @@ describe('MAM', () => {
   let mam2 = null;
 
   it('should initialize the MAM library', () => {
-    mam = new MamClient(
-      mamSeed,
-      config.iotaSecurityLevel,
-      config.iotaDepth,
-      unitializedLogger,
-      'restricted',
-      sideKey,
-    );
+    const iotaOptions = {
+      seed: mamSeed,
+      iotaSecurityLevel: config.iotaSecurityLevel,
+      iotaDepth: config.iotaDepth,
+    };
+    mam = new MamClient(iotaOptions, logger, 'restricted', sideKey);
 
     const mamState = mam.getMamState();
 
@@ -39,13 +37,12 @@ describe('MAM', () => {
   });
 
   it('should initialize a second MAM public library instance without side key', () => {
-    mam2 = new MamClient(
-      mamSeed2,
-      config.iotaSecurityLevel,
-      config.iotaDepth,
-      unitializedLogger,
-      'private',
-    );
+    const iotaOptions = {
+      seed: mamSeed2,
+      iotaSecurityLevel: config.iotaSecurityLevel,
+      iotaDepth: config.iotaDepth,
+    };
+    mam2 = new MamClient(iotaOptions, logger, 'private');
 
     const mamState = mam2.getMamState();
 
