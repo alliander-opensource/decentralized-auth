@@ -15,6 +15,7 @@ module.exports = function requestHandler(req, res) {
   const { sessionId } = req;
   const { mamRoot, mamClient } = sessionState[sessionId];
   mamClient.fetch(mamRoot, 'private')
+    .then(({ messages }) => messages)
     .then(toDevices)
     .then(devices => res.json(devices))
     .catch((err) => {

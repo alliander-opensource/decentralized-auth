@@ -1,5 +1,6 @@
-/*
- * Creates event sourced projections based on messages from a MAM stream.
+/**
+ * @module projections
+ * Creates event sourced projections based on messages from am MAM stream.
  */
 
 const _ = require('lodash');
@@ -18,12 +19,11 @@ const AUTHORIZATION_REVOKED_TYPE = 'AUTHORIZATION_REVOKED';
 /**
  * Builds a projection of available devices from the MAM stream.
  * @function toDevices
- * @param {array} mamMessages Raw messages from the MAM stream
+ * @param {array} messages Messages from an MAM stream
  * @returns {array} Array of devices (device is object with iotaAddress and
  *                  type)
  */
-function toDevices(mamMessages) {
-  const { messages } = mamMessages;
+function toDevices(messages) {
   const devicesSet = messages.reduce((devices, { type, device }) => {
     switch (type) {
       case DEVICE_ADDED_TYPE:
@@ -41,14 +41,13 @@ function toDevices(mamMessages) {
 }
 
 
-/*
+/**
  * @function toPolicies
- * @param {array} mamMessages Raw messages from the MAM stream
+ * @param {array} messages Messages from an MAM stream
  * @returns {array} Array of policies (policy is object with device and
  *                  serviceProvider)
  */
-function toPolicies(mamMessages) {
-  const { messages } = mamMessages;
+function toPolicies(messages) {
   const policiesSet = messages.reduce((policies, { type, policy, device }) => {
     switch (type) {
       case AUTHORIZED_TYPE:
