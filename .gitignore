@@ -1,4 +1,18 @@
+# Node
 build
 node_modules
+
+# Winston logs
 combined.log
 error.log
+
+# macOS
+.DS_Store
+
+# Editor related
+*.swp
+.#*
+
+# Generated html for Markdown preview
+docs/*.html
+README.html
