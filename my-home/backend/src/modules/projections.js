@@ -57,14 +57,7 @@ function toPolicies(mamMessages) {
         policies.delete(policy); // returns true or false
         return policies;
       }
-      case DEVICE_ADDED_TYPE: {
-        policies.forEach((p) => {
-          if (_.isEqual(p.device, device)) {
-            policies.delete(p);
-          }
-        });
-        return policies;
-      }
+      case DEVICE_ADDED_TYPE:
       case DEVICE_DELETED_TYPE: {
         // Remove policies associated with device
         policies.forEach((p) => {
