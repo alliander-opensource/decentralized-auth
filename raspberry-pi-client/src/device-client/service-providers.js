@@ -28,6 +28,11 @@ module.exports = class ServiceProviders {
     this.db.delete(JSON.stringify(serviceProvider));
   }
 
+  clear() {
+    logger.info('Removing all authorized services providers');
+    this.db.clear();
+  }
+
 
   /*
    * Get all authorized service providers
