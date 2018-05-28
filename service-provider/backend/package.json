@@ -35,6 +35,7 @@
     "eslint-plugin-standard": "^3.1.0",
     "express": "4.16.1",
     "get-random-values": "1.2.0",
+    "iota-generate-seed": "^1.0.0",
     "iota.lib.js": "0.4.7",
     "npm": "5.8.0",
     "ntrujs": "1.0.18",

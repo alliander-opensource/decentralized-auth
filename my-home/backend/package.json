@@ -39,6 +39,7 @@
     "express": "4.16.1",
     "get-random-values": "1.2.0",
     "hash-set": "^1.0.1",
+    "iota-generate-seed": "^1.0.0",
     "iota.lib.js": "0.4.7",
     "mam.client.js": "git+ssh://git@github.com/iotaledger/mam.client.js.git",
     "npm": "5.8.0",
