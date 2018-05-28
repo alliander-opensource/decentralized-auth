@@ -22,8 +22,8 @@ describe('MAM', () => {
   it('should initialize the MAM library', () => {
     const iotaOptions = {
       seed: mamSeed,
-      iotaSecurityLevel: config.iotaSecurityLevel,
-      iotaDepth: config.iotaDepth,
+      securityLevel: config.iotaSecurityLevel,
+      depth: config.iotaDepth,
     };
     mam = new MamClient(iotaOptions, logger, 'restricted', sideKey);
 
@@ -39,8 +39,8 @@ describe('MAM', () => {
   it('should initialize a second MAM public library instance without side key', () => {
     const iotaOptions = {
       seed: mamSeed2,
-      iotaSecurityLevel: config.iotaSecurityLevel,
-      iotaDepth: config.iotaDepth,
+      securityLevel: config.iotaSecurityLevel,
+      depth: config.iotaDepth,
     };
     mam2 = new MamClient(iotaOptions, logger, 'private');
 

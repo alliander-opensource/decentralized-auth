@@ -34,8 +34,8 @@ async function deauthenticate(req, res) {
   logger.info(`Creating MAM client for session ${sessionId}`);
   const iotaOptions = {
     seed,
-    iotaSecurityLevel: config.iotaSecurityLevel,
-    iotaDepth: config.iotaDepth,
+    securityLevel: config.iotaSecurityLevel,
+    depth: config.iotaDepth,
   };
   const mam = new MamClient(iotaOptions, logger, 'private');
   sessionState[sessionId].mamClient = mam;

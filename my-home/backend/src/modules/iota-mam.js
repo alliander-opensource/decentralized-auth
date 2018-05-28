@@ -11,16 +11,16 @@ module.exports = class MamClient { // eslint-disable-line padded-blocks
    * @constructor MamClient
    * @param {object} iotaOptions with:
    *                 - {string} seed IOTA seed of the device client
-   *                 - {number} iotaSecurityLevel Security level (1, 2 or 3)
-   *                 - {number} iotaDepth IOTA depth
+   *                 - {number} securityLevel Security level (1, 2 or 3)
+   *                 - {number} depth IOTA depth
    * @param {object} logger Should support the methods info and error
    * @param {string} mamMode MAM mode, either 'public' or 'private' or 'restricted'
    * @param {string} sideKey Optional side key (when mode is 'restricted')
    */
-  constructor({ seed, iotaSecurityLevel, iotaDepth }, logger, mamMode, sideKey) {
+  constructor({ seed, securityLevel, depth }, logger, mamMode, sideKey) {
     this.mamState = null;
-    this.iotaSecurityLevel = iotaSecurityLevel;
-    this.iotaDepth = iotaDepth;
+    this.iotaSecurityLevel = securityLevel;
+    this.iotaDepth = depth;
     this.logger = logger;
     this.init(seed, mamMode, sideKey);
   }

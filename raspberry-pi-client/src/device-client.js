@@ -38,8 +38,7 @@ module.exports = class DeviceClient {
     this.signedChallenges = new SignedChallenges();
     this.authorizedServiceProviders = new ServiceProviders();
     this.seenMessages = new Set(); // To avoid processing same message (below)
-    const { iotaDepth, iotaSecurityLevel } = config;
-    const iotaOptions = { seed, iotaDepth, iotaSecurityLevel };
+    const iotaOptions = { seed, depth: config.iotaDepth, securityLevel: config.iotaSecurityLevel };
     this.mam = new MamClient(iotaOptions, logger, 'restricted', initialSideKey);
     this.init(CHECK_MESSAGE_INTERVAL_MS);
   }
