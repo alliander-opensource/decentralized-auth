@@ -11,6 +11,7 @@ error.log
 
 # Editor related
 *.swp
+*.temp
 .#*
 
 # Generated html for Markdown preview
