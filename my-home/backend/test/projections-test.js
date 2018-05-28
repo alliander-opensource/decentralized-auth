@@ -22,7 +22,7 @@ describe('Get all devices', () => {
 });
 
 
-describe('Get all policies', () => {
+describe('Get policies', () => {
   it('should build projection of policy events', () => {
     const mamMessages = {
       messages: [
@@ -32,7 +32,39 @@ describe('Get all policies', () => {
         { type: 'AUTHORIZED', policy: { serviceProvider: 2, device: { iotaAddress: 2 } } },
         { type: 'AUTHORIZATION_REVOKED', policy: { serviceProvider: 1, device: { iotaAddress: 1 } } },
         { type: 'AUTHORIZED', policy: { serviceProvider: 3, device: { iotaAddress: 3 } } },
-        { type: 'DEVICE_DELETED', device: { iotaAddress: 3 } },
+      ],
+    };
+
+    const policies = toPolicies(mamMessages);
+
+    expect(policies).to.deep.equal([
+      { serviceProvider: 2, device: { iotaAddress: 2 } },
+      { serviceProvider: 3, device: { iotaAddress: 3 } },
+    ]);
+  });
+
+  it('should clear policies related to a device when a device is deleted', () => {
+    const mamMessages = {
+      messages: [
+        { type: 'AUTHORIZED', policy: { serviceProvider: 1, device: { iotaAddress: 1 } } },
+        { type: 'AUTHORIZED', policy: { serviceProvider: 2, device: { iotaAddress: 1 } } },
+        { type: 'AUTHORIZED', policy: { serviceProvider: 2, device: { iotaAddress: 2 } } },
+        { type: 'DEVICE_DELETED', device: { iotaAddress: 1 } },
+      ],
+    };
+
+    const policies = toPolicies(mamMessages);
+
+    expect(policies).to.deep.equal([{ serviceProvider: 2, device: { iotaAddress: 2 } }]);
+  });
+
+  it('should clear policies related to a device when a device is added', () => {
+    const mamMessages = {
+      messages: [
+        { type: 'AUTHORIZED', policy: { serviceProvider: 1, device: { iotaAddress: 1 } } },
+        { type: 'AUTHORIZED', policy: { serviceProvider: 2, device: { iotaAddress: 1 } } },
+        { type: 'AUTHORIZED', policy: { serviceProvider: 2, device: { iotaAddress: 2 } } },
+        { type: 'DEVICE_ADDED', device: { iotaAddress: 1 } },
       ],
     };
 

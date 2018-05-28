@@ -21,6 +21,7 @@ const MAM_DATA_TYPE = 'MAM_DATA';
 // MAM message types
 const AUTHORIZED_TYPE = 'AUTHORIZED';
 const AUTHORIZATION_REVOKED_TYPE = 'AUTHORIZATION_REVOKED';
+const DEVICE_ADDED_TYPE = 'DEVICE_ADDED';
 const DEVICE_DELETED_TYPE = 'DEVICE_DELETED';
 const DATA_MESSAGE_TYPE = 'DATA';
 const KEY_ROTATION_TYPE = 'KEY_ROTATION';
@@ -346,6 +347,10 @@ module.exports = class DeviceClient {
         }
         case AUTHORIZATION_REVOKED_TYPE: {
           this.processAuthorizationRevokedMessage(message);
+          break;
+        }
+        case DEVICE_ADDED_TYPE: {
+          this.authorizedServiceProviders.clear();
           break;
         }
         case DEVICE_DELETED_TYPE: {
