@@ -156,7 +156,7 @@ module.exports = class DeviceClient {
 
     logger.info(`Provide service provider ${address} with MAM data ${JSON.stringify(mamData)}`);
 
-    const message = { type: MAM_DATA_TYPE, mamData };
+    const message = { type: MAM_DATA_TYPE, root: this.root, mamData };
     return iota.send(seed, address, message);
   }
 
