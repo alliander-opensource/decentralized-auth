@@ -3,9 +3,10 @@ const Kerl = require('./iota/kerl/kerl');
 
 
 /**
- * Signs a salt (challenge) with a secret using Kerl
+ * Signs a salt (challenge) with a secret using Kerl.
  *
- * Based on https://github.com/iotaledger/kerl/blob/master/javascript/test/kerl.absorb-squeeze.js
+ * Based on
+ * https://github.com/iotaledger/kerl/blob/master/javascript/test/kerl.absorb-squeeze.js.
  *
  * @function sign
  * @param {string} salt Salt to sign
