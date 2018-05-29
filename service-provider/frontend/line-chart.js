@@ -12,6 +12,15 @@ const DURATION = 100;
 
 const noData = data => typeof data[0] === 'undefined';
 
+// Only show 26 elements
+const cutTo26Elements = (data) => {
+  if (data.length > 26) {
+    return data.slice(data.length - 26, data.length - 1);
+  }
+  return data;
+};
+
+
 /**
  * Draw the fancy line chart.
  *
@@ -20,11 +29,7 @@ const noData = data => typeof data[0] === 'undefined';
  */
 function drawLineChart(elementId, data) { // eslint-disable-line no-unused-vars
   if (noData(data)) return;
-
-  // Only show 26 elements
-  if (data.length > 26) {
-    data = data.slice(data.length - 26, data.length - 1); // eslint-disable-line no-param-reassign
-  }
+  data = cutTo26Elements(data); // eslint-disable-line no-param-reassign
 
   const containerEl = document.getElementById(elementId);
   const width = containerEl.clientWidth;
