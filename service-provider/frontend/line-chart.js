@@ -1,4 +1,10 @@
-// Adjusted from: https://codepen.io/stefanjudis/pen/gkHwJ
+/**
+ * Generates a line chart based on data.
+ * Adjusted from: https://codepen.io/stefanjudis/pen/gkHwJ (MIT)
+ *
+ * @module line-chart
+ */
+
 
 /* global d3 */
 

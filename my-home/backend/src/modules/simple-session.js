@@ -1,3 +1,10 @@
+/**
+ * Initialize or find a session based on a secure cookie.
+ *
+ * @module simple-session
+ */
+
+
 const uuidv4 = require('uuid/v4');
 const MamClient = require('./../modules/iota-mam');
 const iota = require('./../modules/iota');

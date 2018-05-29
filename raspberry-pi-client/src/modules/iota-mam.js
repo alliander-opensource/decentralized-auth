@@ -1,3 +1,10 @@
+/**
+ * Wrapper for the IOTA MAM client that provides some convenience methods.
+ *
+ * @module iota-mam
+ */
+
+
 const util = require('util');
 const MAM = require('./../../node_modules/mam.client.js/lib/mam.client.js');
 const iota = require('./iota');

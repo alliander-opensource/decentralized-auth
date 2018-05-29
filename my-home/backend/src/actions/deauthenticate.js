@@ -1,5 +1,6 @@
 const simpleSession = require('./../modules/simple-session');
 
+
 /**
  * Request handler
  * @function requestHandler

@@ -1,3 +1,10 @@
+/**
+ * Wrapper for the IOTA client that provides some convenience methods.
+ *
+ * @module iota-mam
+ */
+
+
 const IOTA = require('iota.lib.js');
 
 class IotaClient { // eslint-disable-line padded-blocks

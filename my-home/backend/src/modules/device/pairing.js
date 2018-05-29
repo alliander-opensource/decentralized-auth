@@ -1,3 +1,27 @@
+/**
+ * Module for the pairing process of a device and My IOTA Home UI.
+ *
+ * For pairing with the raspberry-pi-client on a device the following steps are
+ * taken:
+ * 1. a message of type ${@link CLAIM_DEVICE_TYPE} is send to the device's
+ *    address that includes our address.
+ * 2. Then when a response of type "CHALLENGE" is received the challenge needs
+ *    to be signed with the secret on the device.
+ * 3. This signed challenge is created by signing the challenge with the secret.
+ * 4. The signed challenge is send in the {@link answerChallenge} alongside the
+ *    My IOTA Home's MAM root in the call with type
+ *    {@link ANSWER_CHALLENGE_TYPE}.
+ * 5. The device checks if this signed challenge is correct. If so, a message of
+ *    type "CLAIM_RESULT" with status "OK" will be returned, and the device will
+ *    starts listening to the events published on the MAM root in the answer
+ *    challenge message.
+ * 6. My IOTA Home will publish an event of type "DEVICE_ADDED" to the event
+ *    store (MAM channel).
+ *
+ * @module pairing
+ */
+
+
 const logger = require('../../logger')(module);
 const iota = require('../iota');
 

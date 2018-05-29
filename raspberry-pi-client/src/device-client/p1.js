@@ -1,9 +1,17 @@
+/**
+ * Methods for reading the P1 port of the Dutch smart meter.
+ *
+ * @module p1
+ */
+
+
 const SerialPort = require('serialport');
 const logger = require('../logger')(module);
 const config = require('../config');
 
 const TRY_INIT_INTERVAL_MS = 5000;
 const RASPBERRY_PI_USB_PORT = config.p1SerialPort;
+
 
 /**
  * Serial port settings for various smart reader versions

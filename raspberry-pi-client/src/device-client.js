@@ -1,3 +1,17 @@
+/**
+ * Software that runs on a device that is connected via P1 to a Dutch smart meter.
+ * Provides the capabilities to:
+ *
+ * - Pair with someone and start listening to their MAM channel with events.
+ *   Then handles all events that are published on this channel.
+ * - Publish P1 data to an MAM channel.
+ * - Send the MAM root and side key to an authorized service provider.
+ * - Revoke the access for a service provider to an MAM channel.
+ *
+ * @module device-client
+ */
+
+
 const logger = require('./logger')(module);
 const config = require('./config');
 
@@ -43,8 +57,6 @@ module.exports = class DeviceClient {
     this.init(CHECK_MESSAGE_INTERVAL_MS);
   }
 
-
-  // TODO: addresses are not rotated.
 
   /**
    * Creates a challenge (a salt to be signed with the secret) that can be
@@ -286,7 +298,7 @@ module.exports = class DeviceClient {
   static formatTrytes(trytes) { return `${trytes.slice(0, 10)}...`; }
 
 
-  /*
+  /**
    * Process MAM message for added authorization.
    * @param message {Object} MAM message of type {@link AUTHORIZED_TYPE}.
    * @returns {undefined}
@@ -299,7 +311,7 @@ module.exports = class DeviceClient {
   }
 
 
-  /*
+  /**
    * Process MAM message revoked: authorization
    * @param message {Object} MAM message of type {@link AUTHORIZATION_REVOKED_TYPE}.
    * @returns {undefined}

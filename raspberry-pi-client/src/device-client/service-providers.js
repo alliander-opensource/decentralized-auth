@@ -1,3 +1,9 @@
+/**
+ * Class to keep the state of the authorized service providers on this device.
+ * @module service-providers
+ */
+
+
 const logger = require('../logger')(module);
 
 

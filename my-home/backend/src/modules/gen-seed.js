@@ -1,3 +1,11 @@
+/**
+ * Generates a seed on Linux and macOS using the built in random number
+ * generator. For other OSes uses the insecure iota-generate-seed library.
+ *
+ * @module gen-seed
+ */
+
+
 const { exec } = require('child_process');
 const generate = require('iota-generate-seed');
 

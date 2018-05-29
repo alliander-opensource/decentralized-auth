@@ -1,3 +1,17 @@
+/**
+ * Creates the logger.
+ * Winston logger provides information from which module it is logging.
+ *
+ * Require as:
+ * ```
+ * require('../../logger')(module);
+ * ```
+ * so that logger can determine from which module it is logging.
+ *
+ * @module logger
+ */
+
+
 const winston = require('winston');
 
 const getLabel = (callingModule) => {
@@ -29,6 +43,5 @@ const logger = callingModule => winston.createLogger({
   ],
 });
 
-// Use: require('../../logger')(module);
-// So that logger can determine from which module it is logging
+
 module.exports = logger;

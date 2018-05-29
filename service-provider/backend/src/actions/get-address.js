@@ -1,9 +1,17 @@
+/**
+ * Get IOTA address. (Since seed belonging to session id is managed on backend.)
+ *
+ * @module get-address
+ */
+
+
 const iota = require('./../modules/iota');
 const sessionState = require('./../session-state');
 const logger = require('./../logger')(module);
 
+
 /**
- * Request handler
+ * Request handler to get address belonging to session id.
  * @function requestHandler
  * @param {object} req Express request object
  * @param {object} res Express response object

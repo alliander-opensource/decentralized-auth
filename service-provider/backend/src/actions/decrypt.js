@@ -1,3 +1,10 @@
+/**
+ * NTRU decrypt.
+ *
+ * @module decrypt
+ */
+
+
 const ntru = require('./../modules/ntru');
 const sessionState = require('./../session-state');
 const logger = require('./../logger')(module);

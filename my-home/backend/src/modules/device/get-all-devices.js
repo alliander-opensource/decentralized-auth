@@ -1,3 +1,10 @@
+/**
+ * Gets all devices from the MAM event store.
+ *
+ * @module get-all-devices
+ */
+
+
 const logger = require('../../logger')(module);
 const sessionState = require('../../session-state');
 
@@ -5,7 +12,7 @@ const { toDevices } = require('./devices');
 
 
 /**
- * Request handler
+ * Request handler to get all devices.
  * @function requestHandler
  * @param {object} req Express request object
  * @param {object} res Express response object

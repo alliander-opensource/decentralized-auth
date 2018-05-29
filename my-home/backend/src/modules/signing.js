@@ -1,3 +1,10 @@
+/**
+ * Use the Kerl signing to sign a challenge of a device in the pairing process.
+ *
+ * @module signing
+ */
+
+
 const Converter = require('./iota/kerl/converter');
 const Kerl = require('./iota/kerl/kerl');
 

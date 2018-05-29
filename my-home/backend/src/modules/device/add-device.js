@@ -1,3 +1,9 @@
+/**
+ * Adding a device by following the pairing process described in {@link pairing}.
+ *
+ * @module add-device
+ */
+
 const logger = require('./../../logger')(module);
 const iota = require('./../iota');
 const pairing = require('./pairing');
@@ -11,7 +17,7 @@ const DEVICE_ADDED_TYPE = 'DEVICE_ADDED';
 
 
 /**
- * Request handler
+ * Request handler for adding a device.
  * @function requestHandler
  * @param {object} req Express request object
  * @param {object} res Express response object

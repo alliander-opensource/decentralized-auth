@@ -1,3 +1,15 @@
+/**
+ * Adds an authorization (policy) to the MAM event stream.
+ *
+ * A policy is a statement that a service provider can access the data of a
+ * certain device for a specific goal and under certain conditions. Paired
+ * devices listen to these policies and start sending their data to the
+ * authorized service providers.
+ *
+ * @module add-policy
+ */
+
+
 const logger = require('../../logger')(module);
 const sessionState = require('../../session-state');
 

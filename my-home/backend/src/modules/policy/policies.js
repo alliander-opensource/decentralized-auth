@@ -1,7 +1,8 @@
 /**
- * @module devices
  * Aggregate created from MAM event stream.
+ * @module devices
  */
+
 
 const _ = require('lodash');
 const HashSet = require('hash-set');

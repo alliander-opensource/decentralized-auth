@@ -1,5 +1,5 @@
 /**
- * Request handler
+ * Request handler that returns the session id.
  * @function requestHandler
  * @param {object} req Express request object
  * @param {object} res Express response object

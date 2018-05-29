@@ -1,9 +1,22 @@
+/**
+ * Wrapper around ntrujs NTRUEncrypt. Provides convenience
+ * methods to work with the IOTA Tangle.
+ *
+ * - Create an NTRU key pair based on an IOTA seed.
+ * - Convert a public key to trytes so it can be send over IOTA.
+ * - Encrypt to trytes using tryte encoded public key.
+ * - Decrypt trytes.
+ *
+ * @module ntru
+ */
+
+
 const { TextEncoder } = require('util');
 const NTRU = require('ntrujs');
 const iota = require('./iota');
 
 
-/*
+/**
  * Converts string to Uint8Array.
  *
  * @param {string} str String to convert
@@ -17,7 +30,7 @@ function toBytes(str) {
 }
 
 
-/*
+/**
  * Creates an NTRU key pair based on a seed.
  *
  * @function createKeyPair
@@ -32,7 +45,7 @@ function createKeyPair(seed) {
 }
 
 
-/*
+/**
  * Converts a Buffer to trytes.
  * First converts to base64 and then to trytes.
  *
@@ -47,7 +60,7 @@ function toTrytes(buffer) {
 }
 
 
-/*
+/**
  * Converts a buffer that was converted to trytes by {@link toTrytes}
  * back to a buffer.
  * First converts from trytes to base64 and then to Buffer.

@@ -1,3 +1,10 @@
+/**
+ * Gets all events from the MAM event store.
+ *
+ * @module get-all-policies
+ */
+
+
 const logger = require('../logger')(module);
 const sessionState = require('../session-state');
 

@@ -1,7 +1,15 @@
+/**
+ * Delete device (add an event of type {@link DEVICE_DELETED_TYPE} to the event
+ * store).
+ *
+ * @module delete-device
+ */
+
 const logger = require('../../logger')(module);
 const sessionState = require('../../session-state');
 
 const DEVICE_DELETED_TYPE = 'DEVICE_DELETED';
+
 
 /**
  * Request handler
@@ -11,7 +19,6 @@ const DEVICE_DELETED_TYPE = 'DEVICE_DELETED';
  * @returns {undefined}
  */
 module.exports = function requestHandler(req, res) {
-  // TODO: Code runs in home (?) so no need for extra checks.....
   if (!req.body.device) {
     throw new Error('No device specified.');
   }

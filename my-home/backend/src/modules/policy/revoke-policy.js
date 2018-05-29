@@ -1,3 +1,11 @@
+/**
+ * Revoke policy (add an event of type {@link AUTHORIZATION_REVOKED_TYPE} to the
+ * event store).
+ *
+ * @module revoke-policy
+ */
+
+
 const logger = require('../../logger')(module);
 const sessionState = require('../../session-state');
 
@@ -11,7 +19,6 @@ const AUTHORIZATION_REVOKED_TYPE = 'AUTHORIZATION_REVOKED';
  * @returns {undefined}
  */
 module.exports = function requestHandler(req, res) {
-  // TODO: Code runs in home (?) so no need for extra checks.....
   if (!req.body.policy) {
     throw new Error('No policy specified.');
   }
