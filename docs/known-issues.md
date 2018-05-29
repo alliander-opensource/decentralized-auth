@@ -26,3 +26,13 @@ This can be solved by keeping track of the last used MAM root. That in combinati
 The MAM root of the private MAM channel is communicated to the service provider. This is so that the service provider can proof that consent was given to access the stream. Because all events of the device owner are published on this MAM stream the service provider and device client can also view authorizations and added or removed devices that are not related to them. Also after the device is removed or the consent is revoked.
 
 To solve this privacy issue separate MAM streams need to be setup per device and service provider.
+
+## Device listens to other device's authorized events
+For example, every AUTHORIZED event leads to an authorization for every paired device.
+Solution 1: check that device in body has same address as raspberry-pi-client itself.
+Solution 2: separate MAM channels per device.
+
+## Device listens to other device's device added/deleted events
+For example, every DEVICE_ADDED event leads to removal of authorized service providers.
+Solution 1: check that device in body has same address as raspberry-pi-client itself.
+Solution 2: separate MAM channels per device.
