@@ -72,7 +72,7 @@ module.exports = class MamClient { // eslint-disable-line padded-blocks
 
 
   /**
-   * Attach MAM messages.
+   * Attach an MAM message.
    * @function attach
    * @param {JSON} packet JSON packet to attach.
    * @returns {Promise} Containing the root or null
