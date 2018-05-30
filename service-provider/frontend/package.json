@@ -16,7 +16,7 @@
   "contributors": [
     "Alliander N.V. (https://alliander.com/)"
   ],
-  "license": "MIT",
+  "license": "Apache-2.0",
   "dependencies": {
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^16.1.0",

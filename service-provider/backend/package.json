@@ -19,7 +19,7 @@
     "Erwin Rooijakkers",
     "Alliander N.V. (https://alliander.com/)"
   ],
-  "license": "MIT",
+  "license": "Apache-2.0",
   "dependencies": {
     "@ljharb/eslint-config": "github:ljharb/eslint-config",
     "basic-auth": "2.0.0",
