@@ -7,6 +7,7 @@ const deviceClient = new DeviceClient(
   config.seed,
   config.secret,
   config.initialSideKey,
+  config.checkMessageIntervalMs,
 );
 
 logger.info(`Started a device client ${util.inspect(deviceClient)} !`);

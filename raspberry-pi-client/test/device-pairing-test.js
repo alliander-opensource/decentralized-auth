@@ -6,6 +6,9 @@ const signing = require('../src/modules/iota/kerl/signing');
 const { expect } = require('chai');
 const generateSeed = require('@decentralized-auth/gen-seed');
 
+const CHECK_MESSAGE_INTERVAL_MS = 1000;
+
+
 describe('Pairing of a device by calling methods on DeviceClient', () => {
   let myHouseSeed;
   const myHouseRoot = 'JACKFRUIT';
@@ -27,6 +30,7 @@ describe('Pairing of a device by calling methods on DeviceClient', () => {
       deviceSeed,
       deviceSecret,
       initialSideKey,
+      CHECK_MESSAGE_INTERVAL_MS,
     );
   });
 

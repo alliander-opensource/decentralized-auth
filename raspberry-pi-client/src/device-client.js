@@ -40,11 +40,9 @@ const DEVICE_DELETED_TYPE = 'DEVICE_DELETED';
 const DATA_MESSAGE_TYPE = 'DATA';
 const KEY_ROTATION_TYPE = 'KEY_ROTATION';
 
-const CHECK_MESSAGE_INTERVAL_MS = 10000;
-
 
 module.exports = class DeviceClient {
-  constructor(seed, sharedSecret, initialSideKey) {
+  constructor(seed, sharedSecret, initialSideKey, checkMessageIntervalMs) {
     this.seed = seed;
     this.secret = sharedSecret; // Shared secret on Pi
     this.sideKey = initialSideKey;
@@ -53,7 +51,7 @@ module.exports = class DeviceClient {
     this.authorizedServiceProviders = new ServiceProviders();
     this.seenMessages = new Set(); // To avoid processing same message (below)
     this.mam = new MamClient(seed, iota, 'restricted', initialSideKey);
-    this.init(CHECK_MESSAGE_INTERVAL_MS);
+    this.init(checkMessageIntervalMs);
   }
 
 

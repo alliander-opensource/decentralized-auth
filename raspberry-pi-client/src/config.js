@@ -8,6 +8,9 @@ const config = {
   iotaDepth: 6,
   iotaSecurityLevel: 2,
 
+  // How often to check for MAM and IOTA message?
+  checkMessageIntervalMs: 10000,
+
   seed: process.env.SEED ? process.env.SEED : 'TLQPEYBND9AFCHFDLCWSVQU9ISCDTBKUQSLXEEUXFHVDEEQZZJPCBPBJ9QSVFBXUJXTIFBMTQSLVUFYTH',
   secret: 'PEAR',
   initialSideKey: 'BANANA',
