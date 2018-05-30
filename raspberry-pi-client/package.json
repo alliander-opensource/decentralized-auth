@@ -23,7 +23,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@decentralized-auth/iota": "^1.0.7",
-    "@decentralized-auth/iota-mam": "^1.0.5",
+    "@decentralized-auth/iota-mam": "^1.0.6",
     "@decentralized-auth/gen-seed": "^1.0.0",
     "@decentralized-auth/ntru": "^1.0.1",
     "ajv": "^6.0.1",
