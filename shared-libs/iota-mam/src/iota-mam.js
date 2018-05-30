@@ -60,6 +60,18 @@ module.exports = class MamClient { // eslint-disable-line padded-blocks
 
 
   /**
+   * Sets or changes the MAM side key.
+   * @function changeSideKey
+   * @param {string} sideKey Side key
+   * @returns {undefined}
+   */
+  changeSideKey(sideKey) {
+    const mode = 'restricted';
+    MAM.changeMode(this.getMamState(), mode, sideKey);
+  }
+
+
+  /**
    * Attach MAM messages.
    * @function attach
    * @param {JSON} packet JSON packet to attach.

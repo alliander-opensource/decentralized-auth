@@ -62,6 +62,7 @@ Wrapper for the IOTA MAM client that provides some convenience methods.
     * [~MamClient](#module_iota-mam..MamClient)
         * [`new MamClient(seed, iotaClient, mamMode, sideKey)`](#new_module_iota-mam..MamClient_new)
     * [`~init(iota, seed, mode, sideKey)`](#module_iota-mam..init) ⇒ <code>Object</code>
+    * [`~changeSideKey(sideKey)`](#module_iota-mam..changeSideKey) ⇒ <code>undefined</code>
     * [`~attach(packet)`](#module_iota-mam..attach) ⇒ <code>Promise</code>
     * [`~fetch(root, mode, sideKey)`](#module_iota-mam..fetch) ⇒ <code>Promise</code>
     * [`~fetch(root, mode, sideKey)`](#module_iota-mam..fetch) ⇒ <code>Promise</code>
@@ -106,6 +107,20 @@ Initialize MAM (mode private or mode restricted if sideKey is provided).
 | seed | <code>string</code> | Seed to initialize MAM with |
 | mode | <code>string</code> | Mode to initialize MAM with ('public', 'private' or restricted') |
 | sideKey | <code>string</code> | Optional side key to initialize MAM with (restricted) |
+
+
+* * *
+
+<a name="module_iota-mam..changeSideKey"></a>
+
+### `iota-mam~changeSideKey(sideKey)` ⇒ <code>undefined</code>
+Sets or changes the MAM side key.
+
+**Kind**: inner method of [<code>iota-mam</code>](#module_iota-mam)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| sideKey | <code>string</code> | Side key |
 
 
 * * *

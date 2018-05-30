@@ -107,4 +107,11 @@ describe('MAM', () => {
     expect(res.messages).to.be.an('array');
     expect(res.messages[0]).to.deep.equal(message1);
   });
+
+  it('should be able change side key', async () => {
+    const newSideKey = 'NEW';
+    mam.changeSideKey(newSideKey);
+
+    expect(mam.getMamState().channel.side_key).to.equal(newSideKey);
+  });
 });

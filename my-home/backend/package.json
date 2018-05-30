@@ -30,7 +30,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@decentralized-auth/iota": "^1.0.7",
-    "@decentralized-auth/iota-mam": "1.0.4",
+    "@decentralized-auth/iota-mam": "1.0.5",
     "@decentralized-auth/gen-seed": "^1.0.0",
     "@ljharb/eslint-config": "github:ljharb/eslint-config",
     "basic-auth": "2.0.0",
