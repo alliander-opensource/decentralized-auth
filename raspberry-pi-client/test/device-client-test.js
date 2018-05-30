@@ -164,16 +164,16 @@ describe('DeviceClient', () => {
       deviceClient.root = myHouseRoot;
       deviceClient.authorizedServiceProviders.add(serviceProvider);
 
-      expect(deviceClient.sideKey).to.equal(initialSideKey);
+      expect(deviceClient.mam.getMamState().channel.side_key).to.equal(initialSideKey);
 
       await mam.attach({
         type: 'AUTHORIZATION_REVOKED',
         policy: { serviceProvider, device },
       });
 
-      await delay(CHECK_MESSAGE_INTERVAL_MS);
+      await delay(45000); // Waiting till KEY_ROTATION MAM message is attached...
 
-      expect(deviceClient.sideKey).to.not.equal(initialSideKey);
+      expect(deviceClient.mam.getMamState().channel.side_key).to.not.equal(initialSideKey);
     });
   });
 });
