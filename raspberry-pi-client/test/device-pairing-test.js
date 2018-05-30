@@ -8,7 +8,7 @@ const generateSeed = require('@decentralized-auth/gen-seed');
 
 describe('Pairing of a device by calling methods on DeviceClient', () => {
   let myHouseSeed;
-  const myHouseRoot = '';
+  const myHouseRoot = 'JACKFRUIT';
   let deviceSeed;
   const deviceSecret = 'PEAR';
   const initialSideKey = 'BANANA';
@@ -153,5 +153,10 @@ describe('Pairing of a device by calling methods on DeviceClient', () => {
       expect(claim).to.have.property('sender');
       expect(claim).to.have.property('status');
       expect(claim.status).to.equal('OK');
+    }));
+
+  describe('deviceClient.root', () =>
+    it('should have added the root to its state', () => {
+      expect(deviceClient.root).to.equal(myHouseRoot);
     }));
 });
