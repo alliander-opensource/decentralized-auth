@@ -20,6 +20,8 @@ For more information on the role of the My Home frontend see [architecture](../d
 npm run test
 ```
 
+Note that some tests take a long time because they attach messages to the Tangle.
+
 ## Production
 
 Requirements:
