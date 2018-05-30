@@ -75,9 +75,9 @@ module.exports = class MamClient { // eslint-disable-line padded-blocks
    * Attach MAM messages.
    * @function attach
    * @param {JSON} packet JSON packet to attach.
-   * @returns {Promise} Containing the root
+   * @returns {Promise} Containing the root or null
    */
-  attach(packet) {
+  async attach(packet) {
     this.logger.info(`Attaching packet ${util.inspect(packet)} to the Tangle`);
 
     const trytes = this.iota.toTrytes(JSON.stringify(packet));
@@ -85,14 +85,16 @@ module.exports = class MamClient { // eslint-disable-line padded-blocks
       this.getMamState(),
       trytes,
     );
-
     this.setMamState(state);
-    return MAM.attach(payload, address, this.iotaDepth, this.iotaMinWeightMagnitude)
-      .then(() => {
-        this.logger.info(`Successfully attached to Tangle at address ${address} and root ${root}.`);
-        return root;
-      })
-      .catch(this.logger.error);
+
+    try {
+      await MAM.attach(payload, address, this.iotaDepth, this.iotaMinWeightMagnitude);
+      this.logger.info(`Successfully attached to Tangle at address ${address} and root ${root}.`);
+      return root;
+    } catch (err) {
+      this.logger.error(err);
+      return null;
+    }
   }
 
 
