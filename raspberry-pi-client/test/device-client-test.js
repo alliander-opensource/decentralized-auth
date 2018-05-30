@@ -171,7 +171,7 @@ describe('DeviceClient', () => {
         policy: { serviceProvider, device },
       });
 
-      await delay(45000); // Waiting till KEY_ROTATION MAM message is attached...
+      await delay(60000); // Waiting till KEY_ROTATION MAM message is attached...
 
       expect(deviceClient.mam.getMamState().channel.side_key).to.not.equal(initialSideKey);
     });
