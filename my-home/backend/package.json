@@ -37,7 +37,6 @@
     "crypto-js": "3.1.9-1",
     "eslint-config-defaults": "^9.0.0",
     "express": "4.16.1",
-    "get-random-values": "1.2.0",
     "hash-set": "^1.0.1",
     "iota-generate-seed": "^1.0.0",
     "iota.lib.js": "0.4.7",
