@@ -172,10 +172,7 @@ module.exports = class DeviceClient {
 
 
   /**
-   * Informs {@link authorizedServiceProviders} of the new side key. The 'key
-   * rotation' message is transferred via MAM, and the new side key is encrypted
-   * with the public key of the remaining authorized service providers (if any).
-   *
+   * Create a key rotation message.
    * Message has structure:
    * ```
    * {
@@ -184,17 +181,16 @@ module.exports = class DeviceClient {
    *   authorizedSp2: 'Side key encrypted with authorizedSp2's key'
    * }
    * ```
-   *
-   * @function informUpdateSideKey
-   * @param {string} authorizedServiceProviders List of remaining authorized
+   * @function makeKeyRotationMessage
+   * @param {string} serviceProviders List of remaining authorized
    *                 service providers
-   * @param {string} newSideKey Our new side key we are using
+   * @param {string} sideKey Our new side key we are using
    * @returns {null}
    */
-  informUpdateSideKey(authorizedServiceProviders, newSideKey) {
-    const keysForServiceProviders = authorizedServiceProviders.map(sp => ({
+  static createKeyRotationMessage(serviceProviders, sideKey) {
+    const keysForServiceProviders = serviceProviders.map(sp => ({
       key: sp.iotaAddress,
-      val: ntru.encrypt(newSideKey, sp.publicKeyTrytes),
+      val: ntru.encrypt(sideKey, sp.publicKeyTrytes),
     })).reduce((map, obj) => {
       map[obj.key] = obj.val; // eslint-disable-line no-param-reassign
       return map;
@@ -205,6 +201,26 @@ module.exports = class DeviceClient {
       ...keysForServiceProviders,
     };
 
+    return message;
+  }
+
+
+  /**
+   * Informs {@link authorizedServiceProviders} of the new side key. The 'key
+   * rotation' message is transferred via MAM, and the new side key is encrypted
+   * with the public key of the remaining authorized service providers (if any).
+   *
+   * @function informUpdateSideKey
+   * @param {string} authorizedServiceProviders List of remaining authorized
+   *                 service providers
+   * @param {string} newSideKey Our new side key we are using
+   * @returns {null}
+   */
+  informUpdateSideKey(authorizedServiceProviders, newSideKey) {
+    const message = DeviceClient.createKeyRotationMessage(
+      authorizedServiceProviders,
+      newSideKey,
+    );
     return this.mam.attach(message);
   }
 
