@@ -41,7 +41,19 @@ const DATA_MESSAGE_TYPE = 'DATA';
 const KEY_ROTATION_TYPE = 'KEY_ROTATION';
 
 
-module.exports = class DeviceClient {
+module.exports = class DeviceClient { // eslint-disable-line padded-blocks
+
+
+  /**
+   * Constructor for a DeviceClient.
+   * @constructor DeviceClient
+   * @param {string} seed IOTA seed of the device client
+   * @param {string} sharedSecret Secret with which the device can be paired
+   * @param {string} initialSideKey Initial side key to use in MAM 'restricted'
+   *                                (for publishing messages of type "DATA")
+   * @param {string} checkMessageIntervalMs Interval in milliseconds in which to
+   *                                        check for new IOTA and MAM messages
+   */
   constructor(seed, sharedSecret, initialSideKey, checkMessageIntervalMs) {
     this.seed = seed;
     this.secret = sharedSecret; // Shared secret on Pi
