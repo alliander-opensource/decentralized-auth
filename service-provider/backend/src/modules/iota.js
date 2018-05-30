@@ -16,11 +16,11 @@ class IotaClient { // eslint-disable-line padded-blocks
    * @param {object} iotaOptions with:
    *                 - {string} provider IOTA provider (host URL)
    *                 - {number} minWeightMagnitude Minimum weight magnitude for PoW
-   *                 - {number} depth IOTA depth
+   *                 - {number} securityLevel IOTA security level
    *                 - {number} depth IOTA depth
    * @param {object} logger Should support the methods info and error
    */
-  constructor({ minWeightMagnitude, securityLevel, depth, provider }, logger) {
+  constructor({ provider, minWeightMagnitude, securityLevel, depth }, logger) {
     this.iota = new IOTA({ provider });
     this.depth = depth;
     this.securityLevel = securityLevel;
