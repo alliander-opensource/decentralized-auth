@@ -45,7 +45,6 @@ module.exports = class DeviceClient {
   constructor(seed, sharedSecret, initialSideKey, checkMessageIntervalMs) {
     this.seed = seed;
     this.secret = sharedSecret; // Shared secret on Pi
-    this.sideKey = initialSideKey;
 
     this.signedChallenges = new SignedChallenges();
     this.authorizedServiceProviders = new ServiceProviders();
