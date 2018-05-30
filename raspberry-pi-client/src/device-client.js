@@ -16,8 +16,8 @@ const logger = require('./logger')(module);
 const config = require('./config');
 
 const iota = require('./modules/iota');
-const MamClient = require('./modules/iota-mam');
-const ntru = require('./modules/ntru');
+const MamClient = require('@decentralized-auth/iota-mam');
+const ntru = require('@decentralized-auth/ntru');
 
 const p1Reader = require('./device-client/p1');
 
@@ -52,8 +52,7 @@ module.exports = class DeviceClient {
     this.signedChallenges = new SignedChallenges();
     this.authorizedServiceProviders = new ServiceProviders();
     this.seenMessages = new Set(); // To avoid processing same message (below)
-    const iotaOptions = { seed, depth: config.iotaDepth, securityLevel: config.iotaSecurityLevel };
-    this.mam = new MamClient(iotaOptions, logger, 'restricted', initialSideKey);
+    this.mam = new MamClient(seed, iota, 'restricted', initialSideKey);
     this.init(CHECK_MESSAGE_INTERVAL_MS);
   }
 
@@ -80,7 +79,7 @@ module.exports = class DeviceClient {
 
 
   /**
-   * Creates a random tryte string of 10 characters
+   * Creates a random tryte string of 10 characters.
    *
    * @function createSideKey
    * @returns {string} The side key
@@ -121,7 +120,7 @@ module.exports = class DeviceClient {
 
   /**
    * Sends claim result to receiver. If signed challenge is valid, starts
-   * listening to the root
+   * listening to the root.
    *
    * @function processChallenge
    * @param {string} seed Our IOTA seed

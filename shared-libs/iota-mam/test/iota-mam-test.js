@@ -1,8 +1,19 @@
 const { expect } = require('chai');
-const config = require('../src/config');
-const logger = require('../src/logger')(module);
-const MamClient = require('../src/modules/iota-mam');
-const generateSeed = require('../src/modules/gen-seed');
+const MamClient = require('../src/iota-mam');
+const generateSeed = require('@decentralized-auth/gen-seed');
+const IotaClient = require('@decentralized-auth/iota');
+
+const logger = new (function () { // eslint-disable-line func-names
+  this.info = console.log; // eslint-disable-line no-console
+  this.error = console.log; // eslint-disable-line no-console
+})();
+
+const iotaClient = new IotaClient({
+  provider: 'http://node01.testnet.iotatoken.nl:16265',
+  securityLevel: 2,
+  depth: 5,
+  minWeightMagnitude: 10,
+}, logger);
 
 describe('MAM', () => {
   let mamSeed;
@@ -13,19 +24,13 @@ describe('MAM', () => {
     mamSeed2 = await generateSeed();
   });
 
-  // MAM seems shared over tests, so use same side key as in other tests for now
   const sideKey = 'SWEETPOTATO';
 
   let mam = null;
   let mam2 = null;
 
   it('should initialize the MAM library', () => {
-    const iotaOptions = {
-      seed: mamSeed,
-      securityLevel: config.iotaSecurityLevel,
-      depth: config.iotaDepth,
-    };
-    mam = new MamClient(iotaOptions, logger, 'restricted', sideKey);
+    mam = new MamClient(mamSeed, iotaClient, 'restricted', sideKey);
 
     const mamState = mam.getMamState();
 
@@ -37,12 +42,7 @@ describe('MAM', () => {
   });
 
   it('should initialize a second MAM public library instance without side key', () => {
-    const iotaOptions = {
-      seed: mamSeed2,
-      securityLevel: config.iotaSecurityLevel,
-      depth: config.iotaDepth,
-    };
-    mam2 = new MamClient(iotaOptions, logger, 'private');
+    mam2 = new MamClient(mamSeed2, iotaClient, 'private');
 
     const mamState = mam2.getMamState();
 

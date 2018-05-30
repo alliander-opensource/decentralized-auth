@@ -6,12 +6,12 @@
 
 
 const uuidv4 = require('uuid/v4');
-const MamClient = require('./../modules/iota-mam');
+const MamClient = require('@decentralized-auth/iota-mam');
 const iota = require('./../modules/iota');
 const config = require('./../config');
 const sessionState = require('./../session-state');
 const logger = require('./../logger')(module);
-const generateSeed = require('./../modules/gen-seed');
+const generateSeed = require('@decentralized-auth/gen-seed');
 
 
 const addIotaAddress = async (seed, sessionId) => {
@@ -26,12 +26,7 @@ const addMamState = (seed, sessionId) => {
   // We also use it as a database (to read the event stream and build the state
   // using `projections.js`)
   logger.info(`Creating MAM client for session ${sessionId}`);
-  const iotaOptions = {
-    seed,
-    securityLevel: config.iotaSecurityLevel,
-    depth: config.iotaDepth,
-  };
-  const mam = new MamClient(iotaOptions, logger, 'private');
+  const mam = new MamClient(seed, iota, 'private');
   sessionState[sessionId].mamClient = mam;
   const mamRoot = mam.getMamState().channel.next_root;
   logger.info(`Set MAM root to ${mamRoot} for session ${sessionId}`);

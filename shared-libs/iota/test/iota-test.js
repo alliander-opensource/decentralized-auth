@@ -1,6 +1,19 @@
-const iota = require('../src/modules/iota');
 const uuidv4 = require('uuid/v4');
 const { expect } = require('chai');
+const IotaClient = require('../src/iota');
+
+const logger = new (function () { // eslint-disable-line func-names
+  this.info = console.log; // eslint-disable-line no-console
+  this.error = console.log; // eslint-disable-line no-console
+})();
+
+const iota = new IotaClient({
+  provider: 'http://node01.testnet.iotatoken.nl:16265',
+  securityLevel: 2,
+  depth: 5,
+  minWeightMagnitude: 10,
+}, logger);
+
 
 const seed = 'AYYUXKIAEOGGXPZIM9GGDLERZEBKVNEOGR9SPSF9ANHWSISVHKEQNTADSZFSMYFKGVVRAYFNTXEPWRLJK';
 const addr = 'JHLL9VAGBCTCCARFSIKNNWEGHQFHQYDCWEQYTDUISHLIPQPZGOUQAJWY9VSP9BNAZNZUCFGMKPXOPFULY';

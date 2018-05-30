@@ -4,7 +4,7 @@ const pairingMock = require('./pairing-mock');
 const DeviceClient = require('../src/device-client');
 const signing = require('../src/modules/iota/kerl/signing');
 const { expect } = require('chai');
-const generateSeed = require('../src/modules/gen-seed');
+const generateSeed = require('@decentralized-auth/gen-seed');
 
 describe('Pairing of a device by calling methods on DeviceClient', () => {
   let myHouseSeed;

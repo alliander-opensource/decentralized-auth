@@ -5,7 +5,7 @@
  */
 
 
-const ntru = require('./../modules/ntru');
+const ntru = require('@decentralized-auth/ntru');
 const sessionState = require('./../session-state');
 const logger = require('./../logger')(module);
 

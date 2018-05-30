@@ -1,7 +1,7 @@
 const chai = require('chai');
 
 const { expect } = chai;
-const generateSeed = require('./../src/modules/gen-seed');
+const generateSeed = require('./../src/gen-seed');
 
 
 describe('Generate seed', () => {

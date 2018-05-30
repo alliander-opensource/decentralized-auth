@@ -6,8 +6,7 @@
 
 
 const util = require('util');
-const MAM = require('./../../node_modules/mam.client.js/lib/mam.client.js');
-const iota = require('./iota');
+const MAM = require('mam.client.js');
 
 
 module.exports = class MamClient { // eslint-disable-line padded-blocks
@@ -16,20 +15,19 @@ module.exports = class MamClient { // eslint-disable-line padded-blocks
   /**
    * Constructor for a MamClient.
    * @constructor MamClient
-   * @param {object} iotaOptions with:
-   *                 - {string} seed IOTA seed of the device client
-   *                 - {number} securityLevel Security level (1, 2 or 3)
-   *                 - {number} depth IOTA depth
-   * @param {object} logger Should support the methods info and error
+   * @param {string} seed IOTA seed of the device client
+   * @param {object} iotaClient Instantiated @decentralized-auth/iota-client with logger
    * @param {string} mamMode MAM mode, either 'public' or 'private' or 'restricted'
    * @param {string} sideKey Optional side key (when mode is 'restricted')
    */
-  constructor({ seed, securityLevel, depth }, logger, mamMode, sideKey) {
+  constructor(seed, iotaClient, mamMode, sideKey) {
+    this.iota = iotaClient;
     this.mamState = null;
-    this.iotaSecurityLevel = securityLevel;
-    this.iotaDepth = depth;
-    this.logger = logger;
-    this.init(seed, mamMode, sideKey);
+    this.iotaSecurityLevel = iotaClient.securityLevel;
+    this.iotaDepth = iotaClient.depth;
+    if (typeof iotaClient.logger === 'undefined') throw new Error('iotaClient should have logger');
+    this.logger = iotaClient.logger;
+    this.init(iotaClient.iota, seed, mamMode, sideKey);
   }
 
   getMamState() { return this.mamState; }
@@ -39,17 +37,18 @@ module.exports = class MamClient { // eslint-disable-line padded-blocks
   /**
    * Initialize MAM (mode private or mode restricted if sideKey is provided).
    * @function init
+   * @param {Object} iota Instance of iota.lib.js
    * @param {string} seed Seed to initialize MAM with
    * @param {string} mode Mode to initialize MAM with ('public', 'private' or restricted')
    * @param {string} sideKey Optional side key to initialize MAM with (restricted)
    * @returns {Object} MAM state
    */
-  init(seed, mode, sideKey) {
-    const state = MAM.init(iota.iota, seed, this.iotaSecurityLevel);
+  init(iota, seed, mode, sideKey) {
+    const state = MAM.init(iota, seed, this.iotaSecurityLevel);
     if (mode === 'private') MAM.changeMode(state, mode);
     this.setMamState(state);
     if (mode === 'restricted') {
-      if (typeof sideKey === 'undefined') throw new Error('Side key needed in restricted');
+      if (typeof sideKey === 'undefined') throw new Error('Side key needed for restricted mode');
       MAM.changeMode(state, mode, sideKey);
     }
 
@@ -69,7 +68,7 @@ module.exports = class MamClient { // eslint-disable-line padded-blocks
   attach(packet) {
     this.logger.info(`Attaching packet ${util.inspect(packet)} to the Tangle`);
 
-    const trytes = iota.toTrytes(JSON.stringify(packet));
+    const trytes = this.iota.toTrytes(JSON.stringify(packet));
     const { state, payload, root, address } = MAM.create(
       this.getMamState(),
       trytes,
@@ -97,7 +96,7 @@ module.exports = class MamClient { // eslint-disable-line padded-blocks
   async fetch(root, mode, sideKey) { // eslint-disable-line class-methods-use-this
     this.logger.info(`Fetching from root ${root}`);
     const { nextRoot, messages } = await MAM.fetch(root, mode, sideKey);
-    const jsonMessages = messages.map(m => JSON.parse(iota.fromTrytes(m)));
+    const jsonMessages = messages.map(m => JSON.parse(this.iota.fromTrytes(m)));
     return { nextRoot, messages: jsonMessages };
   }
 
@@ -116,7 +115,7 @@ module.exports = class MamClient { // eslint-disable-line padded-blocks
     if (typeof res === 'undefined') return res; // No message
     const { nextRoot, payload } = res;
     this.logger.info(`Received nextRoot ${nextRoot} and payload ${payload}`);
-    const message = JSON.parse(iota.fromTrytes(payload));
+    const message = JSON.parse(this.iota.fromTrytes(payload));
     return { nextRoot, message };
   }
 };

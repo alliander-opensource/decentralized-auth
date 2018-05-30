@@ -1,0 +1,36 @@
+{
+  "name": "@decentralized-auth/iota-mam",
+  "version": "1.0.4",
+  "description": "Wrapper for the IOTA MAM client that provides convenience methods.",
+  "main": "src/iota-mam.js",
+  "scripts": {
+    "lint": "./node_modules/.bin/eslint -c .eslintrc src test",
+    "test": "mocha --timeout 60000"
+  },
+  "keywords": [
+    "IOTA",
+    "IOTA MAM"
+  ],
+  "contributors": [
+    "Erwin Rooijakkers",
+    "Alliander N.V. (https://alliander.com/)"
+  ],
+  "repository": "https://www.github.com/alliander/decentralized-auth/shared-libs/iota-mam",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "mam.client.js": "git+https://github.com/iotaledger/mam.client.js.git"
+  },
+  "devDependencies": {
+    "@decentralized-auth/iota": "^1.0.7",
+    "@decentralized-auth/gen-seed": "^1.0.1",
+    "chai": "4.1.2",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "15.1.0",
+    "eslint-plugin-import": "2.7.0",
+    "eslint-plugin-jasmine": "2.9.3",
+    "eslint-plugin-jsx-a11y": "5.1.1",
+    "eslint-plugin-mocha": "4.11.0",
+    "eslint-plugin-react": "7.4.0",
+    "mocha": "4.0.1"
+  }
+}

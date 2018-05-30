@@ -6,11 +6,11 @@
 
 
 const uuidv4 = require('uuid/v4');
-const ntru = require('./../modules/ntru');
+const ntru = require('@decentralized-auth/ntru');
 const config = require('./../config');
 const sessionState = require('./../session-state');
 const logger = require('./../logger')(module);
-const generateSeed = require('./../modules/gen-seed');
+const generateSeed = require('@decentralized-auth/gen-seed');
 
 /**
  * (Re-)initializes the session. Creates a new session id and the instances used

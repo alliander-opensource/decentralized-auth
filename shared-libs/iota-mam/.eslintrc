@@ -1,0 +1,18 @@
+{
+    "extends": [
+      "airbnb",
+      "plugin:mocha/recommended"
+    ],
+    "env": {
+      "es6": true,
+      "browser": true,
+      "node": true,
+      "mocha": true
+    },
+    "rules": {
+      "import/no-extraneous-dependencies": ["off"]
+    },
+    "plugins": [
+      "mocha"
+    ],
+}

@@ -1,0 +1,35 @@
+{
+  "name": "@decentralized-auth/iota",
+  "version": "1.0.7",
+  "description": "Wrapper for the IOTA client that provides convenience methods.",
+  "main": "src/iota.js",
+  "scripts": {
+    "lint": "./node_modules/.bin/eslint -c .eslintrc src test",
+    "test": "mocha --timeout 60000"
+  },
+  "keywords": [
+    "IOTA"
+  ],
+  "contributors": [
+    "Erwin Rooijakkers",
+    "Alliander N.V. (https://alliander.com/)"
+  ],
+  "repository": "https://www.github.com/alliander/decentralized-auth/shared-libs/iota",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "iota.lib.js": "^0.4.7"
+  },
+  "devDependencies": {
+    "chai": "4.1.2",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "15.1.0",
+    "eslint-plugin-import": "2.7.0",
+    "eslint-plugin-jasmine": "2.9.3",
+    "eslint-plugin-jsx-a11y": "5.1.1",
+    "eslint-plugin-mocha": "4.11.0",
+    "eslint-plugin-react": "7.4.0",
+    "keccak": "1.4.0",
+    "mocha": "4.0.1",
+    "uuid": "3.1.0"
+  }
+}

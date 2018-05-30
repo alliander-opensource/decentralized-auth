@@ -2,7 +2,7 @@ const { exec } = require('child_process');
 const { expect } = require('chai');
 const iota = require('../src/modules/iota');
 const pairing = require('../src/modules/device/pairing');
-const generateSeed = require('../src/modules/gen-seed');
+const generateSeed = require('@decentralized-auth/gen-seed');
 const signing = require('../src/modules/iota/kerl/signing');
 const PromiseRetryer = require('promise-retryer')(Promise);
 

@@ -1,0 +1,33 @@
+{
+  "name": "@decentralized-auth/gen-seed",
+  "version": "1.0.1",
+  "description": "Generates an IOTA seed on Linux and macOS using the built in random number generator. For other OSes uses the insecure iota-generate-seed library.",
+  "main": "src/gen-seed.js",
+  "scripts": {
+    "lint": "./node_modules/.bin/eslint -c .eslintrc src test",
+    "test": "mocha"
+  },
+  "keywords": [
+    "IOTA"
+  ],
+  "contributors": [
+    "Erwin Rooijakkers",
+    "Alliander N.V. (https://alliander.com/)"
+  ],
+  "repository": "https://www.github.com/alliander/decentralized-auth/shared-libs/gen-seed",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "iota-generate-seed": "^1.0.0"
+  },
+  "devDependencies": {
+    "chai": "4.1.2",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "15.1.0",
+    "eslint-plugin-import": "2.7.0",
+    "eslint-plugin-jasmine": "2.9.3",
+    "eslint-plugin-jsx-a11y": "5.1.1",
+    "eslint-plugin-mocha": "4.11.0",
+    "eslint-plugin-react": "7.4.0",
+    "mocha": "4.0.1"
+  }
+}
