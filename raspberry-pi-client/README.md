@@ -12,13 +12,7 @@ This client in demonstrates:
 - How service providers can be authorized to access data
 - How access can be revoked
 
-### Pairing a device
-
-### Send data via IOTA MAM
-
-### Authorize access
-
-### Revoke access
+For more information on the role of the My Home frontend see [architecture](../docs/architecture) and the [scenarios](../docs/scenarios).
 
 ## Tests
 

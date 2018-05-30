@@ -6,9 +6,11 @@ Based on [diva-js-reference-3p-frontend](https://github.com/Alliander/diva-js-re
 
 ## Features
 
-This frontend in particular demonstrates
+This frontend in particular demonstrates:
 - How to pair with a device via IOTA
 - How to provide consent to access data of that device
+
+For more information on the role of the My Home frontend see [architecture](../../docs/architecture) and the [scenarios](../../docs/scenarios).
 
 ## Running the application
 

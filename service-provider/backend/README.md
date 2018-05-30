@@ -4,6 +4,7 @@ Backend service that keeps a seed and NTRU key pair per session. It provides an 
 
 Backend also serves the frontend.
 
+For more information on the role of the Service Provider backend see [architecture](../../docs/architecture) and the [scenarios](../../docs/scenarios).
 
 ## Running
 

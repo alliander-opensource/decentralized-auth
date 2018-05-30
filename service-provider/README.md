@@ -4,6 +4,8 @@ Example of service provider that retrieves P1 energy data from a Raspberry Pi. T
 
 This is mainly frontend code, but the encryption related things are done on the backend. The page stores its state in a cookie (its session id) and in input fields (the device's received root and side key)."
 
+For more information on the role of the service provider see [architecture](../docs/architecture) and the [scenarios](../docs/scenarios).
+
 ## Run
 
 The backend serves the static frontend:
@@ -23,11 +25,3 @@ npm start
   * Being authorized means knowing the root and side key of the Raspberry Pi's MAM stream
 - Graph Raspberry Pi's data that is made available via MAM periodically
 - Handle revocation of consent
-
-### Request consent at My Home to receive data
-
-### Listener that checks if a new authorization policy is available
-
-### Graph Raspberry Pi's data that is made available via MAM periodically
-
-### Handle revocation of consent
