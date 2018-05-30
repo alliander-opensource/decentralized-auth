@@ -1,7 +1,7 @@
 /**
  * Gets all events from the MAM event store.
  *
- * @module get-all-policies
+ * @module get-all-events
  */
 
 
