@@ -1,0 +1,38 @@
+@startuml
+
+scale 2
+
+skinparam padding 3
+skinparam shadowing true
+skinparam default {
+  FontName 'Promixa Nova'
+  FontColor #515151
+  FontSize 16
+}
+
+skinparam sequence {
+  BackgroundColor #F5F5F5
+  ArrowColor #373737
+  ParticipantBorderThickness 0
+  ActorBorderColor #25ca6a
+  ParticipantFontColor #f5f5f5
+  LifeLineBorderColor #373737
+}
+
+participant "My Home MAM channel" #7db339
+participant "My Home" #7db339
+participant "Raspberry Pi" #b25400
+
+== Pairing My Home with the Raspberry Pi ==
+
+group IOTA messages
+  "My Home" --> "Raspberry Pi" : **Claim** (sender)
+  "Raspberry Pi" --> "My Home" : **Challenge** (challenge)
+  note right of "My Home" : Challenge needs to be signed with secret on Raspberry Pi
+  "My Home" --> "Raspberry Pi" : **Signed challenge** (signedChallenge, mamRoot)
+  "Raspberry Pi" --> "My Home" : **Claim result** (status)
+end
+
+"Raspberry Pi" --> "My Home MAM channel" : **When signed challenge is valid subscribe to My Home's MAM channel (mamRoot)**
+
+@enduml
