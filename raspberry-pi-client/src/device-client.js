@@ -191,7 +191,7 @@ module.exports = class DeviceClient { // eslint-disable-line padded-blocks
    * ```
    * @function makeKeyRotationMessage
    * @param {string} serviceProviders List of remaining authorized
-   *                 service providers
+   *                                  service providers
    * @param {string} sideKey Our new side key we are using
    * @returns {null}
    */
@@ -220,7 +220,7 @@ module.exports = class DeviceClient { // eslint-disable-line padded-blocks
    *
    * @function informUpdateSideKey
    * @param {string} authorizedServiceProviders List of remaining authorized
-   *                 service providers
+   *                                            service providers
    * @param {string} newSideKey Our new side key we are using
    * @returns {null}
    */
