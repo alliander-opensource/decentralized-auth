@@ -1,9 +1,8 @@
 @startuml
 
-scale 2
+scale 1
 
 skinparam padding 3
-skinparam shadowing true
 skinparam default {
   FontName 'Promixa Nova'
   FontColor #515151
@@ -19,20 +18,83 @@ skinparam sequence {
   LifeLineBorderColor #373737
 }
 
-participant "My Home MAM channel" #7db339
-participant "My Home" #7db339
-participant "Raspberry Pi" #b25400
+actor "Prosumer" as prosumer
+participant "My Home" as my_home #00bcd4
+database "My Home MAM channel\n//(private)//" as my_home_mam #00bcd4
+participant "Raspberry Pi\nP1 Reader" as raspberry_pi #b25400
+database "Raspberry Pi MAM channel\n//(restricted)//" as raspberry_pi_mam #b25400
+participant "Service Provider" as service_provider #7db339
+participant "Service Provider\nbackend" as service_provider_backend #7db339
 
-== Pairing My Home with the Raspberry Pi ==
+== Pairing My Home with the Raspberry Pi P1 Reader ==
 
-group IOTA messages
-  "My Home" --> "Raspberry Pi" : **Claim** (sender)
-  "Raspberry Pi" --> "My Home" : **Challenge** (challenge)
-  note right of "My Home" : Challenge needs to be signed with secret on Raspberry Pi
-  "My Home" --> "Raspberry Pi" : **Signed challenge** (signedChallenge, mamRoot)
-  "Raspberry Pi" --> "My Home" : **Claim result** (status)
+prosumer --> my_home : Claim Raspberry Pi\n**POST** ///api/add-device//\n(iotaAddress, secret)
+
+group IOTA transactions
+  my_home --> raspberry_pi : **Claim** (sender)
+  my_home <-- raspberry_pi : **Challenge** (challenge)
+  note right of my_home : Challenge is signed with secret on Raspberry Pi
+  my_home --> raspberry_pi : **Signed challenge** (signedChallenge, mamRoot)
+  my_home <-- raspberry_pi : **Claim result** (status)
 end
 
-"Raspberry Pi" --> "My Home MAM channel" : **When signed challenge is valid subscribe to My Home's MAM channel (mamRoot)**
+raspberry_pi --> my_home_mam : \
+**When signed challenge**\n**is valid subscribe**\n**to My Home's MAM**\n**channel (mamRoot)**
+
+note right of my_home : My Home uses its MAM channel as backend so publish state
+my_home --> my_home_mam : **DEVICE_ADDED** (device)
+
+== Raspberry Pi Publishes P1 energy data ==
+
+loop Every P1 message
+  raspberry_pi --> raspberry_pi_mam : **DATA** (timestamp, raw)
+end
+note right of raspberry_pi_mam : Example message:\n{ \n\ttype: 'DATA',\n\ttimestamp: "1527760653551",\n\traw: "...1-0:1.8.1(123456.789*kWh)..."\n}
+
+== Give Service Provider consent to display energy data from Pi ==
+
+prosumer --> service_provider : Give consent
+service_provider --> service_provider_backend : **GET** ///api/address//
+service_provider <-- service_provider_backend : iotaAddress
+service_provider --> service_provider_backend : **GET** ///api/public-key//
+service_provider <-- service_provider_backend : publicKeyTrytes
+my_home <-- service_provider : **GET** ///authorize/// (publicKeyTrytes, iotaAddress, goal)
+prosumer --> my_home : Grant access\n(Raspberry Pi)
+my_home --> my_home_mam : **AUTHORIZED** \n(device, publicKeyTrytes,\niotaAddress, goal)
+my_home_mam <-- raspberry_pi : Fetch (mamRoot)
+my_home_mam --> raspberry_pi : **AUTHORIZED** \n(device, publicKeyTrytes,\niotaAddress, goal)
+
+group IOTA transaction
+  raspberry_pi --> service_provider : **Encrypted MAM data** (root, sideKey)
+end
+
+service_provider --> service_provider_backend : **GET** ///api/decrypt///\n(MAM data)
+service_provider <-- service_provider_backend : decrypted root and side key
+raspberry_pi_mam <-- service_provider : Fetch \n(root, side key)
+raspberry_pi_mam --> service_provider : Data
+
+service_provider -> service_provider : Do something with data
+note left of service_provider : E.g., wattt.nl displays data in graph
+
+== Revoke consent for Service Provider ==
+
+prosumer --> my_home : **GET** ///api/revoke-policy//\n(policy)
+my_home --> my_home_mam : **AUTHORIZATION_REVOKED**\n(device, iotaAddress, goal)
+my_home_mam <-- raspberry_pi : Fetch (mamRoot)
+my_home_mam --> raspberry_pi : **AUTHORIZATION_REVOKED**\n(device, iotaAddress, goal)
+raspberry_pi --> raspberry_pi : New side key
+raspberry_pi --> raspberry_pi_mam : **KEY_ROTATION**\n[authorized service providers \n-> encrypted root and side keys]
+note left of service_provider : Example message:\n{\n\ttype: 'KEY_ROTATION',\n\ttimestamp: "1527760653551",\n\tIOTAADDRESS: "ENCRYPTEDSIDEKEY"\n}
+raspberry_pi_mam <-- service_provider : Fetch \n(root, side key)
+raspberry_pi_mam --> service_provider : **KEY_ROTATION**\n[authorized service providers \n-> side keys encrypted\nwith public key]
+
+alt If service provider is stil authorized it can decrypt the new side key
+  service_provider --> service_provider_backend : **GET** ///api/decrypt///\n(encrypted MAM data)
+  service_provider <-- service_provider_backend : decrypted root and side key
+  raspberry_pi_mam <-- service_provider : Fetch \n(root, side key)
+  raspberry_pi_mam --> service_provider : Data
+else If service provider is no longer authorized it stops fetching
+  service_provider --> service_provider : No longer authorized :(
+end
 
 @enduml
