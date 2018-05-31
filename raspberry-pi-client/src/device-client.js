@@ -137,7 +137,6 @@ module.exports = class DeviceClient { // eslint-disable-line padded-blocks
    * @param {string} receiver IOTA address of receiver of successful claim
    * @param {string} root MAM Root of the sender we will start listening to
    * @param {string} signedChallenge Signed challenge send by sender
-   * @param {string} status 'OK' or 'NOK'
    * @returns {null}
    */
   processChallenge(seed, sender, receiver, root, signedChallenge) {
