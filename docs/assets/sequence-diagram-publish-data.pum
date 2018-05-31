@@ -1,0 +1,31 @@
+@startuml
+
+scale 1
+
+skinparam padding 3
+skinparam default {
+  FontName 'Promixa Nova'
+  FontColor #515151
+  FontSize 16
+}
+
+skinparam sequence {
+  BackgroundColor #F5F5F5
+  ArrowColor #373737
+  ParticipantBorderThickness 0
+  ActorBorderColor #25ca6a
+  ParticipantFontColor #f5f5f5
+  LifeLineBorderColor #373737
+}
+
+participant "Raspberry Pi\nP1 Reader" as raspberry_pi #b25400
+database "Raspberry Pi MAM channel\n//(restricted)//" as raspberry_pi_mam #b25400
+
+== Raspberry Pi Publishes P1 energy data ==
+
+loop Every P1 message
+  raspberry_pi --> raspberry_pi_mam : **DATA** (timestamp, raw)
+end
+note right of raspberry_pi_mam : Example message:\n{ \n\ttype: 'DATA',\n\ttimestamp: "1527760653551",\n\traw: "...1-0:1.8.1(123456.789*kWh)..."\n}
+
+@enduml

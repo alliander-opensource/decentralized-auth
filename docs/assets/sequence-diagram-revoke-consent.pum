@@ -1,0 +1,49 @@
+@startuml
+
+scale 1
+
+skinparam padding 3
+skinparam default {
+  FontName 'Promixa Nova'
+  FontColor #515151
+  FontSize 16
+}
+
+skinparam sequence {
+  BackgroundColor #F5F5F5
+  ArrowColor #373737
+  ParticipantBorderThickness 0
+  ActorBorderColor #25ca6a
+  ParticipantFontColor #f5f5f5
+  LifeLineBorderColor #373737
+}
+
+actor "Prosumer" as prosumer
+participant "My Home" as my_home #00bcd4
+database "My Home MAM channel\n//(private)//" as my_home_mam #00bcd4
+participant "Raspberry Pi\nP1 Reader" as raspberry_pi #b25400
+database "Raspberry Pi MAM channel\n//(restricted)//" as raspberry_pi_mam #b25400
+participant "Service Provider" as service_provider #7db339
+participant "Service Provider\nbackend" as service_provider_backend #7db339
+
+== Revoke consent for Service Provider ==
+
+prosumer --> my_home : **GET** ///api/revoke-policy//\n(policy)
+my_home --> my_home_mam : **AUTHORIZATION_REVOKED**\n(device, iotaAddress, goal)
+my_home_mam <-- raspberry_pi : Fetch (mamRoot)
+my_home_mam --> raspberry_pi : **AUTHORIZATION_REVOKED**\n(device, iotaAddress, goal)
+raspberry_pi --> raspberry_pi : New side key
+raspberry_pi --> raspberry_pi_mam : **KEY_ROTATION**\n[authorized service providers \n-> encrypted root and side keys]
+note left of service_provider : Example message:\n{\n\ttype: 'KEY_ROTATION',\n\ttimestamp: "1527760653551",\n\tIOTAADDRESS: "ENCRYPTEDSIDEKEY"\n}
+raspberry_pi_mam <-- service_provider : Fetch \n(root, side key)
+raspberry_pi_mam --> service_provider : **KEY_ROTATION**\n[authorized service providers \n-> side keys encrypted\nwith public key]
+alt If service provider is stil authorized it can decrypt the new side key
+  service_provider --> service_provider_backend : **GET** ///api/decrypt///\n(encrypted MAM data)
+  service_provider <-- service_provider_backend : decrypted root and side key
+  raspberry_pi_mam <-- service_provider : Fetch \n(root, side key)
+  raspberry_pi_mam --> service_provider : Data
+else If service provider is no longer authorized it stops fetching
+  service_provider --> service_provider : No longer authorized :(
+end
+
+@enduml

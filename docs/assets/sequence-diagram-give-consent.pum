@@ -1,0 +1,54 @@
+@startuml
+
+scale 1
+
+skinparam padding 3
+skinparam default {
+  FontName 'Promixa Nova'
+  FontColor #515151
+  FontSize 16
+}
+
+skinparam sequence {
+  BackgroundColor #F5F5F5
+  ArrowColor #373737
+  ParticipantBorderThickness 0
+  ActorBorderColor #25ca6a
+  ParticipantFontColor #f5f5f5
+  LifeLineBorderColor #373737
+}
+
+actor "Prosumer" as prosumer
+participant "My Home" as my_home #00bcd4
+database "My Home MAM channel\n//(private)//" as my_home_mam #00bcd4
+participant "Raspberry Pi\nP1 Reader" as raspberry_pi #b25400
+database "Raspberry Pi MAM channel\n//(restricted)//" as raspberry_pi_mam #b25400
+participant "Service Provider" as service_provider #7db339
+participant "Service Provider\nbackend" as service_provider_backend #7db339
+
+== Give Service Provider consent to display energy data from Pi ==
+
+prosumer --> service_provider : Give consent
+service_provider --> service_provider_backend : **GET** ///api/address//
+service_provider <-- service_provider_backend : iotaAddress
+service_provider --> service_provider_backend : **GET** ///api/public-key//
+service_provider <-- service_provider_backend : publicKeyTrytes
+my_home <-- service_provider : **GET** ///authorize/// (publicKeyTrytes, iotaAddress, goal)
+prosumer --> my_home : Grant access\n(Raspberry Pi)
+my_home --> my_home_mam : **AUTHORIZED** \n(device, publicKeyTrytes,\niotaAddress, goal)
+my_home_mam <-- raspberry_pi : Fetch (mamRoot)
+my_home_mam --> raspberry_pi : **AUTHORIZED** \n(device, publicKeyTrytes,\niotaAddress, goal)
+
+group IOTA transaction
+  raspberry_pi --> service_provider : **Encrypted MAM data** (root, sideKey)
+end
+
+service_provider --> service_provider_backend : **GET** ///api/decrypt///\n(MAM data)
+service_provider <-- service_provider_backend : decrypted root and side key
+raspberry_pi_mam <-- service_provider : Fetch \n(root, side key)
+raspberry_pi_mam --> service_provider : Data
+
+service_provider -> service_provider : Do something with data
+note left of service_provider : E.g., wattt.nl displays data in graph
+
+@enduml
