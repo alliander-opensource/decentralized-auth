@@ -1,0 +1,57 @@
+@startuml
+
+scale 1
+
+skinparam padding 3
+skinparam shadowing true
+skinparam default {
+  FontName 'Promixa Nova'
+  FontColor #525252
+  FontSize 16
+}
+
+node "Raspberry Pi" {
+   ["P1 data publisher"] as device
+   ["Authorization module"] as device_auth_module
+}
+
+node "Service Provider (backend)\nIOTA seed and NTRU key pair per session" as service_provider_backend
+
+node "Service Provider" as service_provider
+note left of service_provider : www.wattt.nl
+
+node "IOTA UI \n IOTA seed and MAM channel per session" as my_home
+note bottom of my_home : www.iotahome.nl
+
+database "Raspberry Pi's MAM channel\n (Data and event Store)" as device_mam {
+  [...] as device_more
+  [DATA] as data1
+  [DATA] as data2
+  [DATA] as data3
+  [KEY_ROTATION] as key_rotation
+  data1 --> data2
+  data2 --> key_rotation
+  key_rotation -->data3
+  data3 --> device_more
+}
+
+database "My Home's MAM channel\n (Event Store)" as my_home_mam {
+  [...] as my_home_more
+  [DEVICE_ADDED] --> [AUTHORIZED]
+  [AUTHORIZED] --> [AUTHORIZATION_REVOKED]
+  [AUTHORIZATION_REVOKED] --> [DEVICE_DELETED]
+  [DEVICE_DELETED] --> my_home_more
+}
+
+
+device --> device_mam
+device_auth_module ..> my_home_mam
+
+service_provider_backend <-- service_provider
+
+my_home --> my_home_mam
+
+service_provider ..> device_mam
+service_provider --> my_home
+
+@enduml
