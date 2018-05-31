@@ -11,8 +11,8 @@ skinparam default {
 }
 
 node "Raspberry Pi" {
-   ["P1 data publisher"] as device
-   ["Authorization module"] as device_auth_module
+   [P1 data publisher] as device
+   [Authorization module] as device_auth_module
 }
 
 node "Service Provider (backend)\nIOTA seed and NTRU key pair per session" as service_provider_backend
