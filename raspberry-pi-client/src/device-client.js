@@ -367,13 +367,13 @@ module.exports = class DeviceClient { // eslint-disable-line padded-blocks
     logger.info(`IOTA MAM: Fetching from root ${DeviceClient.formatTrytes(this.root)}`);
     try {
       const mode = 'private';
-      const res = await this.mam.fetchSingle(this.root, mode);
-      if (typeof res === 'undefined') {
+      const mamMsg = await this.mam.fetchSingle(this.root, mode);
+      if (typeof mamMsg === 'undefined') {
         // no message, you can try again later, keep root
         logger.info('No new MAM message');
         return;
       }
-      const { nextRoot, message } = res;
+      const { nextRoot, message } = mamMsg;
       switch (message.type) {
         case AUTHORIZED_TYPE: {
           this.processAuthorizedMessage(message);
