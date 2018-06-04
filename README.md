@@ -1,6 +1,6 @@
 # Energy usage data streams with consent of device owner Proof of Concept
 
-Sharing high frequency smart meter data with explicit consent of the consumer will help the energy transition in the Netherlands. This Alliander R&D project investigates the use of the distributed ledger IOTA and Masked Authenticated Messaging (MAM) for decentralized energy data streams adhering to the GDPR privacy regulation.
+Sharing high frequency smart meter data with explicit consent of the consumer can help the energy transition in the Netherlands. This Alliander R&D project investigates the use of the distributed ledger IOTA and Masked Authenticated Messaging (MAM) for decentralized energy data streams adhering to the GDPR privacy regulation.
 
 ## Goals
 
