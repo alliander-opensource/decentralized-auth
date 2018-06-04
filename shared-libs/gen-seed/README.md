@@ -1,6 +1,6 @@
 # @decentralized-auth/gen-seed
 
-[![GitHub license](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://raw.githubusercontent.com/alliander/decentralized-auth/master/decentralized-auth/shared-libs/iota/LICENSE)
+[![GitHub license](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://raw.githubusercontent.com/alliander/decentralized-auth/master/decentralized-auth/shared-libs/iota/LICENSE) [![npm version](https://badge.fury.io/js/%40decentralized-auth%2Fgen-seed.svg)](https://badge.fury.io/js/%40decentralized-auth%2Fgen-seed)
 
 Generates an IOTA seed on Linux and macOS using the built in random number generator. For other OSes uses the insecure iota-generate-seed library.
 

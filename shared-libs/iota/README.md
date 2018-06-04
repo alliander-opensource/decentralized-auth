@@ -1,6 +1,6 @@
 # @decentralized-auth/iota
 
-[![GitHub license](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://raw.githubusercontent.com/alliander/decentralized-auth/master/decentralized-auth/shared-libs/iota/LICENSE)
+[![GitHub license](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://raw.githubusercontent.com/alliander/decentralized-auth/master/decentralized-auth/shared-libs/iota/LICENSE) [![npm version](https://badge.fury.io/js/%40decentralized-auth%2Fiota.svg)](https://badge.fury.io/js/%40decentralized-auth%2Fiota)
 
 Wrapper class for the IOTA client that provides some convenience methods for use in the decentralized-auth project.
 

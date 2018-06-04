@@ -1,6 +1,6 @@
 # @decentralized-auth/ntru
 
-[![GitHub license](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://raw.githubusercontent.com/alliander/decentralized-auth/master/decentralized-auth/shared-libs/ntru/LICENSE)
+[![GitHub license](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://raw.githubusercontent.com/alliander/decentralized-auth/master/decentralized-auth/shared-libs/ntru/LICENSE) [![npm version](https://badge.fury.io/js/%40decentralized-auth%2Fntru.svg)](https://badge.fury.io/js/%40decentralized-auth%2Fntru)
 
 Wrapper around ntrujs NTRUEncrypt. Provides convenience methods to work with the IOTA Tangle.
 
