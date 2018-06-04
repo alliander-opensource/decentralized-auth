@@ -11,11 +11,11 @@ skinparam default {
 }
 
 node "**Raspberry Pi**" {
-  [P1 data publisher\n//Forward data from P1 port to//\n //restricted MAM channel and \
+  [**P1 data publisher**\n//Forward data from P1 port to//\n //restricted MAM channel and \
   publish//\n// key rotation message on revocation//] as device
-  [Authorizations\n//Fetch events from given My Home's MAM//\n// root and provide data \
+  [**Authorizations**\n//Fetch events from given My Home's MAM//\n// root and provide data \
   root and side key//\n// to authorized service providers//] as device_auth_module
-  [Pairing\n//Ensure that device pairing//\n//is valid. If so, start listening//\n//to \
+  [**Pairing**\n//Ensure that device pairing//\n//is valid. If so, start listening//\n//to \
   given MAM root//] as device_pairing_module
   device_auth_module <- device_pairing_module
   device_auth_module <- device
