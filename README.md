@@ -36,8 +36,34 @@ Install [Docker](https://www.docker.com/community-edition) and [Docker Compose](
 ```
 docker-compose up
 ```
+For running the components individually:
 
-See the separate projects's READMEs for information on running the components individually.
+Set environment variables:
+```
+export IOTA_PROVIDER=xxxxxx # when not running local-testnet
+export MIN_WEIGHT_MAGNITUDE=14
+```
+
+Start My Home consent management backend (which serves the frontend as well):
+
+```
+cd my-home/backend && npm start
+```
+
+Start Service Provider wattt.nl backend (which serves the frontend as well):
+```
+cd service-provider/backend && npm start 
+```
+
+Start the Raspberry Pi client locally with a fresh seed.
+
+```
+cd raspberry-client 
+SEED=$(cat /dev/urandom | LC_ALL=C tr -dc 'A-Z9' | fold -w 81 | head -n 1) npm start
+```
+When connecting a RJ11 cable to USB ensure the `P1_SERIAL_PORT` environment variable is set to its USB serial port.
+
+See the separate projects's READMEs for more information.
 
 ## Production
 
