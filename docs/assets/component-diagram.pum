@@ -60,4 +60,9 @@ service_provider --> my_home
 device_pairing_module <-- my_home
 device_pairing_module --> my_home
 
+node "Smart Meter" {
+  interface "P1 port" as p1_port
+  p1_port <- device
+}
+
 @enduml
