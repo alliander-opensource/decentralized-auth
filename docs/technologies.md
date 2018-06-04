@@ -16,7 +16,7 @@ IOTA Masked Authenticated Messaging (MAM) is an IXI (extensible interface) modul
 Someone stumbling upon the MAM stream can view the messages by decrypting it with the address. For public information broadcasted like a radio.
 
 ### Private
-Messages are not decryptable by the address. Only someone who knows the root can decrypt the messages. For private communication between devices.
+Messages are not decryptable with the address. Only someone who knows the root can decrypt the messages. For private communication between devices.
 
 ### Restricted
 Messages are private (a listener must know the root to be able to decrypt it) but also encrypted with a side key. A listener much know the root and side key to be able to decrypt the messages. This can be used to revoke access to a listener.
