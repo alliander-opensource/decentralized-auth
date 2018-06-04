@@ -163,9 +163,9 @@ module.exports = class DeviceClient { // eslint-disable-line padded-blocks
    * @param {string} seed IOTA seed of sender
    * @param {string} address IOTA address of the service provider
    * @param {string} publicKey Public key of the service provider in trytes
-   * @returns {Promise}
+   * @returns {Promise} containing IOTA transactions
    */
-  sendMamData(seed, address, publicKey) {
+  async sendMamData(seed, address, publicKey) {
     const { channel: { side_key, next_root } } = this.mam.getMamState();
     const mamData = {
       root: ntru.encrypt(next_root, publicKey),
