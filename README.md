@@ -31,7 +31,7 @@ cd decentralized-auth
 
 ## Running locally
 
-Install [Docker](https://www.docker.com/community-edition) and [Docker Compose](https://docs.docker.com/compose/install). Then run:
+Install [Docker](https://www.docker.com/community-edition) and [Docker Compose](https://docs.docker.com/compose/install). Use node version 8.6. Then run:
 
 ```
 docker-compose up
