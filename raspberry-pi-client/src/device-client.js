@@ -339,15 +339,15 @@ module.exports = class DeviceClient { // eslint-disable-line padded-blocks
    * @param message {Object} MAM message of type {@link AUTHORIZATION_REVOKED_TYPE}.
    * @returns {undefined}
    */
-  processAuthorizationRevokedMessage(message) {
+  async processAuthorizationRevokedMessage(message) {
     const newSideKey = DeviceClient.createSideKey();
     this.authorizedServiceProviders.remove(message.policy.serviceProvider);
-    this.informUpdateSideKey(
-      this.authorizedServiceProviders.getAll(),
-      newSideKey,
-    )
-      .then(() => this.mam.changeSideKey(newSideKey))
-      .catch(err => logger.error(`processAuthorizationRevokedMessage failed: ${err}`));
+    try {
+      this.informUpdateSideKey(this.authorizedServiceProviders.getAll(), newSideKey);
+      this.mam.changeSideKey(newSideKey);
+    } catch (err) {
+      logger.error(`processAuthorizationRevokedMessage failed: ${err}`);
+    }
   }
 
 
