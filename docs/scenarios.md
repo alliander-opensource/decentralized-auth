@@ -16,6 +16,13 @@ When the device is paired it will start listening to My Home's MAM channel, wher
 
 ![sequence diagram pairing](assets/sequence-diagram-pairing.png)
 
+## Publishing data
+
+A device publishes data when a P1-telegram is received on the `P1_SERIAL_PORT` environment variable.
+
+### Sequence diagram
+![sequence diagram publish data](assets/sequence-diagram-publish-data.png)
+
 ## Authorizing a Service Provider
 
 The goals of authorizing a service provider are:
