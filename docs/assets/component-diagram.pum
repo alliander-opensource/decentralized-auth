@@ -12,14 +12,15 @@ skinparam default {
 
 node "**Raspberry Pi**" {
    [P1 data publisher] as device
-   [Authorization and pairing] as device_auth_module
-   device - device_auth_module
+   [Pairing] as device_pairing_module
+   [Authorizations] as device_auth_module
+   device_auth_module -> device
 }
 
 node "**Service Provider** (backend)\nIOTA seed and NTRU key pair per session" as service_provider_backend
 
 node "**Service Provider**" as service_provider
-note left of service_provider : www.wattt.nl
+note right of service_provider : www.wattt.nl
 
 node "**My Home** IOTA UI \n IOTA seed and MAM channel per session" as my_home
 note bottom of my_home : www.iotahome.nl
@@ -49,9 +50,12 @@ device_auth_module ..> my_home_mam
 
 service_provider_backend <-- service_provider
 
-my_home --> my_home_mam
+my_home <-- my_home_mam
 
 service_provider ..> device_mam
 service_provider --> my_home
+
+device_pairing_module <-- my_home
+device_pairing_module --> my_home
 
 @enduml
