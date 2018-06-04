@@ -15,6 +15,7 @@ node "**Raspberry Pi**" {
   [Authorizations\n//Fetch events from given My Home's MAM//\n// root and provide data root and side key//\n// to authorized service providers//] as device_auth_module
   [Pairing\n//Ensure that device pairing//\n//is valid. If so, start listening//\n//to given MAM root//] as device_pairing_module
   device_auth_module <- device_pairing_module
+  device_auth_module <- device
 }
 
 node "**Service Provider (backend)**\n // Provide IOTA address and asymmetric encryption//\nIOTA seed and NTRU key pair per session" as service_provider_backend
