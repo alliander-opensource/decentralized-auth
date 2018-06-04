@@ -238,7 +238,7 @@ module.exports = class DeviceClient { // eslint-disable-line padded-blocks
    *
    * @function handleP1Message
    * @param {string} P1 telegram
-   * @returns {null}
+   * @returns {undefined}
    */
   handleP1Message(telegram) {
     const message = {
