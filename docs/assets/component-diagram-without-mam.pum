@@ -1,0 +1,34 @@
+@startuml
+
+scale 1
+
+skinparam padding 3
+skinparam shadowing true
+skinparam default {
+  FontName 'Promixa Nova'
+  FontColor #525252
+  FontSize 16
+}
+
+node "**Service Provider**\n Request consent and display energy data" as service_provider
+note right of service_provider : www.wattt.nl
+
+node "Raspberry Pi" {
+  [P1 data publisher] as device
+  [Authorization module] as device_auth_module
+  device - device_auth_module
+}
+
+node "Smart Meter" {
+  interface "P1 port" as p1_port
+  p1_port -> device
+}
+
+node "**My Home** IOTA UI \n Pair with device and manage consent" as my_home
+note right of my_home : www.iotahome.nl
+
+device_auth_module <- my_home
+service_provider .. device
+my_home <-- service_provider
+
+@enduml
