@@ -11,18 +11,18 @@ skinparam default {
 }
 
 node "**Raspberry Pi**" {
-   [P1 data publisher] as device
-   [Pairing] as device_pairing_module
-   [Authorizations] as device_auth_module
-   device_auth_module -> device
+  [P1 data publisher\n//Forward data from P1 port to//\n //restricted MAM channel and publish//\n// key rotation message on revocation//] as device
+  [Authorizations\n//Fetch events from given My Home's MAM//\n// root and provide data root and side key//\n// to authorized service providers//] as device_auth_module
+  [Pairing\n//Ensure that device pairing//\n//is valid. If so, start listening//\n//to given MAM root//] as device_pairing_module
+  device_auth_module <- device_pairing_module
 }
 
-node "**Service Provider** (backend)\nIOTA seed and NTRU key pair per session" as service_provider_backend
+node "**Service Provider (backend)**\n // Provide IOTA address and asymmetric encryption//\nIOTA seed and NTRU key pair per session" as service_provider_backend
 
-node "**Service Provider**" as service_provider
-note right of service_provider : www.wattt.nl
+node "**Service Provider**\n //Request consent and (when MAM root and side//\n//key are received and decrypted) fetch data//" as service_provider
+note top of service_provider : www.wattt.nl
 
-node "**My Home** IOTA UI \n IOTA seed and MAM channel per session" as my_home
+node "**My Home** IOTA UI\n//Pair with device and manage consent//\n IOTA seed and MAM channel per session" as my_home
 note bottom of my_home : www.iotahome.nl
 
 database "**Raspberry Pi**'s MAM channel\n (Data and event Store)" as device_mam {
@@ -47,6 +47,7 @@ database "**My Home**'s MAM channel\n (Event Store)" as my_home_mam {
 
 device --> device_mam
 device_auth_module ..> my_home_mam
+device_auth_module --> service_provider
 
 service_provider_backend <-- service_provider
 
