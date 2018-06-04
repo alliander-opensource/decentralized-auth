@@ -28,6 +28,7 @@ node "**My Home** IOTA UI \n Pair with device and manage consent" as my_home
 note right of my_home : www.iotahome.nl
 
 device_auth_module <- my_home
+device_auth_module -> my_home
 service_provider .. device
 my_home <-- service_provider
 
