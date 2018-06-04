@@ -17,9 +17,8 @@ const DEVICE_DELETED_TYPE = 'DEVICE_DELETED';
 /**
  * Creates the devices aggregate from the MAM event stream.
  * @function toDevices
- * @param {array} messages Messages from an MAM stream
- * @returns {array} Array of devices (device is object with iotaAddress and
- *                  type)
+ * @param {array} messages JSON messages from an MAM event stream
+ * @returns {array} Array of devices (device is object with address and type)
  */
 function toDevices(messages) {
   const devicesSet = messages.reduce((devices, { type, device }) => {

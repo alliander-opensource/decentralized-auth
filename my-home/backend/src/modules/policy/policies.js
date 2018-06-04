@@ -20,7 +20,7 @@ const AUTHORIZATION_REVOKED_TYPE = 'AUTHORIZATION_REVOKED';
 /**
  * Creates the policies aggregate from the MAM event stream.
  * @function toPolicies
- * @param {array} messages Messages from an MAM stream
+ * @param {array} messages JSON messages from an MAM event stream
  * @returns {array} Array of policies (policy is object with device and
  *                  serviceProvider)
  */
