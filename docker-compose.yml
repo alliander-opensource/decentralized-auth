@@ -1,0 +1,21 @@
+version: '3'
+services:
+  my-home:
+    build:
+      context: my-home/backend
+    environment:
+      IOTA_PROVIDER: http://node01.testnet.iotatoken.nl:16265
+      IOTA_MIN_WEIGHT_MAGNITUDE: 10
+  service-provider:
+    build:
+      context: service-provider/backend
+    environment:
+      IOTA_PROVIDER: http://node01.testnet.iotatoken.nl:16265
+      IOTA_MIN_WEIGHT_MAGNITUDE: 10
+  raspberry-pi-client:
+    build:
+      context: raspberry-pi-client
+    environment:
+      IOTA_PROVIDER: http://node01.testnet.iotatoken.nl:16265
+      IOTA_MIN_WEIGHT_MAGNITUDE: 10
+      P1_SERIAL_PORT: /dev/tty.usbserial-AC2F18XB # change this to your USB port with P1

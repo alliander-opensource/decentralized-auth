@@ -49,6 +49,7 @@
 
      const ADDRESS_BAR_URL = window.location.href.slice(0, -1);
      const IS_DEV_ENVIRONMENT = ADDRESS_BAR_URL === 'http://localhost:5000';
+     const IOTA_PROVIDER = 'http://node01.testnet.iotatoken.nl:16265';
      const BACKEND_BASE_URL = ADDRESS_BAR_URL;
      const MY_HOUSE_BASE_URL = IS_DEV_ENVIRONMENT
        ? 'http://localhost:4000'
@@ -186,7 +187,7 @@
        window.location = myHouseUrl;
      };
 
-     const iota = new IOTA({ provider: 'https://iota-nod3.de/' });
+     const iota = new IOTA({ provider: IOTA_PROVIDER });
 
      const Mam = require('mam.web.js');
 
