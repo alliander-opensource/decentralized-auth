@@ -32,7 +32,7 @@ node "**My Home** IOTA UI\n//Pair with device and manage consent//\n IOTA seed a
 channel per session" as my_home
 note bottom of my_home : www.iotahome.nl
 
-database "**Raspberry Pi**'s MAM channel\n (Data and event Store)" as device_mam {
+database "**Raspberry Pi**'s\n restricted MAM channel\n (Data and event Store)" as device_mam {
   [...] as device_more
   [DATA] as data1
   [DATA] as data2
@@ -44,7 +44,7 @@ database "**Raspberry Pi**'s MAM channel\n (Data and event Store)" as device_mam
   data3 --> device_more
 }
 
-database "**My Home**'s MAM channel\n (Event Store)" as my_home_mam {
+database "**My Home**'s\n private MAM channel\n (Event Store)" as my_home_mam {
   [...] as my_home_more
   [DEVICE_ADDED] --> [AUTHORIZED]
   [AUTHORIZED] --> [AUTHORIZATION_REVOKED]
