@@ -12,7 +12,7 @@ skinparam default {
 
 node "**Raspberry Pi**" {
    [P1 data publisher] as device
-   [Authorization module] as device_auth_module
+   [Authorization and pairing] as device_auth_module
    device - device_auth_module
 }
 
