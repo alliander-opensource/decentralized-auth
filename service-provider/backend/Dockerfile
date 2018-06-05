@@ -4,11 +4,11 @@ FROM node:8.6
 WORKDIR /usr/src/app
 
 # Install app dependencies
-COPY package.json package-lock.json ./
+COPY package.json yarn.lock /
 
-RUN npm install
+RUN yarn
 
 # Bundle app source
 COPY . .
 
-CMD [ "npm", "start" ]
+CMD [ "yarn", "start" ]

@@ -2,9 +2,10 @@
 build
 node_modules
 
-# Winston logs
+# logs
 combined.log
 error.log
+yarn-error.log
 
 # macOS
 .DS_Store
