@@ -84,7 +84,7 @@ class NewDevicePage extends Component {
             <Col xs={8}>
               Raspberry Pi&#39;s IOTA address: &nbsp;
               <input
-                tabindex="1"
+                tabIndex="-3"
                 type="text"
                 value={iotaAddress}
                 onChange={this.onAddressChange}
@@ -92,7 +92,7 @@ class NewDevicePage extends Component {
             </Col>
             <Col xs={4} style={{ textAlign: 'right' }}>
               <RaisedButton
-                tabindex="3"
+                tabIndex="-2"
                 onClick={() => dispatch(addDevice(iotaAddress, secret))}
                 label="Claim Raspberry Pi"
                 primary
@@ -104,7 +104,7 @@ class NewDevicePage extends Component {
             <Col xs={8}>
               Secret on device: &nbsp;
               <input
-                tabindex="2"
+                tabIndex="-1"
                 type="text"
                 value={secret}
                 onChange={this.onSecretChange}
