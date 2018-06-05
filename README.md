@@ -6,6 +6,7 @@ Sharing high frequency smart meter data with explicit consent of the consumer ca
 
 - User is in control of his data
 - A level playing field is created where service providers (e.g., app developers) can use the data
+- Data goes directly from smart meter to service provider (not from device to a cloud to a service provider)
 - Adheres to GDPR by asking for goal and consent
 - Decentralized consent management via [IOTA MAM](docs/technologies.md#iota-mam)
 - Post-quantum cryptography (signing via [IOTA Kerl](docs/techologies.md#iota) and asymmetric encryption via [NTRU](docs/techologies.md#ntru))
