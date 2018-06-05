@@ -6,8 +6,14 @@ Backend also serves the frontend.
 
 For more information on the role of the Service Provider backend see [architecture](../../docs/architecture) and the [scenarios](../../docs/scenarios).
 
+## Install
+
+```
+yarn
+```
+
 ## Running
 
 ```
-npm run start
+yarn run start
 ```

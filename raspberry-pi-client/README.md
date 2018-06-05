@@ -14,10 +14,16 @@ This client in demonstrates:
 
 For more information on the role of the My Home frontend see [architecture](../docs/architecture) and the [scenarios](../docs/scenarios).
 
+## Installation
+
+```
+yarn
+```
+
 ## Tests
 
 ```
-npm run test
+yarn run test
 ```
 
 Note that some tests take a long time because they attach messages to the Tangle.
@@ -46,7 +52,7 @@ Install Node dependencies:
 
 ```
 cd raspberry-pi-client
-npm i
+yarn i
 ```
 
 Install NTRU quantum proof asymmetric encryption lib:
@@ -68,7 +74,7 @@ cd ~/raspberry-pi-client
 Test installation with:
 
 ```
-npm run test
+yarn run test
 ```
 
 Running for real:
@@ -90,8 +96,8 @@ SEED=$(cat /dev/urandom | LC_ALL=C tr -dc 'A-Z9' | fold -w 81 | head -n 1) npm s
 ## Running the application locally
 
 - Checkout the code
-- `npm install`
-- `npm start`
+- `yarn`
+- `yarn start`
 
 Run with specific seed:
 

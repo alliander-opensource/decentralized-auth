@@ -15,19 +15,19 @@ For more information on the role of the My Home backend see [architecture](../..
 ## Install dependencies
 
 ```
-npm install
+yarn
 ```
 
 ## Run
 
 ```
-npm start
+yarn start
 ```
 
 With hot code reloading:
 
 ```
-npm run dev
+yarn run dev
 ```
 
 ## Tests
@@ -35,13 +35,13 @@ npm run dev
 Run integration test with
 
 ```
-npm run integration-test
+yarn run integration-test
 ```
 
 Run unit tests with
 
 ```
-npm run test:unit
+yarn run test:unit
 ```
 
 Note that IOTA and MAM unit tests also call the IOTA network.
