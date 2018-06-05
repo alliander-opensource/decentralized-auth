@@ -21,8 +21,9 @@ const generateSeed = require('@decentralized-auth/gen-seed');
  * @param {object} res Express response object
  */
 async function deauthenticate(req, res) {
-  const sessionId = uuidv4();
+  logger.info('Deauthenticating...');
 
+  const sessionId = uuidv4();
   req.sessionId = sessionId;
   res.cookie(config.cookieName, req.sessionId, config.cookieSettings);
 
@@ -36,10 +37,13 @@ async function deauthenticate(req, res) {
 
 function simpleSessionCookieParser(req, res, next) {
   if (!req.signedCookies[config.cookieName]) {
-    logger.info('Deauthenticating...');
     deauthenticate(req, res);
   } else {
     req.sessionId = req.signedCookies[config.cookieName];
+    // If this application has restarted it has lost its state, then reinitialize
+    if (typeof sessionState[req.sessionId] === 'undefined') {
+      deauthenticate(req, res);
+    }
   }
   next();
 }
