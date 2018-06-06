@@ -40,10 +40,6 @@ function simpleSessionCookieParser(req, res, next) {
     deauthenticate(req, res);
   } else {
     req.sessionId = req.signedCookies[config.cookieName];
-    // If this application has restarted it has lost its state, then reinitialize
-    if (typeof sessionState[req.sessionId] === 'undefined') {
-      deauthenticate(req, res);
-    }
   }
   next();
 }
