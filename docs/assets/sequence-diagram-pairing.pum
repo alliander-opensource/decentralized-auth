@@ -35,8 +35,8 @@ group IOTA transactions
   my_home <-- raspberry_pi : **Claim result** (status)
 end
 
-raspberry_pi --> my_home_mam : \
-**When signed challenge**\n**is valid subscribe**\n**to My Home's MAM**\n**channel (mamRoot)**
+raspberry_pi --> my_home_mam
+note right of my_home_mam : **When signed challenge**\n**is valid subscribe**\n**to My Home's MAM**\n**channel (mamRoot)**
 
 note right of my_home : My Home uses its MAM channel as backend so publish state
 my_home --> my_home_mam : **DEVICE_ADDED** (device)
