@@ -36,3 +36,7 @@ Solution 2: separate MAM channels per device.
 For example, every DEVICE_ADDED event leads to removal of authorized service providers.
 Solution 1: check that device in body has same address as raspberry-pi-client itself.
 Solution 2: separate MAM channels per device.
+
+## When Raspberry Pi receives DEVICE_DELETED and DEVICE_ADDED events it keeps sending data to old service providers
+
+To solve this a new side key should be generated when a device is added or deleted.
