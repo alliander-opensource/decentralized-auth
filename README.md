@@ -2,6 +2,10 @@
 
 Sharing high frequency smart meter data with explicit consent of the consumer can help the energy transition in the Netherlands. This Alliander R&D project investigates the use of the distributed ledger IOTA and Masked Authenticated Messaging (MAM) for decentralized energy data streams adhering to the GDPR privacy regulation.
 
+<img src="docs/assets/smart-meter-with-pi.jpg" alt="Smart Meter with Raspberry Pi" style="width: 50%"/>
+
+<sub>*A Raspberry Pi running IOTA interfacing software connected via a P1 cable (USB to RJ11) to a Dutch smart meter.*</sub>
+
 ## Goals
 
 - User is in control of his data
