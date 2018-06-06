@@ -34,7 +34,7 @@ NTRU consists of NTRUEncrypt for asymmetric encryption and NTRUSign for digital 
 
 Compared to RSA, NTRU is faster and uses less memory. NTRU keys are longer.
 
-Disadvantage is that roughly 111 characters can be encoded over one IOTA message before the limit is reached that fits in one IOTA message.
+Roughly 111 characters can be encoded over one IOTA message before the limit is reached that fits in one IOTA message.
 
 For more information about NTRUEncrypt, see: [NTRUEncrypt Wikipedia's page](https://en.wikipedia.org/wiki/NTRUEncrypt). For more information on using NTRU with IOTA see [NTRU Key Exchange for IOTA](https://github.com/Noc2/Chiota/wiki/NTRU-Key-Exchange-for-IOTA).
 
