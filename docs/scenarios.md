@@ -29,11 +29,23 @@ The goals of authorizing a service provider are:
 1. Communicating the MAM root and side key of the Raspberry Pi's MAM channel to the service provider
 1. Storing the authorization somewhere so that the service provider and device owner can point to it
 
+When the button is pressed the device receives a `CLAIM_DEVICE` message on its IOTA address. The device will respond with a `CHALLENGE` that needs to be signed with the secret on the device. My Home signs the challenge with the provided secret using Kerl hashing and returns this along side its root of its private MAM channel in a `SIGNED_CHALLENGE` message. If the signed challenge is valid the device starts listening to the MAM root and returns with a `CLAIM_RESULT` of "OK". My Home then publishes a `DEVICE_ADDED` event on its private MAM channel so it can always retrieve this.
+
+When the device is paired it will start listening to My Home's MAM channel, where the events `AUTHORIZED` and `AUTHORIZATION_REVOKED` will be published when a user gives or revokes consent to a service provider to access the energy usage data.
+
 ### Sequence diagram
 
 ![sequence diagram give consent](assets/sequence-diagram-give-consent.png)
 
 ## Revoking access for a Service Provider
+
+A user can revoke consent under Policies in My Home. This starts the following sequence:
+
+An `AUTHORIZATION_REVOKED` message is added to My Home's event stream. The Raspberry Pi fetches this message, creates a new side key, removes the service provider from the set of authorized service providers, and informs the still authorized service provider of the new side key.
+
+The latter is done by encrypting the side key with the public keys of the service providers, and adding it to a `KEY_ROTATION` message. This message is then added to the MAM stream. 
+
+Still authorized service providers fetch this from the MAM stream and can decrypt the new side key. Those who are no longer authorized do see the message, but cannot decrypt it. For them no new energy data can be fetched.
 
 ### Sequence diagram
 
