@@ -40,6 +40,39 @@ For more information about NTRUEncrypt, see: [NTRUEncrypt Wikipedia's page](http
 
 The library used in this project is [ntrujs](https://github.com/IDWMaster/ntrujs).
 
+### Event sourcing
+
+Besides the NTRU encryption (which needs to be done on the backend, it can probably also work on the frontend but I am not sure if that is a good idea) the only backend used are IOTA MAM channels. My Home has an MAM channel as backend, and the Device (once paired) listens to this same MAM channel. On My Home's MAM channel events (JSON data structures with a type) are published (types like `AUTHORIZED`, `AUTHORIZATION_REVOKED`, `DEVICE_ADDED`, `DEVICE_REMOVED`). My Home uses a user's MAM channel to show a user's current policies and authorizations, and the device can determine what service providers are authorized and need to be able to fetch data (and thus receive the root and side key).
+
+The idea of [event sourcing](https://medium.com/capital-one-developers/event-sourcing-with-aggregates-in-rust-4022af41cf67) is that a sequence of immutable events forms the basis of application state. By looking at the events in a certain way an application can build its state. 
+For example, if in My Home consent management UI a device is added an event of type `DEVICE_ADDED` is published to its private MAM stream. If My Home wants to know what devices are available it creates a so-called devices *aggregate*: we consume its private MAM event stream, turn it to JSON, and add a device for every `DEVICE_ADDED` event, and remove it for `DEVICE_DELETED` events in the `toDevices` method:
+
+```
+/**
+ * Creates the devices aggregate from the MAM event stream.
+ * @function toDevices
+ * @param {array} messages JSON messages from an MAM event stream
+ * @returns {array} Array of devices (device is object with address and type)
+ */
+function toDevices(messages) {
+  const devicesSet = messages.reduce((devices, { type, device }) => {
+    switch (type) {
+      case DEVICE_ADDED_TYPE:
+        return devices.add(device);
+      case DEVICE_DELETED_TYPE: {
+        devices.delete(device);
+        return devices;
+      }
+      default:
+        return devices;
+    }
+  }, new JsonSet()); // A type of set that does deep comparisons, so that similar structured objects are equal
+  const devices = Array.from(devicesSet.entries());
+  return devices;
+}
+```
+
+This way we get a list of available devices on the frontend. In a similar manner policies are determined. And the software on the Raspberry Pi builds it application state after being paired from the same event store.
 ## IRMA
 
 IRMA (I Reveal My Attributes) can be used for the identification layer. How can someone proof that he or she lives on a certain address without releaving any other information?
