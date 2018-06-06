@@ -33,7 +33,7 @@ service_provider --> service_provider_backend : **GET** ///api/address//
 service_provider <-- service_provider_backend : iotaAddress
 service_provider --> service_provider_backend : **GET** ///api/public-key//
 service_provider <-- service_provider_backend : publicKeyTrytes
-my_home <-- service_provider : **GET** ///authorize/// (publicKeyTrytes, iotaAddress, goal, url)
+my_home <-- service_provider : **GET** ///new-policy/// (publicKeyTrytes, iotaAddress, goal, url)
 prosumer --> my_home : Grant access\n(Raspberry Pi)
 my_home --> my_home_mam : **AUTHORIZED** \n(device, publicKeyTrytes,\niotaAddress, goal)
 my_home_mam <-- raspberry_pi : Fetch (mamRoot)
