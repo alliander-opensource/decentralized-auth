@@ -71,6 +71,14 @@ cp Release/addon.node ../lib/addon-linux-arm.node
 cd ~/raspberry-pi-client
 ```
 
+Set environment variables:
+
+```
+export IOTA_PROVIDER=xxxx
+export MIN_WEIGHT_MAGNITUDE=10
+export SMART_METER_VERSION=2.2
+```
+
 Test installation with:
 
 ```
