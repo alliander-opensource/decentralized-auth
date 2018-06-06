@@ -249,14 +249,13 @@ module.exports = class DeviceClient { // eslint-disable-line padded-blocks
 
     // 5.0 sends one message every 10 seconds, newer versions one every second
     if (config.smartMeterVersion === 5.0) {
-      // Only handle 1 in 20 messages for now, because otherwise we get too much
+      // Only handle 1 in 10 messages for now, because otherwise we get too much
       // PoW on the node and it crashes
       if (Math.floor(Math.random() * 60) === 0) {
         this.mam.attach(message);
       }
-    } else if (Math.floor(Math.random() * 2) === 0) { // otherwise handle 1 in 2... on mainnet
-      this.mam.attach(message);
     }
+    this.mam.attach(message);
   }
 
 
