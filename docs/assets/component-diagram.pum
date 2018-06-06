@@ -59,6 +59,7 @@ device_auth_module --> service_provider
 service_provider_backend <-- service_provider
 
 my_home <-- my_home_mam
+my_home --> my_home_mam
 
 service_provider ..> device_mam
 service_provider --> my_home
