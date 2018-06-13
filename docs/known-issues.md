@@ -40,3 +40,12 @@ Solution 2: separate MAM channels per device.
 ## When Raspberry Pi receives DEVICE_DELETED and DEVICE_ADDED events it keeps sending data to old service providers
 
 To solve this a new side key should be generated when a device is added or deleted.
+
+## My Home backend
+
+The unnecessary backend of [www.iotahome.nl](https://www.iotahome.nl) with its in-memory session state is:
+
+1. A bottleneck
+1. A trusted third party. (You have to trust that the backend does what it says it does. It does, but still.)
+
+It would be better if the My Home consent management UI would be frontend code only. I don't see a reason against it. Then the My Home frontend can be deployed on something like [IPFS](https://ipfs.io/) to create a decentralized application (DAPP). When turning it into a DAPP everyone can inspect the code, it cannot be changed, and the servers run decentralized.
