@@ -108,7 +108,7 @@ module.exports = class MamClient { // eslint-disable-line padded-blocks
    * @returns {Promise} Contains the root and the messages
    */
   async fetch(root, mode, sideKey) { // eslint-disable-line class-methods-use-this
-    this.logger.info(`Fetching from root ${root}`);
+    this.logger.info(`IOTA MAM: Fetching from root ${root}`);
     const { nextRoot, messages } = await MAM.fetch(root, mode, sideKey);
     const jsonMessages = messages.map(m => JSON.parse(this.iota.fromTrytes(m)));
     return { nextRoot, messages: jsonMessages };
