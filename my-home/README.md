@@ -1,10 +1,10 @@
 # My Home
 
-Example of IOTA user interface for pairing with a energy data reader device and providing a service provider with consent to retrieve that data.
+Example of an IOTA wallet for pairing with a Raspberry Pi and providing a service provider with consent to retrieve that data.
 
 ## Run
 
-The backend can serve the static frontend:
+The backend serves the frontend:
 
 ```
 cd frontend
