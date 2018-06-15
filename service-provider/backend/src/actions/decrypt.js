@@ -20,7 +20,7 @@ const logger = require('./../logger')(module);
 module.exports = async function requestHandler(req, res) {
   const { query: { trytes }, sessionId } = req;
   logger.info(`Decrypting trytes ${trytes} for session id ${sessionId}`);
-  const privateKey = sessionState[sessionId].ntruKeyPairs.private;
+  const privateKey = sessionState[sessionId].ntruKeyPair.private;
   return res
     .status(200)
     .send({
