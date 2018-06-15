@@ -36,12 +36,12 @@ cd decentralized-auth
 
 ## Running locally
 
-Install [Docker](https://www.docker.com/community-edition) and [Docker Compose](https://docs.docker.com/compose/install). Use node version 8.6. Then run:
+See:
+```
+./run-dev.sh
+```
 
-```
-docker-compose up
-```
-For running the components individually:
+Or manually (for proper logging output):
 
 Set environment variables:
 ```
@@ -63,7 +63,7 @@ cd service-provider/backend && npm start
 Start the Raspberry Pi client locally with a fresh seed.
 
 ```
-cd raspberry-client 
+cd raspberry-pi-client 
 SEED=$(cat /dev/urandom | LC_ALL=C tr -dc 'A-Z9' | fold -w 81 | head -n 1) npm start
 ```
 When connecting a RJ11 cable to USB ensure the `P1_SERIAL_PORT` environment variable is set to its USB serial port.
