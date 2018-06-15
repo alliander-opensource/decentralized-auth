@@ -22,8 +22,8 @@ Sharing high frequency smart meter data with explicit consent of the consumer ca
 * Smart Meter: Dutch Smart Meter with a high frequency energy data port (P1 port).
 * [Service Provider Wattt Insights](service-provider): An example of a service provider that graphs energy usage data and interfaces with My Home.
 * [Raspberry Pi energy data reader](raspberry-pi-client): A Raspberry Pi that is connected to a Dutch smart meter's P1 port (with high frequence energy data) via a USB to RJ11 cable.
-* [My Home](my-home): A frontend that interfaces with the IOTA backend where users can:
-  1. Pair with one Raspberry Pi
+* [My Home](my-home): An IOTA wallet that contains your devices and consent frontend that interfaces with IOTA where users can:
+  1. Pair with one Raspberry Pi (so that My Home can send the Pi instructions via a restricted MAM channel)
   1. Give consent for service provider to access data
   1. Revoke consent of service provider to access data
 
