@@ -75,7 +75,7 @@ Set environment variables:
 
 ```
 export IOTA_PROVIDER=xxxx
-export MIN_WEIGHT_MAGNITUDE=10
+export IOTA_MIN_WEIGHT_MAGNITUDE=10
 export SMART_METER_VERSION=2.2
 ```
 

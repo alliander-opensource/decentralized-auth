@@ -46,7 +46,7 @@ Or manually (for proper logging output):
 Set environment variables:
 ```
 export IOTA_PROVIDER=xxxxxx # when not running local-testnet
-export MIN_WEIGHT_MAGNITUDE=14
+export IOTA_MIN_WEIGHT_MAGNITUDE=14
 ```
 
 Start My Home consent management backend (which serves the frontend as well):
