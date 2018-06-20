@@ -42,14 +42,16 @@ cd decentralized-auth
 
 ## Running locally
 
-See:
+Install [Docker](https://www.docker.com/community-edition) and [Docker Compose](https://docs.docker.com/compose/install). Use node version 8.6. Then run:
+
 ```
-./run-dev.sh
+docker-compose up
 ```
 
-Or manually (for proper logging output):
+To start components separately:
 
 Set environment variables:
+
 ```
 export IOTA_PROVIDER=xxxxxx # when not running local-testnet
 export IOTA_MIN_WEIGHT_MAGNITUDE=14
