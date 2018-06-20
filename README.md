@@ -1,5 +1,11 @@
 # Energy usage data streams with consent of device owner Proof of Concept
 
+---
+
+<img src="docs/assets/slimmemeterbasisbeeld-1140x641.jpg" alt="Smart Meter" />
+
+---
+
 Sharing high frequency smart meter data with explicit consent of the consumer can help the energy transition in the Netherlands. This Alliander R&D project investigates the use of the distributed ledger IOTA and Masked Authenticated Messaging (MAM) for decentralized energy data streams adhering to the GDPR privacy regulation.
 
 <img src="docs/assets/smart-meter-with-pi.jpg" alt="Smart Meter with Raspberry Pi" style="width: 50%"/>
