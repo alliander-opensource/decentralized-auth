@@ -80,7 +80,7 @@ See the separate projects's READMEs for more information.
 
 ## Production
 
-Run the [raspberry-pi-client](raspberry-pi-client) on a Raspberry Pi connected with a smart meter using a PJ11 cable.  
+Run the [raspberry-pi-client](raspberry-pi-client) on a Raspberry Pi connected with a smart meter using a RJ11 cable.  
 Deploy [my-home](my-home/backend). An example runs at [www.iotahome.nl](https://www.iotahome.nl).  
 Deploy [service-provider](service-provider/backend). An example runs at [www.wattt.nl](https://www.wattt.nl).  
 
