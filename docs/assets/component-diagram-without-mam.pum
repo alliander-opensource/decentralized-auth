@@ -10,7 +10,7 @@ skinparam default {
   FontSize 16
 }
 
-node "**Service Provider**\n Request consent and display energy data" as service_provider
+node "**Service Provider**\n Request consent and provide service with energy data" as service_provider
 note right of service_provider : www.wattt.nl
 
 node "Raspberry Pi" {
@@ -25,7 +25,7 @@ node "Smart Meter" {
 }
 
 node "**My Home** IOTA UI \n Pair with device and manage consent" as my_home
-note right of my_home : www.iotahome.nl
+note right of my_home : www.consentwallet.com
 
 device_auth_module <- my_home
 device_auth_module -> my_home
