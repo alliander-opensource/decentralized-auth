@@ -48,6 +48,8 @@ Install [Docker](https://www.docker.com/community-edition) and [Docker Compose](
 docker-compose up
 ```
 
+Navigate to localhost:4000 for My Home consent management wallet and to localhost:5000 for the Wattt Insights service provider example.
+
 To start components separately:
 
 Set environment variables:
