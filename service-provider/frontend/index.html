@@ -73,6 +73,7 @@
       * @returns {undefined}
       */
      const initNtruSession = async () => {
+       console.log('Initializing NTRU session');
        await axios.get(
          `${BACKEND_BASE_URL}/api/init`,
           { withCredentials: true },
@@ -335,6 +336,7 @@
      const setRoot = root => document.getElementById('root-text-box').value = root;
      const getSideKey = () => document.getElementById('side-key-text-box').value;
      const setSideKey = key => document.getElementById('side-key-text-box').value = key;
+     const setAddressSpan = address => document.getElementById('iota-address').textContent = address;
 
 
      // Parse MAM data message
@@ -470,6 +472,7 @@
         <ul>
           <li class="chart">
             <h3 class="chart-sub-headline">Wattt P1 Insights</h3>
+            <h4 class="chart-sub-headline">My IOTA address: <span id="iota-address"></span></h3>
             <h2 class="chart-headline">Electricity usage (kW)</h2>
             <div id="line-chart">
               <svg id="line-chart-svg" class="line-chart-svg">
@@ -526,6 +529,16 @@
     <script>
      (async () => {
        await initNtruSession();
+
+       const address = await getAddress();
+       if (!!address) setAddressSpan(address);
+       else {
+         // Quick fix:
+         // Inform to reset session if cookie does not exist on backend (backend
+         // has restarted and lost its state).
+         // Note: did not manage to delete cookie programmatically.
+         setAddressSpan('Please delete wattt-session cookie and refresh...');
+       }
 
        // Process IOTA and MAM messages every 5 seconds
        setInterval(processIotaMessage, POLLING_INTERVAL_MS);
