@@ -7,8 +7,8 @@ const Home = () => (
     channel from this seed.
     <br />
     <br />
-    Pair with devices, give consent to service providers to view their data, or
-    show the MAM events stream using the left menu.
+    Use the left menu to pair with a Raspberry Pi, give consent to service
+    providers to view the device's data, or show the MAM events stream.
   </div>
 );
 
