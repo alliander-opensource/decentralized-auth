@@ -8,7 +8,7 @@ const Home = () => (
     <br />
     <br />
     Use the left menu to pair with a Raspberry Pi, give consent to service
-    providers to view the device's data, or show the MAM events stream.
+    providers to view the device&#39;s data, or show the MAM events stream.
   </div>
 );
 
