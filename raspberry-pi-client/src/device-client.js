@@ -172,7 +172,7 @@ module.exports = class DeviceClient { // eslint-disable-line padded-blocks
       sideKey: ntru.encrypt(side_key, publicKey),
     };
 
-    logger.info(`Provide service provider ${address} with MAM data ${JSON.stringify(mamData)}`);
+    logger.info(`Provide service provider ${address} with encrypted MAM data`);
 
     const message = { type: MAM_DATA_TYPE, root: this.root, mamData };
     return iota.send(seed, address, message);
