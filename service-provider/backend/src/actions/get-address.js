@@ -22,6 +22,15 @@ module.exports = async function requestHandler(req, res) {
 
   logger.info(`Getting address for session id ${sessionId}`);
 
+  if (typeof sessionState[sessionId] === 'undefined') {
+    return res
+      .status(500)
+      .send({
+        success: false,
+        message: 'No sessionId set. Call api/init first or reset session.',
+      });
+  }
+
   const seed = sessionState[sessionId].iotaSeed;
   if (typeof seed === 'undefined') {
     return res
