@@ -15,6 +15,6 @@ RUN npm install
 
 ENV IOTA_PROVIDER http://node01.testnet.iotatoken.nl:16265
 ENV IOTA_MIN_WEIGHT_MAGNITUDE 10
-ENV FRONTEND_DIR frontend/build
+ENV FRONTEND_DIR frontend
 
 CMD [ "npm", "start" ]
