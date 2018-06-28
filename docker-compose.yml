@@ -16,6 +16,11 @@ services:
     environment:
       IOTA_PROVIDER: https://nodes.testnet.iota.org:443/
       IOTA_MIN_WEIGHT_MAGNITUDE: 10
+
+  # On macOS USB does not work, you have to start raspberry-pi-client manually with
+  # cd raspberry-pi-client
+  # SEED=$(cat /dev/urandom | LC_ALL=C tr -dc 'A-Z9' | fold -w 81 | head -n 1) npm start
+  # for USB serial port readings to work
   raspberry-pi-client:
     build:
       context: raspberry-pi-client
