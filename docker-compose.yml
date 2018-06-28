@@ -6,7 +6,7 @@ services:
     ports:
       - 4000:4000
     environment:
-      IOTA_PROVIDER: http://node01.testnet.iotatoken.nl:16265
+      IOTA_PROVIDER: https://nodes.testnet.iota.org:443/
       IOTA_MIN_WEIGHT_MAGNITUDE: 10
   service-provider:
     build:
@@ -14,7 +14,7 @@ services:
     ports:
       - 5000:5000
     environment:
-      IOTA_PROVIDER: http://node01.testnet.iotatoken.nl:16265
+      IOTA_PROVIDER: https://nodes.testnet.iota.org:443/
       IOTA_MIN_WEIGHT_MAGNITUDE: 10
   raspberry-pi-client:
     build:
@@ -23,6 +23,6 @@ services:
     # devices:
     #   - "/dev/tty.usbserial-AC2F18XB:/dev/USB_SERIAL_PORT"
     environment:
-      IOTA_PROVIDER: http://node01.testnet.iotatoken.nl:16265
+      IOTA_PROVIDER: https://nodes.testnet.iota.org:443/
       IOTA_MIN_WEIGHT_MAGNITUDE: 10
       P1_SERIAL_PORT: /dev/USB_SERIAL_PORT
