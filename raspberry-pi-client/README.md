@@ -12,7 +12,7 @@ This client in demonstrates:
 - How service providers can be authorized to access data
 - How access can be revoked
 
-For more information on the role of the My Home frontend see [architecture](../docs/architecture) and the [scenarios](../docs/scenarios).
+For more information on the role of the raspberry-pi-client see [architecture](../docs/architecture) and the [scenarios](../docs/scenarios).
 
 ## Installation
 
