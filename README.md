@@ -12,6 +12,8 @@ Sharing high frequency smart meter data with explicit consent of the consumer ca
 
 <sub>*A Raspberry Pi running IOTA interfacing software connected via a P1 cable (USB to RJ11) to a Dutch smart meter.*</sub>
 
+Also see the blog post [GDPR-compliant smart meter data on the IOTA Tangle — four lessons learned while putting the consumer in control](https://medium.com/@erwinrooijakkers/gdpr-compliant-smart-meter-data-on-the-iota-tangle-four-lessons-learned-while-putting-the-dea852a5b2aa).
+
 ## Goals
 
 - User is in control of his data
