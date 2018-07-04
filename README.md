@@ -96,7 +96,7 @@ Deploy [service-provider](service-provider/backend). An example runs at [www.wat
 
 ## Contributing
 
-We are very happy if you can create issues (also for suggestions) or pull requests.
+We would be happy if you can create issues (also for suggestions) or pull requests.
 
 ## License
 
