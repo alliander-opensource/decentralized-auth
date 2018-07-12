@@ -1,0 +1,36 @@
+*.class
+*.iml
+*.jar
+.hg/
+.hgignore
+.idea/
+/.cljs_rhino_repl
+/.lein-*
+/.nrepl-port
+/.tested
+/checkouts
+/classes
+/figwheel_server.log
+/generated
+/resources/public/contracts/build
+/resources/public/js
+/sdb.db
+/target
+pom.xml
+pom.xml.asc
+profiles.clj
+
+# Other
+.DS_Store
+*.swp#
+
+# Node
+raspberrypi/node_modules
+raspberrypi/npm-debug.log
+raspberrypi/yarn-error.log
+raspberrypi/dist
+raspberrypi/build
+
+# Logs
+raspberrypi/combined.log
+raspberrypi/error.log
