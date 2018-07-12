@@ -23,6 +23,8 @@
             [lein-cljsbuild "1.1.7"]
             [lein-shell "0.5.0"]]
 
+  :externs ["externs.js"]
+
   :min-lein-version "2.5.3"
 
   :source-paths ["src/cljs"]
