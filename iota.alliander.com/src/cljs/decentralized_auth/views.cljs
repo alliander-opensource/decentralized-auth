@@ -15,45 +15,48 @@
                         :layout  "bottomRight"
                         :timeout 10000})))
 
+;; :bearing   64
+;; :pitch     42
 
 (defn map-view-render []
   [:div#map])
 
 
 (defn map-view-did-mount []
-  (set! (.-accessToken js/mapboxgl)
-        "pk.eyJ1IjoiZXJ3aW5hbGxpYW5kZXIiLCJhIjoiY2pqaWRwdmFpNWNmcjNyczJ0aDJpZzE0byJ9.AIp1C3D3wCjbPvfpOShydg")
-  (let [mapbox (new (.-Map js/mapboxgl)
-                    #js {:container "map"
-                         :center    #js [5.788068297037057 53.38723233031408]
-                         :bearing   64
-                         :pitch     42
-                         :zoom      11
-                         :style     "mapbox://styles/mapbox/satellite-streets-v10"})]
-    (.disable (.-scrollZoom mapbox))
-    (.disable (.-keyboard mapbox))
-    (.disable (.-doubleClickZoom mapbox))
-    (.addControl mapbox (new (.-NavigationControl js/mapboxgl) #js {:compass false}) "top-left")
+  ;; (set! (.-accessToken js/mapboxgl)
+  ;;       "pk.eyJ1IjoiZXJ3aW5hbGxpYW5kZXIiLCJhIjoiY2pqaWRwdmFpNWNmcjNyczJ0aDJpZzE0byJ9.AIp1C3D3wCjbPvfpOShydg")
+  (let [mapbox (.setView (.map js/L "map") #js [53.38723233031408 5.788068297037057] 11)]
+    ;; (.disable (.-scrollZoom mapbox))
+    ;; (.disable (.-keyboard mapbox))
+    ;; (.disable (.-doubleClickZoom mapbox))
+    ;; (.addControl mapbox (new (.-NavigationControl js/mapboxgl)) "top-left")
 
-    (let [marker (new (.-Marker js/mapboxgl) #js {:color "red" :label "pin-l-water"})]
-      (-> marker
-          (.setLngLat #js [5.635188 53.444177])
-          (.setPopup
-           (.setHTML (new (.-Popup js/mapboxgl) #js {:offset 25})
-                     "<p>HOI</p>"))
-          (.on "click" #(println "FOO"))
-          (.addTo mapbox)))
+    (.addTo (.tileLayer js/L "https://api.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}"
+                        (clj->js {:attribution "Map data &copy; [...]"
+                                  :maxZoom     18
+                                  :id          "mapbox.streets"
+                                  :accessToken "pk.eyJ1IjoiZXJ3aW5hbGxpYW5kZXIiLCJhIjoiY2pqaWRwdmFpNWNmcjNyczJ0aDJpZzE0byJ9.AIp1C3D3wCjbPvfpOShydg"}))
+            mapbox
 
-    (let [marker (new (.-Marker js/mapboxgl) [:div.car])]
-      (.addTo (.on (.setLngLat marker #js [5.635188 53.449177])
-                   "click"
-                   #(.log js/console "hallo"))
-              mapbox))
-    (set! js/foo mapbox)))
+    ;; (let [marker (new (.-Marker js/mapboxgl) #js {:color "red" :label "pin-l-water"})]
+    ;;   (-> marker
+    ;;       (.setLngLat #js [5.635188 53.444177])
+    ;;       (.setPopup
+    ;;        (.setHTML (new (.-Popup js/mapboxgl) #js {:offset 25})
+    ;;                  "<p>HOI</p>"))
+    ;;       (.on "click" #(println "FOO"))
+    ;;       (.addTo mapbox)))
+
+    ;; (let [marker (new (.-Marker js/mapboxgl) [:div.car])]
+    ;;   (.addTo (.on (.setLngLat marker #js [5.635188 53.449177])
+    ;;                "click"
+    ;;                #(.log js/console "hallo"))
+    ;;           mapbox))
+    )))
 
 ;; TODO add leaflet...
-(let [marker (new (.-Marker js/mapboxgl) [:div.car])]
-  (.addTo (.setLngLat marker #js [5.635188 53.499177]) js/foo))
+;; (let [marker (new (.-Marker js/mapboxgl) [:div.car])]
+;;   (.addTo (.setLngLat marker #js [5.635188 53.499177]) js/foo))
 
 (defn map-view []
   (r/create-class {:reagent-render      map-view-render

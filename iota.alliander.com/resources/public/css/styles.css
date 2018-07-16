@@ -19,6 +19,22 @@ body {
   padding: 0;
 }
 
+.car {
+  background-size: cover;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  background-color "red";
+}
+
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
+
 a {
   color: #fff;
 }
