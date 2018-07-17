@@ -1,6 +1,8 @@
 (ns decentralized-auth.views
   (:require cljsjs.noty
             [decentralized-auth.utils :refer [debug-panel json-encode]]
+            [goog.object :as object]
+            [goog.string :as string]
             [re-frame.core :refer [dispatch subscribe]]
             [reagent.core :as r]))
 
@@ -15,27 +17,27 @@
                         :layout  "bottomRight"
                         :timeout 10000})))
 
-;; :bearing   64
-;; :pitch     42
 
 (defn map-view-render []
   [:div#map])
 
 
-(defn map-view-did-mount []
-  ;; (set! (.-accessToken js/mapboxgl)
-  ;;       "pk.eyJ1IjoiZXJ3aW5hbGxpYW5kZXIiLCJhIjoiY2pqaWRwdmFpNWNmcjNyczJ0aDJpZzE0byJ9.AIp1C3D3wCjbPvfpOShydg")
-  (let [mapbox (.setView (.map js/L "map") #js [53.38723233031408 5.788068297037057] 11)]
-    ;; (.disable (.-scrollZoom mapbox))
-    ;; (.disable (.-keyboard mapbox))
-    ;; (.disable (.-doubleClickZoom mapbox))
-    ;; (.addControl mapbox (new (.-NavigationControl js/mapboxgl)) "top-left")
+(def access-token
+  (string/buildString
+   "pk.eyJ1IjoiZXJ3aW5hbGxpYW5kZXIiLCJhIjoiY2pqaWRwdmF"
+   "pNWNmcjNyczJ0aDJpZzE0byJ9.AIp1C3D3wCjbPvfpOShydg"))
 
-    (.addTo (.tileLayer js/L "https://api.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}"
+
+(defn map-view-did-mount []
+  (let [mapbox (.setView (.map js/L "map") #js [53.418 5.776] 13)]
+    (set! js/foo mapbox)
+    (doseq [prop #{"scrollWheelZoom" "doubleClickZoom" "keyboard"}]
+      (.disable (object/get mapbox prop)))
+    (.addTo (.tileLayer js/L
+                        "https://api.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}"
                         (clj->js {:attribution "Map data &copy; [...]"
-                                  :maxZoom     18
                                   :id          "mapbox.streets"
-                                  :accessToken "pk.eyJ1IjoiZXJ3aW5hbGxpYW5kZXIiLCJhIjoiY2pqaWRwdmFpNWNmcjNyczJ0aDJpZzE0byJ9.AIp1C3D3wCjbPvfpOShydg"}))
+                                  :accessToken access-token}))
             mapbox
 
     ;; (let [marker (new (.-Marker js/mapboxgl) #js {:color "red" :label "pin-l-water"})]
