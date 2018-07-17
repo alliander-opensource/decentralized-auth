@@ -28,6 +28,19 @@
    "pNWNmcjNyczJ0aDJpZzE0byJ9.AIp1C3D3wCjbPvfpOShydg"))
 
 
+(def green-icon
+  (.icon js/L
+         #js {:iconUrl      "leaf-green.png"
+              :shadowUrl    "leaf-shadow.png"
+              :iconSize     #js [38, 95], ;; size of the icon
+              :shadowSize   #js [50, 64], ;; size of the shadow
+              :iconAnchor   #js [22, 94], ;; point of the icon which will correspond to marker's location
+              :shadowAnchor #js [4, 62],  ;; the same for the shadow
+              :popupAnchor  #js [-3, -76] ;; point from which the popup should open relative to the iconAnchor
+              }))
+
+(set! js/icon green-icon)
+
 (defn map-view-did-mount []
   (let [mapbox (.setView (.map js/L "map") #js [53.418 5.776] 13)]
     (set! js/foo mapbox)
@@ -35,10 +48,12 @@
       (.disable (object/get mapbox prop)))
     (.addTo (.tileLayer js/L
                         "https://api.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}"
-                        (clj->js {:attribution "Map data &copy; [...]"
-                                  :id          "mapbox.streets"
-                                  :accessToken access-token}))
-            mapbox
+                        #js {:attribution "Map data &copy; [...]"
+                             :id          "mapbox.streets"
+                             :accessToken access-token})
+            mapbox)
+    (.addTo (.marker js/L #js [53.444177 5.635188] #js {:icon green-icon})
+            mapbox)
 
     ;; (let [marker (new (.-Marker js/mapboxgl) #js {:color "red" :label "pin-l-water"})]
     ;;   (-> marker
@@ -54,7 +69,7 @@
     ;;                "click"
     ;;                #(.log js/console "hallo"))
     ;;           mapbox))
-    )))
+    ))
 
 ;; TODO add leaflet...
 ;; (let [marker (new (.-Marker js/mapboxgl) [:div.car])]
