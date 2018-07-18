@@ -28,18 +28,21 @@
    "pNWNmcjNyczJ0aDJpZzE0byJ9.AIp1C3D3wCjbPvfpOShydg"))
 
 
-(def green-icon
+(def smart-meter-icon
   (.icon js/L
-         #js {:iconUrl      "leaf-green.png"
-              :shadowUrl    "leaf-shadow.png"
-              :iconSize     #js [38, 95], ;; size of the icon
-              :shadowSize   #js [50, 64], ;; size of the shadow
-              :iconAnchor   #js [22, 94], ;; point of the icon which will correspond to marker's location
-              :shadowAnchor #js [4, 62],  ;; the same for the shadow
-              :popupAnchor  #js [-3, -76] ;; point from which the popup should open relative to the iconAnchor
-              }))
+         #js {:iconUrl     "images/smartmeter.png"
+              :iconSize    #js [128 128]
+              :iconAnchor  #js [0 0]
+              :popupAnchor #js [0 0]}))
 
-(set! js/icon green-icon)
+
+(def service-provider-icon
+  (.icon js/L
+         #js {:iconUrl     "images/serviceprovider.png"
+              :iconSize    #js [128 128]
+              :iconAnchor  #js [0 0]
+              :popupAnchor #js [0 0]}))
+
 
 (defn map-view-did-mount []
   (let [mapbox (.setView (.map js/L "map") #js [53.418 5.776] 13)]
@@ -52,7 +55,13 @@
                              :id          "mapbox.streets"
                              :accessToken access-token})
             mapbox)
-    (.addTo (.marker js/L #js [53.444177 5.635188] #js {:icon green-icon})
+    #_(.addTo (.marker js/L #js [53.444177 5.635188] #js {:icon consumer-icon})
+            mapbox)
+
+    (.addTo (.marker js/L #js [53.448177 5.635188] #js {:icon smart-meter-icon})
+            mapbox)
+
+    (.addTo (.marker js/L #js [53.452177 5.659188] #js {:icon service-provider-icon})
             mapbox)
 
     ;; (let [marker (new (.-Marker js/mapboxgl) #js {:color "red" :label "pin-l-water"})]
