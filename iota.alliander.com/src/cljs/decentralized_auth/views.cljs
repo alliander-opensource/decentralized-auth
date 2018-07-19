@@ -71,7 +71,7 @@
       (.disable (object/get mapbox prop)))
     (.addTo (.tileLayer js/L
                         "https://api.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}"
-                        #js {:attribution "Map data &copy; [...]"
+                        #js {:attribution "Map data &copy; Mapbox | <a href=\"http://alliander.com\" rel=\"external nofollow\">Alliander</a>"
                              :id          "mapbox.streets"
                              :accessToken access-token})
             mapbox)
