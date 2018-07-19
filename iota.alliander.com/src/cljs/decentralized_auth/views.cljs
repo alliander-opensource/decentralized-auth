@@ -74,25 +74,6 @@
     (.addTo (.marker js/L #js [53.452177 5.659188] #js {:icon service-provider-icon})
             mapbox)
 
-    ;; (let [marker (new (.-Marker js/mapboxgl) #js {:color "red" :label "pin-l-water"})]
-    ;;   (-> marker
-    ;;       (.setLngLat #js [5.635188 53.444177])
-    ;;       (.setPopup
-    ;;        (.setHTML (new (.-Popup js/mapboxgl) #js {:offset 25})
-    ;;                  "<p>HOI</p>"))
-    ;;       (.on "click" #(println "FOO"))
-    ;;       (.addTo mapbox)))
-
-    ;; (let [marker (new (.-Marker js/mapboxgl) [:div.car])]
-    ;;   (.addTo (.on (.setLngLat marker #js [5.635188 53.449177])
-    ;;                "click"
-    ;;                #(.log js/console "hallo"))
-    ;;           mapbox))
-    ))
-
-;; TODO add leaflet...
-;; (let [marker (new (.-Marker js/mapboxgl) [:div.car])]
-;;   (.addTo (.setLngLat marker #js [5.635188 53.499177]) js/foo))
 
 (defn map-view []
   (r/create-class {:reagent-render      map-view-render
