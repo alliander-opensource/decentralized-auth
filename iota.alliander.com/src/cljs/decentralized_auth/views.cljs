@@ -53,9 +53,19 @@
 
 
 (defn map-view-did-mount []
-  (let [mapbox (.setView (.map js/L "map") #js [53.418 5.776] 13)]
+  (let [mapbox                    (.setView (.map js/L "map") #js [53.418 5.776] 13)
+        smart-meter-latlng1       #js [53.458177 5.655188]
+        smart-meter-latlng2       #js [53.452177 5.699188]
+        polyline                  (.polyline js/L
+                                             #js [smart-meter-latlng1 smart-meter-latlng2]
+                                             #js {:weight 10 :color "black" :opacity 0.0})
+        service-provider-marker   (.marker js/L smart-meter-latlng2 #js {:icon service-provider-icon})
         iota-authorization-marker (.marker (.-Symbol js/L)
                                            #js {:rotate true :markerOptions #js {:icon iota-icon}})
+        polyline-decorator        (.polylineDecorator js/L
+                                                      polyline
+                                                      #js {:patterns #js [#js {:offset "10%" :repeat "10%" :symbol (.arrowHead (.-Symbol js/L) #js {:pixelSize 25})}
+                                                                          #js {:offset "50%" :repeat "100%" :symbol iota-authorization-marker}]})]
     (set! js/foo mapbox)
     (doseq [prop #{"scrollWheelZoom" "doubleClickZoom" "keyboard"}]
       (.disable (object/get mapbox prop)))
@@ -68,11 +78,15 @@
     #_(.addTo (.marker js/L #js [53.444177 5.635188] #js {:icon consumer-icon})
             mapbox)
 
-    (.addTo (.marker js/L #js [53.448177 5.635188] #js {:icon smart-meter-icon})
+    (.addTo (.marker js/L smart-meter-latlng1 #js {:icon smart-meter-icon})
             mapbox)
 
-    (.addTo (.marker js/L #js [53.452177 5.659188] #js {:icon service-provider-icon})
-            mapbox)
+    (.addTo service-provider-marker mapbox)
+    (.addTo polyline mapbox)
+
+    (.on polyline-decorator "click" #(js/alert "haaaaaallo"))
+
+    (.addTo polyline-decorator mapbox)))
 
 
 (defn map-view []
