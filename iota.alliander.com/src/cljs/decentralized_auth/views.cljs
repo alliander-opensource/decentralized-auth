@@ -32,20 +32,30 @@
   (.icon js/L
          #js {:iconUrl     "images/smartmeter.png"
               :iconSize    #js [128 128]
-              :iconAnchor  #js [0 0]
-              :popupAnchor #js [0 0]}))
+              :iconAnchor  #js [64 64]
+              :popupAnchor #js [64 64]}))
 
 
 (def service-provider-icon
   (.icon js/L
          #js {:iconUrl     "images/serviceprovider.png"
               :iconSize    #js [128 128]
-              :iconAnchor  #js [0 0]
-              :popupAnchor #js [0 0]}))
+              :iconAnchor  #js [64 64]
+              :popupAnchor #js [64 64]}))
+
+
+(def iota-icon
+  (.icon js/L
+         #js {:iconUrl     "images/iota.png"
+              :iconSize    #js [64 64]
+              :iconAnchor  #js [32 32]
+              :popupAnchor #js [32 32]}))
 
 
 (defn map-view-did-mount []
   (let [mapbox (.setView (.map js/L "map") #js [53.418 5.776] 13)]
+        iota-authorization-marker (.marker (.-Symbol js/L)
+                                           #js {:rotate true :markerOptions #js {:icon iota-icon}})
     (set! js/foo mapbox)
     (doseq [prop #{"scrollWheelZoom" "doubleClickZoom" "keyboard"}]
       (.disable (object/get mapbox prop)))
