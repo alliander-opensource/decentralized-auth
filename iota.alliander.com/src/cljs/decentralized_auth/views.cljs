@@ -14,7 +14,7 @@
   (.show (js/Noty. #js {:text    (str "<span>" msg "</span>")
                         :theme   "mint"
                         :type    (name type)
-                        :layout  "bottomRight"
+                        :layout  "topRight"
                         :timeout 10000})))
 
 
