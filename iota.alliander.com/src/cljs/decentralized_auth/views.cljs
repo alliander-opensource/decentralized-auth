@@ -52,6 +52,14 @@
               :popupAnchor #js [16 16]}))
 
 
+(defn info-panel []
+  [:div.container-fluid.leaflet-bottom
+   [:div.list-group
+    [:a.list-group-item.active {:href "#"} "EWGHWIUEGHWEIUGHWEIUGHWEUIGHW"]
+    [:h4.list-group-item-heading {:style {:background-color "white"}} "hallo"]
+    [:p.list-group-item-text {:style {:background-color "white"}} "..."]]])
+
+
 (defn map-view-did-mount []
   (let [mapbox                     (.setView (.map js/L "map") #js [53.418 5.776] 12)
         smart-meter-latlng         #js [53.458177 5.655188]
@@ -99,4 +107,6 @@
 
 
 (defn main-panel []
-  [map-view])
+  [:div
+   [map-view]
+   [info-panel]])
