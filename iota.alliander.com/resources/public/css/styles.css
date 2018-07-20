@@ -143,10 +143,10 @@ input {
                        0.15fr
                        0.30fr;
   grid-template-areas: "service-providers service-providers     service-providers"
-                         "...               ...                   ..."
-                         "data-provider     grandma-app-data-flow grandma-app"
-                         "data-provider     wattapp-data-flow     wattapp"
-                         "prosumer          prosumer              prosumer";
+                       "...               ...                   ..."
+                       "data-provider     grandma-app-data-flow grandma-app"
+                       "data-provider     wattapp-data-flow     wattapp"
+                       "prosumer          prosumer              prosumer";
   background-color: #fff;
 }
 
