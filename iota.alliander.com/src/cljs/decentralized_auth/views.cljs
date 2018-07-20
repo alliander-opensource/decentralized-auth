@@ -31,54 +31,60 @@
 (def smart-meter-icon
   (.icon js/L
          #js {:iconUrl     "images/smartmeter.png"
-              :iconSize    #js [128 128]
-              :iconAnchor  #js [64 64]
-              :popupAnchor #js [64 64]}))
-
-
-(def service-provider-icon
-  (.icon js/L
-         #js {:iconUrl     "images/serviceprovider.png"
-              :iconSize    #js [128 128]
-              :iconAnchor  #js [64 64]
-              :popupAnchor #js [64 64]}))
-
-
-(def iota-icon
-  (.icon js/L
-         #js {:iconUrl     "images/iota.png"
               :iconSize    #js [64 64]
               :iconAnchor  #js [32 32]
               :popupAnchor #js [32 32]}))
 
 
+(def service-provider-icon
+  (.icon js/L
+         #js {:iconUrl     "images/serviceprovider.png"
+              :iconSize    #js [64 64]
+              :iconAnchor  #js [32 32]
+              :popupAnchor #js [32 32]}))
+
+
+(def iota-icon
+  (.icon js/L
+         #js {:iconUrl     "images/iota.png"
+              :iconSize    #js [32 32]
+              :iconAnchor  #js [16 16]
+              :popupAnchor #js [16 16]}))
+
+
 (defn map-view-did-mount []
-  (let [mapbox                    (.setView (.map js/L "map") #js [53.418 5.776] 13)
-        smart-meter-latlng1       #js [53.458177 5.655188]
-        smart-meter-latlng2       #js [53.452177 5.699188]
-        polyline                  (.polyline js/L
-                                             #js [smart-meter-latlng1 smart-meter-latlng2]
-                                             #js {:weight 10 :color "black" :opacity 0.0})
-        service-provider-marker   (.marker js/L smart-meter-latlng2 #js {:icon service-provider-icon})
-        iota-authorization-marker (.marker (.-Symbol js/L)
-                                           #js {:rotate true :markerOptions #js {:icon iota-icon}})
-        polyline-decorator        (.polylineDecorator js/L
-                                                      polyline
-                                                      #js {:patterns #js [#js {:offset "10%" :repeat "10%" :symbol (.arrowHead (.-Symbol js/L) #js {:pixelSize 25})}
-                                                                          #js {:offset "50%" :repeat "100%" :symbol iota-authorization-marker}]})]
+  (let [mapbox                     (.setView (.map js/L "map") #js [53.418 5.776] 12)
+        smart-meter-latlng         #js [53.458177 5.655188]
+        service-provider-latlng    #js [53.452177 5.699188]
+        polyline                   (.polyline js/L
+                                              #js [smart-meter-latlng service-provider-latlng]
+                                              #js {:weight 10 :color "black" :opacity 0.0})
+        service-provider-marker    (.marker js/L service-provider-latlng #js {:icon service-provider-icon})
+        iota-authorization-marker  (.marker (.-Symbol js/L)
+                                            #js {:rotate true :markerOptions #js {:icon iota-icon}})
+        arrow-head-pattern         #js {:offset "10%"
+                                        :repeat "10%"
+                                        :symbol (.arrowHead (.-Symbol js/L) #js {:pixelSize 12})}
+        iota-authorization-pattern #js {:offset "50%"
+                                        :repeat "100%"
+                                        :symbol iota-authorization-marker}
+        polyline-decorator         (.polylineDecorator js/L
+                                                       polyline
+                                                       #js {:patterns #js [arrow-head-pattern
+                                                                           iota-authorization-pattern]})]
     (set! js/foo mapbox)
     (doseq [prop #{"scrollWheelZoom" "doubleClickZoom" "keyboard"}]
       (.disable (object/get mapbox prop)))
     (.addTo (.tileLayer js/L
                         "https://api.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}"
                         #js {:attribution "Map data &copy; Mapbox | <a href=\"http://alliander.com\" rel=\"external nofollow\">Alliander</a>"
-                             :id          "mapbox.streets"
+                             :id          "mapbox.run-bike-hike"
                              :accessToken access-token})
             mapbox)
     #_(.addTo (.marker js/L #js [53.444177 5.635188] #js {:icon consumer-icon})
             mapbox)
 
-    (.addTo (.marker js/L smart-meter-latlng1 #js {:icon smart-meter-icon})
+    (.addTo (.marker js/L smart-meter-latlng #js {:icon smart-meter-icon})
             mapbox)
 
     (.addTo service-provider-marker mapbox)
