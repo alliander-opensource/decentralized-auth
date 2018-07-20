@@ -59,6 +59,7 @@
         polyline                   (.polyline js/L
                                               #js [smart-meter-latlng service-provider-latlng]
                                               #js {:weight 10 :color "black" :opacity 0.0})
+        smart-meter-marker         (.marker js/L smart-meter-latlng #js {:icon smart-meter-icon})
         service-provider-marker    (.marker js/L service-provider-latlng #js {:icon service-provider-icon})
         iota-authorization-marker  (.marker (.-Symbol js/L)
                                             #js {:rotate true :markerOptions #js {:icon iota-icon}})
@@ -81,11 +82,8 @@
                              :id          "mapbox.run-bike-hike"
                              :accessToken access-token})
             mapbox)
-    #_(.addTo (.marker js/L #js [53.444177 5.635188] #js {:icon consumer-icon})
-            mapbox)
 
-    (.addTo (.marker js/L smart-meter-latlng #js {:icon smart-meter-icon})
-            mapbox)
+    (.addTo smart-meter-marker mapbox)
 
     (.addTo service-provider-marker mapbox)
     (.addTo polyline mapbox)
