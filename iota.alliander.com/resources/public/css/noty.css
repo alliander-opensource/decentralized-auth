@@ -263,3 +263,18 @@
     border-bottom: 1px solid #A0B55C;
     color: #fff;
 }
+
+#noty_layout__bottom {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.noty_theme__mint.noty_bar .noty_body {
+  padding: 10px 25px;
+  letter-spacing: 0.8px;
+}
+
+#noty_layout__topRight .noty_theme__mint.noty_bar .noty_body {
+  padding: 1px 20px;
+}
