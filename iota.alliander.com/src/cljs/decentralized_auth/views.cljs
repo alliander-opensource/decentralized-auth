@@ -42,7 +42,7 @@
          #js {:iconUrl     "images/iota.png"
               :iconSize    #js [32 32]
               :iconAnchor  #js [16 16]
-              :popupAnchor #js [16 16]}))
+              :popupAnchor #js [0 -16]}))
 
 
 (defn info-panel []
@@ -92,6 +92,7 @@
     (.addTo polyline mapbox)
 
     (.on polyline-decorator "click" #(js/alert "haaaaaallo"))
+    (.bindPopup polyline-decorator "foo")
 
     (.addTo polyline-decorator mapbox)))
 
