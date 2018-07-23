@@ -2,7 +2,6 @@
   (:require cljsjs.noty
             [decentralized-auth.utils :refer [debug-panel json-encode]]
             [goog.object :as object]
-            [goog.string :as string]
             [re-frame.core :refer [dispatch subscribe]]
             [reagent.core :as r]))
 
@@ -20,12 +19,6 @@
 
 (defn map-view-render []
   [:div#map])
-
-
-(def access-token
-  (string/buildString
-   "pk.eyJ1IjoiZXJ3aW5hbGxpYW5kZXIiLCJhIjoiY2pqaWRwdmF"
-   "pNWNmcjNyczJ0aDJpZzE0byJ9.AIp1C3D3wCjbPvfpOShydg"))
 
 
 (def smart-meter-icon
@@ -55,13 +48,15 @@
 (defn info-panel []
   [:div.container-fluid.leaflet-bottom
    [:div.list-group
-    [:a.list-group-item.active {:href "#"} "EWGHWIUEGHWEIUGHWEIUGHWEUIGHW"]
-    [:h4.list-group-item-heading {:style {:background-color "white"}} "hallo"]
-    [:p.list-group-item-text {:style {:background-color "white"}} "..."]]])
+    [:a.list-group-item.active {:href "#"} "Policies"]
+    [:h4.list-group-item-heading {:style {:background-color "white"}}
+     [:br]
+     "Smart meter 1 can access service provider 1 with the goal of graphing energy data\n"]]])
 
 
 (defn map-view-did-mount []
   (let [mapbox                     (.setView (.map js/L "map") #js [53.418 5.776] 12)
+        access-token               (subscribe [:mapbox/access-token])
         smart-meter-latlng         #js [53.458177 5.655188]
         service-provider-latlng    #js [53.452177 5.699188]
         polyline                   (.polyline js/L
@@ -88,7 +83,7 @@
                         "https://api.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}"
                         #js {:attribution "Map data &copy; Mapbox | <a href=\"http://alliander.com\" rel=\"external nofollow\">Alliander</a>"
                              :id          "mapbox.run-bike-hike"
-                             :accessToken access-token})
+                             :accessToken @access-token})
             mapbox)
 
     (.addTo smart-meter-marker mapbox)

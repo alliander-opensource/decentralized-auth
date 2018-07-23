@@ -1,27 +1,11 @@
-(ns decentralized-auth.db)
-
+(ns decentralized-auth.db
+  (:require [goog.string :as string]))
 
 (def default-db
-  {:directory/service-providers {}
-   :directory/data-providers    {}
-
-   :iota/provider      "http://node01.testnet.iotatoken.nl:16265" #_"http://node04.iotatoken.nl:14265" #_"http://localhost:14...."
+  {:iota/provider      "http://node02.iotatoken.nl:14265"
    :iota/iota-instance nil
-   :iota.mam/mam-state nil
-
-   :data-provider/default-side-key             "SECRET"
-   :data-provider/side-key                     ""
-   :data-provider/root                         ""
-   :data-provider/authorized-service-providers #{}
-
-   :service-provider.grandma-app/messages             []
-   :service-provider.grandma-app/latest-msg-timestamp nil
-   :service-provider.grandma-app/side-key             ""
-   :service-provider.grandma-app/root                 ""
-
-   :service-provider.wattapp/messages             []
-   :service-provider.wattapp/latest-msg-timestamp nil
-   :service-provider.wattapp/side-key             ""
-   :service-provider.wattapp/root                 ""
-
-   :prosumer/authorized-service-providers #{}})
+   :mapbox/access-token (string/buildString
+                         "pk.eyJ1IjoiZXJ3aW5hbGxpYW5kZXIiLCJhIjoiY2pqaWRwdmF"
+                         "pNWNmcjNyczJ0aDJpZzE0byJ9.AIp1C3D3wCjbPvfpOShydg")
+   ;; :iota.mam/mam-state nil
+})
