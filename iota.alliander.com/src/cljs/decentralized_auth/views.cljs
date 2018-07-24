@@ -45,7 +45,7 @@
   (small-icon "images/iota.png"))
 
 
-(defn list-group-item [active? smart-meter-name iota-address]
+(defn list-group-item [smart-meter-name iota-address & {:keys [active?] :as options}]
   [:p.list-group-item {:class (when active? "list-group-item-primary")}
    (str smart-meter-name "can access service provider 1 with the goal of graphing energy data")
    [:br]
@@ -60,10 +60,10 @@
   [:div.container-fluid.leaflet-bottom.leaflet-left.leaflet-control-container
    [:div.list-group.leaflet-control
     [:p.list-group-item.active {:href "#"} "Policies"]
-    [list-group-item true "Smart meter 1" "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNAWIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP"]
-    [list-group-item false "Smart meter 1" "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNAWIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP"]
-    [list-group-item false "Smart meter 1" "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNAWIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP"]
-    [list-group-item false "Smart meter 1" "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNAWIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP"]]])
+    [list-group-item "Smart meter 1" "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNAWIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP" :active? true]
+    [list-group-item "Smart meter 1" "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNAWIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP"]
+    [list-group-item "Smart meter 1" "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNAWIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP"]
+    [list-group-item "Smart meter 1" "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNAWIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP"]]])
 
 
 (defn configure [mapbox access-token]
