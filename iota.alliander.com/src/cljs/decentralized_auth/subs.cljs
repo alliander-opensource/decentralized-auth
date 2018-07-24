@@ -9,12 +9,6 @@
 
 
 (reg-sub
- :map/smart-meter-latlngs
- (fn [{:keys [map/smart-meter-latlngs] :as db}]
-   smart-meter-latlngs))
-
-
-(reg-sub
- :map/service-provider-latlngs
- (fn [{:keys [map/service-provider-latlngs] :as db}]
-   service-provider-latlngs))
+ :map/policy-latlngs
+ (fn [{:keys [map/policy-latlngs] :as db}]
+   policy-latlngs))
