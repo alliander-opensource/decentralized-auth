@@ -66,18 +66,22 @@
     [list-group-item "Smart meter 1" "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNAWIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP"]]])
 
 
+(defn add-tile-layer [mapbox access-token]
+  (let [tile-layer (.tileLayer js/L
+                               "https://api.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}"
+                               #js {:attribution (str
+                                                  "Map data &copy; Mapbox | "
+                                                  "<a href=\"http://alliander.com\" "
+                                                  "target=\"_blank\">Alliander</a>")
+                                    :id          "mapbox.run-bike-hike"
+                                    :accessToken access-token})]
+    (.addTo tile-layer mapbox)))
+
+
 (defn configure [mapbox access-token]
   (doseq [prop #{"scrollWheelZoom" "doubleClickZoom" "keyboard"}]
     (.disable (object/get mapbox prop)))
-  (.addTo (.tileLayer js/L
-                      "https://api.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}"
-                      #js {:attribution (str
-                                         "Map data &copy; Mapbox | "
-                                         "<a href=\"http://alliander.com\" "
-                                         "target=\"_blank\">Alliander</a>")
-                           :id          "mapbox.run-bike-hike"
-                           :accessToken access-token})
-          mapbox))
+  (add-tile-layer mapbox access-token))
 
 
 (defn add-policy-visualization [mapbox [smart-meter-latlng service-provider-latlng]]
