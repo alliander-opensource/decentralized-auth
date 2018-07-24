@@ -113,13 +113,13 @@
 
 
 (defn map-view-did-mount []
-  (let [mapbox         (.setView (.map js/L "map") #js [53.418 5.776] 12)
-        access-token   (subscribe [:mapbox/access-token])
-        policy-latlngs (subscribe [:map/policy-latlngs])]
+  (let [mapbox       (.setView (.map js/L "map") #js [53.418 5.776] 12)
+        access-token (subscribe [:mapbox/access-token])
+        policies     (subscribe [:map/policies])]
     (set! js/foo mapbox)
     (configure mapbox @access-token)
-    (doseq [latlng @policy-latlngs]
-      (add-policy-visualization mapbox latlng))))
+    (doseq [policy @policies]
+      (add-policy-visualization mapbox policy))))
 
 
 (defn map-view-render []

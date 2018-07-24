@@ -9,6 +9,6 @@
 
 
 (reg-sub
- :map/policy-latlngs
- (fn [{:keys [map/policy-latlngs] :as db}]
-   policy-latlngs))
+ :map/policies
+ (fn [{:keys [map/policies] :as db}]
+   policies))
