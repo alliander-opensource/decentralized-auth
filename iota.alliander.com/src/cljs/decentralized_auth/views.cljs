@@ -45,20 +45,25 @@
   (small-icon "images/iota.png"))
 
 
+(defn list-group-item [active? smart-meter-name iota-address]
+  [:p.list-group-item {:class (when active? "list-group-item-primary")}
+   (str smart-meter-name "can access service provider 1 with the goal of graphing energy data")
+   [:br]
+   [:a {:href (str "https://mam.tangle.army/fetch?address=" iota-address) :target "_blank"}
+    "View MAM channel"]
+   " | "
+   [:a {:href (str "https://thetangle.org/address/" iota-address) :target "_blank"}
+    "View IOTA transactions"]])
+
+
 (defn info-panel []
-  [:div.container-fluid.leaflet-bottom.leaflet-right.leaflet-control-container
+  [:div.container-fluid.leaflet-bottom.leaflet-left.leaflet-control-container
    [:div.list-group.leaflet-control
     [:p.list-group-item.active {:href "#"} "Policies"]
-    [:p.list-group-item.list-group-item-primary
-     "Smart meter 1 can access service provider 1 with the goal of graphing energy data"
-     [:br]
-     [:a {:href "https://mam.tangle.army/fetch?address=[YOUR-ROOT-ADDRESS]" :rel "external"}
-      "View MAM channel"]]
-    [:p.list-group-item
-     "Smart meter 2 can access service provider 2 with the goal of graphing energy data"
-     [:br]
-     [:a {:href "https://mam.tangle.army/fetch?address=[YOUR-ROOT-ADDRESS]" :rel "external"}
-      "View MAM channel"]]]])
+    [list-group-item true "Smart meter 1" "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNAWIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP"]
+    [list-group-item false "Smart meter 1" "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNAWIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP"]
+    [list-group-item false "Smart meter 1" "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNAWIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP"]
+    [list-group-item false "Smart meter 1" "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNAWIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP"]]])
 
 
 (defn configure [mapbox access-token]
@@ -75,16 +80,12 @@
           mapbox))
 
 
-(defn map-view-did-mount []
-  (let [mapbox                     (.setView (.map js/L "map") #js [53.418 5.776] 12)
-        access-token               (subscribe [:mapbox/access-token])
-        smart-meter-latlngs        (subscribe [:map/smart-meter-latlngs])
-        service-provider-latlngs   (subscribe [:map/service-provider-latlngs])
-        polyline                   (.polyline js/L
-                                              #js [(first @smart-meter-latlngs) (first @service-provider-latlngs)]
+(defn add-policy-visualization [mapbox [smart-meter-latlng service-provider-latlng]]
+  (let [polyline                   (.polyline js/L
+                                              #js [smart-meter-latlng service-provider-latlng]
                                               #js {:weight 2 :color "black" :opacity 0.4})
-        smart-meter-marker         (.marker js/L (first @smart-meter-latlngs) #js {:icon smart-meter-icon})
-        service-provider-marker    (.marker js/L (first @service-provider-latlngs) #js {:icon service-provider-icon})
+        smart-meter-marker         (.marker js/L smart-meter-latlng #js {:icon smart-meter-icon})
+        service-provider-marker    (.marker js/L service-provider-latlng #js {:icon service-provider-icon})
         iota-authorization-marker  (.marker (.-Symbol js/L)
                                             #js {:markerOptions #js {:icon iota-icon}})
         iota-authorization-pattern #js {:offset "50%"
@@ -93,9 +94,6 @@
         polyline-decorator         (.polylineDecorator js/L
                                                        polyline
                                                        #js {:patterns #js [iota-authorization-pattern]})]
-    (set! js/foo mapbox)
-    (configure mapbox @access-token)
-
     (.addTo smart-meter-marker mapbox)
 
     (.addTo service-provider-marker mapbox)
@@ -105,6 +103,19 @@
     (.bindPopup polyline-decorator "foo")
 
     (.addTo polyline-decorator mapbox)))
+
+
+;; TODO: click link and policy is selected
+
+
+(defn map-view-did-mount []
+  (let [mapbox         (.setView (.map js/L "map") #js [53.418 5.776] 12)
+        access-token   (subscribe [:mapbox/access-token])
+        policy-latlngs (subscribe [:map/policy-latlngs])]
+    (set! js/foo mapbox)
+    (configure mapbox @access-token)
+    (doseq [latlng @policy-latlngs]
+      (add-policy-visualization mapbox latlng))))
 
 
 (defn map-view-render []
