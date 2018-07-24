@@ -45,9 +45,9 @@
   (small-icon "images/iota.png"))
 
 
-(defn list-group-item [smart-meter-name iota-address & {:keys [active?] :as options}]
+(defn policy-item [iota-address {:keys [smart-meter-name active?] :as options}]
   [:p.list-group-item {:class (when active? "list-group-item-primary")}
-   (str smart-meter-name "can access service provider 1 with the goal of graphing energy data")
+   (str smart-meter-name " can access service provider 1 with the goal of graphing energy data")
    [:br]
    [:a {:href (str "https://mam.tangle.army/fetch?address=" iota-address) :target "_blank"}
     "View MAM channel"]
@@ -57,13 +57,14 @@
 
 
 (defn info-panel []
-  [:div.container-fluid.leaflet-bottom.leaflet-left.leaflet-control-container
-   [:div.list-group.leaflet-control
-    [:p.list-group-item.active {:href "#"} "Policies"]
-    [list-group-item "Smart meter 1" "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNAWIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP" :active? true]
-    [list-group-item "Smart meter 1" "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNAWIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP"]
-    [list-group-item "Smart meter 1" "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNAWIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP"]
-    [list-group-item "Smart meter 1" "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNAWIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP"]]])
+  (let [policies (subscribe [:map/policies])]
+    [:div.container-fluid.leaflet-bottom.leaflet-left.leaflet-control-container
+     [:div.list-group.leaflet-control
+      [:p.list-group-item.active {:href "#"} "Policies"]
+      (doall
+       (for [[_ _ options] @policies]
+         ^{:key options}
+         [policy-item "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNAWIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP" options]))]]))
 
 
 (defn add-tile-layer [mapbox access-token]
@@ -99,17 +100,11 @@
                                                        polyline
                                                        #js {:patterns #js [iota-authorization-pattern]})]
     (.addTo smart-meter-marker mapbox)
-
     (.addTo service-provider-marker mapbox)
     (.addTo polyline mapbox)
-
     (.on polyline-decorator "click" #(js/alert "haaaaaallo"))
     (.bindPopup polyline-decorator "foo")
-
     (.addTo polyline-decorator mapbox)))
-
-
-;; TODO: click link and policy is selected
 
 
 (defn map-view-did-mount []
