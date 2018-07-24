@@ -17,10 +17,6 @@
                         :timeout 10000})))
 
 
-(defn map-view-render []
-  [:div#map])
-
-
 (def smart-meter-icon
   (.icon js/L
          #js {:iconUrl     "images/smartmeter.png"
@@ -107,9 +103,13 @@
     (.addTo polyline-decorator mapbox)))
 
 
+(defn map-view-render []
+  [:div#map])
+
+
 (defn map-view []
-  (r/create-class {:reagent-render      map-view-render
-                   :component-did-mount map-view-did-mount}))
+  (r/create-class {:component-did-mount map-view-did-mount
+                   :reagent-render      map-view-render}))
 
 
 (defn main-panel []
