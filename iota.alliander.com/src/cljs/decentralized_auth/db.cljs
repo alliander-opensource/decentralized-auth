@@ -1,10 +1,9 @@
-(ns decentralized-auth.db
-  (:require [goog.string :as string]))
+(ns decentralized-auth.db)
 
 (def default-db
-  {:iota/provider      "http://node02.iotatoken.nl:14265"
-   :iota/iota-instance nil
-   :mapbox/access-token (string/buildString
+  {:iota/provider       "http://node02.iotatoken.nl:14265"
+   :iota/iota-instance  nil
+   :mapbox/access-token (str
                          "pk.eyJ1IjoiZXJ3aW5hbGxpYW5kZXIiLCJhIjoiY2pqaWRwdmF"
                          "pNWNmcjNyczJ0aDJpZzE0byJ9.AIp1C3D3wCjbPvfpOShydg")
 
@@ -17,4 +16,4 @@
                                #js [53.445380 5.776408]
                                #js [53.458258 5.902841]]
    ;; :iota.mam/mam-state nil
-})
+   })

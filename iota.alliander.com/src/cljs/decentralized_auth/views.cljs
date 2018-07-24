@@ -40,18 +40,39 @@
 (def iota-icon
   (.icon js/L
          #js {:iconUrl     "images/iota.png"
-              :iconSize    #js [32 32]
-              :iconAnchor  #js [16 16]
-              :popupAnchor #js [0 -16]}))
+              :iconSize    #js [24 24]
+              :iconAnchor  #js [12 12]
+              :popupAnchor #js [0 -12]}))
 
 
 (defn info-panel []
-  [:div.container-fluid.leaflet-bottom
-   [:div.list-group
-    [:a.list-group-item.active {:href "#"} "Policies"]
-    [:h4.list-group-item-heading {:style {:background-color "white"}}
+  [:div.container-fluid.leaflet-bottom.leaflet-right.leaflet-control-container
+   [:div.list-group.leaflet-control
+    [:p.list-group-item.active {:href "#"} "Policies"]
+    [:p.list-group-item.list-group-item-primary
+     "Smart meter 1 can access service provider 1 with the goal of graphing energy data"
      [:br]
-     "Smart meter 1 can access service provider 1 with the goal of graphing energy data\n"]]])
+     [:a {:href "https://mam.tangle.army/fetch?address=[YOUR-ROOT-ADDRESS]" :rel "external"}
+      "View MAM channel"]]
+    [:p.list-group-item
+     "Smart meter 2 can access service provider 2 with the goal of graphing energy data"
+     [:br]
+     [:a {:href "https://mam.tangle.army/fetch?address=[YOUR-ROOT-ADDRESS]" :rel "external"}
+      "View MAM channel"]]]])
+
+
+(defn configure [mapbox access-token]
+  (doseq [prop #{"scrollWheelZoom" "doubleClickZoom" "keyboard"}]
+    (.disable (object/get mapbox prop)))
+  (.addTo (.tileLayer js/L
+                      "https://api.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}"
+                      #js {:attribution (str
+                                         "Map data &copy; Mapbox | "
+                                         "<a href=\"http://alliander.com\" "
+                                         "target=\"_blank\">Alliander</a>")
+                           :id          "mapbox.run-bike-hike"
+                           :accessToken access-token})
+          mapbox))
 
 
 (defn map-view-did-mount []
@@ -61,30 +82,19 @@
         service-provider-latlng    #js [53.452177 5.699188]
         polyline                   (.polyline js/L
                                               #js [smart-meter-latlng service-provider-latlng]
-                                              #js {:weight 10 :color "black" :opacity 0.0})
+                                              #js {:weight 2 :color "black" :opacity 0.4})
         smart-meter-marker         (.marker js/L smart-meter-latlng #js {:icon smart-meter-icon})
         service-provider-marker    (.marker js/L service-provider-latlng #js {:icon service-provider-icon})
         iota-authorization-marker  (.marker (.-Symbol js/L)
-                                            #js {:rotate true :markerOptions #js {:icon iota-icon}})
-        arrow-head-pattern         #js {:offset "10%"
-                                        :repeat "10%"
-                                        :symbol (.arrowHead (.-Symbol js/L) #js {:pixelSize 12})}
+                                            #js {:markerOptions #js {:icon iota-icon}})
         iota-authorization-pattern #js {:offset "50%"
                                         :repeat "100%"
                                         :symbol iota-authorization-marker}
         polyline-decorator         (.polylineDecorator js/L
                                                        polyline
-                                                       #js {:patterns #js [arrow-head-pattern
-                                                                           iota-authorization-pattern]})]
+                                                       #js {:patterns #js [iota-authorization-pattern]})]
     (set! js/foo mapbox)
-    (doseq [prop #{"scrollWheelZoom" "doubleClickZoom" "keyboard"}]
-      (.disable (object/get mapbox prop)))
-    (.addTo (.tileLayer js/L
-                        "https://api.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}"
-                        #js {:attribution "Map data &copy; Mapbox | <a href=\"http://alliander.com\" rel=\"external nofollow\">Alliander</a>"
-                             :id          "mapbox.run-bike-hike"
-                             :accessToken @access-token})
-            mapbox)
+    (configure mapbox @access-token)
 
     (.addTo smart-meter-marker mapbox)
 
