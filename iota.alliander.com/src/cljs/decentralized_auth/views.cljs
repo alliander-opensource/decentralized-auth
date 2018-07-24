@@ -20,17 +20,17 @@
 (def smart-meter-icon
   (.icon js/L
          #js {:iconUrl     "images/smartmeter.png"
-              :iconSize    #js [64 64]
-              :iconAnchor  #js [32 32]
-              :popupAnchor #js [32 32]}))
+              :iconSize    #js [48 48]
+              :iconAnchor  #js [24 24]
+              :popupAnchor #js [24 24]}))
 
 
 (def service-provider-icon
   (.icon js/L
          #js {:iconUrl     "images/serviceprovider.png"
-              :iconSize    #js [64 64]
-              :iconAnchor  #js [32 32]
-              :popupAnchor #js [32 32]}))
+              :iconSize    #js [48 48]
+              :iconAnchor  #js [24 24]
+              :popupAnchor #js [24 24]}))
 
 
 (def iota-icon
