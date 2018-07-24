@@ -102,7 +102,7 @@
     (.addTo smart-meter-marker mapbox)
     (.addTo service-provider-marker mapbox)
     (.addTo polyline mapbox)
-    (.on polyline-decorator "click" #(js/alert "haaaaaallo"))
+    (.on polyline-decorator "click" #(dispatch [:policy/selected smart-meter-latlng]))
     (.bindPopup polyline-decorator "foo")
     (.addTo polyline-decorator mapbox)))
 
