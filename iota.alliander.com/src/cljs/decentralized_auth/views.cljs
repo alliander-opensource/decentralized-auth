@@ -78,13 +78,13 @@
 (defn map-view-did-mount []
   (let [mapbox                     (.setView (.map js/L "map") #js [53.418 5.776] 12)
         access-token               (subscribe [:mapbox/access-token])
-        smart-meter-latlng         #js [53.458177 5.655188]
-        service-provider-latlng    #js [53.452177 5.699188]
+        smart-meter-latlngs        (subscribe [:map/smart-meter-latlngs])
+        service-provider-latlngs   (subscribe [:map/service-provider-latlngs])
         polyline                   (.polyline js/L
-                                              #js [smart-meter-latlng service-provider-latlng]
+                                              #js [(first @smart-meter-latlngs) (first @service-provider-latlngs)]
                                               #js {:weight 2 :color "black" :opacity 0.4})
-        smart-meter-marker         (.marker js/L smart-meter-latlng #js {:icon smart-meter-icon})
-        service-provider-marker    (.marker js/L service-provider-latlng #js {:icon service-provider-icon})
+        smart-meter-marker         (.marker js/L (first @smart-meter-latlngs) #js {:icon smart-meter-icon})
+        service-provider-marker    (.marker js/L (first @service-provider-latlngs) #js {:icon service-provider-icon})
         iota-authorization-marker  (.marker (.-Symbol js/L)
                                             #js {:markerOptions #js {:icon iota-icon}})
         iota-authorization-pattern #js {:offset "50%"
