@@ -108,7 +108,7 @@
 
 
 (defn map-view-did-mount []
-  (let [mapbox       (.setView (.map js/L "map") #js [53.418 5.776] 12)
+  (let [mapbox       (.setView (.map js/L "map") #js [53.405 5.739] 12)
         access-token (subscribe [:mapbox/access-token])
         policies     (subscribe [:map/policies])]
     (set! js/foo mapbox)
