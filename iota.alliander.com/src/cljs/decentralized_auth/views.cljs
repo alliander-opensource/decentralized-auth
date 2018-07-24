@@ -17,28 +17,32 @@
                         :timeout 10000})))
 
 
-(def smart-meter-icon
+(defn medium-icon [image-url]
   (.icon js/L
-         #js {:iconUrl     "images/smartmeter.png"
+         #js {:iconUrl     image-url
               :iconSize    #js [48 48]
               :iconAnchor  #js [24 24]
               :popupAnchor #js [24 24]}))
 
 
-(def service-provider-icon
+(defn small-icon [image-url]
   (.icon js/L
-         #js {:iconUrl     "images/serviceprovider.png"
-              :iconSize    #js [48 48]
-              :iconAnchor  #js [24 24]
-              :popupAnchor #js [24 24]}))
-
-
-(def iota-icon
-  (.icon js/L
-         #js {:iconUrl     "images/iota.png"
+         #js {:iconUrl     image-url
               :iconSize    #js [24 24]
               :iconAnchor  #js [12 12]
               :popupAnchor #js [0 -12]}))
+
+
+(def smart-meter-icon
+  (medium-icon "images/smartmeter.png"))
+
+
+(def service-provider-icon
+  (medium-icon "images/serviceprovider.png"))
+
+
+(def iota-icon
+  (small-icon "images/iota.png"))
 
 
 (defn info-panel []
