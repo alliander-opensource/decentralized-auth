@@ -1,7 +1,9 @@
 (ns decentralized-auth.views
+  (:require-macros [hiccups.core :as hiccups])
   (:require cljsjs.noty
             [decentralized-auth.utils :refer [debug-panel json-encode]]
             [goog.object :as object]
+            [hiccups.runtime]
             [re-frame.core :refer [dispatch subscribe]]
             [reagent.core :as r]))
 
@@ -17,12 +19,12 @@
                         :timeout 10000})))
 
 
-(defn medium-icon [image-url]
+(defn medium-icon [image-url & {:keys [popup-distance] :or {popup-distance 24}}]
   (.icon js/L
          #js {:iconUrl     image-url
               :iconSize    #js [48 48]
               :iconAnchor  #js [24 24]
-              :popupAnchor #js [24 24]}))
+              :popupAnchor #js [0 (- popup-distance)]}))
 
 
 (defn small-icon [image-url]
@@ -38,7 +40,7 @@
 
 
 (def service-provider-icon
-  (medium-icon "images/serviceprovider.png"))
+  (medium-icon "images/serviceprovider.png" :popup-distance 6))
 
 
 (def iota-icon
@@ -85,14 +87,41 @@
   (add-tile-layer mapbox access-token))
 
 
-(defn add-policy-visualization [mapbox {{smart-meter-latlng :latlng}      :smart-meter
-                                        {service-provider-latlng :latlng} :service-provider
-                                        :as                               policy}]
+(defn format-trytes
+  "Shortens trytes and creates a link to IOTA Tangle Explorer."
+  [trytes]
+  (hiccups/html [:a {:href   (str "https://thetangle.org/address/" trytes)
+                     :target "_blank"}
+                 (subs trytes 0 15)]))
+
+
+(defn add-policy-visualization [mapbox {{smart-meter-latlng :latlng
+                                         meter-name         :meter-name
+                                         meter-address      :address}       :smart-meter
+                                        {service-provider-latlng  :latlng
+                                         service-provider-address :address} :service-provider
+                                        :as                                 policy}]
   (let [polyline                   (.polyline js/L
                                               #js [smart-meter-latlng service-provider-latlng]
                                               #js {:weight 2 :color "black" :opacity 0.4})
         smart-meter-marker         (.marker js/L smart-meter-latlng #js {:icon smart-meter-icon})
+        smart-meter-popup          (hiccups/html
+                                    [:table
+                                     [:tr
+                                      [:td "Meter name:"]
+                                      [:td meter-name]]
+                                     [:tr
+                                      [:td "IOTA address:"]
+                                      [:td (format-trytes meter-address)]]])
         service-provider-marker    (.marker js/L service-provider-latlng #js {:icon service-provider-icon})
+        service-provider-popup     (hiccups/html
+                                    [:table
+                                     [:tr
+                                      [:td "Service provider:"]
+                                      [:td "Holwert P1 Data Graphing Service"]]
+                                     [:tr
+                                      [:td "IOTA address:"]
+                                      [:td (format-trytes service-provider-address)]]])
         iota-authorization-marker  (.marker (.-Symbol js/L)
                                             #js {:markerOptions #js {:icon iota-icon}})
         iota-authorization-pattern #js {:offset "50%"
@@ -104,9 +133,11 @@
     (.addTo smart-meter-marker mapbox)
     (.addTo service-provider-marker mapbox)
     (.addTo polyline mapbox)
-    (.on polyline-decorator "click" #(dispatch [:policy/selected policy]))
+    (.addTo polyline-decorator mapbox)
+    (.bindPopup smart-meter-marker smart-meter-popup)
+    (.bindPopup service-provider-marker service-provider-popup)
     (.bindPopup polyline-decorator "foo")
-    (.addTo polyline-decorator mapbox)))
+    (.on polyline-decorator "click" #(dispatch [:policy/selected policy]))))
 
 
 (defn map-view-did-mount []
