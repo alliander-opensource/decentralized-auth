@@ -75,11 +75,7 @@
  :policy/selected
  (fn [{:keys [map/policies]
        :as   db}
-      [_ smart-meter-latlng]]
+      [_ policy]]
    (assoc db :map/policies
-          (reduce (fn [acc [sm-latlng sp-latlng options :as e]]
-                    (if (= sm-latlng smart-meter-latlng)
-                      (conj acc [sm-latlng sp-latlng (assoc options :active? true)])
-                      (conj acc [sm-latlng sp-latlng (assoc options :active? false)])))
-                  []
-                  policies))))
+          (map #(assoc % :active? (= % policy))
+               policies))))

@@ -45,14 +45,14 @@
   (small-icon "images/iota.png"))
 
 
-(defn policy-item [iota-address {:keys [smart-meter-name active?] :as options}]
-  [:p.list-group-item {:class (when active? "list-group-item-primary")}
-   (str smart-meter-name " can access service provider 1 with the goal of graphing energy data")
+(defn policy-item [{{:keys [address meter-name]} :smart-meter :as policy}]
+  [:p.list-group-item {:class (when (:active? policy) "list-group-item-primary")}
+   (str meter-name " can access service provider 1 with the goal of graphing energy data")
    [:br]
-   [:a {:href (str "https://mam.tangle.army/fetch?address=" iota-address) :target "_blank"}
+   [:a {:href (str "https://mam.tangle.army/fetch?address=" address) :target "_blank"}
     "View MAM channel"]
    " | "
-   [:a {:href (str "https://thetangle.org/address/" iota-address) :target "_blank"}
+   [:a {:href (str "https://thetangle.org/address/" address) :target "_blank"}
     "View IOTA transactions"]])
 
 
@@ -62,9 +62,9 @@
      [:div.list-group.leaflet-control
       [:p.list-group-item.active {:href "#"} "Policies"]
       (doall
-       (for [[_ _ options] @policies]
-         ^{:key options}
-         [policy-item "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNAWIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP" options]))]]))
+       (for [policy @policies]
+         ^{:key policy}
+         [policy-item policy]))]]))
 
 
 (defn add-tile-layer [mapbox access-token]
@@ -85,7 +85,9 @@
   (add-tile-layer mapbox access-token))
 
 
-(defn add-policy-visualization [mapbox [smart-meter-latlng service-provider-latlng]]
+(defn add-policy-visualization [mapbox {{smart-meter-latlng :latlng}      :smart-meter
+                                        {service-provider-latlng :latlng} :service-provider
+                                        :as                               policy}]
   (let [polyline                   (.polyline js/L
                                               #js [smart-meter-latlng service-provider-latlng]
                                               #js {:weight 2 :color "black" :opacity 0.4})
@@ -102,7 +104,7 @@
     (.addTo smart-meter-marker mapbox)
     (.addTo service-provider-marker mapbox)
     (.addTo polyline mapbox)
-    (.on polyline-decorator "click" #(dispatch [:policy/selected smart-meter-latlng]))
+    (.on polyline-decorator "click" #(dispatch [:policy/selected policy]))
     (.bindPopup polyline-decorator "foo")
     (.addTo polyline-decorator mapbox)))
 
