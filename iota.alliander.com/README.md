@@ -45,3 +45,5 @@ To compile ClojureScript to JavaScript:
 lein clean
 lein cljsbuild once min
 ```
+
+NOTE: not working at the moment because of extern conflict. Use `lein cljsbuild once dev` to build for production as well.
