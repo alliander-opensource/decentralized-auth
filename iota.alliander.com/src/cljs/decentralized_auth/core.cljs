@@ -47,10 +47,6 @@
 (defn ^:export init []
   (dev-setup)
   (re-frame/dispatch-sync [:db/initialize-db])
-
-  ;; Wait for IOTA MAM to be compiled...
-  (js/setTimeout
-   #(re-frame/dispatch [:iota/initialize])
-   1000)
+  (re-frame/dispatch [:iota/initialize])
 
   (mount-root))
