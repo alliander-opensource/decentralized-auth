@@ -1,6 +1,8 @@
 (ns decentralized-auth.views
   (:require-macros [hiccups.core :as hiccups])
-  (:require cljsjs.noty
+  (:require cljsjs.leaflet
+            cljsjs.leaflet-polylinedecorator
+            cljsjs.noty
             [decentralized-auth.utils :refer [debug-panel json-encode]]
             [goog.object :as object]
             [hiccups.runtime]

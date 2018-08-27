@@ -14,6 +14,8 @@
                  [com.taoensso/timbre "4.10.0"]
 
                  ;; Frontend
+                 [cljsjs/leaflet "1.2.0-0"]
+                 [cljsjs/leaflet-polylinedecorator "1.6.0-0"]
                  [cljsjs/noty "3.1.4-0"]
                  [hiccups "0.3.0"]
                  [re-frame "0.10.2"]
@@ -23,8 +25,6 @@
   :plugins [[lein-auto "0.1.3"]
             [lein-cljsbuild "1.1.7"]
             [lein-shell "0.5.0"]]
-
-  :externs ["externs.js"]
 
   :min-lein-version "2.5.3"
 
@@ -43,8 +43,8 @@
                    [figwheel-sidecar "0.5.14"]
                    [com.cemerick/piggieback "0.2.1"]]
 
-    :plugins      [[lein-figwheel "0.5.14"]
-                   [lein-doo "0.1.8"]]}}
+    :plugins [[lein-figwheel "0.5.14"]
+              [lein-doo "0.1.8"]]}}
 
   :cljsbuild
   {:builds
@@ -63,6 +63,7 @@
      :source-paths ["src/cljs"]
      :compiler     {:main            decentralized-auth.core
                     :output-to       "resources/public/js/compiled/app.js"
+                    :asset-path      "js/compiled/out"
                     :optimizations   :advanced
                     :closure-defines {goog.DEBUG false}
                     :pretty-print    false}}
