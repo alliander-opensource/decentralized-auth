@@ -47,11 +47,14 @@
   (small-icon "images/iota.png"))
 
 
-(defn policy-item [{{:keys [address meter-name]} :smart-meter :as policy}]
+(defn policy-item [{{:keys [meter-name]} :smart-meter
+                    address              :address
+                    side-key             :side-key
+                    :as                  policy}]
   [:p.list-group-item {:class (when (:active? policy) "list-group-item-primary")}
    (str meter-name " can access service provider 1 with the goal of graphing energy data")
    [:br]
-   [:a {:href (str "https://mam.tangle.army/fetch?address=" address) :target "_blank"}
+   [:a {:href (str "https://mam.tangle.army/fetch?address=" address "&key=" side-key) :target "_blank"}
     "View MAM channel"]
    " | "
    [:a {:href (str "https://thetangle.org/address/" address) :target "_blank"}

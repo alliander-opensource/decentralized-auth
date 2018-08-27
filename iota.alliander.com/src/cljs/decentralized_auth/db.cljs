@@ -12,33 +12,41 @@
                                        :meter-name "Smart meter 1"
                                        :address    (str "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNA"
                                                         "WIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP")}
-                    :service-provider {:latlng #js [53.368346 5.926277]
-                                       :address    (str "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNA"
-                                                        "WIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP")}
+                    :service-provider {:latlng  #js [53.368346 5.926277]
+                                       :address (str "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNA"
+                                                     "WIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP")}
+                    :address          "VSSQCMYLXOGATMLAEH9FRVUZTWQBJQQOYDRNUDLBAWHWKUYQQFHBCQTGVUYLOWIEVWNGJFMYLJUMOCUVZ"
+                    :side-key         "TANGLE9ARMY9SIDEKEY"
                     :active?          false}
                    {:smart-meter      {:latlng     #js [53.437087 5.633132]
                                        :meter-name "Smart meter 2"
                                        :address    (str "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNA"
                                                         "WIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP")}
-                    :service-provider {:latlng #js [53.368346 5.926277]
-                                       :address    (str "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNA"
-                                                        "WIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP")}
+                    :service-provider {:latlng  #js [53.368346 5.926277]
+                                       :address (str "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNA"
+                                                     "WIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP")}
+                    :address          "VSSQCMYLXOGATMLAEH9FRVUZTWQBJQQOYDRNUDLBAWHWKUYQQFHBCQTGVUYLOWIEVWNGJFMYLJUMOCUVZ"
+                    :side-key         "TANGLE9ARMY9SIDEKEY"
                     :active?          false}
                    {:smart-meter      {:latlng     #js [53.445156 5.720864]
                                        :meter-name "Smart meter 3"
                                        :address    (str "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNA"
                                                         "WIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP")}
-                    :service-provider {:latlng #js [53.368346 5.926277]
-                                       :address    (str "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNA"
-                                                        "WIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP")}
+                    :service-provider {:latlng  #js [53.368346 5.926277]
+                                       :address (str "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNA"
+                                                     "WIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP")}
+                    :address          "VSSQCMYLXOGATMLAEH9FRVUZTWQBJQQOYDRNUDLBAWHWKUYQQFHBCQTGVUYLOWIEVWNGJFMYLJUMOCUVZ"
+                    :side-key         "TANGLE9ARMY9SIDEKEY"
                     :active?          false}
                    {:smart-meter      {:latlng     #js [53.446079 5.831414]
                                        :meter-name "Smart meter 4"
                                        :address    (str "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNA"
                                                         "WIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP")}
-                    :service-provider {:latlng #js [53.368346 5.926277]
-                                       :address    (str "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNA"
-                                                        "WIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP")}
+                    :service-provider {:latlng  #js [53.368346 5.926277]
+                                       :address (str "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNA"
+                                                     "WIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP")}
+                    :address          "VSSQCMYLXOGATMLAEH9FRVUZTWQBJQQOYDRNUDLBAWHWKUYQQFHBCQTGVUYLOWIEVWNGJFMYLJUMOCUVZ"
+                    :side-key         "TANGLE9ARMY9SIDEKEY"
                     :active?          false}}
    ;; :iota.mam/mam-state nil
    })
