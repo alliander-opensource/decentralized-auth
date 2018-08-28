@@ -17,6 +17,7 @@
                  [cljsjs/leaflet "1.2.0-0"]
                  [cljsjs/leaflet-polylinedecorator "1.6.0-0"]
                  [cljsjs/noty "3.1.4-0"]
+                 [cljsjs/toastr "2.1.2-1"]
                  [hiccups "0.3.0"]
                  [re-frame "0.10.2"]
                  [re-frisk "0.5.3"]

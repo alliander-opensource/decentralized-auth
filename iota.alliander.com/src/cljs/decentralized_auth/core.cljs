@@ -24,7 +24,7 @@
             (.getElementById js/document "app")))
 
 
-(def noty-appender
+(def notification-appender
   (fn [data]
     (let [{:keys [level output_]} data
           formatted-output-str    (-> (force output_)
@@ -35,13 +35,13 @@
 
 (log/merge-config!
  {:appenders
-  {:noty
+  {:notification
    {:enabled?   true
     :async?     false
     :min-level  nil
     :rate-limit [[1 250] [10 5000]]
     :output-fn  :inherit
-    :fn         noty-appender}}})
+    :fn         notification-appender}}})
 
 
 (defn ^:export init []

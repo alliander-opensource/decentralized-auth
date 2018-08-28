@@ -2,7 +2,7 @@
   (:require-macros [hiccups.core :as hiccups])
   (:require cljsjs.leaflet
             cljsjs.leaflet-polylinedecorator
-            cljsjs.noty
+            cljsjs.toastr
             [decentralized-auth.utils :refer [debug-panel json-encode]]
             [goog.object :as object]
             [hiccups.runtime]
@@ -11,14 +11,20 @@
 
 
 (defn notification
-  "Displays the msg in a Noty notification with type `:info`, `:warning` or
-  `:error`."
+  "Displays the msg in a Toastr notification with type `:success`, `:info`,
+  `:warning` or `:error`."
   [type msg]
-  (.show (js/Noty. #js {:text    (str "<span>" msg "</span>")
-                        :theme   "mint"
-                        :type    (name type)
-                        :layout  "topRight"
-                        :timeout 10000})))
+  (case type
+    :success
+    (.success js/toastr msg)
+    :info
+    (.info js/toastr msg)
+    :warning
+    (.warning js/toastr msg)
+    :error
+    (.error js/toastr msg)
+    #_default
+    (.success js/toastr msg)))
 
 
 (defn medium-icon [image-url & {:keys [popup-distance] :or {popup-distance 24}}]
