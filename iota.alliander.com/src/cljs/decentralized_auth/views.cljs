@@ -85,8 +85,10 @@
                                "https://api.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}"
                                #js {:attribution (str
                                                   "Map data &copy; Mapbox | "
-                                                  "<a href=\"http://alliander.com\" "
-                                                  "target=\"_blank\">Alliander</a>")
+                                                  (hiccups/html
+                                                   [:a {:href "http://alliander.com"
+                                                        :target "_blank"}
+                                                    "Alliander"]))
                                     :id          "mapbox.run-bike-hike"
                                     :accessToken access-token})]
     (.addTo tile-layer mapbox)))
