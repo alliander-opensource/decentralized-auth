@@ -55,7 +55,7 @@
   (small-icon "images/iota.png"))
 
 
-(defn policy-item [{{:keys [meter-name]} :smart-meter
+(defn policy-list-item [{{:keys [meter-name]} :smart-meter
                     address              :address
                     side-key             :side-key
                     :as                  policy}]
@@ -77,7 +77,7 @@
       (doall
        (for [policy @policies]
          ^{:key policy}
-         [policy-item policy]))]]))
+         [policy-list-item policy]))]]))
 
 
 (defn add-tile-layer [mapbox access-token]
