@@ -3,7 +3,7 @@
   (:require cljsjs.leaflet
             cljsjs.leaflet-polylinedecorator
             cljsjs.toastr
-            [decentralized-auth.utils :refer [debug-panel json-encode]]
+            [decentralized-auth.utils :refer [debug-panel json-encode jsx->clj]]
             [goog.object :as object]
             [hiccups.runtime]
             [re-frame.core :refer [dispatch subscribe]]

@@ -15,3 +15,8 @@
 
 (defn debug-panel [d]
   [:pre (with-out-str (pprint d))])
+
+
+(defn jsx->clj
+  [x]
+  (into {} (for [k (.keys js/Object x)] [k (aget x k)])))
