@@ -71,16 +71,22 @@
   (->> (random-uuid) str (take 8) (apply str) string/upper-case))
 
 
+(reg-fx
+ :policy/open-popup
+ (fn [{:keys [popup] :as policy}]
+   (.openPopup popup)))
+
+
 (reg-event-fx
  :policy/selected
  (fn [{{:keys [map/policies]
         :as   db}
        :db}
       [_ policy]]
-   (.openPopup (:popup policy))
-   {:db (assoc db :map/policies
-               (map #(assoc % :active? (= % policy))
-                    policies))}))
+   {:db                (assoc db :map/policies
+                              (map #(assoc % :active? (= % policy))
+                                   policies))
+    :policy/open-popup policy}))
 
 
 (reg-event-db
