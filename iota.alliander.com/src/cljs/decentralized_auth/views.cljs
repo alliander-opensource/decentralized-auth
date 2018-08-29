@@ -108,10 +108,16 @@
 
 (defn add-policy-visualization [mapbox {{smart-meter-latlng :latlng
                                          meter-name         :meter-name
-                                         meter-address      :address}       :smart-meter
+                                         meter-address      :address}    :smart-meter
                                         {service-provider-latlng  :latlng
-                                         service-provider-address :address} :service-provider
-                                        :as                                 policy}]
+                                         service-provider-address :address
+                                         service-provider-name    :name} :service-provider
+                                        :as                              policy}]
+  (notification :success
+                (str service-provider-name
+                     " can view "
+                     meter-name
+                     "'s data with the goal of graphing energy data"))
   (let [polyline                   (.polyline js/L
                                               #js [smart-meter-latlng service-provider-latlng]
                                               #js {:weight 2 :color "black" :opacity 0.4})
@@ -129,7 +135,7 @@
                                     [:table
                                      [:tr
                                       [:td "Service provider:"]
-                                      [:td "Holwert P1 Data Graphing Service"]]
+                                      [:td service-provider-name]]
                                      [:tr
                                       [:td "IOTA address:"]
                                       [:td (format-trytes service-provider-address)]]])
