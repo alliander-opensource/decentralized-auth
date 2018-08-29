@@ -59,25 +59,27 @@
                          address              :address
                          side-key             :side-key
                          :as                  policy}]
-  [:p.list-group-item {:class    (when (:active? policy) "list-group-item-primary")
+  [:div.list-group-item {:class    (when (:active? policy) "list-group-item-primary")
                        :on-click #(dispatch [:policy/selected policy])}
    (str meter-name " can access service provider 1 with the goal of graphing energy data")
    [:br]
    [:table
-    [:tr
-     [:td "Data: "]
-     [:td [:a {:href (str "https://mam.tangle.army/fetch?address=" address "&key=" side-key) :target "_blank"}
-           "View MAM channel"]]
-     [:td " | "]
-     [:td [:a {:href (str "https://thetangle.org/address/" address) :target "_blank"}
-           "View IOTA transactions"]]]
+    [:tbody
+     [:tr
+      [:td "Data: "]
+      [:td [:a {:href (str "https://mam.tangle.army/fetch?address=" address "&key=" side-key) :target "_blank"}
+            "View MAM channel"]]
+      [:td " | "]
+      [:td [:a {:href (str "https://thetangle.org/address/" address) :target "_blank"}
+            "View IOTA transactions"]]]
 
-    [:td "Policy: "]
-    [:td [:a {:href (str "https://mam.tangle.army/fetch?address=" address "&key=" side-key) :target "_blank"}
-          "View MAM channel"]]
-    [:td " | "]
-    [:td [:a {:href (str "https://thetangle.org/address/" address) :target "_blank"}
-          "View IOTA transactions"]]]])
+     [:tr
+      [:td "Policy: "]
+      [:td [:a {:href (str "https://mam.tangle.army/fetch?address=" address "&key=" side-key) :target "_blank"}
+            "View MAM channel"]]
+      [:td " | "]
+      [:td [:a {:href (str "https://thetangle.org/address/" address) :target "_blank"}
+            "View IOTA transactions"]]]]]])
 
 
 (defn info-panel []
