@@ -56,10 +56,11 @@
 
 
 (defn policy-list-item [{{:keys [meter-name]} :smart-meter
-                    address              :address
-                    side-key             :side-key
-                    :as                  policy}]
-  [:p.list-group-item {:class (when (:active? policy) "list-group-item-primary")}
+                         address              :address
+                         side-key             :side-key
+                         :as                  policy}]
+  [:p.list-group-item {:class    (when (:active? policy) "list-group-item-primary")
+                       :on-click #(dispatch [:policy/selected policy])}
    (str meter-name " can access service provider 1 with the goal of graphing energy data")
    [:br]
    [:a {:href (str "https://mam.tangle.army/fetch?address=" address "&key=" side-key) :target "_blank"}
@@ -153,10 +154,13 @@
     (.addTo service-provider-marker mapbox)
     (.addTo polyline mapbox)
     (.addTo polyline-decorator mapbox)
-    (.bindPopup smart-meter-marker smart-meter-popup)
-    (.bindPopup service-provider-marker service-provider-popup)
-    (.bindPopup polyline-decorator "foo")
-    (.on polyline-decorator "click" #(dispatch [:policy/selected policy]))))
+    (let [popup            (.bindPopup smart-meter-marker smart-meter-popup)
+          select-policy-fn #(dispatch [:policy/selected (assoc policy :popup popup)])]
+      (.on polyline-decorator "click" select-policy-fn)
+      (.on polyline "click" select-policy-fn)
+      (.on smart-meter-marker "click" select-policy-fn)
+      (dispatch [:policy/add-popup policy popup]))
+    (.bindPopup service-provider-marker service-provider-popup)))
 
 
 (defn map-view-did-mount []
