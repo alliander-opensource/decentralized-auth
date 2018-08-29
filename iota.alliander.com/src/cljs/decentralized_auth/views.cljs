@@ -63,18 +63,28 @@
                        :on-click #(dispatch [:policy/selected policy])}
    (str meter-name " can access service provider 1 with the goal of graphing energy data")
    [:br]
-   [:a {:href (str "https://mam.tangle.army/fetch?address=" address "&key=" side-key) :target "_blank"}
-    "View MAM channel"]
-   " | "
-   [:a {:href (str "https://thetangle.org/address/" address) :target "_blank"}
-    "View IOTA transactions"]])
+   [:table
+    [:tr
+     [:td "Data: "]
+     [:td [:a {:href (str "https://mam.tangle.army/fetch?address=" address "&key=" side-key) :target "_blank"}
+           "View MAM channel"]]
+     [:td " | "]
+     [:td [:a {:href (str "https://thetangle.org/address/" address) :target "_blank"}
+           "View IOTA transactions"]]]
+
+    [:td "Policy: "]
+    [:td [:a {:href (str "https://mam.tangle.army/fetch?address=" address "&key=" side-key) :target "_blank"}
+          "View MAM channel"]]
+    [:td " | "]
+    [:td [:a {:href (str "https://thetangle.org/address/" address) :target "_blank"}
+          "View IOTA transactions"]]]])
 
 
 (defn info-panel []
   (let [policies (subscribe [:map/policies])]
     [:div.container-fluid.leaflet-bottom.leaflet-left.leaflet-control-container
      [:div.list-group.leaflet-control
-      [:p.list-group-item.active {:href "#"} "Policies"]
+      [:p.list-group-item.active {:href "#"} "Policies and data"]
       (doall
        (for [policy @policies]
          ^{:key policy}
