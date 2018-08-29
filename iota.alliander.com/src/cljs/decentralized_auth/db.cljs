@@ -1,6 +1,13 @@
 (ns decentralized-auth.db)
 
 
+(def holwerd-service-provider
+  {:latlng  #js [53.368346 5.926277]
+   :address (str "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNA"
+                 "WIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP")
+   :name    "Holwerd P1 Data Graphing Service"})
+
+
 (def default-db
   {:iota/provider       "http://node02.iotatoken.nl:14265"
    :iota/iota-instance  nil
@@ -12,9 +19,7 @@
                                        :meter-name "Smart meter 1"
                                        :address    (str "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNA"
                                                         "WIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP")}
-                    :service-provider {:latlng  #js [53.368346 5.926277]
-                                       :address (str "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNA"
-                                                     "WIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP")}
+                    :service-provider holwerd-service-provider
                     :address          "VSSQCMYLXOGATMLAEH9FRVUZTWQBJQQOYDRNUDLBAWHWKUYQQFHBCQTGVUYLOWIEVWNGJFMYLJUMOCUVZ"
                     :side-key         "TANGLE9ARMY9SIDEKEY"
                     :active?          false}
@@ -22,9 +27,7 @@
                                        :meter-name "Smart meter 2"
                                        :address    (str "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNA"
                                                         "WIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP")}
-                    :service-provider {:latlng  #js [53.368346 5.926277]
-                                       :address (str "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNA"
-                                                     "WIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP")}
+                    :service-provider holwerd-service-provider
                     :address          "VSSQCMYLXOGATMLAEH9FRVUZTWQBJQQOYDRNUDLBAWHWKUYQQFHBCQTGVUYLOWIEVWNGJFMYLJUMOCUVZ"
                     :side-key         "TANGLE9ARMY9SIDEKEY"
                     :active?          false}
@@ -32,9 +35,7 @@
                                        :meter-name "Smart meter 3"
                                        :address    (str "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNA"
                                                         "WIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP")}
-                    :service-provider {:latlng  #js [53.368346 5.926277]
-                                       :address (str "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNA"
-                                                     "WIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP")}
+                    :service-provider holwerd-service-provider
                     :address          "VSSQCMYLXOGATMLAEH9FRVUZTWQBJQQOYDRNUDLBAWHWKUYQQFHBCQTGVUYLOWIEVWNGJFMYLJUMOCUVZ"
                     :side-key         "TANGLE9ARMY9SIDEKEY"
                     :active?          false}
@@ -42,9 +43,7 @@
                                        :meter-name "Smart meter 4"
                                        :address    (str "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNA"
                                                         "WIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP")}
-                    :service-provider {:latlng  #js [53.368346 5.926277]
-                                       :address (str "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNA"
-                                                     "WIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP")}
+                    :service-provider holwerd-service-provider
                     :address          "VSSQCMYLXOGATMLAEH9FRVUZTWQBJQQOYDRNUDLBAWHWKUYQQFHBCQTGVUYLOWIEVWNGJFMYLJUMOCUVZ"
                     :side-key         "TANGLE9ARMY9SIDEKEY"
                     :active?          false}}
