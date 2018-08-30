@@ -20,3 +20,9 @@
 (defn jsx->clj
   [x]
   (into {} (for [k (.keys js/Object x)] [k (aget x k)])))
+
+
+;;;; Policy
+
+(defn to-string [{:keys [goal smart-meter] :as policy}]
+  (str (:meter-name smart-meter) " can access service provider 1 with the goal of " goal))

@@ -3,7 +3,7 @@
   (:require cljsjs.leaflet
             cljsjs.leaflet-polylinedecorator
             cljsjs.toastr
-            [decentralized-auth.utils :refer [debug-panel json-encode jsx->clj]]
+            [decentralized-auth.utils :refer [to-string debug-panel json-encode jsx->clj]]
             [goog.object :as object]
             [hiccups.runtime]
             [re-frame.core :refer [dispatch subscribe]]
@@ -57,11 +57,12 @@
 
 (defn policy-list-item [{{:keys [meter-name]} :smart-meter
                          address              :address
+                         goal                 :goal
                          side-key             :side-key
                          :as                  policy}]
   [:div.list-group-item {:class    (when (:active? policy) "list-group-item-primary")
                          :on-click #(dispatch [:policy/selected (:id policy)])}
-   (str meter-name " can access service provider 1 with the goal of graphing energy data")
+   (to-string policy)
    [:br]
    [:table
     [:tbody

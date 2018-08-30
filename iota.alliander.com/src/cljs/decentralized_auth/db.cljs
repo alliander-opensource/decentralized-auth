@@ -21,6 +21,7 @@
                                        :address    (str "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNA"
                                                         "WIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP")}
                     :service-provider holwerd-service-provider
+                    :goal             "graphing energy data"
                     :address          "VSSQCMYLXOGATMLAEH9FRVUZTWQBJQQOYDRNUDLBAWHWKUYQQFHBCQTGVUYLOWIEVWNGJFMYLJUMOCUVZ"
                     :side-key         "TANGLE9ARMY9SIDEKEY"
                     :active?          false}
@@ -30,6 +31,7 @@
                                        :address    (str "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNA"
                                                         "WIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP")}
                     :service-provider holwerd-service-provider
+                    :goal             "graphing energy data"
                     :address          "VSSQCMYLXOGATMLAEH9FRVUZTWQBJQQOYDRNUDLBAWHWKUYQQFHBCQTGVUYLOWIEVWNGJFMYLJUMOCUVZ"
                     :side-key         "TANGLE9ARMY9SIDEKEY"
                     :active?          false}
@@ -39,6 +41,7 @@
                                        :address    (str "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNA"
                                                         "WIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP")}
                     :service-provider holwerd-service-provider
+                    :goal             "graphing energy data"
                     :address          "VSSQCMYLXOGATMLAEH9FRVUZTWQBJQQOYDRNUDLBAWHWKUYQQFHBCQTGVUYLOWIEVWNGJFMYLJUMOCUVZ"
                     :side-key         "TANGLE9ARMY9SIDEKEY"
                     :active?          false}
@@ -48,6 +51,7 @@
                                        :address    (str "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNA"
                                                         "WIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP")}
                     :service-provider holwerd-service-provider
+                    :goal             "graphing energy data"
                     :address          "VSSQCMYLXOGATMLAEH9FRVUZTWQBJQQOYDRNUDLBAWHWKUYQQFHBCQTGVUYLOWIEVWNGJFMYLJUMOCUVZ"
                     :side-key         "TANGLE9ARMY9SIDEKEY"
                     :active?          false}}
