@@ -20,6 +20,16 @@
    db/default-db))
 
 
+(reg-event-fx
+ :iota/initialize
+ (fn [{{:keys [iota/provider] :as db} :db :as cofx} _]
+
+   (log/infof "Initializing IOTA with provider %s..." provider)
+
+   (let [iota-instance (iota/create-iota provider)]
+     {:db (assoc db :iota/iota-instance iota-instance)})))
+
+
 (defn get-policy [policies policy-id]
   (first (filter #(= (:id %) policy-id) policies)))
 
@@ -36,19 +46,27 @@
          (apply str))))
 
 
+(defn gen-key []
+  (->> (random-uuid) str (take 8) (apply str) string/upper-case))
+
+
 (reg-event-fx
- :iota/initialize
- (fn [{{:keys [iota/provider] :as db} :db :as cofx} _]
+ :policy/create-and-add-mam-instance
+ (fn [{{:keys [iota/iota-instance map/policies] :as db} :db :as cofx} [_ policy-id]]
+   (let [seed           (gen-seed)
+         side-key       (gen-key)
+         security-level 2
+         mam-instance   (-> (iota-mam/init iota-instance seed security-level)
+                            (iota-mam/change-mode :restricted side-key))]
+     {:db (update db :map/policies
+                  (fn [policies]
+                    (map #(if (= (:id %) policy-id)
+                            (assoc %
+                                   :iota/mam-instance mam-instance
+                                   :iota/mam-key      side-key)
+                            %)
+                         policies)))})))
 
-   (log/infof "Initializing IOTA with provider %s..." provider)
-
-   (let [iota-instance (iota/create-iota provider)]
-     {:db (assoc db :iota/iota-instance iota-instance)})))
-
-
-;; seed              (gen-seed)
-;; security-level    2
-;; iota-mam-instance (iota-mam/init iota-instance seed security-level)
 
 (defn attach-to-tangle [payload address]
   (go (let [depth                5
@@ -67,10 +85,6 @@
                                     (dispatch (conj on-success msg)))
              {:keys [next-root]} (<! (iota-mam/fetch root mode side-key callback))]
          (dispatch (conj on-next-root next-root))))))
-
-
-(defn gen-key []
-  (->> (random-uuid) str (take 8) (apply str) string/upper-case))
 
 
 (reg-fx

@@ -167,6 +167,7 @@
     (.addTo service-provider-marker mapbox)
     (.addTo polyline mapbox)
     (.addTo polyline-decorator mapbox)
+    (dispatch [:policy/create-and-add-mam-instance (:id policy)])
     (let [popup            (.bindPopup smart-meter-marker smart-meter-popup)
           select-policy-fn #(dispatch [:policy/selected (:id policy)])]
       (dispatch [:policy/add-popup (:id policy) popup])
