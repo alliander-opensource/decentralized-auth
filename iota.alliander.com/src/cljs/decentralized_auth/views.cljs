@@ -99,7 +99,7 @@
                                #js {:attribution (str
                                                   "Map data &copy; Mapbox | "
                                                   (hiccups/html
-                                                   [:a {:href "http://alliander.com"
+                                                   [:a {:href   "http://alliander.com"
                                                         :target "_blank"}
                                                     "Alliander"]))
                                     :id          "mapbox.run-bike-hike"
