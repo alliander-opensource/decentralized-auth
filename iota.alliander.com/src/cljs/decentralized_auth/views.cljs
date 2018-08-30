@@ -66,7 +66,7 @@
    [:table
     [:tbody
      [:tr
-      [:td "Data: "]
+      [:td "Policy: "]
       [:td [:a {:href (str "https://mam.tangle.army/fetch?address=" address "&key=" side-key) :target "_blank"}
             "View MAM channel"]]
       [:td " | "]
@@ -74,7 +74,7 @@
             "View IOTA transactions"]]]
 
      [:tr
-      [:td "Policy: "]
+      [:td "Data: "]
       [:td [:a {:href (str "https://mam.tangle.army/fetch?address=" address "&key=" side-key) :target "_blank"}
             "View MAM channel"]]
       [:td " | "]
