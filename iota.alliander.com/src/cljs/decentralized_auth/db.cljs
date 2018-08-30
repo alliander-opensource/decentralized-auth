@@ -8,6 +8,13 @@
    :name    "Holwerd P1 Data Graphing Service"})
 
 
+(def last-id (atom 0))
+
+
+(defn gen-id []
+  (reset! last-id (inc @last-id)))
+
+
 (def default-db
   {:iota/provider       "http://node02.iotatoken.nl:14265"
    :iota/iota-instance  nil
@@ -15,7 +22,8 @@
                          "pk.eyJ1IjoiZXJ3aW5hbGxpYW5kZXIiLCJhIjoiY2pqaWRwdmF"
                          "pNWNmcjNyczJ0aDJpZzE0byJ9.AIp1C3D3wCjbPvfpOShydg")
 
-   :map/policies #{{:smart-meter      {:latlng     #js [53.458177 5.655188]
+   :map/policies #{{:id               (gen-id)
+                    :smart-meter      {:latlng     #js [53.458177 5.655188]
                                        :meter-name "Smart meter 1"
                                        :address    (str "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNA"
                                                         "WIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP")}
@@ -23,7 +31,8 @@
                     :address          "VSSQCMYLXOGATMLAEH9FRVUZTWQBJQQOYDRNUDLBAWHWKUYQQFHBCQTGVUYLOWIEVWNGJFMYLJUMOCUVZ"
                     :side-key         "TANGLE9ARMY9SIDEKEY"
                     :active?          false}
-                   {:smart-meter      {:latlng     #js [53.437087 5.633132]
+                   {:id               (gen-id)
+                    :smart-meter      {:latlng     #js [53.437087 5.633132]
                                        :meter-name "Smart meter 2"
                                        :address    (str "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNA"
                                                         "WIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP")}
@@ -31,7 +40,8 @@
                     :address          "VSSQCMYLXOGATMLAEH9FRVUZTWQBJQQOYDRNUDLBAWHWKUYQQFHBCQTGVUYLOWIEVWNGJFMYLJUMOCUVZ"
                     :side-key         "TANGLE9ARMY9SIDEKEY"
                     :active?          false}
-                   {:smart-meter      {:latlng     #js [53.445156 5.720864]
+                   {:id               (gen-id)
+                    :smart-meter      {:latlng     #js [53.445156 5.720864]
                                        :meter-name "Smart meter 3"
                                        :address    (str "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNA"
                                                         "WIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP")}
@@ -39,7 +49,8 @@
                     :address          "VSSQCMYLXOGATMLAEH9FRVUZTWQBJQQOYDRNUDLBAWHWKUYQQFHBCQTGVUYLOWIEVWNGJFMYLJUMOCUVZ"
                     :side-key         "TANGLE9ARMY9SIDEKEY"
                     :active?          false}
-                   {:smart-meter      {:latlng     #js [53.446079 5.831414]
+                   {:id               (gen-id)
+                    :smart-meter      {:latlng     #js [53.446079 5.831414]
                                        :meter-name "Smart meter 4"
                                        :address    (str "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNA"
                                                         "WIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP")}
