@@ -47,8 +47,8 @@
 ;; iota-mam-instance (iota-mam/init iota-instance seed security-level)
 
 (defn attach-to-tangle [payload address]
-  (go (let [depth                5
-            min-weight-magnitude 15
+  (go (let [depth                6
+            min-weight-magnitude 9
             transactions         (<! (iota-mam/attach payload
                                                       address
                                                       depth

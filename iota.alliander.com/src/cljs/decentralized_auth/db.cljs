@@ -8,13 +8,6 @@
    :name    "Holwerd P1 Data Graphing Service"})
 
 
-(def last-id (atom 0))
-
-
-(defn gen-id []
-  (reset! last-id (inc @last-id)))
-
-
 (def default-db
   {:iota/provider       "http://node02.iotatoken.nl:14265"
    :iota/iota-instance  nil
