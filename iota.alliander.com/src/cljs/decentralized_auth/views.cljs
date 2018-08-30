@@ -60,7 +60,7 @@
                          side-key             :side-key
                          :as                  policy}]
   [:div.list-group-item {:class    (when (:active? policy) "list-group-item-primary")
-                       :on-click #(dispatch [:policy/selected policy])}
+                         :on-click #(dispatch [:policy/selected (:id policy)])}
    (str meter-name " can access service provider 1 with the goal of graphing energy data")
    [:br]
    [:table
@@ -99,7 +99,7 @@
                                #js {:attribution (str
                                                   "Map data &copy; Mapbox | "
                                                   (hiccups/html
-                                                   [:a {:href "http://alliander.com"
+                                                   [:a {:href   "http://alliander.com"
                                                         :target "_blank"}
                                                     "Alliander"]))
                                     :id          "mapbox.run-bike-hike"
@@ -167,11 +167,11 @@
     (.addTo polyline mapbox)
     (.addTo polyline-decorator mapbox)
     (let [popup            (.bindPopup smart-meter-marker smart-meter-popup)
-          select-policy-fn #(dispatch [:policy/selected (assoc policy :popup popup)])]
+          select-policy-fn #(dispatch [:policy/selected (:id policy)])]
+      (dispatch [:policy/add-popup (:id policy) popup])
       (.on polyline-decorator "click" select-policy-fn)
       (.on polyline "click" select-policy-fn)
-      (.on smart-meter-marker "click" select-policy-fn)
-      (dispatch [:policy/add-popup policy popup]))
+      (.on smart-meter-marker "click" select-policy-fn))
     (.bindPopup service-provider-marker service-provider-popup)))
 
 

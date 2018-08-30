@@ -47,8 +47,8 @@
 ;; iota-mam-instance (iota-mam/init iota-instance seed security-level)
 
 (defn attach-to-tangle [payload address]
-  (go (let [depth                6
-            min-weight-magnitude 9
+  (go (let [depth                5
+            min-weight-magnitude 15
             transactions         (<! (iota-mam/attach payload
                                                       address
                                                       depth
@@ -77,24 +77,20 @@
 
 (reg-event-fx
  :policy/selected
- (fn [{{:keys [map/policies]
-        :as   db}
-       :db}
-      [_ policy]]
+ (fn [{{:keys [map/policies] :as db} :db}
+      [_ policy-id]]
    {:db                (assoc db :map/policies
-                              (map #(assoc % :active? (= % policy))
+                              (map #(assoc % :active? (= (:id %) policy-id))
                                    policies))
-    :policy/open-popup policy}))
+    :policy/open-popup (first (filter #(= (:id %) policy-id) policies))}))
 
 
 (reg-event-db
  :policy/add-popup
- (fn [{:keys [map/policies]
-       :as   db}
-      [_ policy popup]]
+ (fn [{:keys [map/policies] :as db} [_ policy-id popup]]
    (update db :map/policies
            (fn [policies]
-             (map #(if (= % policy)
-                     (assoc % :popup popup)
-                     %)
+             (map #(if (= (:id %) policy-id)
+                      (assoc % :popup popup)
+                      %)
                   policies)))))
