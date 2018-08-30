@@ -20,6 +20,10 @@
    db/default-db))
 
 
+(defn get-policy [policies policy-id]
+  (first (filter #(= (:id %) policy-id) policies)))
+
+
 (defn gen-seed
   "Insecure way to generate a seed.
 
@@ -82,7 +86,7 @@
    {:db                (assoc db :map/policies
                               (map #(assoc % :active? (= (:id %) policy-id))
                                    policies))
-    :policy/open-popup (first (filter #(= (:id %) policy-id) policies))}))
+    :policy/open-popup (get-policy policies policy-id)}))
 
 
 (reg-event-db
