@@ -47,3 +47,8 @@ lein cljsbuild once min
 ```
 
 NOTE: not working at the moment because of extern conflict. Use `lein cljsbuild once dev` to build for production as well.
+
+## Deployment
+
+1. Push code to this repository
+2. Press proceed at https://jenkins.appx.cloud/job/alliander/job/decentralized-auth-iota-demo-deploy/job/master/build?delay=0sec
