@@ -34,19 +34,17 @@
 
 (reg-event-fx
  :iota/initialize
- (fn [{{:keys [iota/provider data-provider/default-side-key]
-        :as   db}
-       :db
-       :as cofx} _]
+ (fn [{{:keys [iota/provider] :as db} :db :as cofx} _]
 
-   (log/infof "Initializing IOTA with provider %s..."
-              provider)
+   (log/infof "Initializing IOTA with provider %s..." provider)
 
-   (let [iota-instance (iota/create-iota provider)
-         seed          (gen-seed)]
-     {:db (assoc db
-                 :iota/iota-instance iota-instance)})))
+   (let [iota-instance (iota/create-iota provider)]
+     {:db (assoc db :iota/iota-instance iota-instance)})))
 
+
+;; seed              (gen-seed)
+;; security-level    2
+;; iota-mam-instance (iota-mam/init iota-instance seed security-level)
 
 (defn attach-to-tangle [payload address]
   (go (let [depth                6
