@@ -72,7 +72,9 @@
             "View MAM channel"]]
       [:td " | "]
       [:td [:a {:href (str "https://thetangle.org/address/" address) :target "_blank"}
-            "View IOTA transactions"]]]
+            "View IOTA transactions"]]
+      [:td {:rowSpan 2} " | "]
+      [:td {:rowSpan 2} [:button.btn.btn-outline-primary {:on-click #(prn :hallo)} "Revoke"]]]
 
      [:tr
       [:td "Data: "]
