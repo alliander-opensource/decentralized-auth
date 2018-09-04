@@ -9,12 +9,11 @@
 
 
 (def default-db
-  {:iota/provider       "http://node02.iotatoken.nl:14265"
+  {:iota/provider       "https://potato.iotasalad.org:14265"
    :iota/iota-instance  nil
    :mapbox/access-token (str
                          "pk.eyJ1IjoiZXJ3aW5hbGxpYW5kZXIiLCJhIjoiY2pqaWRwdmF"
                          "pNWNmcjNyczJ0aDJpZzE0byJ9.AIp1C3D3wCjbPvfpOShydg")
-
    :map/policies #{{:id               0
                     :smart-meter      {:latlng     #js [53.458177 5.655188]
                                        :meter-name "Smart meter 1"
@@ -54,6 +53,4 @@
                     :goal             "graphing energy data"
                     :address          "VSSQCMYLXOGATMLAEH9FRVUZTWQBJQQOYDRNUDLBAWHWKUYQQFHBCQTGVUYLOWIEVWNGJFMYLJUMOCUVZ"
                     :side-key         "TANGLE9ARMY9SIDEKEY"
-                    :active?          false}}
-   ;; :iota.mam/mam-state nil
-   })
+                    :active?          false}}})
