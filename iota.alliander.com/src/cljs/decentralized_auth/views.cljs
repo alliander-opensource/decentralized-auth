@@ -131,11 +131,7 @@
                                          service-provider-address :address
                                          service-provider-name    :name} :service-provider
                                         :as                              policy}]
-  (notification :success
-                (str service-provider-name
-                     " can view "
-                     meter-name
-                     "'s data with the goal of graphing energy data"))
+  (notification :success (to-string policy))
   (let [polyline                   (.polyline js/L
                                               #js [smart-meter-latlng service-provider-latlng]
                                               #js {:weight 2 :color "black" :opacity 0.4})
