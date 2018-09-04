@@ -18,8 +18,7 @@
                  [cljsjs/leaflet-polylinedecorator "1.6.0-0"]
                  [cljsjs/toastr "2.1.2-1"]
                  [hiccups "0.3.0"]
-                 [re-frame "0.10.2"]
-                 [re-frisk "0.5.3"]
+                 [re-frame "0.10.6"]
                  [reagent "0.7.0"]]
 
   :plugins [[lein-auto "0.1.3"]
@@ -41,6 +40,7 @@
   {:dev
    {:dependencies [[binaryage/devtools "0.9.9"]
                    [figwheel-sidecar "0.5.14"]
+                   [day8.re-frame/re-frame-10x "0.3.3"]
                    [com.cemerick/piggieback "0.2.1"]]
 
     :plugins [[lein-figwheel "0.5.14"]
@@ -56,7 +56,8 @@
                     :output-dir           "resources/public/js/compiled/out"
                     :asset-path           "js/compiled/out"
                     :source-map-timestamp true
-                    :preloads             [devtools.preload]
+                    :closure-defines      {"re_frame.trace.trace_enabled_QMARK_" true}
+                    :preloads             [day8.re-frame-10x.preload]
                     :external-config      {:devtools/config {:features-to-install :all}}}}
 
     {:id           "min"
