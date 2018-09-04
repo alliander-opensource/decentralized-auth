@@ -169,6 +169,7 @@
     (let [popup            (.bindPopup smart-meter-marker smart-meter-popup)
           select-policy-fn #(dispatch [:policy/selected (:id policy)])]
       (dispatch [:policy/add-popup (:id policy) popup])
+      (dispatch [:policy/publish (:id policy)])
       (.on polyline-decorator "click" select-policy-fn)
       (.on polyline "click" select-policy-fn)
       (.on smart-meter-marker "click" select-policy-fn))

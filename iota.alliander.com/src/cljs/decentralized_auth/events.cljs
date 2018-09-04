@@ -8,7 +8,7 @@
             [clojure.string :as string]
             [decentralized-auth.config :as config]
             [decentralized-auth.db :as db]
-            [decentralized-auth.utils :refer [json-encode json-decode]]
+            [decentralized-auth.utils :refer [json-encode json-decode to-string]]
             [re-frame.core :refer [reg-event-db reg-event-fx reg-fx dispatch]]))
 
 
@@ -50,6 +50,16 @@
   (->> (random-uuid) str (take 8) (apply str) string/upper-case))
 
 
+(defn add-mam-data
+  "Add MAM data to policy with policy-id and return updated policies"
+  [policy-id policies side-key mam-instance]
+  (map #(if (= (:id %) policy-id)
+          (assoc %
+                 :iota/mam-instance mam-instance
+                 :iota/mam-key      side-key)
+          %)
+       policies))
+
 (reg-event-fx
  :policy/create-and-add-mam-instance
  (fn [{{:keys [iota/iota-instance map/policies] :as db} :db :as cofx} [_ policy-id]]
@@ -60,31 +70,69 @@
                             (iota-mam/change-mode :restricted side-key))]
      {:db (update db :map/policies
                   (fn [policies]
-                    (map #(if (= (:id %) policy-id)
-                            (assoc %
-                                   :iota/mam-instance mam-instance
-                                   :iota/mam-key      side-key)
-                            %)
-                         policies)))})))
+                    (add-mam-data policy-id policies side-key mam-instance)))})))
 
 
-(defn attach-to-tangle [payload address]
-  (go (let [depth                5
-            min-weight-magnitude 15
-            transactions         (<! (iota-mam/attach payload
-                                                      address
-                                                      depth
-                                                      min-weight-magnitude))]
-        (log/infof "Transactions attached to tangle: %s" transactions))))
+(defn to-trytes [iota-instance payload]
+  (->> (clj->js payload)
+       (.stringify js/JSON)
+       (iota-utils/to-trytes iota-instance)))
 
+
+(defn attach-policy [payload address policy-id]
+  (go (let [depth                                   5
+            min-weight-magnitude                    15
+            {iota-transaction-address :address
+             :as                      transactions} (<! (iota-mam/attach payload
+                                                                         address
+                                                                         depth
+                                                                         min-weight-magnitude))]
+        (dispatch [:policy/add-iota-transaction-address policy-id iota-transaction-address])
+        (dispatch [:policy/add-mam-address policy-id address])
+        (log/infof "Transactions attached to Tangle: %s" transactions))))
+
+
+(reg-fx
+ :iota-mam-fx/attach
+ (fn [{:keys [iota-instance mam-instance policy]}]
+   (let [{:keys [payload address] :as message}
+         (iota-mam/create mam-instance (to-trytes iota-instance policy))]
+     (attach-policy payload address (:id policy)))))
+
+
+(defn format-policy
+  "Only keep relevant information for publishing on the Tangle and add a
+  description."
+  [policy]
+  (-> policy
+      (select-keys [:smart-meter
+                    :service-provider
+                    :goal
+                    :address])
+      (update
+       :smart-meter
+       dissoc :latlng)
+      (update
+       :service-provider
+       dissoc :latlng)
+      (assoc :description (to-string policy))))
+
+
+(reg-event-fx
+ :policy/publish
+ (fn [{{:keys [map/policies iota/iota-instance] :as db} :db}
+      [_ policy-id]]
+   (let [{:keys [iota/mam-instance] :as policy} (get-policy policies policy-id)
+         shareable-policy                       (format-policy policy)]
+     {:iota-mam-fx/attach {:mam-instance  mam-instance
+                           :iota-instance iota-instance
+                           :policy        shareable-policy}})))
 
 (reg-fx
  :iota-mam-fx/fetch
  (fn [{:keys [iota-instance root mode side-key on-success on-next-root]}]
-   (go (let [callback            #(let [msg (iota-utils/from-trytes iota-instance %)]
-                                    (dispatch (conj on-success msg)))
-             {:keys [next-root]} (<! (iota-mam/fetch root mode side-key callback))]
-         (dispatch (conj on-next-root next-root))))))
+   (let [msg (iota-mam/fetch root mode side-key)]
+     (dispatch (on-success msg)))))
 
 
 (reg-fx
@@ -112,3 +160,26 @@
                       (assoc % :popup popup)
                       %)
                   policies)))))
+
+
+(reg-event-db
+ :policy/add-iota-transaction-address
+ (fn [{:keys [map/policies] :as db} [_ policy-id iota-transaction-address]]
+   (update db :map/policies
+           (fn [policies]
+             (map #(if (= (:id %) policy-id)
+                     (assoc % :iota-transaction-address iota-transaction-address)
+                     %)
+                  policies)))))
+
+
+ ;; Only assoc first time (the root)
+ (reg-event-db
+  :policy/add-mam-address
+  (fn [{:keys [map/policies] :as db} [_ policy-id mam-address]]
+    (update db :map/policies
+            (fn [policies]
+              (map #(if (= (:id %) policy-id)
+                      (assoc % :iota-transaction-address mam-address)
+                      %)
+                   policies)))))
