@@ -24,5 +24,5 @@
 
 ;;;; Policy
 
-(defn to-string [{:keys [goal smart-meter] :as policy}]
-  (str (:meter-name smart-meter) " can access service provider 1 with the goal of " goal))
+(defn to-string [{:keys [goal smart-meter service-provider] :as policy}]
+  (str (:name service-provider) " can access " (:meter-name smart-meter) " with the goal of " goal))
