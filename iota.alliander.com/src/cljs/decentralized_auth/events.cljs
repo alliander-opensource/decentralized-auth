@@ -94,10 +94,10 @@
 
 (reg-fx
  :iota-mam-fx/attach
- (fn [{:keys [iota-instance mam-instance policy]}]
+ (fn [{:keys [iota-instance mam-instance policy policy-id]}]
    (let [{:keys [payload address] :as message}
          (iota-mam/create mam-instance (to-trytes iota-instance policy))]
-     (attach-policy payload address (:id policy)))))
+     (attach-policy payload address policy-id))))
 
 
 (defn format-policy
@@ -126,7 +126,8 @@
          shareable-policy                       (format-policy policy)]
      {:iota-mam-fx/attach {:mam-instance  mam-instance
                            :iota-instance iota-instance
-                           :policy        shareable-policy}})))
+                           :policy        shareable-policy
+                           :policy-id     policy-id}})))
 
 (reg-fx
  :iota-mam-fx/fetch
