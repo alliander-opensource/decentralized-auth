@@ -94,14 +94,18 @@
                        (upsert-mam-data policy-id policies side-key state)))})))
 
 
+(defn format-trytes [trytes]
+  (apply str (conj (vec (take 10 trytes)) "...")))
+
+
 (defn attach-policy [payload address policy-id]
   (go (let [depth                5
             min-weight-magnitude 15
-            _ (log/infof "Publishing policy at address %s" address)
             [{iota-transaction-hash :hash
               iota-bundle-hash      :bundle}
              & more
              :as transactions]   (<! (iota-mam/attach payload
+            _                    (log/infof "Attaching policy at MAM root %s" (format-trytes address))
                                                       address
                                                       depth
                                                       min-weight-magnitude))]
