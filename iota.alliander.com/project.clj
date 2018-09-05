@@ -56,8 +56,8 @@
                     :output-dir           "resources/public/js/compiled/out"
                     :asset-path           "js/compiled/out"
                     :source-map-timestamp true
-                    :closure-defines      {"re_frame.trace.trace_enabled_QMARK_" true}
-                    :preloads             [day8.re-frame-10x.preload]
+                    ;; :closure-defines      {"re_frame.trace.trace_enabled_QMARK_" true}
+                    ;; :preloads             [day8.re-frame-10x.preload]
                     :external-config      {:devtools/config {:features-to-install :all}}}}
 
     {:id           "min"
