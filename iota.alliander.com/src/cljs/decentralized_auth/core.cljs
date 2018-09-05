@@ -6,7 +6,6 @@
             [decentralized-auth.subs]
             [decentralized-auth.views :as views]
             [re-frame.core :as re-frame]
-            [re-frisk.core :refer [enable-re-frisk!]]
             [reagent.core :as r]
             [taoensso.timbre :as log]))
 
@@ -14,7 +13,6 @@
 (defn dev-setup []
   (when config/debug?
     (enable-console-print!)
-    (enable-re-frisk!)
     (println "dev mode")))
 
 
