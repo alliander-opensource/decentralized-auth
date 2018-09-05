@@ -82,9 +82,11 @@
                             :class  (when-not iota-transaction-hash "disabled")
                             :target "_blank"}
            "Latest transaction in Tangle visualization"]]
-     [:td (merge {:rowSpan 2} (when-not policy-published?
+     [:td (merge {:rowSpan 2} (when (or (not policy-published?)
+                                        (:revoked? policy))
                                 {:style {:display "none"}})) " | "]
-     [:td (merge {:rowSpan 2} (when-not policy-published?
+     [:td (merge {:rowSpan 2} (when (or (not policy-published?)
+                                        (:revoked? policy))
                                 {:style {:display "none" }}))
       [:button.btn.btn-outline-primary
        {:on-click #(when revokable-policy?
