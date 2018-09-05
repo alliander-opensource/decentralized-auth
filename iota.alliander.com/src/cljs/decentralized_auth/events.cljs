@@ -109,21 +109,29 @@
 
 
 (defn format-policy
-  "Only keep relevant information for publishing on the Tangle and add a
-  description."
+  "Only keep relevant non-privacy sensitive information for publishing on the
+  Tangle and add a description."
   [policy]
   (-> policy
-      (select-keys [:smart-meter
+      (select-keys [:type
+                    :id ;; Necessary for view
+                    :smart-meter
                     :service-provider
                     :goal
                     :address])
-      (update
-       :smart-meter
-       dissoc :latlng)
-      (update
-       :service-provider
-       dissoc :latlng)
+      (update :smart-meter dissoc :latlng)
+      (update :service-provider dissoc :latlng)
       (assoc :description (to-string policy))))
+
+
+(defn format-authorized-policy
+  [policy]
+  (format-policy (assoc policy :type "AUTHORIZED")))
+
+
+(defn format-revoked-policy
+  [policy]
+  (format-policy (assoc policy :type "REVOKED")))
 
 
 (def called-policy-ids (atom #{}))
@@ -151,12 +159,38 @@
  (fn [{{:keys [map/policies iota/iota-instance] :as db} :db}
       [_ policy-id]]
    (let [{:keys [iota/mam-instance] :as policy} (get-policy policies policy-id)
-         shareable-policy                       (format-policy policy)]
+         shareable-policy                       (format-authorized-policy policy)]
      {:iota-mam-fx/attach {:iota-instance iota-instance
                            :mam-instance  mam-instance
                            :mam-side-key  (:mam-side-key policy)
                            :policy        shareable-policy
                            :policy-id     policy-id}})))
+
+
+(defn assoc-policy
+  "assoc k and value to policy with policy-id in db."
+  [db policy-id k v]
+  (update db :map/policies
+          (fn [policies]
+            (map #(if (= (:id %) policy-id)
+                    (assoc % k v)
+                    %)
+                 policies))))
+
+
+(reg-event-fx
+ :policy/revoke
+ (fn [{{:keys [map/policies iota/iota-instance] :as db} :db}
+      [_ policy-id]]
+   (let [{:keys [iota/mam-instance] :as policy} (get-policy policies policy-id)
+         shareable-policy                       (format-revoked-policy policy)]
+     {:db                 (assoc-policy db policy-id :revoked? true)
+      :iota-mam-fx/attach {:iota-instance iota-instance
+                           :mam-instance  mam-instance
+                           :mam-side-key  (:mam-side-key policy)
+                           :policy        shareable-policy
+                           :policy-id     policy-id}})))
+
 
 (reg-fx
  :iota-mam-fx/fetch
