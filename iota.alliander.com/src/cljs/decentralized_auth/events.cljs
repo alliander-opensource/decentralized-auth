@@ -181,7 +181,7 @@
 
 
 (defn assoc-policy
-  "assoc k and value to policy with policy-id in db."
+  "assoc key k and value v to policy with policy-id in db."
   [db policy-id k v]
   (update db :map/policies
           (fn [policies]
