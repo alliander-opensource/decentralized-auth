@@ -48,6 +48,9 @@
   (medium-icon "images/smartmeter.png"))
 
 
+(def revoked-icon
+  (medium-icon "images/revoked.png"))
+
 (def service-provider-icon
   (medium-icon "images/serviceprovider.png" :popup-distance 6))
 

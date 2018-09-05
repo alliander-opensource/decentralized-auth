@@ -52,3 +52,8 @@ NOTE: not working at the moment because of extern conflict. Use `lein cljsbuild 
 
 1. Push code to this repository
 2. Press proceed at https://jenkins.appx.cloud/job/alliander/job/decentralized-auth-iota-demo-deploy/job/master/build?delay=0sec
+
+
+## Licenses
+
+Uses the [cross file svg](https://commons.wikimedia.org/wiki/File:Flat_cross_icon.svg) which is licensed under the Creative Commons Attribution-Share Alike 3.0 Unported license.
