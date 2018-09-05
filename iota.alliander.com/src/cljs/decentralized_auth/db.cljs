@@ -9,7 +9,11 @@
 
 
 (def iota-providers
-  ["https://whitey.whitey13.org:443" "https://turnip.iotasalad.org:14265" "https://potato.iotasalad.org:14265"])
+  ["https://nod3.theshock.de:443"
+   #_"https://potato.iotasalad.org:14265"
+   "https://beaker01.tangle-iotanode.eu:14267"
+   "https://beaker02.tangle-iotanode.eu:14267"
+   "https://beaker03.tangle-iotanode.eu:14267"])
 
 
 (def default-db
