@@ -45,7 +45,9 @@
 
 
 (defn gen-key []
-  (["BANANA" "POTATO" "HUMMUS" "SWEETPOTATO" "TOMATO"] (rand-int 4)))
+  (let [possible-keys ["BANANA" "POTATO" "HUMMUS" "SWEETPOTATO" "TOMATO"]
+        rand-idx      (rand-int (count possible-keys))]
+    (get possible-keys rand-idx)))
 
 
 (defn upsert-mam-data
