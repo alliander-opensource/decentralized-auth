@@ -112,7 +112,13 @@
 
 
 (defn policy-list-item [policy]
-  [:div.list-group-item {:class    (when (:active? policy) "list-group-item-primary")
+  [:div.list-group-item {:class    (cond (and (:revoked? policy)
+                                              (:active? policy))
+                                         "list-group-item-warning"
+                                         (:revoked? policy)
+                                         "list-group-item-danger"
+                                         (:active? policy)
+                                         "list-group-item-primary")
                          :on-click #(dispatch [:policy/selected (:id policy)])}
    [:i (to-string policy)]
    [:br]
