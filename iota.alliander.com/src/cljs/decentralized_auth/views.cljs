@@ -81,13 +81,13 @@
   (let [policy-published? (:iota-bundle-hash policy)
         revokable-policy? (and (not (:revoked? policy))
                                policy-published?)]
-    [:tr
-     [:td "Policy: "]
      (if pending?
-       (list
+       [:tr
+        [:td "Policy: "]
         [:td [spinner]]
-        [:td [:sub "Performing Proof of Work to attach policy to The Tangle..."]])
-       (list
+        [:td [:sub "Performing Proof of Work to attach policy to the Tangle..."]]]
+       [:tr
+        [:td "Policy: "]
         [:td [:a.btn.btn-link
               {:href   (str "https://mam.tangle.army/fetch?address=" mam-root "&key=" mam-side-key)
                :class  (when-not mam-root "disabled")
@@ -114,7 +114,7 @@
                         (do (notification :success "Revoking policy by publishing to the Tangle")
                             (dispatch [:policy/revoke (:id policy)])))
            :class    (when-not revokable-policy? "disabled")}
-          "Revoke"]]))]))
+          "Revoke"]]])))
 
 
 (defn data-row [{:keys [address
