@@ -85,7 +85,7 @@
        [:tr
         [:td "Policy: "]
         [:td [spinner]]
-        [:td [:sub "Performing Proof of Work to attach policy to the Tangle..."]]]
+        [:td.small "(Performing Proof of Work to attach policy to the Tangle...)"]]
        [:tr
         [:td "Policy: "]
         [:td [:a.btn.btn-link
