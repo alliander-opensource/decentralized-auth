@@ -117,27 +117,11 @@
           "Revoke"]]])))
 
 
-(defn data-row [{:keys [address
-                        goal
-                        mam-root
-                        mam-side-key
-                        iota-bundle-hash
-                        iota-transaction-hash
-                        pending?]
-                 :as   policy}]
+(defn data-row [policy]
   [:tr
    [:td "Data: "]
-   [:td [:a.btn.btn-link
-         {:href   (str "https://mam.tangle.army/fetch?address=" mam-root "&key=" mam-side-key)
-          :class  (when (not mam-root) "disabled")
-          :target "_blank"}
-         "MAM channel"]]
-   [:td " | "]
-   [:td [:a.btn.btn-link
-         {:href   (str "https://thetangle.org/address/" address)
-          :class  (when (not address) "disabled")
-          :target "_blank"}
-         "IOTA transactions"]]])
+   [:td.small {:colSpan 10}
+    "Infeasible to attach high frequent P1-messages to mainnet with standard hardware."]])
 
 
 (defn policy-list-item [policy]
