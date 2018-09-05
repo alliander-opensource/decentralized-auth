@@ -81,7 +81,7 @@
         [:td [:a.btn.btn-link {:href   (str "https://thetangle.org/bundle/" iota-bundle-hash)
                                :class  (when-not iota-bundle-hash "disabled")
                                :target "_blank"}
-              "Latest transactions"]]
+              "Latest bundle"]]
         [:td " | "]
         [:td [:a.btn.btn-link {:href   (str "http://tangle.glumb.de/?hash=" iota-transaction-hash)
                                :class  (when-not iota-transaction-hash "disabled")
