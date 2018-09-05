@@ -56,7 +56,7 @@
   (small-icon "images/iota.png"))
 
 
-(defn policy-list-item [{:keys [address goal iota-mam-address mam-side-key iota-transaction-address]
+(defn policy-list-item [{:keys [address goal mam-root mam-side-key iota-transaction-address]
                          :as   policy}]
   [:div.list-group-item {:class    (when (:active? policy) "list-group-item-primary")
                          :on-click #(dispatch [:policy/selected (:id policy)])}
@@ -66,7 +66,7 @@
     [:tbody
      [:tr
       [:td "Policy: "]
-      [:td [:a {:href (str "https://mam.tangle.army/fetch?address=" iota-mam-address "&key=" mam-side-key) :target "_blank"}
+      [:td [:a {:href (str "https://mam.tangle.army/fetch?address=" mam-root "&key=" mam-side-key) :target "_blank"}
             "View MAM channel"]]
       [:td " | "]
       [:td [:a {:href (str "https://thetangle.org/address/" iota-transaction-address) :target "_blank"}
@@ -76,7 +76,7 @@
 
      [:tr
       [:td "Data: "]
-      [:td [:a {:href (str "https://mam.tangle.army/fetch?address=" address "&key=" mam-side-key) :target "_blank"}
+      [:td [:a {:href (str "https://mam.tangle.army/fetch?address=" mam-root "&key=" mam-side-key) :target "_blank"}
             "View MAM channel"]]
       [:td " | "]
       [:td [:a {:href (str "https://thetangle.org/address/" address) :target "_blank"}
@@ -129,7 +129,7 @@
                                          service-provider-address :address
                                          service-provider-name    :name} :service-provider
                                         :as                              policy}]
-  (notification :success (to-string policy))
+  (notification :success (str "Attaching policy to Tangle: \n" (to-string policy)))
   (let [polyline                   (.polyline js/L
                                               #js [smart-meter-latlng service-provider-latlng]
                                               #js {:weight 2 :color "black" :opacity 0.4})

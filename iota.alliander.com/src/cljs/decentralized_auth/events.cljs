@@ -50,27 +50,23 @@
   (["BANANA" "POTATO" "HUMMUS" "SWEETPOTATO" "TOMATO"] (rand-int 4)))
 
 
-(defn add-mam-data
+(defn upsert-mam-data
   "Add MAM data to policy with policy-id and return updated policies"
   [policy-id policies side-key mam-instance]
   (map #(if (= (:id %) policy-id)
           (assoc %
                  :iota/mam-instance mam-instance
-                 :iota/mam-side-key side-key)
+                 :mam-side-key side-key)
           %)
        policies))
 
-(reg-event-fx
- :policy/create-and-add-mam-instance
- (fn [{{:keys [iota/iota-instance map/policies] :as db} :db :as cofx} [_ policy-id]]
-   (let [seed           (gen-seed)
-         side-key       (gen-key)
-         security-level 2
-         mam-instance   (-> (iota-mam/init iota-instance seed security-level)
-                            (iota-mam/change-mode :restricted side-key))]
-     {:db (update db :map/policies
-                  (fn [policies]
-                    (add-mam-data policy-id policies side-key mam-instance)))})))
+
+(reg-event-db
+ :policy/upsert-mam-data
+ (fn [{:keys [map/policies] :as db} [_ policy-id side-key mam-instance]]
+   (update db :map/policies
+           (fn [policies]
+             (upsert-mam-data policy-id policies side-key mam-instance)))))
 
 
 (defn to-trytes [iota-instance payload]
@@ -79,26 +75,37 @@
        (iota-utils/to-trytes iota-instance)))
 
 
-(defn attach-policy [payload address mam-side-key policy-id]
+(reg-event-fx
+ :policy/create-and-add-mam-instance
+ (fn [{{:keys [iota/iota-instance map/policies] :as db} :db :as cofx} [_ policy-id]]
+   (let [seed           (gen-seed)
+         side-key       (gen-key)
+         security-level 2
+         mam-instance   (-> (iota-mam/init iota-instance seed security-level)
+                            (iota-mam/change-mode :restricted side-key))
+         ;; Initial create to have a next_root on the MAM state...
+         {:keys [state]}    (iota-mam/create mam-instance (to-trytes iota-instance {:type "INIT"}))]
+
+        ;; NOTE: For now do not dispatch to upsert-mam-data because of timing
+        ;;       issues in add-policy-visualization (add-policy expect these
+        ;;       events to have finished...).
+        {:db (update db :map/policies
+                     (fn [policies]
+                       (upsert-mam-data policy-id policies side-key state)))})))
+
+
+(defn attach-policy [payload address policy-id]
   (go (let [depth                5
             min-weight-magnitude 15
-            [{iota-transaction-address :address
-              :as                      transactions}
-             & transactions]     (<! (iota-mam/attach payload
+            _ (log/infof "Adding policy at address %s" address)
+            [{iota-transaction-address :address}
+             & more
+             :as transactions]   (<! (iota-mam/attach payload
                                                       address
                                                       depth
                                                       min-weight-magnitude))]
         (dispatch [:policy/add-iota-transaction-address policy-id iota-transaction-address])
-        (dispatch [:policy/add-mam-data policy-id address mam-side-key])
         (log/infof "Transactions attached to Tangle: %s" transactions))))
-
-
-(reg-fx
- :iota-mam-fx/attach
- (fn [{:keys [iota-instance mam-instance mam-side-key policy policy-id]}]
-   (let [{:keys [payload address] :as message}
-         (iota-mam/create mam-instance (to-trytes iota-instance policy))]
-     (attach-policy payload address mam-side-key policy-id))))
 
 
 (defn format-policy
@@ -119,6 +126,26 @@
       (assoc :description (to-string policy))))
 
 
+(def called-policy-ids (atom #{}))
+(defn first-time? [policy-id]
+  (if (contains? @called-policy-ids policy-id)
+    false
+    (do
+      (swap! called-policy-ids conj policy-id)
+      true)))
+
+
+(reg-fx
+ :iota-mam-fx/attach
+ (fn [{:keys [iota-instance mam-instance mam-side-key policy policy-id]}]
+   (let [{:keys [payload address state] :as message}
+         (iota-mam/create mam-instance (to-trytes iota-instance policy))]
+     (dispatch [:policy/upsert-mam-data policy-id mam-side-key state])
+     (when (first-time? policy-id)
+       (dispatch [:policy/add-mam-root policy-id (get-in mam-instance [:channel :next-root])]))
+     (attach-policy payload address policy-id))))
+
+
 (reg-event-fx
  :policy/publish
  (fn [{{:keys [map/policies iota/iota-instance] :as db} :db}
@@ -127,7 +154,7 @@
          shareable-policy                       (format-policy policy)]
      {:iota-mam-fx/attach {:iota-instance iota-instance
                            :mam-instance  mam-instance
-                           :mam-side-key  (:iota/mam-side-key policy)
+                           :mam-side-key  (:mam-side-key policy)
                            :policy        shareable-policy
                            :policy-id     policy-id}})))
 
@@ -176,15 +203,12 @@
                   policies)))))
 
 
-;; Only assoc first time (the root)
 (reg-event-db
- :policy/add-mam-data
- (fn [{:keys [map/policies] :as db} [_ policy-id mam-address mam-side-key]]
+ :policy/add-mam-root
+ (fn [{:keys [map/policies] :as db} [_ policy-id mam-root]]
    (update db :map/policies
            (fn [policies]
              (map #(if (= (:id %) policy-id)
-                     (assoc %
-                            :iota-mam-address mam-address
-                            :mam-side-key     mam-side-key)
+                     (assoc % :mam-root mam-root)
                      %)
                   policies)))))
