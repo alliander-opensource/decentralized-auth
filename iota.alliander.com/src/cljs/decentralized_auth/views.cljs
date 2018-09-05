@@ -61,35 +61,56 @@
 
 (defn policy-list-item [{:keys [address goal mam-root mam-side-key iota-bundle-hash iota-transaction-hash]
                          :as   policy}]
-  [:div.list-group-item {:class    (when (:active? policy) "list-group-item-primary")
-                         :on-click #(dispatch [:policy/selected (:id policy)])}
-   [:i (to-string policy)]
-   [:br]
-   [:table
-    [:tbody
-     [:tr
-      [:td "Policy: "]
-      [:td [:a {:href (str "https://mam.tangle.army/fetch?address=" mam-root "&key=" mam-side-key) :target "_blank"}
-            "View MAM channel"]]
-      [:td " | "]
-      [:td [:a {:href (str "https://thetangle.org/bundle/" iota-bundle-hash) :target "_blank"}
-            "View latest IOTA transactions"]]
-      [:td " | "]
-      [:td [:a {:href (str "http://tangle.glumb.de/?hash=" iota-transaction-hash) :target "_blank"}
-            "View latest IOTA transaction in Tangle visualization"]]
-      [:td {:rowSpan 2} " | "]
-      [:td {:rowSpan 2} [:button.btn.btn-outline-primary
-                         {:on-click #(do (notification :success "Revoking policy by publishing to the Tangle")
-                                         (dispatch [:policy/revoke (:id policy)]))}
-                         "Revoke"]]]
+  (let [policy-published? (:iota-bundle-hash policy)
+        revokable-policy? (and (not (:revoked? policy))
+                               policy-published?)]
+    [:div.list-group-item {:class    (when (:active? policy) "list-group-item-primary")
+                           :on-click #(dispatch [:policy/selected (:id policy)])}
+     [:i (to-string policy)]
+     [:br]
+     [:table
+      [:tbody
+       [:tr
+        [:td "Policy: "]
+        [:td [:a.btn.btn-link
+              {:href   (str "https://mam.tangle.army/fetch?address=" mam-root "&key=" mam-side-key)
+               :class  (when-not mam-root "disabled")
+               :target "_blank"}
+              "MAM channel"]]
+        [:td " | "]
+        [:td [:a.btn.btn-link {:href   (str "https://thetangle.org/bundle/" iota-bundle-hash)
+                               :class  (when-not iota-bundle-hash "disabled")
+                               :target "_blank"}
+              "Latest transactions"]]
+        [:td " | "]
+        [:td [:a.btn.btn-link {:href   (str "http://tangle.glumb.de/?hash=" iota-transaction-hash)
+                               :class  (when-not iota-transaction-hash "disabled")
+                               :target "_blank"}
+              "Latest transaction in Tangle visualization"]]
+        [:td (merge {:rowSpan 2} (when-not policy-published?
+                                   {:style {:display "none"}})) " | "]
+        [:td (merge {:rowSpan 2} (when-not policy-published?
+                                   {:style {:display "none" }}))
+         [:button.btn.btn-outline-primary
+          {:on-click #(when revokable-policy?
+                        (do (notification :success "Revoking policy by publishing to the Tangle")
+                            (dispatch [:policy/revoke (:id policy)])))
+           :class    (when-not revokable-policy? "disabled")}
+          "Revoke"]]]
 
-     [:tr
-      [:td "Data: "]
-      [:td [:a {:href (str "https://mam.tangle.army/fetch?address=" mam-root "&key=" mam-side-key) :target "_blank"}
-            "View MAM channel"]]
-      [:td " | "]
-      [:td [:a {:href (str "https://thetangle.org/address/" address) :target "_blank"}
-            "View IOTA transactions"]]]]]])
+       [:tr
+        [:td "Data: "]
+        [:td [:a.btn.btn-link
+              {:href   (str "https://mam.tangle.army/fetch?address=" mam-root "&key=" mam-side-key)
+               :class  (when (not mam-root) "disabled")
+               :target "_blank"}
+              "MAM channel"]]
+        [:td " | "]
+        [:td [:a.btn.btn-link
+              {:href   (str "https://thetangle.org/address/" address)
+               :class  (when (not address) "disabled")
+               :target "_blank"}
+              "IOTA transactions"]]]]]]))
 
 
 (defn info-panel []
