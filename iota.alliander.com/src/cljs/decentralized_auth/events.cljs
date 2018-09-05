@@ -106,7 +106,7 @@
                                                       address
                                                       depth
                                                       min-weight-magnitude))]
-        (if (seq? result)
+        (if (vector? result)
           (let [[{iota-transaction-hash :hash
                   iota-bundle-hash      :bundle}
                  & more
@@ -117,7 +117,7 @@
           (log/error
            (str "Failed to attach policy:<br/>"
                 result
-                "<br/>Please refresh (which updates provider)."))))))
+                "<br/>Please refresh."))))))
 
 
 (defn format-policy
