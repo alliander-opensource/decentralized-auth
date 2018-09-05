@@ -103,6 +103,7 @@
   (go (let [depth                5
             min-weight-magnitude 15
             _                    (log/infof "Attaching policy at MAM root %s" (format-trytes address))
+            _                    (dispatch [:policy/set-pending policy-id true])
             t1                   (.getTime (js/Date.))
             result               (<! (iota-mam/attach payload
                                                       address
@@ -115,13 +116,17 @@
                   iota-bundle-hash      :bundle}
                  & more
                  :as transactions] result]
+            (dispatch [:policy/set-pending policy-id false])
             (dispatch [:policy/add-iota-transaction-hash policy-id iota-transaction-hash])
             (dispatch [:policy/add-iota-bundle-hash policy-id iota-bundle-hash])
             (log/infof "Transactions attached to Tangle in %s seconds" duration))
-          (log/error
-           (str "Failed to attach policy:<br/>"
-                result
-                "<br/>Please refresh."))))))
+          (do
+            (dispatch [:policy/set-pending policy-id false])
+            (dispatch [:policy/set-error policy-id])
+            (log/error
+             (str "Failed to attach policy:<br/>"
+                  result
+                  "<br/>Please refresh.")))))))
 
 
 (defn format-policy
@@ -293,3 +298,15 @@
  :policy/add-iota-authorization-pattern
  (fn [{:keys [map/policies] :as db} [_ policy-id iota-authorization-pattern]]
    (assoc-policy db policy-id :iota-authorization-pattern iota-authorization-pattern)))
+
+
+(reg-event-db
+ :policy/set-pending
+ (fn [{:keys [map/policies] :as db} [_ policy-id pending?]]
+   (assoc-policy db policy-id :pending? pending?)))
+
+
+(reg-event-db
+ :policy/set-error
+ (fn [{:keys [map/policies] :as db} [_ policy-id]]
+   (assoc-policy db policy-id :error? true)))

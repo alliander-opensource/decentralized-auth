@@ -59,7 +59,23 @@
   (small-icon "images/iota.png"))
 
 
-(defn policy-row [{:keys [address goal mam-root mam-side-key iota-bundle-hash iota-transaction-hash]
+;; SOURCE: http://tobiasahlin.com/spinkit/ (MIT)
+(defn spinner
+  []
+  [:div.sk-folding-cube
+   [:div.sk-cube1.sk-cube]
+   [:div.sk-cube2.sk-cube]
+   [:div.sk-cube4.sk-cube]
+   [:div.sk-cube3.sk-cube]])
+
+
+(defn policy-row [{:keys [address
+                          goal
+                          mam-root
+                          mam-side-key
+                          iota-bundle-hash
+                          iota-transaction-hash
+                          pending?]
                    :as   policy}]
 
   (let [policy-published? (:iota-bundle-hash policy)
@@ -67,36 +83,47 @@
                                policy-published?)]
     [:tr
      [:td "Policy: "]
-     [:td [:a.btn.btn-link
-           {:href   (str "https://mam.tangle.army/fetch?address=" mam-root "&key=" mam-side-key)
-            :class  (when-not mam-root "disabled")
-            :target "_blank"}
-           "MAM channel"]]
-     [:td " | "]
-     [:td [:a.btn.btn-link {:href   (str "https://thetangle.org/bundle/" iota-bundle-hash)
-                            :class  (when-not iota-bundle-hash "disabled")
-                            :target "_blank"}
-           "Latest bundle"]]
-     [:td " | "]
-     [:td [:a.btn.btn-link {:href   (str "http://tangle.glumb.de/?hash=" iota-transaction-hash)
-                            :class  (when-not iota-transaction-hash "disabled")
-                            :target "_blank"}
-           "Latest transaction in Tangle visualization"]]
-     [:td (merge {:rowSpan 2} (when (or (not policy-published?)
-                                        (:revoked? policy))
-                                {:style {:display "none"}})) " | "]
-     [:td (merge {:rowSpan 2} (when (or (not policy-published?)
-                                        (:revoked? policy))
-                                {:style {:display "none" }}))
-      [:button.btn.btn-outline-primary
-       {:on-click #(when revokable-policy?
-                     (do (notification :success "Revoking policy by publishing to the Tangle")
-                         (dispatch [:policy/revoke (:id policy)])))
-        :class    (when-not revokable-policy? "disabled")}
-       "Revoke"]]]))
+     (if pending?
+       (list
+        [:td [spinner]]
+        [:td [:sub "Performing Proof of Work to attach policy to The Tangle..."]])
+       (list
+        [:td [:a.btn.btn-link
+              {:href   (str "https://mam.tangle.army/fetch?address=" mam-root "&key=" mam-side-key)
+               :class  (when-not mam-root "disabled")
+               :target "_blank"}
+              "MAM channel"]]
+        [:td " | "]
+        [:td [:a.btn.btn-link {:href   (str "https://thetangle.org/bundle/" iota-bundle-hash)
+                               :class  (when-not iota-bundle-hash "disabled")
+                               :target "_blank"}
+              "Latest bundle"]]
+        [:td " | "]
+        [:td [:a.btn.btn-link {:href   (str "http://tangle.glumb.de/?hash=" iota-transaction-hash)
+                               :class  (when-not iota-transaction-hash "disabled")
+                               :target "_blank"}
+              "Latest transaction in Tangle visualization"]]
+        [:td (merge {:rowSpan 2} (when (or (not policy-published?)
+                                           (:revoked? policy))
+                                   {:style {:display "none"}})) " | "]
+        [:td (merge {:rowSpan 2} (when (or (not policy-published?)
+                                           (:revoked? policy))
+                                   {:style {:display "none" }}))
+         [:button.btn.btn-outline-primary
+          {:on-click #(when revokable-policy?
+                        (do (notification :success "Revoking policy by publishing to the Tangle")
+                            (dispatch [:policy/revoke (:id policy)])))
+           :class    (when-not revokable-policy? "disabled")}
+          "Revoke"]]))]))
 
 
-(defn data-row [{:keys [address goal mam-root mam-side-key iota-bundle-hash iota-transaction-hash]
+(defn data-row [{:keys [address
+                        goal
+                        mam-root
+                        mam-side-key
+                        iota-bundle-hash
+                        iota-transaction-hash
+                        pending?]
                  :as   policy}]
   [:tr
    [:td "Data: "]
