@@ -55,11 +55,8 @@
   (small-icon "images/iota.png"))
 
 
-(defn policy-list-item [{{:keys [meter-name]} :smart-meter
-                         address              :address
-                         goal                 :goal
-                         side-key             :side-key
-                         :as                  policy}]
+(defn policy-list-item [{:keys [address goal iota-mam-address mam-side-key iota-transaction-address]
+                         :as   policy}]
   [:div.list-group-item {:class    (when (:active? policy) "list-group-item-primary")
                          :on-click #(dispatch [:policy/selected (:id policy)])}
    (to-string policy)
@@ -68,17 +65,17 @@
     [:tbody
      [:tr
       [:td "Policy: "]
-      [:td [:a {:href (str "https://mam.tangle.army/fetch?address=" address "&key=" side-key) :target "_blank"}
+      [:td [:a {:href (str "https://mam.tangle.army/fetch?address=" iota-mam-address "&key=" mam-side-key) :target "_blank"}
             "View MAM channel"]]
       [:td " | "]
-      [:td [:a {:href (str "https://thetangle.org/address/" address) :target "_blank"}
+      [:td [:a {:href (str "https://thetangle.org/address/" iota-transaction-address) :target "_blank"}
             "View IOTA transactions"]]
       [:td {:rowSpan 2} " | "]
       [:td {:rowSpan 2} [:button.btn.btn-outline-primary {:on-click #(prn :hallo)} "Revoke"]]]
 
      [:tr
       [:td "Data: "]
-      [:td [:a {:href (str "https://mam.tangle.army/fetch?address=" address "&key=" side-key) :target "_blank"}
+      [:td [:a {:href (str "https://mam.tangle.army/fetch?address=" address "&key=" mam-side-key) :target "_blank"}
             "View MAM channel"]]
       [:td " | "]
       [:td [:a {:href (str "https://thetangle.org/address/" address) :target "_blank"}

@@ -22,7 +22,6 @@
                     :service-provider holwerd-service-provider
                     :goal             "graphing energy data"
                     :address          "VSSQCMYLXOGATMLAEH9FRVUZTWQBJQQOYDRNUDLBAWHWKUYQQFHBCQTGVUYLOWIEVWNGJFMYLJUMOCUVZ"
-                    :side-key         "TANGLE9ARMY9SIDEKEY"
                     :active?          false}
                    {:id               1
                     :smart-meter      {:latlng     #js [53.437087 5.633132]
@@ -32,7 +31,6 @@
                     :service-provider holwerd-service-provider
                     :goal             "graphing energy data"
                     :address          "VSSQCMYLXOGATMLAEH9FRVUZTWQBJQQOYDRNUDLBAWHWKUYQQFHBCQTGVUYLOWIEVWNGJFMYLJUMOCUVZ"
-                    :side-key         "TANGLE9ARMY9SIDEKEY"
                     :active?          false}
                    {:id               2
                     :smart-meter      {:latlng     #js [53.445156 5.720864]
@@ -42,7 +40,6 @@
                     :service-provider holwerd-service-provider
                     :goal             "graphing energy data"
                     :address          "VSSQCMYLXOGATMLAEH9FRVUZTWQBJQQOYDRNUDLBAWHWKUYQQFHBCQTGVUYLOWIEVWNGJFMYLJUMOCUVZ"
-                    :side-key         "TANGLE9ARMY9SIDEKEY"
                     :active?          false}
                    {:id               3
                     :smart-meter      {:latlng     #js [53.446079 5.831414]
@@ -52,5 +49,4 @@
                     :service-provider holwerd-service-provider
                     :goal             "graphing energy data"
                     :address          "VSSQCMYLXOGATMLAEH9FRVUZTWQBJQQOYDRNUDLBAWHWKUYQQFHBCQTGVUYLOWIEVWNGJFMYLJUMOCUVZ"
-                    :side-key         "TANGLE9ARMY9SIDEKEY"
                     :active?          false}}})

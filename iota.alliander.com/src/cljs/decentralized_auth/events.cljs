@@ -56,7 +56,7 @@
   (map #(if (= (:id %) policy-id)
           (assoc %
                  :iota/mam-instance mam-instance
-                 :iota/mam-key      side-key)
+                 :iota/mam-side-key side-key)
           %)
        policies))
 
@@ -79,25 +79,26 @@
        (iota-utils/to-trytes iota-instance)))
 
 
-(defn attach-policy [payload address policy-id]
-  (go (let [depth                                   5
-            min-weight-magnitude                    15
-            {iota-transaction-address :address
-             :as                      transactions} (<! (iota-mam/attach payload
-                                                                         address
-                                                                         depth
-                                                                         min-weight-magnitude))]
+(defn attach-policy [payload address mam-side-key policy-id]
+  (go (let [depth                5
+            min-weight-magnitude 15
+            [{iota-transaction-address :address
+              :as                      transactions}
+             & transactions]     (<! (iota-mam/attach payload
+                                                      address
+                                                      depth
+                                                      min-weight-magnitude))]
         (dispatch [:policy/add-iota-transaction-address policy-id iota-transaction-address])
-        (dispatch [:policy/add-mam-address policy-id address])
+        (dispatch [:policy/add-mam-data policy-id address mam-side-key])
         (log/infof "Transactions attached to Tangle: %s" transactions))))
 
 
 (reg-fx
  :iota-mam-fx/attach
- (fn [{:keys [iota-instance mam-instance policy policy-id]}]
+ (fn [{:keys [iota-instance mam-instance mam-side-key policy policy-id]}]
    (let [{:keys [payload address] :as message}
          (iota-mam/create mam-instance (to-trytes iota-instance policy))]
-     (attach-policy payload address policy-id))))
+     (attach-policy payload address mam-side-key policy-id))))
 
 
 (defn format-policy
@@ -124,8 +125,9 @@
       [_ policy-id]]
    (let [{:keys [iota/mam-instance] :as policy} (get-policy policies policy-id)
          shareable-policy                       (format-policy policy)]
-     {:iota-mam-fx/attach {:mam-instance  mam-instance
-                           :iota-instance iota-instance
+     {:iota-mam-fx/attach {:iota-instance iota-instance
+                           :mam-instance  mam-instance
+                           :mam-side-key  (:iota/mam-side-key policy)
                            :policy        shareable-policy
                            :policy-id     policy-id}})))
 
@@ -174,13 +176,15 @@
                   policies)))))
 
 
- ;; Only assoc first time (the root)
- (reg-event-db
-  :policy/add-mam-address
-  (fn [{:keys [map/policies] :as db} [_ policy-id mam-address]]
-    (update db :map/policies
-            (fn [policies]
-              (map #(if (= (:id %) policy-id)
-                      (assoc % :iota-transaction-address mam-address)
-                      %)
-                   policies)))))
+;; Only assoc first time (the root)
+(reg-event-db
+ :policy/add-mam-data
+ (fn [{:keys [map/policies] :as db} [_ policy-id mam-address mam-side-key]]
+   (update db :map/policies
+           (fn [policies]
+             (map #(if (= (:id %) policy-id)
+                     (assoc %
+                            :iota-mam-address mam-address
+                            :mam-side-key     mam-side-key)
+                     %)
+                  policies)))))
