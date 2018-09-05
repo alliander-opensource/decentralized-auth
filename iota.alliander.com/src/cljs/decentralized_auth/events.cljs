@@ -12,8 +12,6 @@
             [re-frame.core :refer [reg-event-db reg-event-fx reg-fx dispatch]]))
 
 
-;;;; Initialize database event handlers
-
 (reg-event-db
  :db/initialize-db
  (fn [_ _]
