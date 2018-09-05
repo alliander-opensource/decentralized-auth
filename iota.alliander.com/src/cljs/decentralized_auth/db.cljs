@@ -8,8 +8,12 @@
    :name    "Holwerd P1 Data Graphing Service"})
 
 
+(def iota-providers
+  ["https://whitey.whitey13.org:443" "https://turnip.iotasalad.org:14265" "https://potato.iotasalad.org:14265"])
+
+
 (def default-db
-  {:iota/provider       "https://whitey.whitey13.org:443" #_"https://turnip.iotasalad.org:14265" #_"https://potato.iotasalad.org:14265"
+  {:iota/provider       (get iota-providers (rand-int (count iota-providers)))
    :iota/iota-instance  nil
    :mapbox/access-token (str
                          "pk.eyJ1IjoiZXJ3aW5hbGxpYW5kZXIiLCJhIjoiY2pqaWRwdmF"
