@@ -14,6 +14,7 @@
   "Displays the msg in a Toastr notification with type `:success`, `:info`,
   `:warning` or `:error`."
   [type msg]
+  (set! (.-options js/toastr) #js {:timeOut 0 :extendedTimeOut 0})
   (case type
     :success
     (.success js/toastr msg)
