@@ -56,7 +56,7 @@
   (small-icon "images/iota.png"))
 
 
-(defn policy-list-item [{:keys [address goal mam-root mam-side-key iota-transaction-address]
+(defn policy-list-item [{:keys [address goal mam-root mam-side-key iota-bundle-hash iota-transaction-hash]
                          :as   policy}]
   [:div.list-group-item {:class    (when (:active? policy) "list-group-item-primary")
                          :on-click #(dispatch [:policy/selected (:id policy)])}
@@ -69,10 +69,16 @@
       [:td [:a {:href (str "https://mam.tangle.army/fetch?address=" mam-root "&key=" mam-side-key) :target "_blank"}
             "View MAM channel"]]
       [:td " | "]
-      [:td [:a {:href (str "https://thetangle.org/address/" iota-transaction-address) :target "_blank"}
-            "View IOTA transactions"]]
+      [:td [:a {:href (str "https://thetangle.org/bundle/" iota-bundle-hash) :target "_blank"}
+            "View latest IOTA transactions"]]
+      [:td " | "]
+      [:td [:a {:href (str "http://tangle.glumb.de/?hash=" iota-transaction-hash) :target "_blank"}
+            "View latest IOTA transaction in Tangle visualization"]]
       [:td {:rowSpan 2} " | "]
-      [:td {:rowSpan 2} [:button.btn.btn-outline-primary {:on-click #(prn :hallo)} "Revoke"]]]
+      [:td {:rowSpan 2} [:button.btn.btn-outline-primary
+                         {:on-click #(do (notification :success "Revoking policy by publishing to the Tangle")
+                                         (dispatch [:policy/revoke (:id policy)]))}
+                         "Revoke"]]]
 
      [:tr
       [:td "Data: "]

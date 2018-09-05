@@ -97,15 +97,17 @@
 (defn attach-policy [payload address policy-id]
   (go (let [depth                5
             min-weight-magnitude 15
-            _ (log/infof "Adding policy at address %s" address)
-            [{iota-transaction-address :address}
+            _ (log/infof "Publishing policy at address %s" address)
+            [{iota-transaction-hash :hash
+              iota-bundle-hash      :bundle}
              & more
              :as transactions]   (<! (iota-mam/attach payload
                                                       address
                                                       depth
                                                       min-weight-magnitude))]
-        (dispatch [:policy/add-iota-transaction-address policy-id iota-transaction-address])
-        (log/infof "Transactions attached to Tangle: %s" transactions))))
+        (dispatch [:policy/add-iota-transaction-hash policy-id iota-transaction-hash])
+        (dispatch [:policy/add-iota-bundle-hash policy-id iota-bundle-hash])
+        (log/info "Transactions attached to Tangle"))))
 
 
 (defn format-policy
@@ -194,7 +196,7 @@
 
 (reg-fx
  :iota-mam-fx/fetch
- (fn [{:keys [iota-instance root mode side-key on-success on-next-root]}]
+ (fn [{:keys [iota-instance root mode side-key on-success]}]
    (let [msg (iota-mam/fetch root mode side-key)]
      (dispatch (on-success msg)))))
 
@@ -227,22 +229,18 @@
 
 
 (reg-event-db
- :policy/add-iota-transaction-address
- (fn [{:keys [map/policies] :as db} [_ policy-id iota-transaction-address]]
-   (update db :map/policies
-           (fn [policies]
-             (map #(if (= (:id %) policy-id)
-                     (assoc % :iota-transaction-address iota-transaction-address)
-                     %)
-                  policies)))))
+ :policy/add-iota-transaction-hash
+ (fn [{:keys [map/policies] :as db} [_ policy-id iota-transaction-hash]]
+   (assoc-policy db policy-id :iota-transaction-hash iota-transaction-hash)))
+
+
+(reg-event-db
+ :policy/add-iota-bundle-hash
+ (fn [{:keys [map/policies] :as db} [_ policy-id iota-bundle-hash]]
+   (assoc-policy db policy-id :iota-bundle-hash iota-bundle-hash)))
 
 
 (reg-event-db
  :policy/add-mam-root
  (fn [{:keys [map/policies] :as db} [_ policy-id mam-root]]
-   (update db :map/policies
-           (fn [policies]
-             (map #(if (= (:id %) policy-id)
-                     (assoc % :mam-root mam-root)
-                     %)
-                  policies)))))
+   (assoc-policy db policy-id :mam-root mam-root)))
