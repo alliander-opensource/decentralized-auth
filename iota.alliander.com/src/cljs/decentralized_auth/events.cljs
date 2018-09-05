@@ -47,7 +47,7 @@
 
 
 (defn gen-key []
-  (->> (random-uuid) str (take 8) (apply str) string/upper-case))
+  (["BANANA" "POTATO" "HUMMUS" "SWEETPOTATO" "TOMATO"] (rand-int 4)))
 
 
 (defn add-mam-data
