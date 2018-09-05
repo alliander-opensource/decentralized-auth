@@ -9,7 +9,7 @@
 
 
 (def default-db
-  {:iota/provider       "https://potato.iotasalad.org:14265"
+  {:iota/provider       "https://whitey.whitey13.org:443" #_"https://turnip.iotasalad.org:14265" #_"https://potato.iotasalad.org:14265"
    :iota/iota-instance  nil
    :mapbox/access-token (str
                          "pk.eyJ1IjoiZXJ3aW5hbGxpYW5kZXIiLCJhIjoiY2pqaWRwdmF"
