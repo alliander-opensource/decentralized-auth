@@ -101,17 +101,23 @@
 (defn attach-policy [payload address policy-id]
   (go (let [depth                5
             min-weight-magnitude 15
-            [{iota-transaction-hash :hash
-              iota-bundle-hash      :bundle}
-             & more
-             :as transactions]   (<! (iota-mam/attach payload
             _                    (log/infof "Attaching policy at MAM root %s" (format-trytes address))
+            result               (<! (iota-mam/attach payload
                                                       address
                                                       depth
                                                       min-weight-magnitude))]
-        (dispatch [:policy/add-iota-transaction-hash policy-id iota-transaction-hash])
-        (dispatch [:policy/add-iota-bundle-hash policy-id iota-bundle-hash])
-        (log/info "Transactions attached to Tangle"))))
+        (if (seq? result)
+          (let [[{iota-transaction-hash :hash
+                  iota-bundle-hash      :bundle}
+                 & more
+                 :as transactions] result]
+            (dispatch [:policy/add-iota-transaction-hash policy-id iota-transaction-hash])
+            (dispatch [:policy/add-iota-bundle-hash policy-id iota-bundle-hash])
+            (log/info "Transactions attached to Tangle"))
+          (log/error
+           (str "Failed to attach policy:<br/>"
+                result
+                "<br/>Please refresh (which updates provider)."))))))
 
 
 (defn format-policy
