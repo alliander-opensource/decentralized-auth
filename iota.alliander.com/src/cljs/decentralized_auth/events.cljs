@@ -9,6 +9,7 @@
             [decentralized-auth.config :as config]
             [decentralized-auth.db :as db]
             [decentralized-auth.utils :refer [json-encode json-decode to-string]]
+            [decentralized-auth.views :as views] ;; misuse some mapbox stuff
             [re-frame.core :refer [reg-event-db reg-event-fx reg-fx dispatch]]))
 
 
@@ -225,6 +226,12 @@
                               (map #(assoc % :active? (= (:id %) policy-id))
                                    policies))
     :policy/open-popup (get-policy policies policy-id)}))
+
+
+(reg-event-db
+ :map/add-mapbox
+ (fn [db [_ mapbox]]
+   (assoc db :map/mapbox mapbox)))
 
 
 (reg-event-db
