@@ -194,7 +194,12 @@
     (.addTo polyline mapbox)
     (.addTo polyline-decorator mapbox)
     (dispatch [:policy/create-and-add-mam-instance (:id policy)])
-    (dispatch [:map/add-mapbox mapbox])
+
+    ;; Little bit of a hassle to be able to add a new pattern on the existing one later...
+    (dispatch [:policy/add-polyline (:id policy) polyline])
+    (dispatch [:policy/add-iota-authorization-pattern (:id policy) iota-authorization-pattern])
+    (dispatch [:policy/add-polyline-decorator (:id policy) polyline-decorator])
+
     (let [popup            (.bindPopup smart-meter-marker smart-meter-popup)
           select-policy-fn #(dispatch [:policy/selected (:id policy)])]
       (dispatch [:policy/add-popup (:id policy) popup])
@@ -211,6 +216,7 @@
         policies     (subscribe [:map/policies])]
     (set! js/foo mapbox)
     (configure mapbox @access-token)
+    (dispatch [:map/add-mapbox mapbox])
     (doseq [policy @policies]
       (add-policy-visualization mapbox policy))))
 

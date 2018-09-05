@@ -194,18 +194,35 @@
                  policies))))
 
 
+(reg-fx
+ :policy/show-revoked-icon
+ (fn [{:keys [mapbox iota-authorization-pattern polyline-decorator]}]
+   (let [revoked-marker  (.marker (.-Symbol js/L)
+                                  #js {:markerOptions #js {:icon views/revoked-icon}})
+         revoked-pattern #js {:offset "50%"
+                              :repeat "100%"
+                              :symbol revoked-marker}]
+     (.setPatterns polyline-decorator #js [iota-authorization-pattern
+                                           revoked-pattern]))))
+
+
 (reg-event-fx
  :policy/revoke
- (fn [{{:keys [map/policies iota/iota-instance] :as db} :db}
+ (fn [{{:keys [map/mapbox map/policies iota/iota-instance] :as db} :db}
       [_ policy-id]]
-   (let [{:keys [iota/mam-instance] :as policy} (get-policy policies policy-id)
-         shareable-policy                       (format-revoked-policy policy)]
-     {:db                 (assoc-policy db policy-id :revoked? true)
-      :iota-mam-fx/attach {:iota-instance iota-instance
-                           :mam-instance  mam-instance
-                           :mam-side-key  (:mam-side-key policy)
-                           :policy        shareable-policy
-                           :policy-id     policy-id}})))
+   (let [{:keys [iota/mam-instance
+                 iota-authorization-pattern
+                 polyline-decorator] :as policy} (get-policy policies policy-id)
+         shareable-policy                        (format-revoked-policy policy)]
+     {:db                       (assoc-policy db policy-id :revoked? true)
+      :policy/show-revoked-icon {:mapbox                     mapbox
+                                 :iota-authorization-pattern iota-authorization-pattern
+                                 :polyline-decorator         polyline-decorator}
+      :iota-mam-fx/attach       {:iota-instance iota-instance
+                                 :mam-instance  mam-instance
+                                 :mam-side-key  (:mam-side-key policy)
+                                 :policy        shareable-policy
+                                 :policy-id     policy-id}})))
 
 
 (reg-fx
@@ -258,3 +275,21 @@
  :policy/add-mam-root
  (fn [{:keys [map/policies] :as db} [_ policy-id mam-root]]
    (assoc-policy db policy-id :mam-root mam-root)))
+
+
+(reg-event-db
+ :policy/add-polyline
+ (fn [{:keys [map/policies] :as db} [_ policy-id polyline]]
+   (assoc-policy db policy-id :polyline polyline)))
+
+
+(reg-event-db
+ :policy/add-polyline-decorator
+ (fn [{:keys [map/policies] :as db} [_ policy-id polyline-decorator]]
+   (assoc-policy db policy-id :polyline-decorator polyline-decorator)))
+
+
+(reg-event-db
+ :policy/add-iota-authorization-pattern
+ (fn [{:keys [map/policies] :as db} [_ policy-id iota-authorization-pattern]]
+   (assoc-policy db policy-id :iota-authorization-pattern iota-authorization-pattern)))
