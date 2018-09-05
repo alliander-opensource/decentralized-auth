@@ -237,13 +237,7 @@
 (reg-event-db
  :policy/add-popup
  (fn [{:keys [map/policies] :as db} [_ policy-id popup]]
-   (update db :map/policies
-           (fn [policies]
-             (map #(if (= (:id %) policy-id)
-                      (assoc % :popup popup)
-                      %)
-                  policies)))))
-
+   (assoc-policy db policy-id :popup popup)))
 
 (reg-event-db
  :policy/add-iota-transaction-hash
