@@ -60,7 +60,7 @@
                          :as   policy}]
   [:div.list-group-item {:class    (when (:active? policy) "list-group-item-primary")
                          :on-click #(dispatch [:policy/selected (:id policy)])}
-   (to-string policy)
+   [:i (to-string policy)]
    [:br]
    [:table
     [:tbody
