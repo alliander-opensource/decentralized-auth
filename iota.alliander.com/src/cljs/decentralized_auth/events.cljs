@@ -99,7 +99,7 @@
   (apply str (conj (vec (take 10 trytes)) "...")))
 
 
-(defn attach-policy [payload address policy-id]
+(defn attach-policy [payload address policy-id on-success]
   (go (let [depth                5
             min-weight-magnitude 15
             _                    (log/infof "Attaching policy at MAM root %s" (format-trytes address))
@@ -119,7 +119,8 @@
             (dispatch [:policy/set-pending policy-id false])
             (dispatch [:policy/add-iota-transaction-hash policy-id iota-transaction-hash])
             (dispatch [:policy/add-iota-bundle-hash policy-id iota-bundle-hash])
-            (log/infof "Transactions attached to Tangle in %s seconds" duration))
+            (log/infof "Transactions attached to Tangle in %s seconds" duration)
+            (on-success))
           (do
             (dispatch [:policy/set-pending policy-id false])
             (dispatch [:policy/set-error policy-id])
@@ -166,13 +167,14 @@
 
 (reg-fx
  :iota-mam-fx/attach
- (fn [{:keys [iota-instance mam-instance mam-side-key policy policy-id]}]
+ (fn [{:keys [iota-instance mam-instance mam-side-key policy policy-id on-success]
+       :or   {on-success identity}}]
    (let [{:keys [payload address state] :as message}
          (iota-mam/create mam-instance (to-trytes iota-instance policy))]
      (dispatch [:policy/upsert-mam-data policy-id mam-side-key state])
      (when (first-time? policy-id)
        (dispatch [:policy/add-mam-root policy-id (get-in mam-instance [:channel :next-root])]))
-     (attach-policy payload address policy-id))))
+     (attach-policy payload address policy-id on-success))))
 
 
 (reg-event-fx
@@ -199,16 +201,14 @@
                  policies))))
 
 
-(reg-fx
- :policy/show-revoked-icon
- (fn [{:keys [mapbox iota-authorization-pattern polyline-decorator]}]
-   (let [revoked-marker  (.marker (.-Symbol js/L)
-                                  #js {:markerOptions #js {:icon views/revoked-icon}})
-         revoked-pattern #js {:offset "50%"
-                              :repeat "100%"
-                              :symbol revoked-marker}]
-     (.setPatterns polyline-decorator #js [iota-authorization-pattern
-                                           revoked-pattern]))))
+(defn show-revoked-icon [mapbox iota-authorization-pattern polyline-decorator]
+  (let [revoked-marker  (.marker (.-Symbol js/L)
+                                 #js {:markerOptions #js {:icon views/revoked-icon}})
+        revoked-pattern #js {:offset "50%"
+                             :repeat "100%"
+                             :symbol revoked-marker}]
+    (.setPatterns polyline-decorator #js [iota-authorization-pattern
+                                          revoked-pattern])))
 
 
 (reg-event-fx
@@ -219,15 +219,16 @@
                  iota-authorization-pattern
                  polyline-decorator] :as policy} (get-policy policies policy-id)
          shareable-policy                        (format-revoked-policy policy)]
-     {:db                       (assoc-policy db policy-id :revoked? true)
-      :policy/show-revoked-icon {:mapbox                     mapbox
-                                 :iota-authorization-pattern iota-authorization-pattern
-                                 :polyline-decorator         polyline-decorator}
-      :iota-mam-fx/attach       {:iota-instance iota-instance
-                                 :mam-instance  mam-instance
-                                 :mam-side-key  (:mam-side-key policy)
-                                 :policy        shareable-policy
-                                 :policy-id     policy-id}})))
+     (letfn [(show-revoked-icon-fn [] (show-revoked-icon mapbox
+                                                         iota-authorization-pattern
+                                                         polyline-decorator))]
+       {:db                       (assoc-policy db policy-id :revoked? true)
+        :iota-mam-fx/attach       {:iota-instance iota-instance
+                                   :mam-instance  mam-instance
+                                   :mam-side-key  (:mam-side-key policy)
+                                   :policy        shareable-policy
+                                   :policy-id     policy-id
+                                   :on-success    show-revoked-icon-fn}}))))
 
 
 (reg-fx
