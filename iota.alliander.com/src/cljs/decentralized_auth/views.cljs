@@ -141,7 +141,7 @@
      [data-row policy]]]])
 
 
-(defn info-panel []
+(defn policies-panel []
   (let [policies (subscribe [:map/policies])]
     [:div.container-fluid.leaflet-bottom.leaflet-left.leaflet-control-container
      [:div.list-group.leaflet-control
@@ -261,4 +261,4 @@
 (defn main-panel []
   [:div
    [map-view]
-   [info-panel]])
+   [policies-panel]])
