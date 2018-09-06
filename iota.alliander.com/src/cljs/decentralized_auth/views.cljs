@@ -244,6 +244,8 @@
         policies     (subscribe [:map/policies])]
     (set! js/foo mapbox)
     (configure mapbox @access-token)
+    (.addTo (.easyButton js/L "glyphicon-info-sign"
+                         #(js/alert "Decentral\nIOTA MAM\nIOTA\nPolicy\nData")) mapbox)
     (dispatch [:map/add-mapbox mapbox])
     (doseq [policy @policies]
       (add-policy-visualization mapbox policy))))
