@@ -120,7 +120,7 @@
 (defn data-row [policy]
   [:tr
    [:td "Data: "]
-   [:td.small {:colSpan 10}
+   [:td.small {:colSpan 5}
     "Infeasible to attach high frequent P1-messages to mainnet with standard hardware."]])
 
 
