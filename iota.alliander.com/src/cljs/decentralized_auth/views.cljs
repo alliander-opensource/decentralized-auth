@@ -51,6 +51,11 @@
 (def revoked-icon
   (medium-icon "images/revoked.png"))
 
+
+(def arrow-icon
+  (small-icon "images/arrow.gif"))
+
+
 (def service-provider-icon
   (medium-icon "images/serviceprovider.png" :popup-distance 6))
 

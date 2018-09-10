@@ -99,6 +99,16 @@
   (apply str (conj (vec (take 10 trytes)) "...")))
 
 
+(defn show-data-polyline [mapbox iota-authorization-pattern polyline-decorator]
+  (let [data-marker  (.marker js/L
+                              #js {:icon views/arrow-icon})
+        data-pattern #js {:offset "50%"
+                          :repeat "100%"
+                          :symbol data-marker}]
+    (.setPatterns polyline-decorator #js [iota-authorization-pattern
+                                          data-pattern])))
+
+
 (defn attach-policy [payload address policy-id on-success]
   (go (let [depth                5
             min-weight-magnitude 15
@@ -177,17 +187,33 @@
      (attach-policy payload address policy-id on-success))))
 
 
+(defn show-data-flow [mapbox iota-authorization-pattern polyline-decorator]
+  (let [arrow-marker  (.marker (.-Symbol js/L)
+                               #js {:markerOptions #js {:icon         views/arrow-icon
+                                                        :zIndexOffset -1000}})
+        arrow-pattern #js {:offset "10%"
+                           :repeat "5%"
+                           :symbol arrow-marker}]
+    (.setPatterns polyline-decorator #js [iota-authorization-pattern
+                                          arrow-pattern])))
+
 (reg-event-fx
  :policy/publish
- (fn [{{:keys [map/policies iota/iota-instance] :as db} :db}
+ (fn [{{:keys [map/policies map/mapbox iota/iota-instance] :as db} :db}
       [_ policy-id]]
-   (let [{:keys [iota/mam-instance] :as policy} (get-policy policies policy-id)
-         shareable-policy                       (format-authorized-policy policy)]
-     {:iota-mam-fx/attach {:iota-instance iota-instance
-                           :mam-instance  mam-instance
-                           :mam-side-key  (:mam-side-key policy)
-                           :policy        shareable-policy
-                           :policy-id     policy-id}})))
+   (let [{:keys [iota/mam-instance
+                 iota-authorization-pattern
+                 polyline-decorator] :as policy} (get-policy policies policy-id)
+         shareable-policy                        (format-authorized-policy policy)]
+     (letfn [(show-data-flow-fn [] (show-data-flow mapbox
+                                                   iota-authorization-pattern
+                                                   polyline-decorator))]
+       {:iota-mam-fx/attach {:iota-instance iota-instance
+                             :mam-instance  mam-instance
+                             :mam-side-key  (:mam-side-key policy)
+                             :policy        shareable-policy
+                             :policy-id     policy-id
+                             :on-success    show-data-flow-fn}}))))
 
 
 (defn assoc-policy
