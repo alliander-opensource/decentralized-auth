@@ -246,12 +246,29 @@
   ([mapbox]
    (show-info-modal mapbox identity))
   ([mapbox callback]
-   (let [content (hiccups/html [:a {:href "www.google.nl"} "Decentral\nIOTA MAM\nIOTA\nPolicy\nData"])]
-     (.openModal mapbox #js {:content            content
+   (let [content (hiccups/html [:a {:href "www.google.nl"} "Decentral IOTA MAM IOTA Policy Data"])]
+     #_(.openModal mapbox #js {:content            content
                              :closeTitle         "Close"
                              :zIndex             10000
                              :onHide             (fn [e] (callback))
                              :transitionDuration 300}))))
+
+
+(defn confirm-policies
+  "Show dialog box for first policy and recur with rest of policies"
+  [mapbox policies]
+  (when (seq policies)
+    (let [policy (first policies)]
+      (.confirm js/bootbox
+                #js {:message  (hiccups/html [:a {:href "www.google.nl"} "Policy 1"])
+                     :buttons  #js {:confirm #js {:label     "Yes"
+                                                  :className "btn-success"}
+                                    :cancel  #js {:label     "No"
+                                                  :className "btn-danger"}}
+                     :callback #(do (if %
+                                      (add-policy-visualization mapbox policy)
+                                      (notification :error "Policy not accepted"))
+                                    (confirm-policies mapbox (next policies)))}))))
 
 
 (defn map-view-did-mount []
@@ -261,8 +278,7 @@
     (configure mapbox @access-token)
     (.addTo (.easyButton js/L "glyphicon-info-sign" #(show-info-modal mapbox)) mapbox)
     (dispatch [:map/add-mapbox mapbox])
-    (doseq [policy @policies]
-      (add-policy-visualization mapbox policy))))
+    (confirm-policies mapbox @policies)))
 
 
 (defn map-view-render []
