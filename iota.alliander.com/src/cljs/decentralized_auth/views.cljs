@@ -258,7 +258,6 @@
   (let [mapbox       (.setView (.map js/L "map") #js [53.405 5.739] 12)
         access-token (subscribe [:mapbox/access-token])
         policies     (subscribe [:map/policies])]
-    (set! js/foo mapbox)
     (configure mapbox @access-token)
     (.addTo (.easyButton js/L "glyphicon-info-sign" #(show-info-modal mapbox)) mapbox)
     (dispatch [:map/add-mapbox mapbox])
