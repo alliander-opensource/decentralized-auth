@@ -243,20 +243,22 @@
     (.bindPopup service-provider-marker service-provider-popup)))
 
 
+(defn show-info-modal [mapbox]
+  (.openModal mapbox #js {:content            (hiccups/html [:a {:href "www.google.nl"} "Decentral\nIOTA MAM\nIOTA\nPolicy\nData"])
+                          :closeTitle         "Close"
+                          :zIndex             10000
+                          ;; :onShow             (fn [e] (js/alert "onshow"))
+                          ;; :onHide             (fn [e] (js/alert "onhide"))
+                          :transitionDuration 300}))
+
+
 (defn map-view-did-mount []
   (let [mapbox       (.setView (.map js/L "map") #js [53.405 5.739] 12)
         access-token (subscribe [:mapbox/access-token])
         policies     (subscribe [:map/policies])]
     (set! js/foo mapbox)
     (configure mapbox @access-token)
-    (.addTo (.easyButton js/L "glyphicon-info-sign"
-                         #(.openModal mapbox #js {:content            (hiccups/html [:a {:href "www.google.nl"} "Decentral\nIOTA MAM\nIOTA\nPolicy\nData"])
-                                                  :closeTitle         "Close"
-                                                  :zIndex             10000
-                                                  ;; :onShow             (fn [e] (js/alert "onshow"))
-                                                  ;; :onHide             (fn [e] (js/alert "onhide"))
-                                                  :transitionDuration 300}))
-            mapbox)
+    (.addTo (.easyButton js/L "glyphicon-info-sign" #(show-info-modal mapbox)) mapbox)
     (dispatch [:map/add-mapbox mapbox])
     (doseq [policy @policies]
       (add-policy-visualization mapbox policy))))
