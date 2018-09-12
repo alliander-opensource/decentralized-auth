@@ -192,7 +192,6 @@
                                          service-provider-address :address
                                          service-provider-name    :name} :service-provider
                                         :as                              policy}]
-  (notification :success (str "Attaching policy to Tangle: \n" (to-string policy)))
   (let [polyline                   (.polyline js/L
                                               #js [smart-meter-latlng service-provider-latlng]
                                               #js {:weight 2 :color "black" :opacity 0.4})

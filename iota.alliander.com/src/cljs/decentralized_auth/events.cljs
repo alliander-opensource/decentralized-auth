@@ -112,7 +112,9 @@
 (defn attach-policy [payload address policy-id on-success]
   (go (let [depth                5
             min-weight-magnitude 15
-            _                    (log/infof "Attaching policy at MAM root %s" (format-trytes address))
+            _                    (views/notification :success
+                                                     (str "Attaching policy to Tangle at MAM root "
+                                                          (format-trytes address)))
             _                    (dispatch [:policy/set-pending policy-id true])
             t1                   (.getTime (js/Date.))
             result               (<! (iota-mam/attach payload
