@@ -250,7 +250,13 @@
     (set! js/foo mapbox)
     (configure mapbox @access-token)
     (.addTo (.easyButton js/L "glyphicon-info-sign"
-                         #(js/alert "Decentral\nIOTA MAM\nIOTA\nPolicy\nData")) mapbox)
+                         #(.openModal mapbox #js {:content            (hiccups/html [:a {:href "www.google.nl"} "Decentral\nIOTA MAM\nIOTA\nPolicy\nData"])
+                                                  :closeTitle         "Close"
+                                                  :zIndex             10000
+                                                  ;; :onShow             (fn [e] (js/alert "onshow"))
+                                                  ;; :onHide             (fn [e] (js/alert "onhide"))
+                                                  :transitionDuration 300}))
+            mapbox)
     (dispatch [:map/add-mapbox mapbox])
     (doseq [policy @policies]
       (add-policy-visualization mapbox policy))))
