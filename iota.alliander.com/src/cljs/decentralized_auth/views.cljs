@@ -242,13 +242,16 @@
     (.bindPopup service-provider-marker service-provider-popup)))
 
 
-(defn show-info-modal [mapbox]
-  (.openModal mapbox #js {:content            (hiccups/html [:a {:href "www.google.nl"} "Decentral\nIOTA MAM\nIOTA\nPolicy\nData"])
-                          :closeTitle         "Close"
-                          :zIndex             10000
-                          ;; :onShow             (fn [e] (js/alert "onshow"))
-                          ;; :onHide             (fn [e] (js/alert "onhide"))
-                          :transitionDuration 300}))
+(defn show-info-modal
+  ([mapbox]
+   (show-info-modal mapbox identity))
+  ([mapbox callback]
+   (let [content (hiccups/html [:a {:href "www.google.nl"} "Decentral\nIOTA MAM\nIOTA\nPolicy\nData"])]
+     (.openModal mapbox #js {:content            content
+                             :closeTitle         "Close"
+                             :zIndex             10000
+                             :onHide             (fn [e] (callback))
+                             :transitionDuration 300}))))
 
 
 (defn map-view-did-mount []
