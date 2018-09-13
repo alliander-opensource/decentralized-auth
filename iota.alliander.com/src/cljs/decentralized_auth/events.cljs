@@ -184,8 +184,8 @@
   (let [arrow-marker  (.marker (.-Symbol js/L)
                                #js {:markerOptions #js {:icon         views/arrow-icon
                                                         :zIndexOffset -1000}})
-        arrow-pattern #js {:offset "10%"
-                           :repeat "5%"
+        arrow-pattern #js {:offset "8%"
+                           :repeat "10%"
                            :symbol arrow-marker}]
     (.setPatterns polyline-decorator #js [iota-authorization-pattern
                                           arrow-pattern])))
