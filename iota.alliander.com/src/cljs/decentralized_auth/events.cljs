@@ -339,3 +339,9 @@
  :policy/set-error
  (fn [{:keys [map/policies] :as db} [_ policy-id]]
    (assoc-policy db policy-id :error? true)))
+
+
+(reg-event-db
+ :policy/accept
+ (fn [{:keys [map/policies] :as db} [_ policy-id]]
+   (assoc-policy db policy-id :accepted? true)))

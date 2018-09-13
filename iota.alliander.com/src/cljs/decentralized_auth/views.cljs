@@ -148,13 +148,15 @@
 
 (defn policies-panel []
   (let [policies (subscribe [:map/policies])]
-    [:div.container-fluid.leaflet-bottom.leaflet-left.leaflet-control-container
-     [:div.list-group.leaflet-control
-      [:p.list-group-item.active {:href "#"} "Policies and data"]
-      (doall
-       (for [policy @policies]
-         ^{:key policy}
-         [policy-list-item policy]))]]))
+    (when (not (empty? (keep :accepted? @policies)))
+      [:div.container-fluid.leaflet-bottom.leaflet-left.leaflet-control-container
+       [:div.list-group.leaflet-control
+        [:p.list-group-item.active {:href "#"} "Policies and data"]
+        (doall
+         (for [policy @policies
+               :when  (:accepted? policy)]
+           ^{:key policy}
+           [policy-list-item policy]))]])))
 
 
 (defn add-tile-layer [mapbox access-token]
@@ -222,10 +224,10 @@
                                                        polyline
                                                        #js {:patterns #js [iota-authorization-pattern]})]
     (.addTo smart-meter-marker mapbox)
-    (.addTo service-provider-marker mapbox)
     (.addTo polyline mapbox)
     (.addTo polyline-decorator mapbox)
     (dispatch [:policy/create-and-add-mam-instance (:id policy)])
+    (dispatch [:policy/accept (:id policy)])
 
     ;; Little bit of a hassle to be able to add a new pattern on the existing one later...
     (dispatch [:policy/add-polyline (:id policy) polyline])
