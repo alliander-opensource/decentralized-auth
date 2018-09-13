@@ -89,11 +89,11 @@
                                policy-published?)]
      (if pending?
        [:tr
-        [:td "Policy: "]
+        [:td "Policy events log: "]
         [:td [spinner]]
         [:td.small "(Performing Proof of Work to attach policy to the Tangle...)"]]
        [:tr
-        [:td "Policy: "]
+        [:td "Policy events log: "]
         [:td [:a.btn.btn-link
               {:href   (str "https://mam.tangle.army/fetch?key=" mam-side-key "&address=" mam-root)
                :class  (when-not mam-root "disabled")
