@@ -91,3 +91,29 @@
                           " will no longer be able to fetch data. The access key
                             will be changed and is only communicated to parties
                             who are still authorized."]]]]))
+
+
+(defn format
+  "Only keep relevant non-privacy sensitive information for publishing on the
+  Tangle and add a description."
+  [policy]
+  (-> policy
+      (select-keys [:type
+                    :id ;; Necessary for view
+                    :smart-meter
+                    :service-provider
+                    :goal
+                    :address])
+      (update :smart-meter dissoc :latlng)
+      (update :service-provider dissoc :latlng)
+      (assoc :description (policy/to-string policy))))
+
+
+(defn authorized
+  [policy]
+  (format (assoc policy :type "AUTHORIZED")))
+
+
+(defn revoked
+  [policy]
+  (format (assoc policy :type "REVOKED")))

@@ -133,32 +133,6 @@
                   "<br/>Please refresh.")))))))
 
 
-(defn format-policy
-  "Only keep relevant non-privacy sensitive information for publishing on the
-  Tangle and add a description."
-  [policy]
-  (-> policy
-      (select-keys [:type
-                    :id ;; Necessary for view
-                    :smart-meter
-                    :service-provider
-                    :goal
-                    :address])
-      (update :smart-meter dissoc :latlng)
-      (update :service-provider dissoc :latlng)
-      (assoc :description (policy/to-string policy))))
-
-
-(defn format-authorized-policy
-  [policy]
-  (format-policy (assoc policy :type "AUTHORIZED")))
-
-
-(defn format-revoked-policy
-  [policy]
-  (format-policy (assoc policy :type "REVOKED")))
-
-
 (def called-policy-ids (atom #{}))
 (defn first-time? [policy-id]
   (if (contains? @called-policy-ids policy-id)
@@ -197,7 +171,7 @@
    (let [{:keys [iota/mam-instance
                  iota-authorization-pattern
                  polyline-decorator] :as policy} (get-policy policies policy-id)
-         shareable-policy                        (format-authorized-policy policy)]
+         shareable-policy                        (policy/authorized policy)]
      (letfn [(show-data-flow-fn [] (show-data-flow mapbox
                                                    iota-authorization-pattern
                                                    polyline-decorator))]
@@ -237,7 +211,7 @@
    (let [{:keys [iota/mam-instance
                  iota-authorization-pattern
                  polyline-decorator] :as policy} (get-policy policies policy-id)
-         shareable-policy                        (format-revoked-policy policy)]
+         shareable-policy                        (policy/revoked policy)]
      (letfn [(show-revoked-icon-fn [] (show-revoked-icon mapbox
                                                          iota-authorization-pattern
                                                          polyline-decorator))]
