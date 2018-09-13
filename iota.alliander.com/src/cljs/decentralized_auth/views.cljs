@@ -95,7 +95,7 @@
        [:tr
         [:td "Policy: "]
         [:td [:a.btn.btn-link
-              {:href   (str "https://mam.tangle.army/fetch?address=" mam-root "&key=" mam-side-key)
+              {:href   (str "https://mam.tangle.army/fetch?key=" mam-side-key "&address=" mam-root)
                :class  (when-not mam-root "disabled")
                :target "_blank"}
               "MAM channel"]]
