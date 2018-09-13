@@ -3,7 +3,7 @@
   (:require cljsjs.leaflet
             cljsjs.leaflet-polylinedecorator
             cljsjs.toastr
-            [decentralized-auth.utils :refer [to-string debug-panel json-encode jsx->clj]]
+            [decentralized-auth.utils :refer [to-string to-html debug-panel json-encode jsx->clj]]
             [goog.object :as object]
             [hiccups.runtime]
             [re-frame.core :refer [dispatch subscribe]]
@@ -252,20 +252,20 @@
   [mapbox policies]
   (when (seq policies)
     (let [policy (first policies)]
-      (.confirm js/bootbox
-                #js {:message  (hiccups/html [:a {:href "www.google.nl"} "Policy 1"])
-                     :buttons  #js {:confirm #js {:label     "Yes"
-                                                  :className "btn-success"}
-                                    :cancel  #js {:label     "No"
-                                                  :className "btn-danger"}}
-                     :callback #(do (if %
-                                      (add-policy-visualization mapbox policy)
-                                      (notification :error
-                                                    (str "Do not allow Holwerd P1 Data Graphing Service to access "
-                                                         (-> policy
-                                                             :smart-meter
-                                                             :meter-name))))
-                                    (confirm-policies mapbox (next policies)))}))))
+    (.confirm js/bootbox
+              #js {:message  (to-html policy)
+                   :buttons  #js {:confirm #js {:label     "Yes"
+                                                :className "btn-success"}
+                                  :cancel  #js {:label     "No"
+                                                :className "btn-danger"}}
+                   :callback #(do (if %
+                                    (add-policy-visualization mapbox policy)
+                                    (notification :error
+                                                  (str "Do not allow Holwerd P1 Data Graphing Service to access "
+                                                       (-> policy
+                                                           :smart-meter
+                                                           :meter-name))))
+                                  (confirm-policies mapbox (next policies)))}))))
 
 
 (defn show-smart-meter [mapbox {:keys [latlng meter-name address] :as smart-meter}]
