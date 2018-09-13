@@ -269,7 +269,11 @@
                                                   :className "btn-danger"}}
                      :callback #(do (if %
                                       (add-policy-visualization mapbox policy)
-                                      (notification :error "Policy not accepted"))
+                                      (notification :error
+                                                    (str "Do not allow Holwerd P1 Data Graphing Service to access "
+                                                         (-> policy
+                                                             :smart-meter
+                                                             :meter-name))))
                                     (confirm-policies mapbox (next policies)))}))))
 
 
