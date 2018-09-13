@@ -235,12 +235,20 @@
       (.on smart-meter-marker "click" select-policy-fn))))
 
 
-(defn show-info-modal
-  ([mapbox]
-   (show-info-modal mapbox identity))
-  ([mapbox callback]
-   (let [content (hiccups/html [:a {:href "www.google.nl"} "Decentral IOTA MAM IOTA Policy Data"])]
-     (.alert js/bootbox content))))
+(defn show-info-modal []
+  (let [content
+        (hiccups/html
+         [:div
+          [:h1 "GDPR-compliant smart meter data on the IOTA Tangle"]
+          [:p
+           [:div
+            [:h3 "Links"]
+            [:ul
+             [:li [:a {:href "https://github.com/Alliander/decentralized-auth/tree/master/docs"}
+                   "Documentation of open source project"]]
+             [:li [:a {:href "https://medium.com/@erwinrooijakkers/gdpr-compliant-smart-meter-data-on-the-iota-tangle-four-lessons-learned-while-putting-the-dea852a5b2aa"}
+                   "Blog post GDPR-compliant smart meter data on the IOTA Tangle"]]]]]])]
+    (.alert js/bootbox content)))
 
 
 (defn confirm-policies
@@ -299,7 +307,7 @@
     (configure mapbox @access-token)
     (doseq [meter smart-meters]
       (show-smart-meter mapbox meter))
-    (.addTo (.easyButton js/L "glyphicon-info-sign" #(show-info-modal mapbox)) mapbox)
+    (.addTo (.easyButton js/L "glyphicon-info-sign" #(show-info-modal)) mapbox)
     (.addTo service-provider-marker mapbox)
     (dispatch [:map/add-mapbox mapbox])
     (.openPopup (.bindPopup service-provider-marker service-provider-popup))
