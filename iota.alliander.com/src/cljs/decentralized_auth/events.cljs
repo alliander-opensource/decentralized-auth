@@ -103,8 +103,8 @@
 (defn show-data-polyline [mapbox iota-authorization-pattern polyline-decorator]
   (let [data-marker  (.marker js/L
                               #js {:icon views/arrow-icon})
-        data-pattern #js {:offset "50%"
-                          :repeat "100%"
+        data-pattern #js {:offset "25%"
+                          :repeat "50%"
                           :symbol data-marker}]
     (.setPatterns polyline-decorator #js [iota-authorization-pattern
                                           data-pattern])))

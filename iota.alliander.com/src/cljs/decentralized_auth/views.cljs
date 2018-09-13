@@ -54,7 +54,7 @@
 
 
 (def arrow-icon
-  (small-icon "images/arrow.gif"))
+  (medium-icon "images/arrow.gif"))
 
 
 (def service-provider-icon
