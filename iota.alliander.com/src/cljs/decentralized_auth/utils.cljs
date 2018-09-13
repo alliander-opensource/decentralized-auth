@@ -30,14 +30,14 @@
   (str (:name service-provider) " can access " (:meter-name smart-meter) " with the goal of " goal))
 
 
-(defn to-html [{{smart-meter-latlng :latlng
-                 meter-name         :meter-name
-                 meter-address      :address}    :smart-meter
-                {service-provider-latlng  :latlng
-                 service-provider-address :address
-                 service-provider-name    :name} :service-provider
-                goal :goal
-                :as                              policy}]
+(defn request-html [{{smart-meter-latlng :latlng
+                      meter-name         :meter-name
+                      meter-address      :address}    :smart-meter
+                     {service-provider-latlng  :latlng
+                      service-provider-address :address
+                      service-provider-name    :name} :service-provider
+                     goal :goal
+                     :as                              policy}]
   (hiccups/html [:div
                  [:h1 (str "Allow " service-provider-name " to retrieve data of " meter-name "?")]
                  [:p (str "You are the owner of "

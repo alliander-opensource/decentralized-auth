@@ -3,7 +3,7 @@
   (:require cljsjs.leaflet
             cljsjs.leaflet-polylinedecorator
             cljsjs.toastr
-            [decentralized-auth.utils :refer [to-string to-html debug-panel json-encode jsx->clj]]
+            [decentralized-auth.utils :refer [to-string request-html revoke-html debug-panel json-encode jsx->clj]]
             [goog.object :as object]
             [hiccups.runtime]
             [re-frame.core :refer [dispatch subscribe]]
@@ -249,7 +249,7 @@
   (when (seq policies)
     (let [policy (first policies)]
     (.confirm js/bootbox
-              #js {:message  (to-html policy)
+              #js {:message  (request-html policy)
                    :buttons  #js {:confirm #js {:label     "Yes"
                                                 :className "btn-success"}
                                   :cancel  #js {:label     "No"
