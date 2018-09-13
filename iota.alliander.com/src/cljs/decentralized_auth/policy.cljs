@@ -38,7 +38,6 @@
                   [:br]
                   [:strong "Do you accept this request?"]
                   [:br]
-                  [:br]
                   [:i
                    "Accepting the request will lead to the publishing of a
                    policy on a "
