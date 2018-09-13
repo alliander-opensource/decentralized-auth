@@ -30,7 +30,7 @@
                   [:a {:href   "https://github.com/Alliander/decentralized-auth/blob/master/docs/scenarios.md#pairing-with-a-device"
                        :target "_blank"}
                    "shared secret)"]
-                  "."
+                  ". You have received the following request: "
                   [:br]
                   [:br]
                   (to-string policy)
