@@ -106,7 +106,7 @@
                     :address])
       (update :smart-meter dissoc :latlng)
       (update :service-provider dissoc :latlng)
-      (assoc :description (policy/to-string policy))))
+      (assoc :description (to-string policy))))
 
 
 (defn authorized
