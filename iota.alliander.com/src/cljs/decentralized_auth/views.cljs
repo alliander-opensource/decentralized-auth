@@ -206,15 +206,7 @@
                                      [:tr
                                       [:td "IOTA address:"]
                                       [:td (format-trytes meter-address)]]])
-        service-provider-marker    (.marker js/L service-provider-latlng #js {:icon service-provider-icon})
-        service-provider-popup     (hiccups/html
-                                    [:table
-                                     [:tr
-                                      [:td "Service provider:"]
-                                      [:td service-provider-name]]
-                                     [:tr
-                                      [:td "IOTA address:"]
-                                      [:td (format-trytes service-provider-address)]]])
+
         iota-authorization-marker  (.marker (.-Symbol js/L)
                                             #js {:markerOptions #js {:icon iota-icon}})
         iota-authorization-pattern #js {:offset "50%"
@@ -240,8 +232,7 @@
       (dispatch [:policy/publish (:id policy)])
       (.on polyline-decorator "click" select-policy-fn)
       (.on polyline "click" select-policy-fn)
-      (.on smart-meter-marker "click" select-policy-fn))
-    (.bindPopup service-provider-marker service-provider-popup)))
+      (.on smart-meter-marker "click" select-policy-fn))))
 
 
 (defn show-info-modal
@@ -277,14 +268,48 @@
                                     (confirm-policies mapbox (next policies)))}))))
 
 
+(defn show-smart-meter [mapbox {:keys [latlng meter-name address] :as smart-meter}]
+  (let [marker (.marker js/L latlng #js {:icon smart-meter-icon})
+        popup  (hiccups/html
+                [:table
+                 [:tr
+                  [:td "Meter name:"]
+                  [:td meter-name]]
+                 [:tr
+                  [:td "IOTA address:"]
+                  [:td (format-trytes address)]]])]
+    (.addTo marker mapbox)
+    (.bindPopup marker popup)))
+
+
 (defn map-view-did-mount []
-  (let [mapbox       (.setView (.map js/L "map") #js [53.405 5.739] 12)
-        access-token (subscribe [:mapbox/access-token])
-        policies     (subscribe [:map/policies])]
+  (let [mapbox                   (.setView (.map js/L "map") #js [53.405 5.739] 12)
+        access-token             (subscribe [:mapbox/access-token])
+        policies                 (subscribe [:map/policies])
+        {:keys [latlng
+                name
+                address]
+         :as   service-provider} @(subscribe [:map/service-provider])
+        smart-meters             @(subscribe [:map/smart-meters])
+        service-provider-marker  (.marker js/L latlng #js {:icon service-provider-icon})
+        service-provider-popup   (hiccups/html
+                                  [:table
+                                   [:tr
+                                    [:td "Service provider:"]
+                                    [:td name]]
+                                   [:tr
+                                    [:td "IOTA address:"]
+                                    [:td (format-trytes address)]]])]
     (configure mapbox @access-token)
+    (doseq [meter smart-meters]
+      (show-smart-meter mapbox meter))
     (.addTo (.easyButton js/L "glyphicon-info-sign" #(show-info-modal mapbox)) mapbox)
+    (.addTo service-provider-marker mapbox)
     (dispatch [:map/add-mapbox mapbox])
-    (confirm-policies mapbox @policies)))
+    (.openPopup (.bindPopup service-provider-marker service-provider-popup))
+
+    ;; Show popup and then start confirming policies
+    (js/setTimeout #(confirm-policies mapbox @policies) 3000)))
 
 
 (defn map-view-render []
