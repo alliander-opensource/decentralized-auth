@@ -19,29 +19,29 @@
 (def smart-meter1
   {:latlng     #js [53.458177 5.655188]
    :meter-name "Smart meter 1"
-   :address    (str "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNA"
-                    "WIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP")})
+   :address    (str "GQVRNZVMGLYLERJOSFTARCHXCEWWVQBE9NEIHIDMHAGAA"
+                    "YEFEIDKLQ9OIQBVTYXMZB9UV9OJVIALHYXIFQRVLK9DVW")})
 
 
 (def smart-meter2
   {:latlng     #js [53.437087 5.633132]
    :meter-name "Smart meter 2"
-   :address    (str "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNA"
-                    "WIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP")})
+   :address    (str "GQVRNZVMGLYLERJOSFTARCHXCEWWVQBE9NEIHIDMHAGAA"
+                    "YEFEIDKLQ9OIQBVTYXMZB9UV9OJVIALHYXIFQRVLK9DVW")})
 
 
 (def smart-meter3
   {:latlng     #js [53.445156 5.720864]
    :meter-name "Smart meter 3"
-   :address    (str "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNA"
-                    "WIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP")})
+   :address    (str "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNAWI"
+                    "AABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP")})
 
 
 (def smart-meter4
   {:latlng     #js [53.446079 5.831414]
    :meter-name "Smart meter 4"
-   :address    (str "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNA"
-                    "WIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP")})
+   :address    (str "UBCYULSBUJUKGJKMATEIZUKUJP9OZ9WMAMWYVLRGFUFAFSA"
+                    "VLNJMVBD9HZKFTBVOIFTLSJWWK9ZIZIVNCAAEATKPBC")})
 
 
 (def default-db
@@ -60,7 +60,7 @@
                           {:id               1
                            :smart-meter      smart-meter2
                            :service-provider holwerd-service-provider
-                           :goal             "graphing energy data"
+                           :goal             "graphing energy data and selling the data to third parties"
                            :active?          false}
                           {:id               2
                            :smart-meter      smart-meter3
@@ -70,5 +70,5 @@
                           {:id               3
                            :smart-meter      smart-meter4
                            :service-provider holwerd-service-provider
-                           :goal             "graphing energy data"
+                           :goal             "selling the data to third parties"
                            :active?          false}}})

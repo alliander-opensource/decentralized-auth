@@ -1,5 +1,6 @@
 (ns decentralized-auth.policy
-  (:require-macros [hiccups.core :as hiccups])
+  (:require-macros [decentralized-auth.policy :as policy]
+                   [hiccups.core :as hiccups])
   (:require [hiccups.runtime]))
 
 
@@ -31,6 +32,9 @@
                        :target "_blank"}
                    "shared secret)"]
                   "."
+                  [:br]
+                  [:br]
+                  (policy/to-string policy)
                   [:br]
                   [:br]
                   [:strong "Do you accept this request?"]
