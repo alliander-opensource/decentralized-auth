@@ -1,7 +1,5 @@
 (ns decentralized-auth.utils
-  (:require-macros [hiccups.core :as hiccups])
-  (:require [cljs.pprint :refer [pprint]]
-            [hiccups.runtime]))
+  (:require [cljs.pprint :refer [pprint]]))
 
 
 (defn json-encode [m]
@@ -22,65 +20,3 @@
 (defn jsx->clj
   [x]
   (into {} (for [k (.keys js/Object x)] [k (aget x k)])))
-
-
-;;;; Policy
-
-(defn to-string [{:keys [goal smart-meter service-provider] :as policy}]
-  (str (:name service-provider) " can access " (:meter-name smart-meter) " with the goal of " goal))
-
-
-(defn request-html [{{smart-meter-latlng :latlng
-                      meter-name         :meter-name
-                      meter-address      :address}    :smart-meter
-                     {service-provider-latlng  :latlng
-                      service-provider-address :address
-                      service-provider-name    :name} :service-provider
-                     goal                             :goal
-                     :as                              policy}]
-  (hiccups/html [:div
-                 [:h1 (str "Allow " service-provider-name " to retrieve data of " meter-name "?")]
-                 [:p "You are the owner of "
-                  meter-name
-                  " (as proven by "
-                  [:a {:href "https://privacybydesign.foundation/irma-en/" :target "_blank"}
-                   "IRMA"]
-                  " or a "
-                  [:a {:href   "https://github.com/Alliander/decentralized-auth/blob/master/docs/scenarios.md#pairing-with-a-device"
-                       :target "_blank"}
-                   "shared secret)"]
-                  "."
-                  [:br]
-                  [:br]
-                  [:strong "Do you accept this access request?"]
-                  [:br]
-                  [:br]
-                  [:i
-                   "Accepting the request will lead to the publishing of a policy on a "
-                   [:a {:href   "https://blog.iota.org/introducing-masked-authenticated-messaging-e55c1822d50e#7036"
-                        :target "_blank"}
-                    "restricted MAM channel"]
-                   " (a message channel only readable by those who have the address and the side key) "
-                   "on the "
-                   [:a {:href "https://www.iota.org/" :target "_blank"} "IOTA Tangle"]
-                   ". Only you and the service provider will have the address and side key. "
-                   "Because it is published on the IOTA Tangle this policy is part of an immutable audit log."
-                   " both you and "
-                   service-provider-name
-                   " can point to this policy to prove access to the P1 data was authorized or not."]]
-                 [:p [:i (str service-provider-name " wants to use its data for " goal".")]]]))
-                          (hiccups/html [:br])
-                          (hiccups/html [:br])
-                          (hiccups/html
-                           [:i
-                            "Accepting the request will lead to the publishing of a policy on a "
-                            (hiccups/html [:a {:href "https://blog.iota.org/introducing-masked-authenticated-messaging-e55c1822d50e#7036"} "restricted MAM channel"])
-                            " (a message channel only readable by those who have the address and the side key) "
-                            "on the IOTA Tangle. Only you and the service provider will have the address and side key. "
-                            "Because it is published on the IOTA Tangle this message is part of an immutable audit log both you and "
-                            service-provider-name
-                            " can point to this policy to prove access to the P1 data was allowed or not."]))]
-                 [:p [:i (str service-provider-name " wants to use its data for " goal".")]]]))
-
-
-;; :id 0, :smart-meter {:latlng #js [53.458177 5.655188], :meter-name "Smart meter 1", :address "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNAWIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP"}, :service-provider {:latlng #js [53.368346 5.926277], :address "9QDNPW9YGZ9EMTQARJZGOZWEYQZX9NWLBPUNZSR9CNAWIAABHSJMZLQEDYKQVLQSVIFMSQTBGXOGUBWBP", :name "Holwerd P1 Data Graphing Service"}, :goal "graphing energy data", :address "VSSQCMYLXOGATMLAEH9FRVUZTWQBJQQOYDRNUDLBAWHWKUYQQFHBCQTGVUYLOWIEVWNGJFMYLJUMOCUVZ", :active? false}

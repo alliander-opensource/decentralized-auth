@@ -8,7 +8,8 @@
             [clojure.string :as string]
             [decentralized-auth.config :as config]
             [decentralized-auth.db :as db]
-            [decentralized-auth.utils :refer [json-encode json-decode to-string]]
+            [decentralized-auth.policy :as policy]
+            [decentralized-auth.utils :refer [json-encode json-decode]]
             [decentralized-auth.views :as views] ;; misuse some mapbox stuff
             [re-frame.core :refer [reg-event-db reg-event-fx reg-fx dispatch]]))
 
@@ -155,7 +156,7 @@
                     :address])
       (update :smart-meter dissoc :latlng)
       (update :service-provider dissoc :latlng)
-      (assoc :description (to-string policy))))
+      (assoc :description (policy/to-string policy))))
 
 
 (defn format-authorized-policy

@@ -3,7 +3,8 @@
   (:require cljsjs.leaflet
             cljsjs.leaflet-polylinedecorator
             cljsjs.toastr
-            [decentralized-auth.utils :refer [to-string request-html revoke-html debug-panel json-encode jsx->clj]]
+            [decentralized-auth.policy :as policy]
+            [decentralized-auth.utils :refer [debug-panel json-encode jsx->clj]]
             [goog.object :as object]
             [hiccups.runtime]
             [re-frame.core :refer [dispatch subscribe]]
@@ -138,7 +139,7 @@
                                          (:active? policy)
                                          "list-group-item-primary")
                          :on-click #(dispatch [:policy/selected (:id policy)])}
-   [:i (to-string policy)]
+   [:i (policy/to-string policy)]
    [:br]
    [:table
     [:tbody
@@ -332,7 +333,7 @@
   (when (seq policies)
     (let [policy (first policies)]
       (.confirm js/bootbox
-                #js {:message  (request-html policy)
+                #js {:message  (policy/request-html policy)
                      :buttons  #js {:confirm #js {:label     "Yes"
                                                   :className "btn-lg btn-success"}
                                     :cancel  #js {:label     "No"
