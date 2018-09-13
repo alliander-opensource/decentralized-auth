@@ -240,11 +240,7 @@
    (show-info-modal mapbox identity))
   ([mapbox callback]
    (let [content (hiccups/html [:a {:href "www.google.nl"} "Decentral IOTA MAM IOTA Policy Data"])]
-     #_(.openModal mapbox #js {:content            content
-                             :closeTitle         "Close"
-                             :zIndex             10000
-                             :onHide             (fn [e] (callback))
-                             :transitionDuration 300}))))
+     (.alert js/bootbox content))))
 
 
 (defn confirm-policies
