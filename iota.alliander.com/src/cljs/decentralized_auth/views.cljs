@@ -279,7 +279,7 @@
            truth, without the need for a trusted third party. In the most famous
            example of a distributed ledger, "
             [:a {:href "https://bitcoin.org/bitcoin.pdf"} "Bitcoin"]
-            " , money can be transferred without a bank. In the case of
+            ", money can be transferred without a bank. In the case of
            providing access to energy data, data can be transferred and policies
            stored without an Alliander cloud."]]
           [:p
@@ -302,7 +302,7 @@
             here. But they are available in the "
             [:a {:href "https://github.com/alliander/decentralized-auth"}
              "proof-of-concept application"]
-            ")"]]
+            "."]]
           [:p
            [:div
             "We hope this will be a step towards a decentralized
