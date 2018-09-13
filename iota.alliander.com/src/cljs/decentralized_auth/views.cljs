@@ -247,7 +247,8 @@
             "Sharing P1 usage data with service providers can help the energy transition. "
             "But the data is privacy-sensitive. "
             "When dealing with personal identifiable information (like the measurements of a smart meter) a service provider has to adhere to the "
-            [:a {:href "https://ec.europa.eu/commission/priorities/justice-and-fundamental-rights/data-protection/2018-reform-eu-data-protection-rules_en"}
+            [:a {:href   "https://ec.europa.eu/commission/priorities/justice-and-fundamental-rights/data-protection/2018-reform-eu-data-protection-rules_en"
+                 :target "_blank"}
 
              "GDPR"]
             " and therefore: "]]
@@ -278,7 +279,8 @@
            [:div "Distributed ledgers are capable of creating a single source of
            truth, without the need for a trusted third party. In the most famous
            example of a distributed ledger, "
-            [:a {:href "https://bitcoin.org/bitcoin.pdf"} "Bitcoin"]
+            [:a {:href "https://bitcoin.org/bitcoin.pdf" :target "_blank"}
+             "Bitcoin"]
             ", money can be transferred without a bank. In the case of
            providing access to energy data, data can be transferred and policies
            stored without an Alliander cloud."]]
@@ -300,7 +302,7 @@
            [:div
             "Note that the data flow and encrypted key exchange are not shown
             here. But they are available in the "
-            [:a {:href "https://github.com/alliander/decentralized-auth"}
+            [:a {:href "https://github.com/alliander/decentralized-auth" :target "_blank"}
              "proof-of-concept application"]
             "."]]
           [:p
