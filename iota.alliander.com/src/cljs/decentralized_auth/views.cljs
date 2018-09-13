@@ -256,20 +256,18 @@
   [mapbox policies]
   (when (seq policies)
     (let [policy (first policies)]
-    (.confirm js/bootbox
-              #js {:message  (request-html policy)
-                   :buttons  #js {:confirm #js {:label     "Yes"
-                                                :className "btn-success"}
-                                  :cancel  #js {:label     "No"
-                                                :className "btn-danger"}}
-                   :callback #(do (if %
-                                    (add-policy-visualization mapbox policy)
-                                    (notification :error
-                                                  (str "Do not allow Holwerd P1 Data Graphing Service to access "
-                                                       (-> policy
-                                                           :smart-meter
-                                                           :meter-name))))
-                                  (confirm-policies mapbox (next policies)))}))))
+      (.confirm js/bootbox
+                #js {:message  (request-html policy)
+                     :buttons  #js {:confirm #js {:label     "Yes"
+                                                  :className "btn-lg btn-success"}
+                                    :cancel  #js {:label     "No"
+                                                  :className "btn-lg btn-danger"}}
+                     :callback #(do (if %
+                                      (add-policy-visualization mapbox policy)
+                                      (notification :error
+                                                    (str "Do not allow Holwerd P1 Data Graphing Service to access "
+                                                         (-> policy :smart-meter :meter-name))))
+                                    (confirm-policies mapbox (next policies)))}))))
 
 
 (defn show-smart-meter [mapbox {:keys [latlng meter-name address] :as smart-meter}]
