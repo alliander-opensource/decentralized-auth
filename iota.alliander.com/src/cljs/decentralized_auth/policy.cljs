@@ -1,6 +1,5 @@
 (ns decentralized-auth.policy
-  (:require-macros [decentralized-auth.policy :as policy]
-                   [hiccups.core :as hiccups])
+  (:require-macros [hiccups.core :as hiccups])
   (:require [hiccups.runtime]))
 
 
@@ -34,7 +33,7 @@
                   "."
                   [:br]
                   [:br]
-                  (policy/to-string policy)
+                  (to-string policy)
                   [:br]
                   [:br]
                   [:strong "Do you accept this request?"]
