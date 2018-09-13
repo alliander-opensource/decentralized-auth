@@ -127,7 +127,8 @@
   [:tr
    [:td "Data: "]
    [:td.small {:colSpan 5}
-    "Infeasible to attach high frequent P1-messages to mainnet with standard hardware."]])
+    "Infeasible to attach (non-batch) high frequent P1-messages to mainnet with
+    standard hardware."]])
 
 
 (defn policy-list-item [policy]
@@ -240,7 +241,6 @@
   (let [content
         (hiccups/html
          [:div
-          ;; decentral iota iota mam policy data
           [:h1 "GDPR-compliant smart meter data on the IOTA Tangle"]
           [:p
            [:div
@@ -287,33 +287,27 @@
             "In this demo smart meters are shown (not actual ones) on Ameland.
             Holwerd P1 Data Graphing Service is an example service provider. The
             smart meter publishes its measurements on the IOTA Tangle, but this
-            data can only be accessed when the address and key is known."]]
+            data can only be accessed when the access key is known."]]
           [:p
            [:div
             "Access to your smart meter data is requested by Holwerd P1 Data
             Graphing Service. Since you are the owner of the smart meter you can
             accept or decline this request. If the request is accepted a policy
-            will be stored on the IOTA Tangle. This policy is only accessible by
-            you and the service provider."]]
-          #_[:p
+            will be stored on the IOTA Tangle. And the service provider will
+            receive the access key to the measurement data. The audit log is only
+            decryptable by you and the service provider."]]
+          [:p
            [:div
-            "Not shown in this demo (but it is programmed in the "
+            "Note that the data flow and encrypted key exchange are not shown
+            here. But they are available in the "
             [:a {:href "https://github.com/alliander/decentralized-auth"}
              "proof-of-concept application"]
-            ") is the key exchange to the service provider. The access key needs
-            to be send over the public network, and since communication on the
-            IOTA Tangle is public this data is encrypted with the public key of
-            the service provider (so that only he can decrypt it). When access
-            is revoked measurements are published with a new side key, and this
-            new side key is only communicated to the service providers who are
-            still authorized."]]
+            ")"]]
           [:p
            [:div
             "We hope this will be a step towards a decentralized
             privacy-preserving infrastructure that opens smart meter data to the
-            world. Where energy data can be used by everyone who you trust.
-            Smart meter owners can be in control of their data, and everyone can
-            create services that use it." ]]
+            world." ]]
           [:p
            [:div
             [:h3 "Links"]
