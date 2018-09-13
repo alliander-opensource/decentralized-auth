@@ -75,23 +75,19 @@
   (hiccups/html [:div
                  [:h1 (str "Revoke access of " service-provider-name " to retrieve data of " meter-name "?")]
                  [:p [:strong "Do you want to revoke the access?"]
-                  [:br]
-                  [:br]
-                  [:i
-                   "Revoking the authorization will lead to the publishing of a policy on a "
-                   [:a {:href   "https://blog.iota.org/introducing-masked-authenticated-messaging-e55c1822d50e#7036"
-                        :target "_blank"}
-                    "restricted MAM channel"]
-                   " (a message channel only readable by those who have the
-                   address and the side key) on the IOTA Tangle. Only you and
-                   the service provider will have the address and side key.
-                   Because it is published on the IOTA Tangle this policy is
-                   part of an immutable audit log. Only you and "
-                   service-provider-name
-                   " can decrypt this audit log to prove access to the P1 data
-                   was authorized or not. For all others without the address and
-                   key the data is gibberish."]]
-                 [:p [:div
-                      "When the policy is revoked "
-                      service-provider-name
-                      " will no longer be able to fetch data."]]]))
+                  [:div
+                   [:br]
+                   [:br]
+                   [:i
+                    "Revoking the authorization will lead to the publishing of a policy on a "
+                    [:a {:href   "https://blog.iota.org/introducing-masked-authenticated-messaging-e55c1822d50e#7036"
+                         :target "_blank"}
+                     "restricted MAM channel"]
+                    " (a message channel only readable by those who have the
+                     address and the side key) on the IOTA Tangle."]]]
+                 [:i [:p [:div
+                          "When the policy is revoked "
+                          service-provider-name
+                          " will no longer be able to fetch data. The access key
+                            will be changed and is only communicated to parties
+                            who are still authorized."]]]]))

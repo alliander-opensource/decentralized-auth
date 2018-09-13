@@ -117,8 +117,20 @@
                                    {:style {:display "none" }}))
          [:button.btn.btn-outline-primary
           {:on-click #(when revokable-policy?
-                        (do (notification :success "Revoking policy by publishing to the Tangle")
-                            (dispatch [:policy/revoke (:id policy)])))
+                        (.confirm js/bootbox
+                                  #js {:message  (policy/revoke-html policy)
+                                       :buttons  #js {:confirm #js {:label     "Yes"
+                                                                    :className "btn-lg btn-success"}
+                                                      :cancel  #js {:label     "No"
+                                                                    :className "btn-lg btn-danger"}}
+                                       :callback (fn [confirmed?]
+                                                   (do (if confirmed?
+                                                         (do (notification :success "Revoking policy by publishing to the Tangle")
+                                                             (dispatch [:policy/revoke (:id policy)]))
+                                                         (notification :error
+                                                                       (str "Do not revoke Holwerd P1 Data Graphing Service's access."
+                                                                            (-> policy :smart-meter :meter-name))))))})
+                        )
            :class    (when-not revokable-policy? "disabled")}
           "Revoke"]]])))
 
