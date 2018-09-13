@@ -239,14 +239,89 @@
   (let [content
         (hiccups/html
          [:div
+          ;; decentral iota iota mam policy data
           [:h1 "GDPR-compliant smart meter data on the IOTA Tangle"]
+          [:p
+           [:div
+            "Sharing P1 usage data with service providers can help the energy transition. "
+            "But the data is privacy-sensitive. "
+            "When dealing with personal identifiable information (like the measurements of a smart meter) a service provider has to adhere to the "
+            [:a {:href "https://ec.europa.eu/commission/priorities/justice-and-fundamental-rights/data-protection/2018-reform-eu-data-protection-rules_en"}
+
+             "GDPR"]
+            " and therefore: "]]
+          [:p
+           [:lu
+            [:li "State the goal for data usage clearly (and only use the data for that goal)."]
+            [:li "Have consent of the consumer to access the data."]
+            [:li "Stop collecting data when consent is revoked."]]]
+          [:p
+           [:div
+            "Storing policies or data in a central place can lead to "
+            [:a {:href   "https://tweakers.net/nieuws/115665/energiedata-miljoenen-nederlanders-gestolen-door-energieleverancier.html"
+                 :target "_blank"}
+             "misuse"]
+            ", "
+            [:a {:href   "https://www.independent.ie/irish-news/news/exclusive-eirgrid-targeted-by-state-sponsored-hackers-leaving-networks-exposed-to-devious-attack-36003502.html"
+                 :target "_blank"}
+             "hacks"] " and a "
+            [:a {:href   "https://www.theregister.co.uk/2016/03/23/npm_left_pad_chaos/"
+                 :target "_blank"}
+             "single point of failure"]
+            ". Central storage can also lead to a vendor lock-in, where the owner
+            of the smart meter data reader determines what service providers can
+            use the data, instead of creating a level playing field where you
+            can authorize anyone to access the data."]]
+          [:p "Distributed ledger technology could address these issues."]
+          [:p
+           [:div "Distributed ledgers are capable of creating a single source of
+           truth, without the need for a trusted third party. In the most famous
+           example of a distributed ledger, "
+            [:a {:href "https://bitcoin.org/bitcoin.pdf"} "Bitcoin"]
+            " , money can be transferred without a bank. In the case of
+           providing access to energy data, data can be transferred and policies
+           stored without an Alliander cloud."]]
+          [:p
+           [:div
+            "In this demo smart meters are shown (not actual ones) on Ameland.
+            Holwerd P1 Data Graphing Service is an example service provider. The
+            smart meter publishes its measurements on the IOTA Tangle, but this
+            data can only be accessed when the address and key is known."]]
+          [:p
+           [:div
+            "Access to your smart meter data is requested by Holwerd P1 Data
+            Graphing Service. Since you are the owner of the smart meter you can
+            accept or decline this request. If the request is accepted a policy
+            will be stored on the IOTA Tangle. This policy is only accessible by
+            you and the service provider."]]
+          #_[:p
+           [:div
+            "Not shown in this demo (but it is programmed in the "
+            [:a {:href "https://github.com/alliander/decentralized-auth"}
+             "proof-of-concept application"]
+            ") is the key exchange to the service provider. The access key needs
+            to be send over the public network, and since communication on the
+            IOTA Tangle is public this data is encrypted with the public key of
+            the service provider (so that only he can decrypt it). When access
+            is revoked measurements are published with a new side key, and this
+            new side key is only communicated to the service providers who are
+            still authorized."]]
+          [:p
+           [:div
+            "We hope this will be a step towards a decentralized
+            privacy-preserving infrastructure that opens smart meter data to the
+            world. Where energy data can be used by everyone who you trust.
+            Smart meter owners can be in control of their data, and everyone can
+            create services that use it." ]]
           [:p
            [:div
             [:h3 "Links"]
             [:ul
-             [:li [:a {:href "https://github.com/Alliander/decentralized-auth/tree/master/docs"}
+             [:li [:a {:href   "https://github.com/Alliander/decentralized-auth/tree/master/docs"
+                       :target "_blank"}
                    "Documentation of open source project"]]
-             [:li [:a {:href "https://medium.com/@erwinrooijakkers/gdpr-compliant-smart-meter-data-on-the-iota-tangle-four-lessons-learned-while-putting-the-dea852a5b2aa"}
+             [:li [:a {:href   "https://medium.com/@erwinrooijakkers/gdpr-compliant-smart-meter-data-on-the-iota-tangle-four-lessons-learned-while-putting-the-dea852a5b2aa"
+                       :target "_blank"}
                    "Blog post GDPR-compliant smart meter data on the IOTA Tangle"]]]]]])]
     (.alert js/bootbox content)))
 
