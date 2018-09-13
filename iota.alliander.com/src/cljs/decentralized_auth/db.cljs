@@ -56,23 +56,19 @@
                            :smart-meter      smart-meter1
                            :service-provider holwerd-service-provider
                            :goal             "graphing energy data"
-                           :address          "VSSQCMYLXOGATMLAEH9FRVUZTWQBJQQOYDRNUDLBAWHWKUYQQFHBCQTGVUYLOWIEVWNGJFMYLJUMOCUVZ"
                            :active?          false}
                           {:id               1
                            :smart-meter      smart-meter2
                            :service-provider holwerd-service-provider
                            :goal             "graphing energy data"
-                           :address          "VSSQCMYLXOGATMLAEH9FRVUZTWQBJQQOYDRNUDLBAWHWKUYQQFHBCQTGVUYLOWIEVWNGJFMYLJUMOCUVZ"
                            :active?          false}
                           {:id               2
                            :smart-meter      smart-meter3
                            :service-provider holwerd-service-provider
                            :goal             "graphing energy data"
-                           :address          "VSSQCMYLXOGATMLAEH9FRVUZTWQBJQQOYDRNUDLBAWHWKUYQQFHBCQTGVUYLOWIEVWNGJFMYLJUMOCUVZ"
                            :active?          false}
                           {:id               3
                            :smart-meter      smart-meter4
                            :service-provider holwerd-service-provider
                            :goal             "graphing energy data"
-                           :address          "VSSQCMYLXOGATMLAEH9FRVUZTWQBJQQOYDRNUDLBAWHWKUYQQFHBCQTGVUYLOWIEVWNGJFMYLJUMOCUVZ"
                            :active?          false}}})
