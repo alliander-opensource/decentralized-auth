@@ -152,7 +152,9 @@
                                          (:active? policy)
                                          "list-group-item-primary")
                          :on-click #(dispatch [:policy/selected (:id policy)])}
-   [:i (policy/to-string policy)]
+   [:i {:style (when (:revoked? policy) {:text-decoration "line-through"})}
+    (policy/to-string policy)]
+   [:i (when (:revoked? policy) " (revoked)")]
    [:br]
    [:table
     [:tbody
