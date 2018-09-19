@@ -33,7 +33,8 @@
                   ". You have received the following request: "
                   [:br]
                   [:br]
-                  (to-string policy)
+                  service-provider-name " can access " meter-name " with the goal of "
+                  [:i [:strong goal]]
                   [:br]
                   [:br]
                   [:strong "Do you accept this request?"]
