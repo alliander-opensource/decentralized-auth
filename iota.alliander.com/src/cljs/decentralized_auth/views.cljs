@@ -125,7 +125,7 @@
                                                                     :className "btn-lg btn-danger"}}
                                        :callback (fn [confirmed?]
                                                    (do (if confirmed?
-                                                         (do (notification :success "Revoking policy by publishing to the Tangle")
+                                                         (do (notification :info "Revoking policy by publishing to the Tangle")
                                                              (dispatch [:policy/revoke (:id policy)]))
                                                          (notification :error
                                                                        (str "Do not revoke Holwerd P1 Data Graphing Service's access."

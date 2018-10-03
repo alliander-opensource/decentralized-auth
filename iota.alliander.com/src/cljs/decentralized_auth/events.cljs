@@ -103,7 +103,7 @@
 (defn attach-policy [payload address policy-id on-success]
   (go (let [depth                5
             min-weight-magnitude 15
-            _                    (views/notification :success
+            _                    (views/notification :info
                                                      (str "Attaching policy to Tangle at MAM root "
                                                           (format-trytes address)))
             _                    (dispatch [:policy/set-pending policy-id true])
