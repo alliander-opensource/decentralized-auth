@@ -11,9 +11,9 @@
 (def iota-providers
   ["https://nod3.theshock.de:443"
    #_"https://potato.iotasalad.org:14265"
-   "https://beaker01.tangle-iotanode.eu:14267"
-   "https://beaker02.tangle-iotanode.eu:14267"
-   "https://beaker03.tangle-iotanode.eu:14267"])
+   #_"https://beaker01.tangle-iotanode.eu:14267"
+   #_"https://beaker02.tangle-iotanode.eu:14267"
+   #_"https://beaker03.tangle-iotanode.eu:14267"])
 
 
 (def smart-meter1
