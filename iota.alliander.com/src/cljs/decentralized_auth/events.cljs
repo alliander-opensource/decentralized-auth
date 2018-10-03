@@ -122,7 +122,8 @@
             (dispatch [:policy/set-pending policy-id false])
             (dispatch [:policy/add-iota-transaction-hash policy-id iota-transaction-hash])
             (dispatch [:policy/add-iota-bundle-hash policy-id iota-bundle-hash])
-            (log/infof "Transactions attached to Tangle in %s seconds" duration)
+            (views/notification :succes
+                                (str "Transactions attached to Tangle in " duration " seconds"))
             (on-success))
           (do
             (dispatch [:policy/set-pending policy-id false])
