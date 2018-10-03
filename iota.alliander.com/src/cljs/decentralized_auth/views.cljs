@@ -300,6 +300,20 @@
            stored without an Alliander cloud."]]
           [:p
            [:div
+            "The "
+            [:a {:href "https://www.iota.org/" :target "_blank"} "IOTA"]
+            " Tangle is used because this is a distributed ledger without
+             transaction fees (who wants to pay for adding a policy?) and it
+             scales well (the more transactions are done on the IOTA Tangle the
+             more secure it becomes). These properties of the IOTA Tangle are
+             achieved because every transaction has to validate two earlier
+             transactions (the machine performing the transaction does the "
+            [:a {:href   "https://docs.iota.org/introduction/tangle/proof-of-work"
+                 :target "_blank"}
+             "proof-of-work"]
+            ".)"]]
+          [:p
+           [:div
             "In this demo smart meters are shown (not actual ones) on Ameland.
             Holwerd P1 Data Graphing Service is an example service provider. The
             smart meter publishes its measurements on the IOTA Tangle, but this
